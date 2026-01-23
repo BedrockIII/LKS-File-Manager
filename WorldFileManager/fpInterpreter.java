@@ -14,12 +14,12 @@ public class fpInterpreter
 	//SFP = Sound FP 
 	int numObjects;
 	int headerSize;
+	static boolean DEGREEMODE = false;
 	ArrayList<fpObject> objects = new ArrayList<fpObject>();
 	ArrayList<String> objectTypes = new ArrayList<String>();
 	public fpInterpreter(byte[] data)
 	{
 		file = data;
-		//if(PCKGManager.same(Arrays.copyOf(data, 4));
 		extractObjects(); 
 	}
 	private void extractObjects() 
@@ -45,43 +45,40 @@ public class fpInterpreter
 			objectTypes.add(objects.get(i).getName());
 			if(objects.get(i).getObjectType()!=-1&&objectTypes.get(i)!=null)objects.get(i).setType(objectTypes.get(objects.get(i).getObjectType()));
 		}
-	}
+	} 
 	public fpInterpreter(List<String> lines, String type)
 	{
 		fpType = type;
-		int objectCount = -1;
-		int index = 0;
-		boolean blenderCoords = false;
-		boolean randomizeRotation = false;
-		boolean randomizeScale = false;
-		ArrayList<String> objectLines = new ArrayList<String>();
+		fpObject object = null;
 		for(int i =1; i<lines.size(); i++)
 		{
-			if(lines.get(i).length()>1&&lines.get(i).indexOf("<Name>")!=-1)
+			if(lines.get(i).indexOf("<<Name>>")!=-1)
 			{
-				objectCount += 1;
-				if(objectCount<0)objectLines.add(lines.get(i));
-				else if(objectLines.size()>0)
-				{
-					objects.add(new fpObject(new ArrayList<String>(objectLines), index, objects, blenderCoords, randomizeRotation, randomizeScale));
-					objectLines= new ArrayList<String>();
-					index++;
-					objectCount -= 1;
-				}
+				object = new fpObject(lines.get(i), objects);
+				objects.add(object);
 			}
-			else if(lines.get(i).length()>1&&lines.get(i).indexOf("Blender Mode")!=-1)
+			else if(lines.get(i).indexOf("<<Object>>")!=-1||lines.get(i).indexOf("<<Position>>")!=-1||
+					lines.get(i).indexOf("<<Scale>>")!=-1||lines.get(i).indexOf("<<Shear>>")!=-1||
+					lines.get(i).indexOf("<<Rotation>>")!=-1)
 			{
-				blenderCoords = true;
+				object.addLine(lines.get(i));
+			}
+			else if(lines.get(i).length()>1&&lines.get(i).indexOf("Degree Mode")!=-1)
+			{
+				DEGREEMODE = true;
+			}
+			else if(lines.get(i).length()>1&&lines.get(i).indexOf("Radian Mode")!=-1)
+			{
+				DEGREEMODE = false;
 			}
 			else if(lines.get(i).length()>1&&lines.get(i).indexOf("Randomize Rotation")!=-1)
 			{
-				randomizeRotation = true;
+				object.setRandomRotation(true);
 			}
 			else if(lines.get(i).length()>1&&lines.get(i).indexOf("Randomize Scale")!=-1)
 			{
-				randomizeScale = true;
+				object.setRandomScale(true);
 			}
-			objectLines.add(lines.get(i));
 		}	
 	}
 	public int getAmountOf(String object)
