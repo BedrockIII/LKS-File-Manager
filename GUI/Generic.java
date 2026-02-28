@@ -4,84 +4,95 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.SwingUtilities;
 
-import GUI.GUI.Actions;
+import MenuDBGUI.KingdomPlanAreaSelectorGUI;
 import PCKGManager.PCKGManager;
 
 @SuppressWarnings("serial")
-public class Generic extends JPanel implements ActionListener
+public class Generic extends JPanel
 {
-	byte[] data;
-	String name = "";
+	protected byte[] data;
+	protected String name = "";
+	GenericFileInfoGUI gui = null;
+	protected Generic()
+	{
+		
+	}
 	public Generic(PCKGManager pac, int parentY, int parentX, int displacement)
 	{
 		data = pac.getFile(displacement);
 		name = pac.getName(displacement);
-		super.setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-		super.setLayout(new GridBagLayout());
-		super.setMaximumSize(new Dimension(100000,GUI.assetHeight));
+		makeGUI(parentX);
+	}
+	public Generic(String name, byte[] data, int padding)
+	{
+		this.name = name;
+		this.data = data;
+		makeGUI(padding);
+	}
+	public Generic(String name, int padding) 
+	{
+		this.name = name;
+		this.data = new byte[0];
+		makeGUI(padding);
+	}
+	private void makeGUI(int padding) 
+	{
+		gui = makeInfoGUI(name, data);
+		setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
+		//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
+		setLayout(new GridBagLayout());
+		setMaximumSize(new Dimension(100000,GUI.assetHeight));
+		JPanel spacer = new JPanel();
+		spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
+		spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
+		add(spacer);
 		GridBagConstraints constraints = new GridBagConstraints();  
 		constraints.weightx = 1.0;
-		JPanel spacer = new JPanel();
-		spacer.setPreferredSize(new Dimension(parentX, GUI.assetHeight));
-		spacer.setMinimumSize(new Dimension(parentX, GUI.assetHeight));
-		super.add(spacer);
-		JLabel fileName = new JLabel(pac.getName(displacement), SwingConstants.LEFT);
-		fileName.setPreferredSize(new Dimension(10000, GUI.assetHeight));
-		super.add(fileName, constraints);
+		JLabel fileName = new JLabel(name, SwingConstants.LEFT);
+		fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
+		add(fileName, constraints);
 		
-		JButton export = new JButton("Export File");
-		export.setActionCommand(Actions.EXPORT.name());
-		export.addActionListener(this);
-		export.setPreferredSize(GUI.buttonSize);
-		export.setMinimumSize(GUI.buttonSize);
-		super.add(export);
-		
-		JButton replace = new JButton("Replace File");
-		replace.setActionCommand(Actions.REPLACE.name());
-		replace.setPreferredSize(GUI.buttonSize);
-		replace.setMinimumSize(GUI.buttonSize);
-		super.add(replace);
-		
-		//coloring
-		if(displacement%2==0)
-		{
-			super.setBackground(new Color(179, 245, 244)); //blue
-		}
-		else
-		{
-			super.setBackground(new Color(191, 191, 191)); //grey
-		}
+		addActions();
 	}
-	@Override
-	public void actionPerformed(ActionEvent event) 
+	public void addActions()
 	{
+		JPopupMenu actions = new JPopupMenu();
 		
-		if(event.getActionCommand()== Actions.EXPORT.name())
-		{
+		JMenuItem export = new JMenuItem("Export File");
+		export.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
 			chooseFile.setSelectedFile(new File(name));
 			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
 			{
-				try {Files.write(chooseFile.getSelectedFile().toPath(),data);}catch(IOException e){e.printStackTrace();System.out.println("Failed to Export Generic File");}
+				try 
+				{
+					Files.write(chooseFile.getSelectedFile().toPath(),data);
+				}
+				catch(IOException i)
+				{
+					System.out.println("Failed to Export Generic File");
+					i.printStackTrace();
+				}
 				System.out.println("Exported Generic File");
 			}
-		}else if(event.getActionCommand()== Actions.REPLACE.name())
-		{
+		});
+		actions.add(export);
+		
+		JMenuItem replace = new JMenuItem("Replace File");
+		replace.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
 			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			//chooseFile.setFileFilter(new FileNameExtensionFilter("Collision File", "col"));
@@ -93,14 +104,59 @@ public class Generic extends JPanel implements ActionListener
 				try 
 				{
 					data = Files.readAllBytes(chooseFile.getSelectedFile().toPath());
-				} catch (IOException e) 
+				} catch (IOException i) 
 				{
-					e.printStackTrace();
+					i.printStackTrace();
 					System.out.println("Failed to Import Generic File");
 				}
 				System.out.println("Imported Generic File");
 			}
-		}
+		});
+		actions.add(replace);
+		
+		add(actions);
+		
+		addMouseListener(new MouseAdapter() {
+		    public void mousePressed(MouseEvent e) {
+		        if (e.isPopupTrigger()) showMenu(e);
+		        else if(SwingUtilities.isLeftMouseButton(e))
+		        {
+		        	GUI.deselectAll();
+		        	setBackground(GUI.selectedColor);
+		        	GUI.setFileInfo(gui);
+		        }
+		    }
+		    public void mouseReleased(MouseEvent e) {
+		        if (e.isPopupTrigger()) showMenu(e);
+		    }
+		    private void showMenu(MouseEvent e) {
+		    	actions.show(e.getComponent(), e.getX(), e.getY());
+		    }
+		});
 	}
-
+	protected GenericFileInfoGUI makeInfoGUI(String name, byte[] data)
+	{
+		String type = bFM.Utils.getFileType(name, data);
+		if(type.equals("KingdomPlanDB"))
+		{
+			return new KingdomPlanAreaSelectorGUI(data);
+		}
+		else if(type.equals("Package"))
+		{
+			throw new IllegalArgumentException();
+		}
+		return new GenericFileInfoGUI(data);
+	}
+	public int getHeight()
+	{
+		return GUI.assetHeight;
+	}
+	public byte[] getBytes() 
+	{
+		return gui.getBytes();
+	}
+	public void deselect()
+	{
+		setBackground(Color.white);
+	}
 }

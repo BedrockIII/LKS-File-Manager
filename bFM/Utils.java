@@ -1,8 +1,9 @@
 package bFM;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class Utils 
 {
@@ -116,6 +117,32 @@ public class Utils
 		}
 		return Integer.parseInt(integer);
 	}
+	public static String[] toStrArr(String line) 
+	{
+		ArrayList<String> ret = new ArrayList<String>();
+		while(line.length()>0)
+		{
+			int endex = line.indexOf(',');
+			if(endex == -1) endex = line.indexOf(';');
+			if(endex == -1) endex = line.length();
+			String value = line.substring(0, endex);
+			ret.add(value);
+			if(endex!=line.length())
+			{
+				line = line.substring(endex+1);
+			}
+			else
+			{
+				break;
+			}
+		}
+		String[] returnArr = new String[ret.size()];
+		for(int i = 0; i <ret.size(); i++)
+		{
+			returnArr[i] = ret.get(i);
+		}
+		return  returnArr;
+	}
 	public static ArrayList<String> extractStrings(byte[] data)
 	{
 		return extractStrings(data,0);
@@ -169,6 +196,10 @@ public class Utils
 		{
 			ret = lineAfterHeader;
 		}
+		return formatStringChars(ret);
+	}
+	public static String formatStringChars(String ret)
+	{
 		String finalLine = "";
 		for(int i = 0; i<ret.length(); i++)
 		{
@@ -190,9 +221,75 @@ public class Utils
 			{
 				finalLine += ret.charAt(i);
 			}
-			
 		}
 		return finalLine;
-		
+	}
+	public static int strToInt(String str)
+	{
+		String allowedChars = "1234567890-";
+		String integer = "";
+		for(int i = 0; i<str.length();i++)
+		{
+			if(allowedChars.indexOf(str.charAt(i))!=-1)
+			{
+				integer+=str.charAt(i);
+			}
+		}
+		try
+		{
+			return Integer.parseInt(integer);
+		}
+		catch (NumberFormatException w)
+		{
+			
+		}
+		return 0;
+	}
+	public static List<String> bytesToStrs(byte[] data)
+	{
+		List<String> Strings = new ArrayList<String>();
+		byte[] temp = new byte[256];
+		int k = 0;
+		for(int i = 0; i<data.length; i++)
+		{
+			if(data[i]==0x0a||data[i]==0x0d)
+			{
+				try {
+					String line = new String(temp, "SHIFT-JIS");
+					line = line.substring(0, line.indexOf(0x00));
+					if(line.length()>0)Strings.add(line);
+				} catch (UnsupportedEncodingException e) 
+				{
+					e.printStackTrace();
+				}
+				temp = new byte[temp.length];
+				k=0;
+			
+			}
+			else
+			{
+				temp[k] = data[i];
+				k++;
+			}
+		}
+		return Strings;
+	}
+	public static byte[] localFileToBytes(String inputPos) throws IOException
+	{
+		return ClassLoader.getSystemResourceAsStream(inputPos).readAllBytes();
+	}
+	public static String getFileType(String name, byte[] file) 
+	{
+		if(name.equals("KingdomPlan.bin"))
+		{
+			return "KingdomPlanDB";
+		}
+		if(PCKGManager.PCKGManager.isPAC(file))
+		{
+			//Check if special TODO
+			//else return "Package"
+			return "Package";
+		}
+		return "Todo";
 	}
 }

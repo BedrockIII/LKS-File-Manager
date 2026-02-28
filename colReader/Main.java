@@ -3,6 +3,7 @@ package colReader;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -11,18 +12,19 @@ import MSDBManager.ConstantEnemyManager;
 import PCKGManager.PCKGManager;
 import WorldFileManager.fpInterpreter;
 import itemManager.itemPlaceManager;
+import mapDBManager.BuildingResourceList;
 import mapDBManager.exteriorPlaceList;
 import SystemDataManagers.CockpitLogManager;
 import SystemDataManagers.KingdomPlanManager;
 import SystemDataManagers.MailManager;
 import VMC.VMCConverter;
 @SuppressWarnings("unused")
-public class Main {
-	
-	public static boolean grid = false;
-	final public static String importPath = "C:\\Users\\idkWhatMyNameIsNgl\\OneDrive\\Documents\\LKS Mod\\";
+public class Main 
+{
+	public static boolean grid = true;
+	final public static String importPath = "D:\\LKS Mod\\";
 	final public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\";
-	static String name = "0100a";//0510 soba
+	static String name = "0701";//0510 soba
 	static byte [] colData;
 	static byte [] fpData;
 	static String fpType = ".vfp";	
@@ -33,9 +35,10 @@ public class Main {
 		//decodeCollision();
 		//encodeCollision();
 		//encodeFixedPoints();
-		menuDBManager();
+		//decodeFixedPoints();
+		//menuDBManager();
 		//packGrid();
-		//mapDataBase();			
+		mapDataBase();			
 		//decodeLightZones();
 		//encodeLightZones();
 		//message();				
@@ -136,25 +139,25 @@ public class Main {
 		byte[] data = mapBootPack.getFile("allfield.lfp");
 		fpInterpreter lightingFixedPoints = new fpInterpreter(data);
 		try {
-			Files.write(Paths.get(importPath+"darkvalley.blfp"), lightingFixedPoints.toBFP().getBytes());
+			Files.write(Paths.get(importPath+"AllLightZones.blfp"), lightingFixedPoints.toBFP().getBytes());
 		} catch (IOException e) 
 		{
-			System.out.println("Failed to write .blfp output file");
+			System.out.println("Failed to write .lfp output file");
 			e.printStackTrace();
 		}
 	}
 	private static void menuDBManager() 
 	{
-		menuDBManager(0);
+		//menuDBManager(0);
 		menuDBManager(1);
-		menuDBManager(2);
-		menuDBManager(3);								
-		menuDBManager(4);
-		menuDBManager(5);
+		//menuDBManager(2);
+		//menuDBManager(3);								
+		//menuDBManager(4);
+		//menuDBManager(5);
 	}
 	private static void menuDBManager(int languageCode)
 	{
-		String outputPath = Main.outputPath + "\\System Data\\Menu Data\\";
+		String outputPath = Main.outputPath + "System Data\\Menu Data\\";
 		PCKGManager menuDatabase = new PCKGManager("menuDB");
 		try 
 		{
@@ -166,9 +169,9 @@ public class Main {
 			return;
 		}
 		
-		menuDatabase.replaceFile("CockpitLog.bin",encodeCockpitLog(menuDatabase.getFile("CockpitLog.bin")));
+		//menuDatabase.replaceFile("CockpitLog.bin",encodeCockpitLog(menuDatabase.getFile("CockpitLog.bin")));
 		menuDatabase.replaceFile("KingdomPlan.bin",encodeKingdomPlan(menuDatabase.getFile("KingdomPlan.bin"))); // TODO
-		menuDatabase.replaceFile("Movie.bin", MovieManager(menuDatabase.getFile("Movie.bin")));
+		//menuDatabase.replaceFile("Movie.bin", MovieManager(menuDatabase.getFile("Movie.bin")));
 		menuDatabase.replaceFile("CameraData.bin", encodeCameraZones(menuDatabase.getFile("CameraData.bin")));
 		
 		
@@ -702,8 +705,9 @@ public class Main {
 		}
 		try 
 		{
-			MapDataBase.addFile("building0.lst", Files.readAllBytes(Paths.get(inputPath+"building0.lst")));
-			bFM.Utils.DebugPrint("Sucessfully added Building Configuration File");
+			BuildingResourceList buildingList = new BuildingResourceList(Files.readAllLines(Paths.get(inputPath+"building0.lst"), Charset.forName("Shift_JIS")));
+			//MapDataBase.addFile("building0.lst", buildingList.toBytes());
+			//bFM.Utils.DebugPrint("Sucessfully added Building Configuration File");
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to locate Building Configuration File at: " + inputPath + "building0.lst");
@@ -716,13 +720,13 @@ public class Main {
 		{
 			bFM.Utils.DebugPrint("Failed to locate Exterior Places File at: " + inputPath + "extPlace1.lst");
 		}
-		try 
-		{
-			Files.write(Paths.get(mapDBPath) , MapDataBase.getFile());
-		} catch (IOException e) 
-		{
-			bFM.Utils.DebugPrint("Failed to write Map Data Base File");
-		}
+		//try 
+		//{
+			//Files.write(Paths.get(mapDBPath) , MapDataBase.getFile());
+		//} catch (IOException e) 
+		//{
+			//bFM.Utils.DebugPrint("Failed to write Map Data Base File");
+		//}
 	}
 	private static void decodeFixedPoints()
 	{
@@ -756,11 +760,11 @@ public class Main {
 			fixedPoints = new fpInterpreter(Files.readAllLines(Paths.get(importPath+name+'\\'+name+".bfp")),fpType.toUpperCase().substring(1));
 		} catch (IOException e) 
 		{
-			bFM.Utils.DebugPrint("Failed to read Light Zone File. Will attempt to decode from a pack.");
+			bFM.Utils.DebugPrint("Failed to read Fixed Point File. Will attempt to decode from a pack.");
 			decodeFixedPoints();
 			return;
 		}
-		
+		 
 		fpData = fixedPoints.getBytes();
 
 		try 
