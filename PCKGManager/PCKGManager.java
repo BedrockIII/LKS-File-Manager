@@ -1,6 +1,7 @@
 package PCKGManager;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class PCKGManager {
 	ArrayList<byte[]> filesContents = new ArrayList<byte[]>();
 	ArrayList<String> pacFilesNames = new ArrayList<String>();
 	ArrayList<PCKGManager> pacFilesContents = new ArrayList<PCKGManager>();
+	private boolean nlksMode = false;
 	public PCKGManager(String name)
 	{
 		this.name = name;
@@ -22,6 +24,18 @@ public class PCKGManager {
 		
 		extractPAC();
 		
+	}
+	public PCKGManager(byte[] data, boolean nlksFile)
+	{
+		file = data;
+		nlksMode = true;
+		extractPAC();
+		
+	}
+	public void setLKSMode(boolean bool)
+	{
+		nlksMode = bool;
+		//ByteBuffer.
 	}
 	public PCKGManager(byte[] data, String name)
 	{
@@ -47,16 +61,25 @@ public class PCKGManager {
 		int nextCnt = 1;
 		String theName = "";
 		int headerSize = 32;
+		
+		ByteBuffer data = ByteBuffer.wrap(file);
+		if(nlksMode)
+		{
+			data.order(ByteOrder.LITTLE_ENDIAN);
+		}
 		if(isPAC(file))
 		{
 		while (nextCnt != 0) 
 		{
 			
 			
-			//System.out.println("NextHeaderPos: " + nextHeaderPos);
-			headerSize = ByteBuffer.wrap(Arrays.copyOfRange(file, nextHeaderPos+8, nextHeaderPos+12)).getInt();
+			bFM.Utils.DebugPrint("\tNextHeaderPos: " + nextHeaderPos);
+			headerSize = data.getInt(nextHeaderPos+8);
+			int FileStartPosition = nextHeaderPos+headerSize;
+			int FileEndPosition = FileStartPosition + data.getInt(nextHeaderPos+4);
 			
-			fileContents = Arrays.copyOfRange(file, nextHeaderPos+headerSize, nextHeaderPos+headerSize + ByteBuffer.wrap(Arrays.copyOfRange(file,nextHeaderPos+4,nextHeaderPos+8)).getInt());	
+			
+			fileContents = Arrays.copyOfRange(file, FileStartPosition, FileEndPosition);	
 			
 			fileName = Arrays.copyOfRange(file, nextHeaderPos+12, nextHeaderPos+headerSize);
 			try {theName = new String(fileName);} catch (Exception error) {System.out.println("Failed to Extract due to being an unsupported encoding");break;}
@@ -74,13 +97,13 @@ public class PCKGManager {
 			
 			filesNames.add(theNewName);
 			
-			bFM.Utils.DebugPrint("Found File: " + theName + " File Size: " + Math.abs(ByteBuffer.wrap(Arrays.copyOfRange(file, nextHeaderPos+4, nextHeaderPos+8)).getInt()));
+			bFM.Utils.DebugPrint("Found File: " + theName + " File Size: " + Math.abs(data.getInt(nextHeaderPos+4)));
 			bFM.Utils.DebugPrint("\tHeader Size: " + headerSize);
 			filesContents.add(fileContents);
 			
 			
 			
-			nextCnt = ByteBuffer.wrap(Arrays.copyOfRange(file, nextHeaderPos+0, nextHeaderPos+4)).getInt();
+			nextCnt = data.getInt(nextHeaderPos);
 			nextHeaderPos += nextCnt;
 			}
 		}
@@ -126,7 +149,7 @@ public class PCKGManager {
 				return filesContents.get(i);
 			}
 		}
-		return null;
+		return new byte[0];
 	}
 	public void replaceFile(String name, byte[] file)
 	{

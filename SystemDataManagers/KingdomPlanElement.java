@@ -47,6 +47,8 @@ public class KingdomPlanElement
 	{
 		this.AreaCode = AreaCode;
 		Name = bFM.Utils.formatString(NameLine);
+	}public KingdomPlanElement()
+	{
 	}
 	public String getName()
 	{
@@ -137,5 +139,137 @@ public class KingdomPlanElement
 		if(cockpitLogCode!=-1) ret += "\t\t<<Cockpit Log Code>> " + cockpitLogCode + "\n";
 		if(flag16!=-1) ret += "\t\t<<flag16>> " + flag16 + "\n";
 		return ret;
+	}
+	public void setName(String name)
+	{
+		Name = name;
+	}
+	public void setDescription(String text) 
+	{
+		Description = text;
+	}
+	public void setImage(String text) 
+	{
+		Image = text;
+	}
+	public int getPrice() 
+	{
+		return Price;
+	}
+	public void setPrice(int num) 
+	{
+		Price = num;
+	}
+	public int getActivationFlag() 
+	{
+		return ActivationFlag;
+	}
+	public void setActivationFlag(int num) 
+	{
+		ActivationFlag = num;
+	}
+	public int getAltActivationFlag() 
+	{
+		return AltActivationFlag;
+	}
+	public void setAltActivationFlag(int num) 
+	{
+		AltActivationFlag = num;
+	}
+	public int getFlag5() 
+	{
+		return flag5;
+	}
+	public void setFlag5(int num) 
+	{
+		flag5 = num;
+	}
+	public int getFlag6() 
+	{
+		return flag6;
+	}
+	public int getFlag7() 
+	{
+		return flag7;
+	}
+	public int getFlag8() 
+	{
+		return flag8;
+	}
+	public int getFlag12() 
+	{
+		return flag12;
+	}
+	public int getFlag13() 
+	{
+		return flag13;
+	}
+	public int getFlag14() 
+	{
+		return flag14;
+	}
+	public int getFlag16() 
+	{
+		return flag16;
+	}
+	public int getPopulationMinimum() 
+	{
+		return PopulationMinimum;
+	}
+	public int getPrereqPurchaseFlag() 
+	{
+		return PrereqPurchaseFlag;
+	}
+	public int getPurchaseFlag() 
+	{
+		return PurchaseFlag;
+	}
+	public int getCockpitLogCode() 
+	{
+		return cockpitLogCode;
+	}
+	public void setFlag6(int num) 
+	{
+		flag6 = num;
+	}
+	public void setFlag7(int num) 
+	{
+		flag7 = num;
+	}
+	public void setFlag8(int num) 
+	{
+		flag8 = num;
+	}
+	public void setFlag12(int num) 
+	{
+		flag12 = num;
+	}
+	public void setFlag13(int num) 
+	{
+		flag13 = num;
+	}
+	public void setFlag14(int num) 
+	{
+		flag14 = num;
+	}
+	public void setFlag16(int num) 
+	{
+		flag16 = num;
+	}
+	public void setPopulationMinimum(int num) 
+	{
+		PopulationMinimum = num;
+	}
+	public void setPrereqPurchaseFlag(int num) 
+	{
+		PrereqPurchaseFlag = num;
+	}
+	public void setPurchaseFlag(int num) 
+	{
+		PurchaseFlag = num;
+	}
+	public void setCockpitLogCode(int num) 
+	{
+		cockpitLogCode = num;
 	}
 }

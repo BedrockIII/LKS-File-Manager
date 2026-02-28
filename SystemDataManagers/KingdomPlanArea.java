@@ -94,4 +94,36 @@ public class KingdomPlanArea
 		}
 		return Flags;
 	}
+	public ArrayList<KingdomPlanElement>getElements() 
+	{
+		return Elements;
+	}
+	public void setName(String text) 
+	{
+		Name = text;
+	}
+	public void setDescription(String text) 
+	{
+		Description = text;
+	}
+	public void setImage(String text) 
+	{
+		Image = text;
+	}
+	public void moveDown(int index) 
+	{
+		KingdomPlanElement Element = (KingdomPlanElement) Elements.get(index);
+		Elements.remove(index);
+		Elements.add(index+1, Element);
+	}
+	public void moveUp(int index) 
+	{
+		KingdomPlanElement Element = (KingdomPlanElement) Elements.get(index);
+		Elements.remove(index);
+		Elements.add(index-1, Element);
+	}
+	public void removeElement(KingdomPlanElement element) 
+	{
+		Elements.remove(element);
+	}
 }

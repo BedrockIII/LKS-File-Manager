@@ -69,7 +69,7 @@ public class KingdomPlanManager
 			}
 			else if(lines.get(i).indexOf("<<Area Description>>")!=-1||lines.get(i).indexOf("<<Area Image>>")!=-1)
 			{
-				if((lines.get(i+1).indexOf("<<")!=-1)&&lines.get(i+1).indexOf(">>")!=-1)//if next line isny another object
+				if(i+1!=lines.size()&&(lines.get(i+1).indexOf("<<")!=-1)&&lines.get(i+1).indexOf(">>")!=-1)//if next line isny another object
 				{
 					Areas.get(Areas.size()-1).addLine(lines.get(i));
 				}
@@ -182,7 +182,7 @@ public class KingdomPlanManager
 			{
 				Areas.get(AreaIndex).addElement(new KingdomPlanElement(ElemNames.get(i), ElemDescriptions.get(i), ElemImages.get(i), ElemFlags.get(i)));
 			}
-			else
+			else 
 			{
 				bFM.Utils.DebugPrint("Element has an invalid Area Index");
 			}
@@ -287,5 +287,9 @@ public class KingdomPlanManager
 			ret+=Areas.get(i).toString();
 		}
 		return ret;
+	}
+	public ArrayList<KingdomPlanArea> getAreas()
+	{
+		return Areas;
 	}
 }

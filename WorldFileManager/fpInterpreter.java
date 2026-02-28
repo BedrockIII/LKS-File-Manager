@@ -14,7 +14,7 @@ public class fpInterpreter
 	//SFP = Sound FP 
 	int numObjects;
 	int headerSize;
-	static boolean DEGREEMODE = false;
+	static boolean DEGREEMODE = true;
 	ArrayList<fpObject> objects = new ArrayList<fpObject>();
 	ArrayList<String> objectTypes = new ArrayList<String>();
 	public fpInterpreter(byte[] data)
@@ -24,6 +24,7 @@ public class fpInterpreter
 	}
 	private void extractObjects() 
 	{ 
+		if(file.length<36) return;
 		//Get Type
 		byte[] type = Arrays.copyOfRange(file, 32, 36);
 		try {fpType = new String(type, "ISO-8859-1");} catch (Exception error) {System.out.println("Failed to Extract due to being an unsupported encoding");}

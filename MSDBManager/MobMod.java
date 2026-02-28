@@ -72,11 +72,64 @@ public class MobMod
 			e.printStackTrace();
 		}
 	}
+	String modLine = null;
+	public MobMod(String modLine)
+	{
+		this.modLine = modLine;
+		modCode = getNextInt();
+		modReplacementCode= getNextInt();
+		health= getNextInt();
+		num3 = getNextInt();
+		num4 = getNextInt();
+		num5 = getNextInt();
+		num6 = getNextInt();
+		num7 = getNextInt();
+		num8 = getNextInt();
+		num9 = getNextInt();
+		num10 = getNextInt();
+		num11 = getNextInt();
+		mobCode = getNextInt();
+		num13 = getNextInt();
+		num14 = getNextInt();
+		num15 = getNextInt();
+		num16 = getNextInt();
+		num17 = getNextInt();
+		num18 = getNextInt();
+		num19 = getNextInt();
+		num20 = getNextInt();
+		num21 = getNextInt();
+		num22 = getNextInt();
+		num23 = getNextInt();
+		num24 = getNextInt();
+		num25 = getNextInt();
+		num26 = getNextInt();
+		num27 = getNextInt();
+		name = bFM.Utils.formatString(this.modLine);
+	}
+	private int getNextInt()
+	{
+		if(modLine==null)return -1;
+		int startIndex = 0;
+		String ret = "";
+		String validChars = "1234567890-.";
+		for(int i = startIndex; i<modLine.length()&&modLine.charAt(i)!=-1; i++)
+		{
+			if(validChars.indexOf(modLine.charAt(i))!=-1)
+			{
+				ret+=modLine.charAt(i);
+			}
+		}
+		startIndex = modLine.indexOf(',');
+		modLine = modLine.substring(startIndex+1);
+		
+		
+		return Integer.parseInt(ret);
+	}
 	public String toString()
 	{
-		return ""+modCode +" ,"+modReplacementCode+" ,"+health+" ,"+num3 +" ,"+num4 +" ,"+num5 +" ,"+num6 +" ,"+num7 +" ,"+num8 +" ,"+num9 + " ," +
-				num10 +" ,"+num11 +" ,"+mobCode +" ,"+num13 +" ,"+num14 +" ,"+num15 +" ,"+num16 +" ,"+num17 +" ,"+num18 +" ,"+num19 +" ," +
-				num20 +" ,"+num21 +" ,"+num22 +" ,"+num23 +" ,"+num24 +" ,"+num25 +" ,"+num26 +" ,"+num27 +" ,\""+name+"\"\n";
+		return ""+modCode +", "+modReplacementCode+", "+health+", "+num3 +", "+num4 +", "+num5 +", "+num6 +", "+num7 +", "+num8 +", "+num9 + ", " +
+				num10 +", "+num11 +", "+mobCode +", "+num13 +", "+num14 +", "+num15 +", "+num16 +", "+num17 +", "+num18 +", "+num19 +", " +
+				num20 +", "+num21 +", "+num22 +", "+num23 +", "+num24 +", "+num25 +", "+num26 +", "+num27 +", \""+name+"\"\n";
 	}
 	public String toHP()
 	{

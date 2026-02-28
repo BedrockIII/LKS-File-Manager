@@ -13,6 +13,7 @@ public class MobResAsn
 	ArrayList<MobRes> Res = new ArrayList<MobRes>();
 	public MobResAsn(byte[] data)
 	{
+		if(data.length<4) return;
 		startNum1 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort();
 		startNum2 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(2);
 		for(int i = 4; i<data.length-99; i+=104)

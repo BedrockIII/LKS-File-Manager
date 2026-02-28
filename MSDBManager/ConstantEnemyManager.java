@@ -530,7 +530,14 @@ public class ConstantEnemyManager
 					{
 						if(modCode==-1||Objects.get(Groups.get(groupIndex1).getObjectIndex()+j).getModCode()==modCode)
 						{
-							ret+= Objects.get(Groups.get(groupIndex1).getObjectIndex()+j).bMos();
+							MobGroup mobGroup = Groups.get(groupIndex1);
+							int objectIndex = mobGroup.getObjectIndex()+j;
+							if(Objects.size()>objectIndex)
+							{
+								MobObject obj = Objects.get(objectIndex);
+								ret+= obj.bMos();
+							}
+							
 						}
 						
 					}

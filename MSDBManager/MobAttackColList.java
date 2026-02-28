@@ -12,6 +12,7 @@ public class MobAttackColList
 	ArrayList<MobAttackCol> AttackCol = new ArrayList<MobAttackCol>();
 	public MobAttackColList(byte[] data)
 	{
+		if(data.length<4) return;
 		startNum1 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort();
 		startNum2 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(2);
 		for(int i = 4; i<data.length; i+=36)

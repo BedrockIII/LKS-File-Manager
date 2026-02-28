@@ -1,6 +1,7 @@
 package WorldFileManager;
 
 import java.nio.ByteBuffer;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -26,6 +27,7 @@ public class fpObject
 	float zPos;
 	float wPos;
 	boolean blenderCoords, randomizeRotation, randomizeScale = false;
+	private static final DecimalFormat round = new DecimalFormat("0.00");
 	ArrayList<fpObject> referenceObjects = new ArrayList<fpObject>();
 	String type = "";
 	public fpObject(String name, int index, int objectType, 
@@ -326,6 +328,7 @@ public class fpObject
 	}
  	public String toBFP()
 	{
+ 		
 		String nameLine = "";
 		String objectLine = "";
 		String positionLine = "";
@@ -343,15 +346,15 @@ public class fpObject
 		if(xPos!=0.0||yPos!=0.0||zPos!=0.0||wPos!=0.0)
 		{
 			positionLine = "\t\t<<Position>> ";
-			if(wPos!=0.0) positionLine += "{" + wPos +"} ";
-			if(xPos!=0.0||yPos!=0.0||zPos!=0.0) positionLine += "(" + xPos + ", " + yPos + ", " + zPos + ")";
+			if(wPos!=0.0) positionLine += "{" + round.format(wPos) +"} ";
+			if(xPos!=0.0||yPos!=0.0||zPos!=0.0) positionLine += "(" + round.format(xPos) + ", " + round.format(yPos) + ", " + round.format(zPos) + ")";
 			positionLine+="\n";
 		}
 		if(xStretch!=1||yStretch!=1||zStretch!=1||(wStretch!=0&&wStretch!=1))
 		{
 			stretchLine = "\t\t<<Scale>> ";
-			if(wStretch!=0&&wStretch!=1) stretchLine += "{" + wStretch +"} ";
-			if(xStretch!=1||yStretch!=1||zStretch!=1) stretchLine += "(" + xStretch + ", " + yStretch + ", " + zStretch + ")";
+			if(wStretch!=0&&wStretch!=1) stretchLine += "{" + round.format(wStretch) +"} ";
+			if(xStretch!=1||yStretch!=1||zStretch!=1) stretchLine += "(" + round.format(xStretch) + ", " + round.format(yStretch) + ", " + round.format(zStretch) + ")";
 			stretchLine += "\n";
 		}
 		if(xAxisRotation!=0||yAxisRotation!=0||zAxisRotation!=0||wAxisRotation!=0)

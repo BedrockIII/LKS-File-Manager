@@ -102,4 +102,8 @@ public class MobGroup //probably who has attack bonus
 	{
 		groupIndex = (int)(Short.MAX_VALUE*Math.random());
 	}
+	public int getGroupNumber()
+	{
+		return groupNumber;
+	}
 }
