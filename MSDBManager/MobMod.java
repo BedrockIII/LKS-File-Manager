@@ -76,52 +76,61 @@ public class MobMod
 	public MobMod(String modLine)
 	{
 		this.modLine = modLine;
-		modCode = getNextInt();
-		modReplacementCode= getNextInt();
-		health= getNextInt();
-		num3 = getNextInt();
-		num4 = getNextInt();
-		num5 = getNextInt();
-		num6 = getNextInt();
-		num7 = getNextInt();
-		num8 = getNextInt();
-		num9 = getNextInt();
-		num10 = getNextInt();
-		num11 = getNextInt();
-		mobCode = getNextInt();
-		num13 = getNextInt();
-		num14 = getNextInt();
-		num15 = getNextInt();
-		num16 = getNextInt();
-		num17 = getNextInt();
-		num18 = getNextInt();
-		num19 = getNextInt();
-		num20 = getNextInt();
-		num21 = getNextInt();
-		num22 = getNextInt();
-		num23 = getNextInt();
-		num24 = getNextInt();
-		num25 = getNextInt();
-		num26 = getNextInt();
-		num27 = getNextInt();
+		modCode = getInt(0);
+		modReplacementCode= getInt(1);
+		health= getInt(2);
+		num3 = getInt(3);
+		num4 = getInt(4);
+		num5 = getInt(5);
+		num6 = getInt(6);
+		num7 = getInt(7);
+		num8 = getInt(8);
+		num9 = getInt(9);
+		num10 = getInt(10);
+		num11 = getInt(11);
+		mobCode = getInt(12);
+		num13 = getInt(13);
+		num14 = getInt(14);
+		num15 = getInt(15);
+		num16 = getInt(16);
+		num17 = getInt(17);
+		num18 = getInt(18);
+		num19 = getInt(19);
+		num20 = getInt(20);
+		num21 = getInt(21);
+		num22 = getInt(22);
+		num23 = getInt(23);
+		num24 = getInt(24);
+		num25 = getInt(25);
+		num26 = getInt(26);
+		num27 = getInt(27);
 		name = bFM.Utils.formatString(this.modLine);
 	}
-	private int getNextInt()
+	private int getInt(int index)
 	{
 		if(modLine==null)return -1;
 		int startIndex = 0;
+		for(int i = 0; i<modLine.length(); i++)
+		{
+			if(startIndex==index)
+			{
+				startIndex = i;
+				break;
+			}
+			if(modLine.charAt(i)==',')
+			{
+				startIndex++;
+			}
+		}
 		String ret = "";
 		String validChars = "1234567890-.";
-		for(int i = startIndex; i<modLine.length()&&modLine.charAt(i)!=-1; i++)
+		for(int i = startIndex; i<modLine.length()&&modLine.charAt(i)!=','; i++)
 		{
 			if(validChars.indexOf(modLine.charAt(i))!=-1)
 			{
 				ret+=modLine.charAt(i);
 			}
 		}
-		startIndex = modLine.indexOf(',');
-		modLine = modLine.substring(startIndex+1);
-		
 		
 		return Integer.parseInt(ret);
 	}
@@ -137,37 +146,37 @@ public class MobMod
 	}
 	public byte[] toBytes()
 	{
-		byte[] ret = ByteBuffer.allocate(2).putInt(modCode).array();
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(modReplacementCode).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(health).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num3).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num4).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num5).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num6).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num7).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num8).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num9).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num10).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num11).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(mobCode).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num13).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num14).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num15).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num16).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num17).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num18).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num19).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num20).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num21).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num22).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num23).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num24).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num25).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num26).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putInt(num27).array());
+		byte[] ret = ByteBuffer.allocate(2).putShort((short) modCode).array();
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) modReplacementCode).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) health).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num3).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num4).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num5).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num6).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num7).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num8).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num9).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num10).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num11).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) mobCode).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num13).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num14).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num15).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num16).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num17).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num18).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num19).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num20).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num21).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num22).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num23).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num24).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num25).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num26).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num27).array());
 		ret = bFM.Utils.mergeArrays(ret, name.getBytes());
 		byte[] ret1 = new byte[88]; 
-		for(int i = 0; i<ret.length;i++)
+		for(int i = 0; i<ret.length&&i<88;i++)
 		{
 			ret1[i] = ret[i];
 		}

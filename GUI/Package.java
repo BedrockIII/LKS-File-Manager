@@ -287,7 +287,16 @@ public class Package extends Generic
 		{
 			if(c instanceof KingdomPlanFileList)
 			{
-				packageFile.addFile("KingdomPlan.bin", ((KingdomPlanFileList)(c)).getBytes());
+				packageFile.addFile("KingdomPlan.bin", ((KingdomPlanFileList)c).getBytes());
+			}
+			else if(c instanceof Generic)
+			{
+				if(((Generic)c).getName()!=null)
+				{
+					System.out.println(((Generic)c).getName());
+					packageFile.addFile(((Generic)c).getName(), ((Generic)c).getBytes());
+				}
+				
 			}
 		}
 		

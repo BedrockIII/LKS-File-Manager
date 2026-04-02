@@ -37,6 +37,7 @@ public class GUI extends JFrame
 	//private static JPanel openedFile = new Package();
 	private static FileListPanel openedFileList = new FileListPanel();
 	private static JScrollPane leftPanel = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	private static GenericFileInfoGUI fileInfo = new GenericFileInfoGUI();
 	static JSplitPane contents = new JSplitPane();
 	public static JFrame frame = new JFrame();
 	public static final int assetHeight = 20;
@@ -89,6 +90,8 @@ public class GUI extends JFrame
 	{
 		openedFileList.update();
 		if(leftPanel.getViewport().getView()!=null)leftPanel.getViewport().getView().repaint();
+		fileInfo.update();
+		fileInfo.repaint();
 		frame.repaint();
 		//System.out.println(openedFileList.getHeight());
 		frame.setSize(Math.max(Math.max(rowWidth+20, 300), frame.getWidth()), Math.max(openedFileList.getHeight()+45+assetHeight, frame.getHeight()));
@@ -105,13 +108,14 @@ public class GUI extends JFrame
 		//frame.setContentPane(LeftWindow);
         //contents.setTopComponent(LeftWindow);
 	}
-	public static void setFileInfo(JPanel gui) 
+	public static void setFileInfo(GenericFileInfoGUI gui) 
 	{
+		fileInfo = gui;
 		leftPanel.setViewportView(gui);
 	}
 	public static Dimension getRightSize() 
 	{
-		System.out.println(leftPanel.getSize());
+		//System.out.println(leftPanel.getSize());
 		return leftPanel.getSize();
 	}
 	public static void deselectAll() 

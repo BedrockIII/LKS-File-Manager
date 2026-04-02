@@ -12,12 +12,14 @@ import javax.swing.JPanel;
 public class LabeledInputBox extends JPanel
 {
 	Component comp;
+	JLabel text;
 	int height = 0;
+	GridBagConstraints layout = new GridBagConstraints();
 	public LabeledInputBox(String labelText, Component comp, double yFactor)
 	{
 		this.comp = comp;
 		height = (int)(GUI.assetHeight*yFactor);
-		GridBagConstraints layout = new GridBagConstraints();
+		
 		setLayout(new GridBagLayout());
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.fill = GridBagConstraints.HORIZONTAL;
@@ -25,7 +27,7 @@ public class LabeledInputBox extends JPanel
 		layout.weighty = 1.0;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
 		setLayout(new GridBagLayout());
-		JLabel text = new JLabel(labelText);
+		text = new JLabel(labelText);
 		text.setPreferredSize(GUI.buttonSize);
 		add(text);
 		add(comp, layout);
@@ -33,6 +35,10 @@ public class LabeledInputBox extends JPanel
 	}
 	public void update()
 	{
+		removeAll();
+		add(text);
+		add(comp, layout);
+		
 		comp.setPreferredSize(new Dimension((int) GUI.getRightSize().getWidth() - GUI.buttonWidth, height));
 		comp.setMinimumSize(new Dimension(250 - GUI.buttonWidth, height));
 		setPreferredSize(new Dimension((int) GUI.getRightSize().getWidth(), height));

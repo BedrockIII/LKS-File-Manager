@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 
 import CameraData.CameraZoneList;
 import MSDBManager.ConstantEnemyManager;
+import MSDBManager.MobModList;
 import PCKGManager.PCKGManager;
 import WorldFileManager.fpInterpreter;
 import itemManager.itemPlaceManager;
@@ -24,7 +25,9 @@ public class Main
 	public static boolean grid = true;
 	final public static String importPath = "D:\\LKS Mod\\";
 	final public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\";
-	static String name = "0701";//0510 soba
+	//final public static String importPath = "D:\\LKS Green\\";
+	//final public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\DeadweightsStudio\\";
+	static String name = "0202";//0510 soba
 	static byte [] colData;
 	static byte [] fpData;
 	static String fpType = ".vfp";	
@@ -38,11 +41,11 @@ public class Main
 		//decodeFixedPoints();
 		//menuDBManager();
 		//packGrid();
-		mapDataBase();			
+		//mapDataBase();			
 		//decodeLightZones();
 		//encodeLightZones();
 		//message();				
-		//enemyManagers();
+		enemyManagers();
 		//decodeEnemyData("CoinPurse.bMos", 4010);
 		//itemManager();
 		//MailManager();
@@ -398,8 +401,10 @@ public class Main
 	private static void encodeEnemyData(String difficulty)	
 	{
 		String outputPath = Main.outputPath + "Resources\\";
+		String importPath = Main.importPath + "Resources\\Monster Database\\";
 		bFM.Utils.DebugPrint("Encoding Enemies "+ difficulty);
 		ConstantEnemyManager bMos;
+		MobModList enemyModifications = null;
 		try
 		{
 			bMos = new ConstantEnemyManager(Files.readAllLines(Paths.get(importPath+"Enemies.bMos")));
@@ -409,6 +414,14 @@ public class Main
 			bFM.Utils.DebugPrint("Failed to locate file at: "+importPath+"Enemies.bMos");
 			bFM.Utils.DebugPrint("Program will now return.");
 			return;
+		}
+		try
+		{
+			enemyModifications = new MobModList(Files.readAllLines(Paths.get(importPath+"MobModList"+difficulty+".lst"), Charset.forName("Shift-JIS")));
+		}
+		catch (IOException e)
+		{
+			bFM.Utils.DebugPrint("Failed to locate file at: "+importPath+"MobModList"+difficulty+".lst");
 		}
 		//bMos.setConstraints(704,896,704,896,false, true);
 		
@@ -429,6 +442,21 @@ public class Main
 		MonsterDataBase.addFile("MOP_14_CONST_PLACE.lst", bMos.getConstantPlaces());
 		MonsterDataBase.addFile("MOP_14_GROUP.lst", bMos.getGroups());
 		MonsterDataBase.addFile("MOP_14_OBJECT.lst", bMos.getObjects());
+		
+		if(enemyModifications!=null)
+		{
+			MonsterDataBase.addFile("MOB_24_MOD.lst", enemyModifications.toBytes());
+		}
+		else
+		{
+			try 
+			{
+				Files.write(Paths.get(importPath+"MobModList"+difficulty+".lst") , new MobModList(MonsterDataBase.getFile("MOB_24_MOD.lst")).toString().getBytes(Charset.forName("Shift-JIS")));
+			} catch (IOException e) 
+			{
+				bFM.Utils.DebugPrint("Failed to write Mod file at: "+importPath+"MobModList"+difficulty+".lst");
+			}
+		}
 		
 		try 
 		{
@@ -694,6 +722,14 @@ public class Main
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to locate Ground Configuration File at: " + inputPath+"grnd2.cfg");
+			try 
+			{
+				bFM.Utils.DebugPrint("Attempting to extract file");
+				Files.write(Paths.get(inputPath+"grnd2.cfg") , MapDataBase.getFile("grnd2.cfg"));
+			} catch (IOException i) 
+			{
+				bFM.Utils.DebugPrint("Failed to extract file");
+			}
 		}
 		try 
 		{
@@ -701,16 +737,33 @@ public class Main
 			bFM.Utils.DebugPrint("Sucessfully added Building Position File");
 		} catch (IOException e) 
 		{
-			bFM.Utils.DebugPrint("Failed to locate Building Position File at: " + inputPath+"grnd2.cfg");
+			bFM.Utils.DebugPrint("Failed to locate Building Position File at: " + inputPath+"buildPos0.lst");
+			try 
+			{
+				bFM.Utils.DebugPrint("Attempting to extract file");
+				Files.write(Paths.get(inputPath+"buildPos0.lst") , MapDataBase.getFile("buildPos0.lst"));
+			} catch (IOException i) 
+			{
+				bFM.Utils.DebugPrint("Failed to extract file");
+			}
 		}
 		try 
 		{
 			BuildingResourceList buildingList = new BuildingResourceList(Files.readAllLines(Paths.get(inputPath+"building0.lst"), Charset.forName("Shift_JIS")));
-			//MapDataBase.addFile("building0.lst", buildingList.toBytes());
+			MapDataBase.addFile("building0.lst", buildingList.toBytes());
+			MapDataBase.addFile("building0.lst", Files.readAllBytes(Paths.get(inputPath+"building0.lst")));
 			//bFM.Utils.DebugPrint("Sucessfully added Building Configuration File");
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to locate Building Configuration File at: " + inputPath + "building0.lst");
+			try 
+			{
+				bFM.Utils.DebugPrint("Attempting to extract file");
+				Files.write(Paths.get(inputPath+"building0.lst") , MapDataBase.getFile("building0.lst"));
+			} catch (IOException i) 
+			{
+				bFM.Utils.DebugPrint("Failed to extract file");
+			}
 		}
 		try 
 		{
@@ -719,14 +772,22 @@ public class Main
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to locate Exterior Places File at: " + inputPath + "extPlace1.lst");
+			try 
+			{
+				bFM.Utils.DebugPrint("Attempting to extract file");
+				Files.write(Paths.get(inputPath+"extPlace1.lst") , MapDataBase.getFile("extPlace1.lst"));
+			} catch (IOException i) 
+			{
+				bFM.Utils.DebugPrint("Failed to extract file");
+			}
 		}
-		//try 
-		//{
-			//Files.write(Paths.get(mapDBPath) , MapDataBase.getFile());
-		//} catch (IOException e) 
-		//{
-			//bFM.Utils.DebugPrint("Failed to write Map Data Base File");
-		//}
+		try 
+		{
+			Files.write(Paths.get(mapDBPath) , MapDataBase.getFile());
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrint("Failed to write Map Data Base File");
+			}
 	}
 	private static void decodeFixedPoints()
 	{

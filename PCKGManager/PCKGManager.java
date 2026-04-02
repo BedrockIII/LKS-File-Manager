@@ -61,7 +61,7 @@ public class PCKGManager {
 		int nextCnt = 1;
 		String theName = "";
 		int headerSize = 32;
-		
+		if(file.length<64)return;
 		ByteBuffer data = ByteBuffer.wrap(file);
 		if(nlksMode)
 		{
@@ -111,34 +111,63 @@ public class PCKGManager {
 		}
 	private void rePAC()
 	{//Turns the ArrayLists into a pacFile again
-		byte[] name = {0x00, 0x00, 0x00, 0x00};
-		byte[] line;
-		byte[] data = {0x50, 0x43, 0x4B, 0x47, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-		byte headerSize = 0x20;
-
+		byte[] data = new byte[32];
+			data[0] = 'P';
+			data[1] = 'C';
+			data[2] = 'K';
+			data[3] = 'G';
 		for (int i = 0; i < filesContents.size(); i++) 
 		{
-			//make header info
-			try {name = filesNames.get(i).getBytes();} catch (Exception error) {System.out.println("Unsupported Encoding!!!");break;}
-			if(name.length>20) headerSize = (byte)(((name.length+12)/32 + 1) * 32);
-			else headerSize = 32;
-			line = new byte[headerSize];
-			System.arraycopy(bFM.Utils.toByteArr((filesContents.get(i).length/32+1)*32+headerSize, 4), 0, line, 0, 4);
-			System.arraycopy(bFM.Utils.toByteArr(filesContents.get(i).length, 4), 0, line, 4, 4);
-			line[11] = headerSize;
-			if(i == filesContents.size()-1)
-			{
-				line[0] = 0x00;
-				line[1] = 0x00;
-				line[2] = 0x00;
-				line[3] = 0x00;
-			}
-			System.arraycopy(name, 0, line, 12, name.length);       
-			
-			data = bFM.Utils.mergeArrays(data, bFM.Utils.mergeArrays(line, filesContents.get(i))); //adds the newly packed data at the end of the data array
-			data = bFM.Utils.mergeArrays(data, new byte[((filesContents.get(i).length/32+1)*32+headerSize)-(filesContents.get(i).length+headerSize)]);
+			data = bFM.Utils.mergeArrays(data, getFileHeader(i));
 		}
 		file = data;
+	}
+	private byte[] getFileHeader(int index)
+	{
+		byte[] headerLine;
+		byte headerSize = 0x20;
+		byte[] name = {0x00, 0x00, 0x00, 0x00};
+		try {
+			name = filesNames.get(index).getBytes();
+			} 
+		catch (Exception error) 
+		{
+			System.out.println("Unsupported Encoding!!!");
+			return new byte[0];
+		}
+		if((name.length+12)>32) 
+			headerSize = (byte)(((name.length+12)/32 + 1) * 32);
+		else 
+			headerSize = 32;
+		
+		headerLine = new byte[headerSize];
+		int nextFileIndex = 0;
+		if(index != filesContents.size()-1)
+		{
+			nextFileIndex = (filesContents.get(index).length/32+1)*32+headerSize;
+		}
+		byte[] nextFileIndexArray = bFM.Utils.toByteArr(nextFileIndex, 4);
+		headerLine[0] = nextFileIndexArray[0];
+		headerLine[1] = nextFileIndexArray[1];
+		headerLine[2] = nextFileIndexArray[2];
+		headerLine[3] = nextFileIndexArray[3];
+		int fileSize = filesContents.get(index).length;
+		byte[] fileSizeArray = bFM.Utils.toByteArr(fileSize, 4);
+		headerLine[4] = fileSizeArray[0];
+		headerLine[5] = fileSizeArray[1];
+		headerLine[6] = fileSizeArray[2];
+		headerLine[7] = fileSizeArray[3];
+		byte[] headerSizeArray = bFM.Utils.toByteArr(headerSize, 4);
+		headerLine[8] = headerSizeArray[0];
+		headerLine[9] = headerSizeArray[1];
+		headerLine[10] = headerSizeArray[2];
+		headerLine[11] = headerSizeArray[3];
+		for(int i = 12; i<name.length+12&&i<headerSize; i++)
+		{
+			headerLine[i] = name[i-12];
+		}
+		byte[] ret = bFM.Utils.mergeArrays(headerLine, filesContents.get(index));
+		return  bFM.Utils.mergeArrays(ret, new byte[32-ret.length%32]);
 	}
 	public byte[] getFile(String name)
 	{ 
@@ -225,6 +254,7 @@ public class PCKGManager {
 	}
 	public void writePac(String outputName) 
 	{
+		rePAC();
 		try{Files.write(Paths.get(outputName + name), file);}catch(Exception error) {System.out.println("File Writing Error");}
 	}
 	public int getFileAmount()

@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MobModList 
 {
@@ -19,9 +20,17 @@ public class MobModList
 			Mod.add(new MobMod(Arrays.copyOfRange(data, i, i+88)));
 		}
 	}
+	public MobModList(List<String> data) 
+	{
+		for(int i = 0; i<data.size(); i++)
+		{
+			Mod.add(new MobMod(data.get(i)));
+		}
+	}
 	public String toString()
 	{
-		String ret = "Num " + startNum2 + "\n";
+		String ret = "";
+		//String ret = "Num " + startNum2 + "\n";
 		for(int i = 0; i<Mod.size(); i++)
 		{
 			ret = ret + Mod.get(i).toString();
@@ -39,8 +48,8 @@ public class MobModList
 	}
 	public byte[] toBytes()
 	{
-		byte[] ret = ByteBuffer.allocate(4).putShort((short)1).array();
-		ret = mergeArrays(ret, ByteBuffer.allocate(4).putFloat((short)Mod.size()).array());
+		byte[] ret = ByteBuffer.allocate(2).putShort((short)1).array();
+		ret = mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)Mod.size()).array());
 		for(int i = 0; i< Mod.size();i++)
 		{
 			ret = mergeArrays(ret, Mod.get(i).toBytes());

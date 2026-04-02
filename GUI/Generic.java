@@ -26,6 +26,7 @@ public class Generic extends JPanel
 	protected byte[] data;
 	protected String name = "";
 	GenericFileInfoGUI gui = null;
+	JLabel fileName = new JLabel();
 	protected Generic()
 	{
 		
@@ -61,7 +62,7 @@ public class Generic extends JPanel
 		add(spacer);
 		GridBagConstraints constraints = new GridBagConstraints();  
 		constraints.weightx = 1.0;
-		JLabel fileName = new JLabel(name, SwingConstants.LEFT);
+		fileName = new JLabel(name, SwingConstants.LEFT);
 		fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
 		add(fileName, constraints);
 		
@@ -97,13 +98,17 @@ public class Generic extends JPanel
 			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			//chooseFile.setFileFilter(new FileNameExtensionFilter("Collision File", "col"));
 			
-			chooseFile.showOpenDialog(null);
-			int num = chooseFile.showSaveDialog(null);
+			int num =chooseFile.showOpenDialog(null);
 			if(num==JFileChooser.APPROVE_OPTION)
 			{
 				try 
 				{
 					data = Files.readAllBytes(chooseFile.getSelectedFile().toPath());
+					//System.out.println(data.length);
+					gui.updateGUI(data);
+					name = chooseFile.getSelectedFile().toPath().getFileName().toString();
+					fileName.setText(name);
+					GUI.update();
 				} catch (IOException i) 
 				{
 					i.printStackTrace();
@@ -153,6 +158,8 @@ public class Generic extends JPanel
 	}
 	public byte[] getBytes() 
 	{
+		System.out.println(name);
+		if(gui==null) return new byte[0];
 		return gui.getBytes();
 	}
 	public void deselect()

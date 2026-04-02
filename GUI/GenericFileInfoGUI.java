@@ -40,10 +40,17 @@ public class GenericFileInfoGUI extends JPanel
 	public void updateGUI(byte[] data)
 	{
 		this.data = data;
+		//System.out.println(data.length);
 		fileSize.replaceComponent(new JLabel("" + data.length));
+		//repaint();
 	}
 	public byte[] getBytes() 
 	{
 		return data;
+	}
+	public void update() 
+	{
+		if(data==null) fileSize.replaceComponent(new JLabel("0"));
+		else fileSize.replaceComponent(new JLabel("" + data.length));
 	}
 }

@@ -185,7 +185,7 @@ public class Utils
 	public static String formatString(String line) 
 	{
 		String ret = "";
-		String lineAfterHeader = line.substring(line.indexOf(">>"));
+		String lineAfterHeader = line.substring(Math.max(line.indexOf(">>"), 0));
 		int startIndex = lineAfterHeader.indexOf('\"');
 		int endIndex = lineAfterHeader.lastIndexOf('\"');
 		if(startIndex!=-1&&endIndex!=-1)

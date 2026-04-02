@@ -4,6 +4,7 @@
 package MSDBManager;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -14,19 +15,30 @@ import PCKGManager.PCKGManager;
  */
 public class ExtractionTester 
 {
-	static String outputPath = "D:\\ws - Copy\\pack\\mount\\msbdnlks\\Output\\";
-	static String inputPath = "D:\\ws - Copy\\pack\\mount\\msbdnlks\\msDB27.pac"; 
+	static String outputPath = "D:\\ModTest\\";
+	static String inputPath = "D:\\ModTest\\"; 
+	//static String outputPath = "D:\\ws - Copy\\pack\\mount\\msbdnlks\\Output\\";
+	//static String inputPath = "D:\\ws - Copy\\pack\\mount\\msbdnlks\\msDB27.pac"; 
 	//static String inputPath = "D:\\LKS Debug!!!!1\\ROMs\\onetri1\\DATA\\files\\res\\test\\";
 	public static void main(String[] args) 
 	{
 		
 		try {
 			//testAll();
-			RandomMonster();
+			testMod();
+			//RandomMonster();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	private static void testMod() throws IOException
+	{
+		//MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB24MOD.lst")));
+		//Files.write(Paths.get(outputPath+"MobModList.lst"), mod.toString().getBytes("Shift-JIS"));
+		MobModList mod2 = new MobModList(Files.readAllLines(Paths.get(inputPath+"MobModList.lst"), Charset.forName("Shift-JIS")));
+		Files.write(Paths.get(outputPath+"MOB25MOD.lst"), mod2.toBytes());
+		//testDifferences(mod.toBytes(), mod2.toBytes());
 	}
 	public static void RandomMonster() throws IOException
 	{
