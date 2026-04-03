@@ -93,12 +93,12 @@ public class itemDatabaseManager
 		{
 			for(Item i : items)
 			{
-				if(Line.indexOf("HITSE "+ i.getItemCode())!=-1)
+				if(Line.indexOf("HITSE "+ i.getItemCode()+",")!=-1)
 				{
 					i.addHitSoundEffectData(Line);
 					break;
 				}
-				if(Line.indexOf("WEP " + i.getItemCode())!=-1)
+				if(Line.indexOf("WEP " + i.getItemCode()+",")!=-1)
 				{
 					i.addWeaponData(Line);
 					break;
