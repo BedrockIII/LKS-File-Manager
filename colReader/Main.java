@@ -12,6 +12,7 @@ import MSDBManager.ConstantEnemyManager;
 import MSDBManager.MobModList;
 import PCKGManager.PCKGManager;
 import WorldFileManager.fpInterpreter;
+import itemManager.itemDatabaseManager;
 import itemManager.itemPlaceManager;
 import mapDBManager.BuildingResourceList;
 import mapDBManager.exteriorPlaceList;
@@ -25,8 +26,6 @@ public class Main
 	public static boolean grid = true;
 	final public static String importPath = "D:\\LKS Mod\\";
 	final public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\";
-	//final public static String importPath = "D:\\LKS Green\\";
-	//final public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\DeadweightsStudio\\";
 	static String name = "0202";//0510 soba
 	static byte [] colData;
 	static byte [] fpData;
@@ -45,9 +44,10 @@ public class Main
 		//decodeLightZones();
 		//encodeLightZones();
 		//message();				
-		enemyManagers();
+		//enemyManagers();
 		//decodeEnemyData("CoinPurse.bMos", 4010);
 		//itemManager();
+		decodeItems(1);
 		//MailManager();
 		//decodeCollision("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\zpack\\mapBoot2.pac\\");
 	}
@@ -378,24 +378,23 @@ public class Main
 	private static void decodeItems(int language)
 	{
 		bFM.Utils.DebugPrint("Attempting to decode item places");
-		PCKGManager itemDB = new PCKGManager("itemDB");
+		byte[] itemDB = new byte[0];
 		try 
 		{
 			bFM.Utils.DebugPrint("Reading Item Pack at: " + outputPath+"itemDB3_"+language+".pac");
-			itemDB = new PCKGManager(Files.readAllBytes(Paths.get(outputPath + "itemDB3_"+language+".pac")));
-			return;
+			itemDB = Files.readAllBytes(Paths.get(outputPath + "itemDB3_"+language+".pac"));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read Item Pack");
 		}
-		itemPlaceManager items = new itemPlaceManager(itemDB.getFile("itemPlace.bin"));
+		itemDatabaseManager items = new itemDatabaseManager(itemDB);
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to write Item Places File.");
-			Files.write(Paths.get(importPath+"Item Places.txt") , items.toString().getBytes());
+			bFM.Utils.DebugPrint("Attempting to write Item Database File.");
+			Files.write(Paths.get(importPath+"Item Database.txt") , items.toString().getBytes(Charset.forName("Shift_JIS")));
 		} catch (IOException e) 
 		{
-			bFM.Utils.DebugPrint("Failed to write extracted file");
+			bFM.Utils.DebugPrint("Failed to write decoded file");
 		}
 	}
 	private static void encodeEnemyData(String difficulty)	
