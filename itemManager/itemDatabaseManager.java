@@ -1,7 +1,11 @@
 package itemManager;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -122,14 +126,84 @@ public class itemDatabaseManager
 	{
 		//TODO, do a loop through all lines that adds the line to the last item made, or makes a new item
 		//Initializes an Item Manager using the extracted textfile, for re-encryption
+		Item lastItemCreated = null;
+		for(String Line : lines)
+		{
+			if(Line.indexOf("<<Item>>")!=-1)
+			{
+				lastItemCreated = new Item(Line);
+				items.add(lastItemCreated);//Can add instantly because it is the same object
+			}
+			else if(Line.indexOf("<<")!=-1 && Line.indexOf(">>")!=-1)
+			{
+				lastItemCreated.addItemVariableLine(Line);
+			}
+		}
 		
 	}
 	public String toString()
 	{
+		//If I need to explain this, you dont need to read it.
 		String ret = "LKS Item Database File Version 1.0\n";
 		for(Item i : items)
 		{
 			ret += i;
+		}
+		return ret;
+	}
+	public byte[] toBytes()
+	{
+		//return an encoded byte Array
+		PCKGManager itemDB = new PCKGManager("Item Database");
+		itemDB.addFile("item1.bin", getItemBin());//No Difference!!!
+		itemDB.addFile("item1.lst", getItemList());//No Difference!!!
+		itemDB.addFile("item1sub.lst", getItemSubList());//No Difference!!!
+		itemDB.addFile("itemPlace.bin", getItemPlacementData());//.34% difference
+		return itemDB.getFile();
+	}
+	private byte[] getItemSubList() 
+	{
+		//returns the item1sub.lst file
+		String ret = "";
+		for(Item i : items)
+		{
+			ret += i.getSubList();
+		}
+		//System.out.println(ret);
+		return ret.getBytes(Charset.forName("Shift_JIS"));
+	}
+	private byte[] getItemList() 
+	{
+		// returns the item1.lst file
+		String ret = "";
+		for(Item i : items)
+		{
+			ret += i.getList();
+		}
+		
+		return ret.getBytes();
+	}
+	private byte[] getItemPlacementData() 
+	{
+		// returns the itemPlace.bin file
+		byte[] ret = new byte[14];
+		int placeCount = 0;
+		for(Item i : items)
+		{
+			byte[] newArr = i.getPlaceBytes();
+			ret = bFM.Utils.mergeArrays(ret, newArr);
+			if(newArr.length==28) placeCount++;
+		}
+		return bFM.Utils.mergeArrays(bFM.Utils.toByteArr(placeCount, 2), ret);
+	}
+	private byte[] getItemBin() 
+	{
+		// creates the item1.bin file
+		byte[] ret = bFM.Utils.toByteArr(items.size(), 4);
+		ret = bFM.Utils.mergeArrays(ret, new byte[12]);
+		for(Item i : items)
+		{
+			ret = bFM.Utils.mergeArrays(ret, i.getItemBytes());
 		}
 		return ret;
 	}

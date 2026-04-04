@@ -45,6 +45,7 @@ public class Item
 	int BreakSpeed = -1;
 	String AttackType = "";
 	int AttackSpeed = -1;
+	Placement lastPlacement = null;
 	protected Item(byte[] data)  
 	{
 		// Create an Item from an ItemBin Item Array
@@ -187,6 +188,158 @@ public class Item
 		{
 			ret += p.toString();
 		}
+		return ret;
+	}
+	protected Item(String line) 
+	{
+		//Initialize an Item using only it's name line from the text
+		ItemName = bFM.Utils.formatString(line);
+	}
+	protected void addItemVariableLine(String line) 
+	{
+		//Set Variables depending on what the line has
+		if(line.indexOf("<<Item Code>>")!=-1) itemCode = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num1>>")!=-1) num1 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num2>>")!=-1) num2 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num3>>")!=-1) num3 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num4>>")!=-1) num4 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num5>>")!=-1) num5 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num6>>")!=-1) num6 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num7>>")!=-1) num7 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num8>>")!=-1) num8 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num9>>")!=-1) num9 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num10>>")!=-1) num10 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<Item Model>>")!=-1) ItemModel = bFM.Utils.formatString(line);
+		else if(line.indexOf("<<num11>>")!=-1) num11 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num12>>")!=-1) num12 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num13>>")!=-1) num13 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num14>>")!=-1) num14 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num15>>")!=-1) num15 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num16>>")!=-1) num16 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num17>>")!=-1) num17 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<Value>>")!=-1) Price = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num18>>")!=-1) num18 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num19>>")!=-1) num19 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num20>>")!=-1) num20 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num21>>")!=-1) num21 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<Newslog Name>>")!=-1) NewslogName = bFM.Utils.formatString(line);
+		else if(line.indexOf("<<Display Name>>")!=-1) DisplayName = bFM.Utils.formatString(line);
+		else if(line.indexOf("<<Item Description>>")!=-1) ItemDescription = bFM.Utils.formatString(line);
+		else if(line.indexOf("<<Equipment Sound Effect 1>>")!=-1) SoundEffect1 = bFM.Utils.formatString(line);
+		else if(line.indexOf("<<Equipment Sound Effect 2>>")!=-1) SoundEffect2 = bFM.Utils.formatString(line);
+		else if(line.indexOf("<<Equipment Dig Type>>")!=-1) DigType = bFM.Utils.formatString(line);
+		else if(line.indexOf("<<Dig Speed>>")!=-1) DigSpeed = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<Equipment Build Type>>")!=-1) BuildType = bFM.Utils.formatString(line);
+		else if(line.indexOf("<<Build Speed>>")!=-1) BuildSpeed = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<Equipment Break Type>>")!=-1) BreakType = bFM.Utils.formatString(line);
+		else if(line.indexOf("<<Break Speed>>")!=-1) BreakSpeed = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<Equipment Attack Type>>")!=-1) AttackType = bFM.Utils.formatString(line);
+		else if(line.indexOf("<<Attack Speed>>")!=-1) AttackSpeed = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<Location>>")!=-1) 
+		{
+			lastPlacement = new Placement(line);
+			placements.add(lastPlacement);
+		}
+		else if(line.indexOf("<<Placement Activation Flag>>")!=-1) 
+		{
+			if(lastPlacement != null)
+			{
+				lastPlacement.addPlacementLine(line);
+			}
+		}
+		else if(line.indexOf("<<Placement Deactivation Flag>>")!=-1)
+		{
+			if(lastPlacement != null)
+			{
+				lastPlacement.addPlacementLine(line);
+			}
+		}
+		else if(line.indexOf("<<Unknown Placement Number>>")!=-1)
+		{
+			if(lastPlacement != null)
+			{
+				lastPlacement.addPlacementLine(line);
+			}
+		}
+		else if(line.indexOf("<<Placement Building>>")!=-1)
+		{
+			if(lastPlacement != null)
+			{
+				lastPlacement.addPlacementLine(line);
+			}
+		}
+	}
+	protected String getSubList() 
+	{
+		// If the Equipment Data is initialized, return it.
+		String ret = "";
+		if(SoundEffect1.length()>0||SoundEffect2.length()>0)
+		{
+			ret += "HITSE " + itemCode + ",\"" + SoundEffect1 + "\",\"" + SoundEffect2 + "\";\r\n";
+		}
+		
+		if(DigType.length()>0||BuildType.length()>0||BreakType.length()>0||AttackType.length()>0||
+				DigSpeed!=-1||BuildSpeed!=-1||BreakSpeed!=-1||AttackSpeed!=-1)
+		{
+			ret += "WEP " + itemCode + ",\"" + DigType + "\",\"" 
+		+ BuildType + "\",\"" + BreakType + "\",\"" + AttackType
+		+ "\"," + DigSpeed + "," + BuildSpeed + "," + BreakSpeed
+		+ "," + AttackSpeed + ";\r\n";
+		}
+		
+		return ret;
+	}
+	protected String getList() 
+	{
+		// return Text Data for Items
+		String ret = "@" + itemCode + "\r\n";
+		ret += ItemName + "\r\n";
+		ret += NewslogName + "\r\n";
+		ret += DisplayName + "\r\n";
+		ret += bFM.Utils.formatStringChars(ItemDescription) + "\r\n";
+		return ret;
+	}
+	protected byte[] getPlaceBytes()
+	{
+		//returns the placement data for all the appearances of this object
+		byte[] ret = new byte[0];
+		for(Placement p : placements)
+		{
+			//ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(itemCode).array());
+			ret = bFM.Utils.mergeArrays(ret, p.toBytes(itemCode));
+		}
+		return ret;
+	}
+	public byte[] getItemBytes() 
+	{
+		//returns the item resource data for this object
+		//im sorry
+		byte[] ret = new byte[0];
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(itemCode).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num1).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num2).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num3).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num4).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num5).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num6).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num7).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num8).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num9).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num10).array());
+		ret = bFM.Utils.mergeArrays(ret, ItemModel.substring(0, Math.min(ItemModel.length(), 16)).getBytes());
+		ret = bFM.Utils.mergeArrays(ret, new byte[40-ret.length]);
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num11).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num12).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num13).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num14).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num15).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num16).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num17).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(Price).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num18).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num19).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num20).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num21).array());
 		return ret;
 	}
 }

@@ -106,6 +106,8 @@ public class Utils
 	}
 	public static int formatFlag(String line) 
 	{
+		//Return whatever number is after a ">>", which is used to denote the variable names 
+		//Rounds down at a decimal
 		String allowedChars = "1234567890-";
 		String integer = "";
 		for(int i = line.indexOf(">>"); i<line.length();i++)
@@ -114,8 +116,76 @@ public class Utils
 			{
 				integer+=line.charAt(i);
 			}
+			if(line.charAt(i)=='.')
+			{
+				break;
+			}
 		}
 		return Integer.parseInt(integer);
+	}
+	public static float[] formatCoords(String line, boolean blenderCoords) 
+	{
+		//Return whichever 3 floats are after a ">>", which is used to denote the variable names 
+		String numChars = "1234567890-.E ";
+		float xVal, yVal, zVal, wVal = (float) -1.0;
+		if(line.indexOf('{')!=-1&&line.indexOf('}')!=-1)
+		{
+			wVal = Float.valueOf(line.substring(line.indexOf('{')+1, line.indexOf('}')));
+		}
+		else
+		{
+			wVal = 1;
+		}
+		int startX = -1;
+		int endX=-1;
+		int startY = -1;
+		int endY=-1;
+		int startZ=-1;
+		int endZ;
+		int LoopStart;
+		int LoopEnd;
+		if(line.indexOf('(')!=-1&&line.indexOf(')')!=-1)
+		{
+			endZ = line.indexOf(')');
+			LoopStart = line.indexOf('(');
+		}
+		else
+		{
+			endZ = line.length();
+			LoopStart = line.indexOf('>');
+		}
+		LoopEnd = endZ;
+			
+			boolean inFloat = false;
+			for(int j = LoopStart; j<LoopEnd; j++)
+			{
+				if(inFloat&&numChars.indexOf(line.charAt(j))==-1)
+				{
+					if(endX==-1) endX=j;
+					else if(endY==-1) endY=j;
+					else endZ=j;
+					inFloat=false;
+				}
+				if(!inFloat&&numChars.indexOf(line.charAt(j))!=-1)
+				{
+					if(startX==-1) startX=j; 
+					else if(startY==-1) startY=j;
+					else startZ=j;
+					inFloat=true;
+				}
+			}
+			xVal = Float.valueOf(line.substring(startX, endX));
+			yVal = Float.valueOf(line.substring(startY, endY));
+			if(endZ>startZ) zVal = Float.valueOf(line.substring(startZ, endZ));
+			else zVal = Float.valueOf(line.substring(startZ, line.length()-1));
+			if(blenderCoords)
+			{
+				xVal *= 100.0;
+				yVal *= 100.0;
+				zVal *= -100.0;
+			}
+			float[] ret = {wVal, xVal, yVal, zVal};
+			return ret;
 	}
 	public static String[] toStrArr(String line) 
 	{
@@ -184,6 +254,7 @@ public class Utils
 	}
 	public static String formatString(String line) 
 	{
+		//Return whatever is between the two outermost quotation marks after a ">>", which is used to denote the variable names 
 		String ret = "";
 		String lineAfterHeader = line.substring(Math.max(line.indexOf(">>"), 0));
 		int startIndex = lineAfterHeader.indexOf('\"');
@@ -291,5 +362,35 @@ public class Utils
 			return "Package";
 		}
 		return "Todo";
+	}
+	public static float[] formatCoords(String line) 
+	{
+		// wrapper for the other format Coords
+		return formatCoords(line, false);
+	}
+	public static void testDifferences(byte[] file1, byte[] file2) 
+	{
+		int count = 0;
+		int firstDifference = -1;
+		for(int i = 0; i<Math.min(file1.length, file2.length); i++)
+		{
+			if(file1[i]!=file2[i])
+			{
+				if(firstDifference==-1)
+				{
+					firstDifference = i;
+				}
+				count++;
+				System.out.println("Difference at: " + i + ". File 1 is: " + file1[i] + ". File 2 is: " + file2[i] + ".");
+			}
+		}
+		System.out.println("File 1 size: " + file1.length);
+		System.out.println("File 2 size: " + file2.length);
+		System.out.println("Total Differences: " + count);
+		System.out.println("Percent Difference: " + ((double)count/((file1.length+file2.length+0.0)/2.0))*100);
+		if(firstDifference!=-1)
+		{
+			System.out.println("First Difference at: " + firstDifference + ". File 1 is: " + file1[firstDifference] + ". File 2 is: " + file2[firstDifference] + ".");
+		}
 	}
 }

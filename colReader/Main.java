@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import CameraData.CameraZoneList;
 import MSDBManager.ConstantEnemyManager;
@@ -47,7 +48,8 @@ public class Main
 		//enemyManagers();
 		//decodeEnemyData("CoinPurse.bMos", 4010);
 		//itemManager();
-		decodeItems(1);
+		//decodeItems(1);
+		encodeItems(1);
 		//MailManager();
 		//decodeCollision("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\zpack\\mapBoot2.pac\\");
 	}
@@ -346,38 +348,54 @@ public class Main
 	private static void encodeItems(int language)
 	{
 		bFM.Utils.DebugPrint("Attempting to encode item places");
-		PCKGManager itemDB = new PCKGManager("itemDB");
+		String outputPath = Main.outputPath + "Resources\\";
+		String importPath = Main.importPath + "Resources\\Item Database.txt";
+		List<String> Lines = null;
+		byte[] data = new byte[0];
 		try 
 		{
-			bFM.Utils.DebugPrint("Reading Item Pack at: " + outputPath+"itemDB3_"+language+".pac");
-			itemDB = new PCKGManager(Files.readAllBytes(Paths.get(outputPath + "itemDB3_"+language+".pac")));
+			bFM.Utils.DebugPrint("Reading Item Database File at: " + importPath);
+			Lines = Files.readAllLines(Paths.get(importPath), Charset.forName("Shift_JIS"));
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrint("Failed to read Item Database File");
+			e.printStackTrace();
 			return;
-		} catch (IOException e) 
-		{
-			bFM.Utils.DebugPrint("Failed to read Item Pack");
 		}
-		itemPlaceManager items = null;
-		try 
-		{
-			bFM.Utils.DebugPrint("Attempting to read item Places file at: " + importPath + "Item Places.txt");
-			items = new itemPlaceManager(Files.readAllLines(Paths.get(importPath+"Item Places.txt")));
-		} catch (IOException e) 
-		{
-			bFM.Utils.DebugPrint("Failed to read file");
-		}
-		itemDB.addFile("itemPlace.bin", items.toBytes());
+		itemDatabaseManager itemDB = new itemDatabaseManager(Lines);
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write Item Database Pack.");
-			Files.write(Paths.get(outputPath + "itemDB3_"+language+".pac") , itemDB.getFile());
+			Files.write(Paths.get(outputPath + "itemDB3_"+language+".pac") , itemDB.toBytes());
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write pack");
 		}
+		//Legacy code incase i need it to get the item placement data from the old mod
+		//itemPlaceManager items = null;
+		//try 
+		//{
+			//bFM.Utils.DebugPrint("Attempting to read item Places file at: " + importPath + "Item Places.txt");
+			//items = new itemPlaceManager(Files.readAllLines(Paths.get(importPath+"Item Places.txt")));
+		//} catch (IOException e) 
+		//{
+			//bFM.Utils.DebugPrint("Failed to read file");
+		//}
+		//itemDB.addFile("itemPlace.bin", items.toBytes());
+		//try 
+		//{
+			//bFM.Utils.DebugPrint("Attempting to write Item Database Pack.");
+			//Files.write(Paths.get(outputPath + "itemDB3_"+language+".pac") , itemDB.getFile());
+		//} catch (IOException e) 
+		//{
+			//bFM.Utils.DebugPrint("Failed to write pack");
+		//}
 	}
 	private static void decodeItems(int language)
 	{
 		bFM.Utils.DebugPrint("Attempting to decode item places");
+		String outputPath = Main.outputPath + "Resources\\";
+		String importPath = Main.importPath + "Resources\\";
 		byte[] itemDB = new byte[0];
 		try 
 		{

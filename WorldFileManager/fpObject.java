@@ -234,60 +234,7 @@ public class fpObject
 	}
 	private float[] getCoords(String line)
 	{
-		String numChars = "1234567890-.E ";
-		float xVal, yVal, zVal, wVal = (float) -1.0;
-		if(line.indexOf('{')!=-1&&line.indexOf('}')!=-1)
-		{
-			wVal = Float.valueOf(line.substring(line.indexOf('{')+1, line.indexOf('}')));
-		}
-		else
-		{
-			wVal = 1;
-		}
-		if(line.indexOf('(')!=-1&&line.indexOf(')')!=-1)
-		{
-			int startX = -1;
-			int endX=-1;
-			int startY = -1;
-			int endY=-1;
-			int startZ=-1;
-			int endZ = line.indexOf(')');
-			boolean inFloat = false;
-			for(int j = line.indexOf('('); j<line.indexOf(')'); j++)
-			{
-				if(inFloat&&numChars.indexOf(line.charAt(j))==-1)
-				{
-					if(endX==-1) endX=j;
-					else if(endY==-1) endY=j;
-					else endZ=j;
-					inFloat=false;
-				}
-				if(!inFloat&&numChars.indexOf(line.charAt(j))!=-1)
-				{
-					if(startX==-1) startX=j; 
-					else if(startY==-1) startY=j;
-					else startZ=j;
-					inFloat=true;
-				}
-			}
-			xVal = Float.valueOf(line.substring(startX, endX));
-			yVal = Float.valueOf(line.substring(startY, endY));
-			if(endZ>startZ) zVal = Float.valueOf(line.substring(startZ, endZ));
-			else zVal = Float.valueOf(line.substring(startZ, line.length()-1));
-			if(blenderCoords)
-			{
-				xVal *= 100.0;
-				yVal *= 100.0;
-				zVal *= -100.0;
-			}
-			float[] ret = {wVal, xVal, yVal, zVal};
-			return ret;
-		}
-		else
-		{
-			bFM.Utils.DebugPrint("Failed to find Coordinates for .fp file on line: " + line);
-		}
-		return null;
+		return bFM.Utils.formatCoords(line, blenderCoords);
 	}
 	public int getObjectType()
 	{

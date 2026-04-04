@@ -38,7 +38,7 @@ public class ExtractionTester
 		//Files.write(Paths.get(outputPath+"MobModList.lst"), mod.toString().getBytes("Shift-JIS"));
 		MobModList mod2 = new MobModList(Files.readAllLines(Paths.get(inputPath+"MobModList.lst"), Charset.forName("Shift-JIS")));
 		Files.write(Paths.get(outputPath+"MOB25MOD.lst"), mod2.toBytes());
-		//testDifferences(mod.toBytes(), mod2.toBytes());
+		//bFM.Utils.testDifferences(mod.toBytes(), mod2.toBytes());
 	}
 	public static void RandomMonster() throws IOException
 	{
@@ -61,11 +61,11 @@ public class ExtractionTester
 		//System.out.println("Testing Constant Places");
 		//testDifferences(test.getFile("MOP_14_CONST_PLACE.lst"),BRM.getConstantPlaces());
 		System.out.println("Testing Area Data");
-		testDifferences(test.getFile("MOP_14_AREA_DATA.lst"),BRM.getAreaDatas());
+		bFM.Utils.testDifferences(test.getFile("MOP_14_AREA_DATA.lst"),BRM.getAreaDatas());
 		System.out.println("Testing Random Area");
-		testDifferences(test.getFile("MOP_14_RANDOM_AREA.lst"),BRM.getAreas());
+		bFM.Utils.testDifferences(test.getFile("MOP_14_RANDOM_AREA.lst"),BRM.getAreas());
 		System.out.println("Testing Random Points");
-		testDifferences(test.getFile("MOP_14_RANDOM_POINT.lst"),BRM.getPoints());
+		bFM.Utils.testDifferences(test.getFile("MOP_14_RANDOM_POINT.lst"),BRM.getPoints());
 		
 		
 		
@@ -86,18 +86,6 @@ public class ExtractionTester
 		test.addFile("MOP_14_GROUP.lst", BRM.getGroups());
 		test.addFile("MOP_14_OBJECT.lst", BRM.getObjects());
 		//Files.write(Paths.get(outputPath+"test.pac") , test.getFile());
-	}
-	private static void testDifferences(byte[] file1, byte[] file2) 
-	{
-		System.out.println("File 1 size: " + file1.length);
-		System.out.println("File 2 size: " + file2.length);
-		for(int i = 0; i<Math.min(file1.length, file2.length); i++)
-		{
-			if(file1[i]!=file2[i])
-			{
-				System.out.println("Difference at: " + i + ". File 1 is: " + file1[i] + ". File 2 is: " + file2[i] + ".");
-			}
-		}
 	}
 	public static void testAll() throws IOException
 	{
