@@ -39,7 +39,7 @@ public class BuildingResourceList
 	}
 	public int size() 
 	{
-		return 0;
+		return Buildings.size();
 	}
 	public BuildingResource getBuilding(int buildingCode)
 	{
@@ -54,12 +54,12 @@ public class BuildingResourceList
 	}
 	public String toString()
 	{
-		String ret = "NUM " + size() + ";\n";
+		String ret = "NUM " + size() + ";\r\n";
 		for(BuildingResource bld : Buildings)
 			ret += bld;
-		ret += "MPJP_NUM " + Connections.size() +";\n";
+		ret += "MPJP_NUM " + (Connections.size()+1) +";\r\n";
 		for(String str : Connections)
-			ret += str + "\n";
+			ret += str + "\r\n";
 		return ret;
 	}
 	public byte[] toBytes()

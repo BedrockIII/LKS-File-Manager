@@ -96,7 +96,7 @@ public class BuildingResource
 		secondMobCode = bFM.Utils.strToInt(datLine[2]);
 		mobCodeHP = bFM.Utils.strToInt(datLine[3]);
 		num5 = bFM.Utils.strToInt(datLine[4]);
-		num6 = bFM.Utils.strToInt(datLine[4]);
+		num6 = bFM.Utils.strToInt(datLine[5]);
 		//System.out.println(Arrays.toString(datLine));
 	}
 	public int getCode() 
@@ -117,12 +117,18 @@ public class BuildingResource
 	}
 	public String toString()
 	{// + "," + 
-		String ret = "DAT " + buildingCode + "," + interactionType + "," + num0 + "," + num02 + "," + width + "," + depth + "," + linkCode1 + "," + linkCode2 + ";\n";
-		ret+="DAT2 " + buildingCode + "," + trainCode + "," + num1 + "," + num2 + "," + speakCode + ";\n";
-		ret+="MDL " + num3 + "," + num4 + "," + filePath + "," + name + ";\n";
+		String ret = "DAT " + buildingCode + "," + interactionType + "," + num0 + "," + num02 + "," + width + "," + depth + "," + linkCode1 + "," + linkCode2 + ";\r\n";
+		ret+="DAT2 " + buildingCode + "," + trainCode + "," + num1 + "," + num2 + "," + speakCode + ";\r\n";
+		ret+="MDL " + num3 + "," + num4;
+		if(num4<100&& buildingCode!= 10012 && buildingCode!=10034) ret+=" ";
+		ret += "," + filePath + "," + name + ";\r\n";
+		if(Animations.size()>0)
+		{
+			ret += "ANMNUM " + Animations.size() + ";\r\n";
+		}
 		for(String str : Animations)
-			ret += str;
-		ret+="MS " + buildingCode + "," + mobCode + "," + secondMobCode + "," + mobCodeHP + " ," + num5 + "," + num6 + ";\n";
+			ret += str + "\r\n";
+		ret+="MS " + buildingCode + "," + mobCode + "," + secondMobCode + "," + mobCodeHP + " ," + num5 + "," + num6 + ";\r\n";
 		return ret;
 	}
 }

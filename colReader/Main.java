@@ -1,4 +1,4 @@
-package colReader;
+ package colReader;
 
 
 import java.io.File;
@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 import CameraData.CameraZoneList;
+import LZ10Convertor.LZ10Manager;
 import MSDBManager.ConstantEnemyManager;
 import MSDBManager.MobModList;
 import PCKGManager.PCKGManager;
@@ -49,9 +51,11 @@ public class Main
 		//decodeEnemyData("CoinPurse.bMos", 4010);
 		//itemManager();
 		//decodeItems(1);
-		encodeItems(1);
+		//encodeItems(1);
 		//MailManager();
 		//decodeCollision("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\zpack\\mapBoot2.pac\\");
+		//deCompressEventText();
+		compressEventText(1);
 	}
 	private static void decodeEnemyData(String outputFileName)	
 	{
@@ -508,11 +512,115 @@ public class Main
 		//exteriorPlaceList buildings = new exteriorPlaceList(Files.readAllLines(Paths.get(importPath+"extPlaceTemp.lst")));
 		//Files.write(Paths.get(importPath+"extPlace1.lst"), buildings.toString().getBytes());
 		
-		byte[] vmcData = Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\mos\\ms0000.pcha\\out0.vmc"));
-		VMCConverter vmcData1 = new VMCConverter(vmcData);
-		vmcData1.toString();
+		//byte[] vmcData = Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\mos\\ms0000.pcha\\out0.vmc"));
+		//VMCConverter vmcData1 = new VMCConverter(vmcData);
+		//vmcData1.toString();
+		byte[] file1 = new PCKGManager(LZ10Manager.decompress("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\event\\message\\1\\mes_LZ.bin")).getFile(7);
+		byte[] file2 = LZ10Manager.compress(LZ10Manager.decompress(new PCKGManager(LZ10Manager.decompress("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\event\\message\\1\\mes_LZ.bin")).getFile(7)));
+		//byte[] file3
+		//byte[] file4
+		Files.write(Paths.get("D:\\file3.bin"), file1);
+		Files.write(Paths.get("D:\\file4.bin"), file2);
+		bFM.Utils.testDifferences(file1, file2);
+		System.out.println(Arrays.toString(file1));
+		System.out.println(Arrays.toString(file2));
+	}
+	private static String getLanguage(int languageCode)
+	{
+		//Return the name of the anguage based off number. default to english as i speak that
+		switch(languageCode)
+		{
+		case 0: return "Japanese\\";
+		case 1: return "English\\";
+		case 2: return "French\\";
+		case 3: return "Italian\\";
+		case 4: return "German\\";
+		case 5: return "Spanish\\";
+		}
+		return "English\\";
+	}
+	private static void compressEventText()
+	{
+		for(int i = 0; i < 6; i++)
+		{
+			compressEventText(i);
+		}
+	}
+	private static void compressEventText(int languageCode)
+	{
+		String importPath = Main.importPath + "Event\\Text\\" + getLanguage(languageCode);
+		String outputPath = Main.outputPath + "Message\\" + getLanguage(languageCode);
+		
+		//read the compressed pack file
+		PCKGManager eventTextPac = new PCKGManager(LZ10Manager.decompress(outputPath + "mes_LZ.bin"));
+		
+		
+		File[] fileList = new File(importPath).listFiles();
+		
+		for(int i = 0; i < fileList.length; i++)
+		{
+			//change the file ending
+			String fileName = fileList[i].getName().substring(0, fileList[i].getName().indexOf(".txt")) + "_LZ.bin";
+			
+			try 
+			{
+				eventTextPac.addFile(fileName, LZ10Manager.compress(Files.readAllBytes(fileList[i].toPath())));
+			} catch (IOException e) 
+			{
+				bFM.Utils.DebugPrint("Failed to Read Event Text File");
+			}
+		}
+		
+		try {
+			bFM.Utils.testDifferences(LZ10Manager.decompress(Files.readAllBytes(Paths.get(outputPath + "mes_LZ.bin")))
+					, eventTextPac.getFile());
+			//bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(outputPath + "mes_LZ.bin")), LZ10Manager.compress(eventTextPac.getFile()));
+			//Files.write(Paths.get(outputPath + "mes_LZ.bin1"), LZ10Manager.decompress(Files.readAllBytes(Paths.get(outputPath + "mes_LZ.bin"))));
+			//Files.write(Paths.get(outputPath + "mes_LZ.bin2"), eventTextPac.getFile());
+			Files.write(Paths.get(outputPath + "mes_LZ.bin"), LZ10Manager.compress(eventTextPac.getFile()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//Write the compressed package file
+		
 		
 	}
+	private static void deCompressEventText()
+	{
+		for(int i = 0; i < 6; i++)
+		{
+			deCompressEventText(i);
+		}
+	}
+	private static void deCompressEventText(int languageCode)
+	{
+		//deCompress and extract and decompress the event text files
+		
+		String importPath = Main.importPath + "Event\\Text\\" + getLanguage(languageCode);
+		String outputPath = Main.outputPath + "Message\\" + getLanguage(languageCode);
+		
+		
+		PCKGManager eventTextPac = new PCKGManager(LZ10Manager.decompress(outputPath + "mes_LZ.bin"));
+		
+		
+		for(int i = 0; i < eventTextPac.getFileAmount(); i++)
+		{
+			try
+			{
+				String fileName = eventTextPac.getName(i).substring(0, eventTextPac.getName(i).indexOf("_LZ"));
+				Files.write(Paths.get(importPath+fileName+".txt"), LZ10Manager.decompress(eventTextPac.getFile(i)));
+			}
+			catch (IOException  e)
+			{
+				bFM.Utils.DebugPrint("Failed to write Event Text File");
+			}
+		}
+		
+		
+	}
+	
 	private static void decodeCollision()
 	{
 		String importPath = Main.importPath;

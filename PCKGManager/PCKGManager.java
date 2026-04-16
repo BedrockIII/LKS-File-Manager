@@ -167,6 +167,19 @@ public class PCKGManager {
 			headerLine[i] = name[i-12];
 		}
 		byte[] ret = bFM.Utils.mergeArrays(headerLine, filesContents.get(index));
+		
+		boolean lzPac = false;
+		if(lzPac)
+		{
+			byte[] filler = new byte[32-ret.length%32];
+			for(int i = 0; i<filler.length; i++)
+			{
+				filler[i] = -1;
+			}
+			
+			return bFM.Utils.mergeArrays(ret, filler);
+		}
+		
 		return  bFM.Utils.mergeArrays(ret, new byte[32-ret.length%32]);
 	}
 	public byte[] getFile(String name)

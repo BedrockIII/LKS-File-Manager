@@ -2,6 +2,8 @@ package bFM;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -345,10 +347,6 @@ public class Utils
 		}
 		return Strings;
 	}
-	public static byte[] localFileToBytes(String inputPos) throws IOException
-	{
-		return ClassLoader.getSystemResourceAsStream(inputPos).readAllBytes();
-	}
 	public static String getFileType(String name, byte[] file) 
 	{
 		if(name.equals("KingdomPlan.bin"))
@@ -392,5 +390,29 @@ public class Utils
 		{
 			System.out.println("First Difference at: " + firstDifference + ". File 1 is: " + file1[firstDifference] + ". File 2 is: " + file2[firstDifference] + ".");
 		}
+	}
+	public static byte[] readFile(String name, String path)
+	{
+		byte[] ret = null;
+		try 
+		{
+			ret = ClassLoader.getSystemResourceAsStream(name).readAllBytes();
+		}
+		catch (NullPointerException e)
+		{
+			try 
+			{
+				ret = Files.readAllBytes(Paths.get(path + name));
+			} 
+			catch (IOException error) 
+			{
+				System.out.println("Failed to read file at: " + Paths.get(path + name));
+			}
+		}
+		catch (IOException error) 
+		{
+			System.out.println("Failed to read internal file: " + name);
+		}
+		return ret;
 	}
 }
