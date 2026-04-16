@@ -11,7 +11,7 @@ public class MobMod
 	int health;
 	int num3;
 	int num4;
-	int num5;
+	int indexOfNameMaybe;
 	int num6;
 	int num7;
 	int num8;
@@ -20,8 +20,8 @@ public class MobMod
 	int num11;
 	int mobCode;
 	int num13;
-	int num14;
-	int num15;
+	int Flags;// 5th byte from left determines if HP Bar Shows
+	int num15;// 10th byte from left disables AI and makes smoke on death
 	int num16;
 	int num17;
 	int num18;
@@ -42,7 +42,7 @@ public class MobMod
 		health= bFM.Utils.getShort(data, 4);
 		num3 = bFM.Utils.getShort(data, 6);
 		num4 = bFM.Utils.getShort(data, 8);
-		num5 = bFM.Utils.getShort(data, 10);
+		indexOfNameMaybe = bFM.Utils.getShort(data, 10);
 		num6 = bFM.Utils.getShort(data, 12);
 		num7 = bFM.Utils.getShort(data, 14);
 		num8 = bFM.Utils.getShort(data, 16);
@@ -51,7 +51,7 @@ public class MobMod
 		num11 = bFM.Utils.getShort(data, 22);
 		mobCode = bFM.Utils.getShort(data, 24);
 		num13 = bFM.Utils.getShort(data, 26);
-		num14 = bFM.Utils.getShort(data, 28);
+		Flags = bFM.Utils.getShort(data, 28);
 		num15 = bFM.Utils.getShort(data, 30);
 		num16 = bFM.Utils.getShort(data, 32);
 		num17 = bFM.Utils.getShort(data, 34);
@@ -81,7 +81,7 @@ public class MobMod
 		health= getInt(2);
 		num3 = getInt(3);
 		num4 = getInt(4);
-		num5 = getInt(5);
+		indexOfNameMaybe = getInt(5);
 		num6 = getInt(6);
 		num7 = getInt(7);
 		num8 = getInt(8);
@@ -90,7 +90,7 @@ public class MobMod
 		num11 = getInt(11);
 		mobCode = getInt(12);
 		num13 = getInt(13);
-		num14 = getInt(14);
+		Flags = getInt(14);
 		num15 = getInt(15);
 		num16 = getInt(16);
 		num17 = getInt(17);
@@ -136,8 +136,8 @@ public class MobMod
 	}
 	public String toString()
 	{
-		return ""+modCode +", "+modReplacementCode+", "+health+", "+num3 +", "+num4 +", "+num5 +", "+num6 +", "+num7 +", "+num8 +", "+num9 + ", " +
-				num10 +", "+num11 +", "+mobCode +", "+num13 +", "+num14 +", "+num15 +", "+num16 +", "+num17 +", "+num18 +", "+num19 +", " +
+		return ""+modCode +", "+modReplacementCode+", "+health+", "+num3 +", "+num4 +", "+indexOfNameMaybe +", "+num6 +", "+num7 +", "+num8 +", "+num9 + ", " +
+				num10 +", "+num11 +", "+mobCode +", "+num13 +", "+Flags +", "+num15 +", "+num16 +", "+num17 +", "+num18 +", "+num19 +", " +
 				num20 +", "+num21 +", "+num22 +", "+num23 +", "+num24 +", "+num25 +", "+num26 +", "+num27 +", \""+name+"\"\n";
 	}
 	public String toHP()
@@ -151,7 +151,7 @@ public class MobMod
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) health).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num3).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num4).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num5).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) indexOfNameMaybe).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num6).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num7).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num8).array());
@@ -160,7 +160,7 @@ public class MobMod
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num11).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) mobCode).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num13).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num14).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) Flags).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num15).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num16).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num17).array());
@@ -182,5 +182,14 @@ public class MobMod
 		}
 		ret = ret1;
 		return ret;
+	}
+	public boolean showsHP()
+	{
+		//Easy way to tell if its an enemy/obstical or invulnerable
+		return (Flags&16)==0;
+	}
+	public int getModCode() 
+	{
+		return modCode;
 	}
 }

@@ -43,11 +43,11 @@ public class Main
 		//decodeFixedPoints();
 		//menuDBManager();
 		//packGrid();
-		//mapDataBase();			
+		mapDataBase();			
 		//decodeLightZones();
 		//encodeLightZones();
 		//message();				
-		//enemyManagers();
+		enemyManagers();
 		//decodeEnemyData("CoinPurse.bMos", 4010);
 		//itemManager();
 		//decodeItems(1);
@@ -55,7 +55,7 @@ public class Main
 		//MailManager();
 		//decodeCollision("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\zpack\\mapBoot2.pac\\");
 		//deCompressEventText();
-		compressEventText(1);
+		//compressEventText(1);
 	}
 	private static void decodeEnemyData(String outputFileName)	
 	{
@@ -876,7 +876,7 @@ public class Main
 		{
 			BuildingResourceList buildingList = new BuildingResourceList(Files.readAllLines(Paths.get(inputPath+"building0.lst"), Charset.forName("Shift_JIS")));
 			MapDataBase.addFile("building0.lst", buildingList.toBytes());
-			MapDataBase.addFile("building0.lst", Files.readAllBytes(Paths.get(inputPath+"building0.lst")));
+			//MapDataBase.addFile("building0.lst", Files.readAllBytes(Paths.get(inputPath+"building0.lst")));
 			//bFM.Utils.DebugPrint("Sucessfully added Building Configuration File");
 		} catch (IOException e) 
 		{
