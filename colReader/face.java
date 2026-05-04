@@ -3,7 +3,7 @@ package colReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-public class face 
+class face 
 {
 	public short v1;
 	public short v2;

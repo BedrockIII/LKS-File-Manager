@@ -3,7 +3,8 @@ package colReader;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class otherObject {
+class otherObject 
+{
 	byte[] data;
 	String name;
 	float num1;

@@ -16,6 +16,10 @@ public class ColReader {
 	int index = 0;
 	ArrayList<colObject> COLOBJECTS = new ArrayList<colObject>();
 	int objects;
+	public ColReader()
+	{
+		
+	}
 	public ColReader(byte[] data)
 	{
 		type = "MDF_COL_WII_100";
@@ -44,9 +48,6 @@ public class ColReader {
 			COLOBJECTS.add(new colObject("Wall", 0, 2));
 		}
 		
-	}
-	public ColReader() {
-		// TODO Auto-generated constructor stub
 	}
 	private void makeColObjects(byte[] data) 
 	{

@@ -3,7 +3,8 @@ package colReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class vertex {
+class vertex 
+{
 	float x;
 	float y;
 	float z;

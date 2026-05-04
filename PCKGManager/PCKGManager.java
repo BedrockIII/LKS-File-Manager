@@ -2,48 +2,50 @@ package PCKGManager;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-public class PCKGManager {
-	byte[] file;
-	String name = "unknown";
-	ArrayList<String> filesNames = new ArrayList<String>();
-	ArrayList<byte[]> filesContents = new ArrayList<byte[]>();
-	ArrayList<String> pacFilesNames = new ArrayList<String>();
-	ArrayList<PCKGManager> pacFilesContents = new ArrayList<PCKGManager>();
-	private boolean nlksMode = false;
+public class PCKGManager 
+{
+	final static private int HeaderSizeWithoutName = 12;
+	private static boolean AlignedFiles = true; // Whether or not files have extra bytes appended onto them so they are exactly a multiple of 32
+	private static boolean LZMode = false;
+	private static boolean nlksMode = false;
+	String name = "Unknown Name";
+	ArrayList<PackedFile> files = new ArrayList<PackedFile>();
 	public PCKGManager(String name)
 	{
 		this.name = name;
 	}
 	public PCKGManager(byte[] data)
 	{
-		file = data;
-		
-		extractPAC();
-		
+		extractPAC(data);
 	}
 	public PCKGManager(byte[] data, boolean nlksFile)
 	{
-		file = data;
 		nlksMode = true;
-		extractPAC();
-		
+		extractPAC(data);
 	}
-	public void setLKSMode(boolean bool)
+	public static void setLKSMode(boolean bool)
 	{
 		nlksMode = bool;
-		//ByteBuffer.
+	}
+	public static void setLzCompressionMode(boolean bool)
+	{
+		LZMode = bool;
+	}
+	public static void setAlignmentMode(boolean bool)
+	{
+		AlignedFiles = bool;
 	}
 	public PCKGManager(byte[] data, String name)
 	{
-		file = data;
 		this.name = name;
-		extractPAC();
+		extractPAC(data);
 	}
-	private void extractPAC()
+	private void extractPAC(byte[] file)
 	{//turns the pacFile into ArrayLists
 		/*PCKG File layout
 		 * First 32 Bytes: PCKG Header, PCKG and then 28 0x00 bytes
@@ -95,11 +97,9 @@ public class PCKGManager {
 				}
 			}
 			
-			filesNames.add(theNewName);
-			
 			bFM.Utils.DebugPrint("Found File: " + theName + " File Size: " + Math.abs(data.getInt(nextHeaderPos+4)));
 			bFM.Utils.DebugPrint("\tHeader Size: " + headerSize);
-			filesContents.add(fileContents);
+			files.add(new PackedFile(theNewName, fileContents));
 			
 			
 			
@@ -107,126 +107,51 @@ public class PCKGManager {
 			nextHeaderPos += nextCnt;
 			}
 		}
-		
-		}
-	private void rePAC()
-	{//Turns the ArrayLists into a pacFile again
-		byte[] data = new byte[32];
-			data[0] = 'P';
-			data[1] = 'C';
-			data[2] = 'K';
-			data[3] = 'G';
-		for (int i = 0; i < filesContents.size(); i++) 
-		{
-			data = bFM.Utils.mergeArrays(data, getFileHeader(i));
-		}
-		file = data;
-	}
-	private byte[] getFileHeader(int index)
-	{
-		byte[] headerLine;
-		byte headerSize = 0x20;
-		byte[] name = {0x00, 0x00, 0x00, 0x00};
-		try {
-			name = filesNames.get(index).getBytes();
-			} 
-		catch (Exception error) 
-		{
-			System.out.println("Unsupported Encoding!!!");
-			return new byte[0];
-		}
-		if((name.length+12)>32) 
-			headerSize = (byte)(((name.length+12)/32 + 1) * 32);
-		else 
-			headerSize = 32;
-		
-		headerLine = new byte[headerSize];
-		int nextFileIndex = 0;
-		if(index != filesContents.size()-1)
-		{
-			nextFileIndex = (filesContents.get(index).length/32+1)*32+headerSize;
-		}
-		byte[] nextFileIndexArray = bFM.Utils.toByteArr(nextFileIndex, 4);
-		headerLine[0] = nextFileIndexArray[0];
-		headerLine[1] = nextFileIndexArray[1];
-		headerLine[2] = nextFileIndexArray[2];
-		headerLine[3] = nextFileIndexArray[3];
-		int fileSize = filesContents.get(index).length;
-		byte[] fileSizeArray = bFM.Utils.toByteArr(fileSize, 4);
-		headerLine[4] = fileSizeArray[0];
-		headerLine[5] = fileSizeArray[1];
-		headerLine[6] = fileSizeArray[2];
-		headerLine[7] = fileSizeArray[3];
-		byte[] headerSizeArray = bFM.Utils.toByteArr(headerSize, 4);
-		headerLine[8] = headerSizeArray[0];
-		headerLine[9] = headerSizeArray[1];
-		headerLine[10] = headerSizeArray[2];
-		headerLine[11] = headerSizeArray[3];
-		for(int i = 12; i<name.length+12&&i<headerSize; i++)
-		{
-			headerLine[i] = name[i-12];
-		}
-		byte[] ret = bFM.Utils.mergeArrays(headerLine, filesContents.get(index));
-		
-		boolean lzPac = false;
-		if(lzPac)
-		{
-			byte[] filler = new byte[32-ret.length%32];
-			for(int i = 0; i<filler.length; i++)
-			{
-				filler[i] = -1;
-			}
-			
-			return bFM.Utils.mergeArrays(ret, filler);
-		}
-		
-		return  bFM.Utils.mergeArrays(ret, new byte[32-ret.length%32]);
 	}
 	public byte[] getFile(String name)
 	{ 
-		for(int i = 0; i < filesNames.size(); i++)
+		for(PackedFile file : files)
 		{
-			if(filesNames.get(i).equals(name))
+			if(file.equals(name))
 			{
-				return filesContents.get(i);
+				return file.getData();
 			}
 		}
 		return new byte[0];
 	}
 	public void replaceFile(String name, byte[] file)
 	{
-		for(int i = 0; i < filesNames.size(); i++)
+		for(PackedFile f : files)
 		{
-			if(filesNames.get(i).equals(name))
+			if(f.equals(name))
 			{
-				filesContents.set(i, file);
+				f.setData(file);
 			}
-			
 		}
-		rePAC();
 	}
 	public void removeFile(String name)
 	{
-		for(int i = 0; i < filesNames.size(); i++)
+		for(PackedFile file : files)
 		{
-			if(filesNames.get(i).equals(name))
+			if(file.equals(name))
 			{
-				filesNames.remove(i);
-				filesContents.remove(i);
-				///if(pacFilesNames.get(i).equals(name))
-				//{
-					//pacFilesNames.remove(i);
-					//pacFilesContents.remove(i);
-				//}
+				files.remove(file);
 			}
 			
 		}
-		rePAC();
 	}
 	public byte[] getFile()
 	{
-		rePAC();
-		return file;
+		byte[] data = new byte[32];
+		data[0] = 'P';
+		data[1] = 'C';
+		data[2] = 'K';
+		data[3] = 'G';
+		for (PackedFile file : files) 
+		{
+			data = bFM.Utils.mergeArrays(data, file.toBytes());
+		}
+		return data;
 	}
 	public static boolean isPAC(byte[] data)
 	{//returns if the header matches a PAC file header
@@ -235,55 +160,125 @@ public class PCKGManager {
 	}
 	public void extractAll(String dest)
 	{
-		for(int i = 0; i < filesContents.size(); i++)
+		for(PackedFile file : files)
 		{
-			try {
-				Files.write(Paths.get(dest + filesNames.get(i)), filesContents.get(i));
-			} catch (IOException e) {
-				System.out.println("Failed to Create File \"" + filesNames.get(i) + "\"");
-				System.out.println(e);
+			try 
+			{
+				Files.write(Paths.get(dest + file.getName()), file.getData());
+			} catch (IOException e) 
+			{
+				System.out.println("Failed to Create File \"" + file.getName() + "\"");
+				e.printStackTrace();
 			}
 		}
 	}
 	public String toString()
 	{
-		return name;
+		String ret = "Package File \"" + name + "\"\n";
+		for(PackedFile file : files)
+		{
+			ret += file.toString();
+		}
+		return ret;
 	}
 	public void addFile(String name, byte[] bytes) 
 	{
-		for(int i = 0; i<filesNames.size(); i++)
+		for(PackedFile file : files)
 		{
-			if(filesNames.get(i).equals(name))
+			if(file.equals(name))
 			{
-				filesNames.set(i, name);
-				filesContents.set(i, bytes);
-				rePAC();
+				file.setData(bytes);
 				return;
 			}
 		}
-		filesNames.add(name);
-		filesContents.add(bytes);
-		rePAC();
+		files.add(new PackedFile(name, bytes));
 	}
 	public void writePac(String outputName) 
 	{
-		rePAC();
-		try{Files.write(Paths.get(outputName + name), file);}catch(Exception error) {System.out.println("File Writing Error");}
+		try
+		{
+			Files.write(Paths.get(outputName + name), getFile());
+		}
+		catch(Exception error) 
+		{
+			System.out.println("File Writing Error");
+		}
 	}
 	public int getFileAmount()
 	{
-		return filesContents.size();
+		return files.size();
 	}
 	public String getName()
 	{
 		return name;
 	}
-	public String getName(int index)
+	public String getName(int i)
 	{
-		return filesNames.get(index);
+		return files.get(i).getName();
 	}
 	public byte[] getFile(int i) 
 	{
-		return filesContents.get(i);
+		return files.get(i).getData();
+	}
+	private class PackedFile
+	{
+		String name = "null";
+		byte[] data = new byte[0];
+		private PackedFile(String fileName, byte[] fileData)
+		{
+			name = fileName;
+			data = fileData;
+		}
+		private PackedFile(String fileName, ByteBuffer fileData)
+		{
+			name = fileName;
+			data = fileData.array();
+		}
+		private byte[] toBytes()
+		{
+			int headerSize = HeaderSizeWithoutName + name.length(); //Get the size of the header
+			if(headerSize % 32 != 0) headerSize = (headerSize / 32 + 1) * 32; //round the header to be the correct length
+			
+			int nextFileOffset = data.length + headerSize;
+			if(nextFileOffset % 32 != 0 && AlignedFiles) nextFileOffset = (nextFileOffset / 32 + 1) * 32; //round the offset to be the correct length if needed
+			
+			ByteBuffer ret = ByteBuffer.allocate(nextFileOffset);
+			
+			ret.putInt(nextFileOffset);
+			ret.putInt(data.length);
+			ret.putInt(headerSize);
+			ret.put(name.getBytes(Charset.forName("Shift-JIS")));
+			ret.position(headerSize);
+			ret.put(data);
+			if(LZMode)
+			{
+				while(ret.remaining()>0)
+				{
+					ret.put((byte)0xff);
+				}
+			}
+			return ret.array();
+		}
+		public boolean equals(String name)
+		{
+			//returns if this is the same file in the Package, not whether or not the contents are the same.
+			return this.name.equals(name);
+		}
+		public void setData(byte[] data)
+		{
+			this.data = data;
+		}
+		public byte[] getData()
+		{
+			return data;
+		}
+		public String getName()
+		{
+			return name;
+		}
+		public String toString()
+		{
+			return "Packed File: " + name + " File Size: " + data.length;
+		}
 	}
 }

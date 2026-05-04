@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class colTree 
+class colTree 
 {
 	final public static int maxTreeSize = 32;
 	float boundingBoxXMin;
