@@ -8,6 +8,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileList.Package;
 import PCKGManager.PCKGManager;
 
 @SuppressWarnings("serial")

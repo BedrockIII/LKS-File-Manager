@@ -1,12 +1,13 @@
 package VMC;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 
 public class VMCConverter 
 {
-	byte[] data;
+	private final String version = "LKS Virtual Machine Code Version 1.0";
 	private static String[] notinstrutionTypes = new String[] {"#SUSPEND",
 	                                                     "#EXECUTE_SEQUENCE",
 	                                                     "#NOP",
@@ -241,239 +242,116 @@ public class VMCConverter
 															"Modulus","Invert","Compare","JMP","CJMP",
 															"CALL","RET","PRNT","EXT","HALT","SPND" };
 	ArrayList<String> Instructions = new ArrayList<String>();
-	private static int[] nextInt = new int[] {3,4,5,6,7,8,9,10,17,18,21};
-	private static int[] nextFloat = new int[] {11,12,13,14,15,16,22};
-	public VMCConverter(byte[] data)
+	ArrayList<vmInstruction> code = new ArrayList<vmInstruction>();
+	ArrayList<String> Strings = new ArrayList<String>();
+	ByteBuffer data = null;
+	int size = -1;
+	public VMCConverter(byte[] data1)
 	{
-		ArrayList<String> Instructions = new ArrayList<String>();
-		this.data = data;
-	}
-	private static boolean contains(int[] arr, int instruction)
-	{
-		for(int i = 0; i < arr.length; i++)
+		//ArrayList<String> Instructions = new ArrayList<String>();
+		//this.data = data1;
+		
+		data = ByteBuffer.wrap(data1);
+		data.position(12);
+		size = data.getInt(4);
+		code = new ArrayList<vmInstruction>();
+		vmInstruction lastInstruction = null;
+		while(data.position() < data.limit() && (lastInstruction == null || !lastInstruction.equals("Halt")))
 		{
-			if(arr[i]==instruction)return true;
+			lastInstruction = vmInstruction.createInstruction(data);
+			code.add(lastInstruction);
 		}
-		return false;
+		Strings = extractStrings();
+	}
+	public VMCConverter(List<String> Lines) 
+	{
+		if(Lines.get(0).indexOf(version)==-1) throw new IllegalArgumentException("Wrong Version of File. Current Version is: " + version);
+		int StringStart = -1;
+		for(int i = 0; i < Lines.size(); i++)
+		{
+			String line = Lines.get(i);
+			if(line.indexOf("Event Code")!=-1) size = bFM.Utils.strToInt(line);
+			else code.add(vmInstruction.createInstruction(line));
+			StringStart = i;
+			if(line.indexOf("Strings:")!=-1) break;
+			
+		}
+		for(int i = StringStart; i < Lines.size(); i++)
+		{
+			String line = Lines.get(i);
+			if(line.indexOf("Strings:")!=-1) {}
+			else Strings.add(line);
+		}
 	}
 	public String toString()
 	{
-		int instructionsCount = ByteBuffer.wrap(data).getInt(4);
-		
-		int finalPos = 0;
-		for(int position = 8; position<data.length; position+=4)
+		String ret = version + "\n";
+		ret += "Event Code " + size + "\n";
+		for(vmInstruction i : code)
 		{
-			int instructionType = ByteBuffer.wrap(data).getInt(position);
-			if(instructionType>=instrutionTypes.length ||instructionType<0)
-			{
-				Instructions.add("Error");
-				System.out.println("Error " + instructionType);
-			}
-			else if(instructionType==0x0)//Label
-			{
-				//int number1 = ByteBuffer.wrap(data).getInt(position + 4);
-				//int number2 = ByteBuffer.wrap(data).getInt(position + 8);
-				//int number3 = ByteBuffer.wrap(data).getInt(position + 12);
-				String line = instrutionTypes[instructionType];
-				//line += " " + number1;
-				//line += " " + number2;
-				//line += " " + number3;
-				System.out.println(line);
-				Instructions.add(line);
-				//position+=12;
-			}
-			else if(instructionType==0x1)//Load
-			{
-				int numberType = -1;
-				String line = instrutionTypes[instructionType];
-				//numberType = ByteBuffer.wrap(data).getInt(position+8);
-				if(numberType==1)
-				{
-					line += " " + ByteBuffer.wrap(data).getInt(position+4);
-				}
-				else if(numberType==3)
-				{
-					line += " " + ByteBuffer.wrap(data).getFloat(position+4);
-				}
-				else
-				{
-					line += " " + ByteBuffer.wrap(data).getInt(position+4);
-					//line += " " + ByteBuffer.wrap(data).getInt(position+8);
-				}
-				System.out.println(line);
-				Instructions.add(line);
-				position += 4;
-			}
-			else if(instructionType==0x3)//Push
-			{
-				String line = instrutionTypes[instructionType];
-				position += 4;
-				int numberType = ByteBuffer.wrap(data).getInt(position+4);
-				if(numberType==0)
-				{
-					line += " " + ByteBuffer.wrap(data).getInt(position);
-				}
-				else if(numberType==1)
-				{
-					line += " " + ByteBuffer.wrap(data).getFloat(position);
-				}
-				else
-				{
-					line += " " + ByteBuffer.wrap(data).getInt(position);
-					line += " " + ByteBuffer.wrap(data).getInt(position+4);
-				}
-				position += 4;
-				
-				System.out.println(line);
-				Instructions.add(line);
-			}
-			else if(instructionType==13)//Jump
-			{
-				
-				position += 4;
-				String line = instrutionTypes[instructionType] + " " + ByteBuffer.wrap(data).getInt(position);
-				System.out.println(line);
-				Instructions.add(line);
-			}
-			else if(instructionType==14)//Compare Jump
-			{
-				
-				position += 4;
-				String line = instrutionTypes[instructionType] + " " + ByteBuffer.wrap(data).getInt(position);
-				System.out.println(line);
-				Instructions.add(line);
-			}
-			else if(instructionType==15)//Call
-			{
-				
-				position += 4;
-				String line = instrutionTypes[instructionType] + " " + ByteBuffer.wrap(data).getInt(position);
-				System.out.println(line);
-				Instructions.add(line);
-			}
-			else if(instructionType==0x12)//External; nth String is the function ref I think?
-			{
-				
-				position += 4;
-				String line = instrutionTypes[instructionType] + " " + ByteBuffer.wrap(data).getInt(position);
-				System.out.println(line);
-				Instructions.add(line);
-			}
-			else if(instructionType==0x13)//Halt; end of code
-			{
-				String line = instrutionTypes[instructionType];
-				System.out.println(line);
-				Instructions.add(line);
-				finalPos = position+4;
-				break;
-			}
-			else
-			{
-				System.out.println(instrutionTypes[instructionType]);
-				Instructions.add(instrutionTypes[instructionType]);
-			}
-			
-			Instructions.set(Instructions.size()-1, Instructions.get(Instructions.size()-1)+"\n");
-			
-			finalPos = position+4;
+			ret += i;
 		}
-		System.out.println(Instructions.size()+"   "+instructionsCount);
-		System.out.println(extractStrings(data, finalPos));
-		String ret = "";
-		for(int i = 0; i<Instructions.size();i++)
+		ret += "Strings: ";
+		for(String i : Strings)
 		{
-			ret+= Instructions.get(i);
+			ret += '\n' + i;
 		}
 		return ret;
 	}
-	private int Load(int position, int num1)
+	public byte[] toBytes()
 	{
-		int LoadType;
-		int num3;//is LoadType
-		int num4;
-		//removed
-		int num2;
-		int num5;
-		int num6;
-		int num7;
-		int num8;
-		int InstructionType;
-		
-		
-		
-		
-		
-		LoadType = ByteBuffer.wrap(data).getInt(position + 8);
-		InstructionType = ByteBuffer.wrap(data).getInt(position + 4);
-		
-		if(LoadType != 3)
+		byte[] ret = null;
+		ret = bFM.Utils.mergeArrays(ret, "VMC ".getBytes());
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(size, 4));
+		ret = bFM.Utils.mergeArrays(ret, new byte[4]);
+		for(vmInstruction i : code)
 		{
-			if(LoadType < 3)
+			ret = bFM.Utils.mergeArrays(ret, i.toBytes());
+		}
+		for(String i : Strings)
+		{
+			i = i.replace("\\r", "\r");
+			i = i.replace("\\n", "\n");
+			i = i.replace("\\t", "\t");
+			ret = bFM.Utils.mergeArrays(ret, i.getBytes(Charset.forName("SHIFT-JIS")));
+			ret = bFM.Utils.mergeArrays(ret, (byte)0);
+			if(ret.length%4!=0)
 			{
-				if(LoadType == 1)
-				{
-					//num2 = ByteBuffer.wrap(data).getInt(num1+12) + InstructionType*8;
-					//InstructionType = ByteBuffer.wrap(data).getInt(num2);
-					//LoadType = ByteBuffer.wrap(data).getInt(num2+4);
-					if(ByteBuffer.wrap(data).getInt(num1+4)<= ByteBuffer.wrap(data).getInt(num1+8))
-					{
-						//num6 = InstructionType;
-						//Out of Stack Error
-						//Return
-					}
-					//num2 = ByteBuffer.wrap(data).getInt(num1+8);
-					//Increase 8 ahead of num1 by 2, = num2 +2
-					//Execute Code??
-				}
-				else if(0 < LoadType)
-				{
-					
-				}
-			}
-			else if(LoadType<5)
-			{
-				
+				ret = bFM.Utils.mergeArrays(ret, new byte[4-ret.length%4]);
 			}
 		}
-		System.out.println(instrutionTypes[1]);
-		Instructions.add(instrutionTypes[1]);
-		//System.out.println(line);
-		//Instructions.add(line);
-		position+=12;
-		return position;
+		return ret;
 	}
-	private static ArrayList<String> extractStrings(byte[] data, int startPos)
+	private ArrayList<String> extractStrings() 
 	{
+		//Skip filler 0's
+		byte b = data.get(data.position());
+		int zeroCount = 0;
+		while(b == 0)
+		{
+			b = data.get();
+			zeroCount++;
+		}
+		if(zeroCount!=0) System.out.println("ZeroCount = " + zeroCount);
 		ArrayList<String> Strings = new ArrayList<String>();
 		String temp = "";
-		for(int i = startPos; i<data.length; i++)
+		int startIndex = data.position();
+		int endIndex = startIndex;
+		for(int i = data.position(); i<data.limit(); i++)
 		{
-			if(data[i]==0x00)
+			if(data.get(i)==0x00)
 			{
-				try {
-					Strings.add(new String(temp.getBytes(), "SHIFT-JIS"));
-				} catch (UnsupportedEncodingException e) 
-				{
-					e.printStackTrace();
-				}
+				endIndex = i-1;
+				byte[] stringData = new byte[endIndex-startIndex+1];
+				data.get(startIndex, stringData, 0, endIndex-startIndex+1);
+				temp = new String(stringData, Charset.forName("SHIFT-JIS"));
+				temp = temp.replace("\r", "\\r");
+				temp = temp.replace("\n", "\\n");
+				temp = temp.replace("\t", "\\t");
+				Strings.add(temp);
 				i = ((int)(i/4)+1)*4-1;
+				startIndex = i+1;
 				temp = "";
-			}
-			else if(data[i]==0x0d)
-			{
-				temp+="\\r";
-			}
-			else if(data[i]==0x0a)
-			{
-				temp+="\\n";
-			}
-			else if(data[i]==0x09)
-			{
-				temp+="\\t";
-			}
-			else 
-			{
-				temp+=(char)data[i];
 			}
 		}
 		return Strings;

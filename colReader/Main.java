@@ -14,14 +14,16 @@ import LZ10Convertor.LZ10Manager;
 import MSDBManager.ConstantEnemyManager;
 import MSDBManager.MobModList;
 import PCKGManager.PCKGManager;
+import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
+import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
+import ResourceManagers.ItemDatabaseManager.itemPlaceManager;
+import ResourceManagers.MapDatabaseManager.BuildingResourceList;
+import ResourceManagers.MapDatabaseManager.exteriorPlaceList;
+import ResourceManagers.MapDatabaseManager.mapDataBaseManager;
 import WorldFileManager.fpInterpreter;
-import itemManager.itemDatabaseManager;
-import itemManager.itemPlaceManager;
-import mapDBManager.BuildingResourceList;
-import mapDBManager.exteriorPlaceList;
 import SystemDataManagers.CockpitLogManager;
-import SystemDataManagers.KingdomPlanManager;
 import SystemDataManagers.MailManager;
+import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
 import VMC.VMCConverter;
 @SuppressWarnings("unused")
 public class Main 
@@ -35,19 +37,20 @@ public class Main
 	static String fpType = ".vfp";	
 	public static void main(String[] args) 
 	{
-		bFM.Utils.DebugPrint("");
-		//try {tester();} catch (IOException e) {e.printStackTrace();}
+		bFM.Utils.setDebugOutput(true);
+		bFM.Utils.DebugPrint("Debug Data Enabled");
+		//{tester();} catch (IOException e) {e.printStackTrace();}
 		//decodeCollision();
 		//encodeCollision();
 		//encodeFixedPoints();
 		//decodeFixedPoints();
 		//menuDBManager();
 		//packGrid();
-		mapDataBase();			
+		//mapDataBase();			
 		//decodeLightZones();
 		//encodeLightZones();
 		//message();				
-		enemyManagers();
+		//enemyManagers();
 		//decodeEnemyData("CoinPurse.bMos", 4010);
 		//itemManager();
 		//decodeItems(1);
@@ -56,6 +59,8 @@ public class Main
 		//decodeCollision("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\zpack\\mapBoot2.pac\\");
 		//deCompressEventText();
 		//compressEventText(1);
+		//characterDataBaseManager();
+		encodeVMC("CH03_EVT_001");
 	}
 	private static void decodeEnemyData(String outputFileName)	
 	{
@@ -199,9 +204,9 @@ public class Main
 	private static byte[] encodeKingdomPlan(byte[] data) 
 	{
 		bFM.Utils.DebugPrint("Attempting to Encode Kingdom Plan Data");
-		KingdomPlanManager kingdomPlanData;
+		kingdomPlanManager kingdomPlanData;
 		try {
-			kingdomPlanData = new KingdomPlanManager(Files.readAllLines(Paths.get(importPath+"KingdomPlan.txt")));
+			kingdomPlanData = new kingdomPlanManager(Files.readAllLines(Paths.get(importPath+"KingdomPlan.txt")));
 			bFM.Utils.DebugPrint("Success");
 		} catch (IOException e) 
 		{
@@ -213,7 +218,7 @@ public class Main
 	}
 	private static void decodeKingdomPlan(byte[] data)
 	{
-		KingdomPlanManager kingdomPlanData = new KingdomPlanManager(data);
+		kingdomPlanManager kingdomPlanData = new kingdomPlanManager(data);
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write Kingdom Plan file at: " + importPath+"KingdomPlan.txt");
@@ -512,18 +517,32 @@ public class Main
 		//exteriorPlaceList buildings = new exteriorPlaceList(Files.readAllLines(Paths.get(importPath+"extPlaceTemp.lst")));
 		//Files.write(Paths.get(importPath+"extPlace1.lst"), buildings.toString().getBytes());
 		
-		//byte[] vmcData = Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\mos\\ms0000.pcha\\out0.vmc"));
-		//VMCConverter vmcData1 = new VMCConverter(vmcData);
-		//vmcData1.toString();
-		byte[] file1 = new PCKGManager(LZ10Manager.decompress("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\event\\message\\1\\mes_LZ.bin")).getFile(7);
-		byte[] file2 = LZ10Manager.compress(LZ10Manager.decompress(new PCKGManager(LZ10Manager.decompress("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\event\\message\\1\\mes_LZ.bin")).getFile(7)));
+		byte[] vmcData = Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Events\\New folder\\CH01_EVT_001.vmc0"));
+		//byte[] vmcData = Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\event\\script\\event\\CH02_EVT_101.vmc0"));
+		VMCConverter vmcData1 = new VMCConverter(vmcData);
+		bFM.Utils.testDifferences(vmcData, vmcData1.toBytes());
+		Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest.txt"), vmcData1.toString().getBytes(Charset.forName("Shift-JIS")));
+		VMCConverter vmcData2 = new VMCConverter(Files.readAllLines(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest.txt"), Charset.forName("Shift-JIS")));
+		bFM.Utils.testDifferences(vmcData, vmcData2.toBytes());
+		Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest.vmc"), vmcData1.toBytes());
+		Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest2.vmc"), vmcData2.toBytes());
+		//byte[] file1 = new PCKGManager(LZ10Manager.decompress("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\event\\message\\1\\mes_LZ.bin")).getFile(7);
+		//byte[] file2 = LZ10Manager.compress(LZ10Manager.decompress(new PCKGManager(LZ10Manager.decompress("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\event\\message\\1\\mes_LZ.bin")).getFile(7)));
 		//byte[] file3
 		//byte[] file4
-		Files.write(Paths.get("D:\\file3.bin"), file1);
-		Files.write(Paths.get("D:\\file4.bin"), file2);
-		bFM.Utils.testDifferences(file1, file2);
-		System.out.println(Arrays.toString(file1));
-		System.out.println(Arrays.toString(file2));
+		//Files.write(Paths.get("D:\\file3.bin"), file1);
+		//Files.write(Paths.get("D:\\file4.bin"), file2);
+		//bFM.Utils.testDifferences(file1, file2);
+		//System.out.println(Arrays.toString(file1));
+		//System.out.println(Arrays.toString(file2));
+		
+		
+		//PCKGManager test = new PCKGManager(Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Characters\\cbData1.pac")));
+		//PCKGManager tests = new PCKGManager("cb0010.pac");
+		//tests.addFile("cb0010.brres", Files.readAllBytes(Paths.get("D:\\LKS Mod\\cb0010.brres")));
+		//tests.addFile("chr.cfg", Files.readAllBytes(Paths.get("D:\\LKS Mod\\chr.cfg")));
+		//test.addFile("cb0010.pcha", tests.getFile());
+		//Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Characters\\cbData1.pac"), test.getFile());
 	}
 	private static String getLanguage(int languageCode)
 	{
@@ -598,7 +617,7 @@ public class Main
 	{
 		//deCompress and extract and decompress the event text files
 		
-		String importPath = Main.importPath + "Event\\Text\\" + getLanguage(languageCode);
+		String importPath = Main.importPath + "Events\\Text\\" + getLanguage(languageCode);
 		String outputPath = Main.outputPath + "Message\\" + getLanguage(languageCode);
 		
 		
@@ -620,7 +639,17 @@ public class Main
 		
 		
 	}
-	
+	private static void characterDataBaseManager()
+	{
+		String importDirectory = importPath + "Resources\\Character Database\\";
+		CharacterDataBaseManager cdb = new CharacterDataBaseManager(outputPath + "Resources\\chrDB0.pac");
+		cdb.importIndex(importDirectory);
+		cdb.importJoin(importDirectory);
+		cdb.importCharacters(importDirectory);
+		cdb.importPrice(importDirectory);
+		
+		cdb.writeFile(outputPath + "Resources\\chrDB0.pac");
+	}
 	private static void decodeCollision()
 	{
 		String importPath = Main.importPath;
@@ -830,89 +859,9 @@ public class Main
 	{
 		String mapDBPath = outputPath + "Resources\\mapDB0.pac";
 		String inputPath = importPath + "Resources\\Map Database\\";
-		PCKGManager MapDataBase = new PCKGManager("mapDB0");
-		try 
-		{
-			bFM.Utils.DebugPrint("Attempting to read mapDB package at: " + mapDBPath);
-			MapDataBase = new PCKGManager(Files.readAllBytes(Paths.get(mapDBPath)));
-		} catch (IOException e) 
-		{
-			bFM.Utils.DebugPrint("Failed to read package. Program will skip this step for now");
-			return;
-		}
-		try 
-		{
-			MapDataBase.addFile("grnd2.cfg", Files.readAllBytes(Paths.get(inputPath+"grnd2.cfg")));
-			bFM.Utils.DebugPrint("Sucessfully added Ground Configuration File");
-		} catch (IOException e) 
-		{
-			bFM.Utils.DebugPrint("Failed to locate Ground Configuration File at: " + inputPath+"grnd2.cfg");
-			try 
-			{
-				bFM.Utils.DebugPrint("Attempting to extract file");
-				Files.write(Paths.get(inputPath+"grnd2.cfg") , MapDataBase.getFile("grnd2.cfg"));
-			} catch (IOException i) 
-			{
-				bFM.Utils.DebugPrint("Failed to extract file");
-			}
-		}
-		try 
-		{
-			MapDataBase.addFile("buildPos0.lst", Files.readAllBytes(Paths.get(inputPath+"buildPos0.lst")));
-			bFM.Utils.DebugPrint("Sucessfully added Building Position File");
-		} catch (IOException e) 
-		{
-			bFM.Utils.DebugPrint("Failed to locate Building Position File at: " + inputPath+"buildPos0.lst");
-			try 
-			{
-				bFM.Utils.DebugPrint("Attempting to extract file");
-				Files.write(Paths.get(inputPath+"buildPos0.lst") , MapDataBase.getFile("buildPos0.lst"));
-			} catch (IOException i) 
-			{
-				bFM.Utils.DebugPrint("Failed to extract file");
-			}
-		}
-		try 
-		{
-			BuildingResourceList buildingList = new BuildingResourceList(Files.readAllLines(Paths.get(inputPath+"building0.lst"), Charset.forName("Shift_JIS")));
-			MapDataBase.addFile("building0.lst", buildingList.toBytes());
-			//MapDataBase.addFile("building0.lst", Files.readAllBytes(Paths.get(inputPath+"building0.lst")));
-			//bFM.Utils.DebugPrint("Sucessfully added Building Configuration File");
-		} catch (IOException e) 
-		{
-			bFM.Utils.DebugPrint("Failed to locate Building Configuration File at: " + inputPath + "building0.lst");
-			try 
-			{
-				bFM.Utils.DebugPrint("Attempting to extract file");
-				Files.write(Paths.get(inputPath+"building0.lst") , MapDataBase.getFile("building0.lst"));
-			} catch (IOException i) 
-			{
-				bFM.Utils.DebugPrint("Failed to extract file");
-			}
-		}
-		try 
-		{
-			MapDataBase.addFile("extPlace1.lst", Files.readAllBytes(Paths.get(inputPath+"extPlace1.lst")));
-			bFM.Utils.DebugPrint("Sucessfully added Exterior Places Configuration File");
-		} catch (IOException e) 
-		{
-			bFM.Utils.DebugPrint("Failed to locate Exterior Places File at: " + inputPath + "extPlace1.lst");
-			try 
-			{
-				bFM.Utils.DebugPrint("Attempting to extract file");
-				Files.write(Paths.get(inputPath+"extPlace1.lst") , MapDataBase.getFile("extPlace1.lst"));
-			} catch (IOException i) 
-			{
-				bFM.Utils.DebugPrint("Failed to extract file");
-			}
-		}
-		try 
-		{
-			Files.write(Paths.get(mapDBPath) , MapDataBase.getFile());
-		} catch (IOException e) 
-		{
-			bFM.Utils.DebugPrint("Failed to write Map Data Base File");
-			}
+		mapDataBaseManager mapData = new mapDataBaseManager(mapDBPath);
+		mapData.addFiles(inputPath);
+		mapData.writeFile(mapDBPath);
 	}
 	private static void decodeFixedPoints()
 	{
@@ -962,5 +911,63 @@ public class Main
 			bFM.Utils.DebugPrint("Failed to write Fixed Point File");
 			return;
 		}
+	}
+	private static void encodeVMC(String VMC_Code)
+	{
+		String outputPath = Main.outputPath + "Events\\"+VMC_Code+".vmc0";
+		String importPath = Main.importPath + "Events\\"+VMC_Code+".txt";
+		//This came to me in a series of visions.
+		VMCConverter eventData = null;
+		byte[] vmcData = null;
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "Event Code", importPath);
+			eventData = new VMCConverter(Files.readAllLines(Paths.get(importPath)));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "Event Code");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureContinue, "Event Code", "decode", "VMC", outputPath);
+			decodeVMC(VMC_Code);
+			return;
+		}
+		 
+		vmcData = eventData.toBytes();
+		
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "VMC", outputPath);
+			Files.write(Paths.get(outputPath), vmcData);
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "VMC");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "VMC");
+			return;
+		}
+	}
+	private static void decodeVMC(String VMC_Code)
+	{
+		VMCConverter eventData = null;
+		String outputPath = Main.outputPath + "Events\\"+VMC_Code+".vmc0";
+		String importPath = Main.importPath + "Events\\"+VMC_Code+".txt";
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "VMC", outputPath);
+			eventData = new VMCConverter(Files.readAllBytes(Paths.get(outputPath)));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "VMC");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureEnd, "VMC");
+			return;
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "Event Code", importPath);
+			Files.write(Paths.get(importPath), eventData.toString().getBytes());
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "Event Code");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "Event Code");
+		}
+		
 	}
 }

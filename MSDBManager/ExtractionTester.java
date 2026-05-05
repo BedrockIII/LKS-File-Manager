@@ -1,6 +1,3 @@
-/**
- * 
- */
 package MSDBManager;
 
 import java.io.IOException;
