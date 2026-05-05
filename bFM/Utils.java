@@ -9,12 +9,19 @@ import java.util.List;
 
 public class Utils 
 {
-	final static boolean debugOutput = true;
+	public static boolean debugOutput = false;
 	public static void DebugPrint(String message)
 	{
 		if(debugOutput)
 		{
 			System.out.println(message);
+		}
+	}
+	public static void DebugPrintF(String message, String...strings)
+	{
+		if(debugOutput)
+		{
+			System.out.printf(message + '\n', (Object[])strings);
 		}
 	}
 	public static byte[] mergeArrays(byte[] main, byte[] add)
@@ -414,5 +421,41 @@ public class Utils
 			System.out.println("Failed to read internal file: " + name);
 		}
 		return ret;
+	}
+	public static int byteToInt(byte b)
+	{
+		int ret = Byte.toUnsignedInt(b);
+		if(ret == 255) return -1;
+		return ret;
+	}
+	public static byte[] mergeArrays(byte[] ret, byte num13a) 
+	{
+		byte[] temp = {num13a};
+		return mergeArrays(ret, temp);
+	}
+	public static void setDebugOutput(boolean b) 
+	{
+		debugOutput = b;
+	}
+	public static float strToFloat(String str) 
+	{
+		String allowedChars = "1234567890-.";
+		String integer = "";
+		for(int i = 0; i<str.length();i++)
+		{
+			if(allowedChars.indexOf(str.charAt(i))!=-1)
+			{
+				integer+=str.charAt(i);
+			}
+		}
+		try
+		{
+			return Float.parseFloat(integer);
+		}
+		catch (NumberFormatException w)
+		{
+			
+		}
+		return 0;
 	}
 }

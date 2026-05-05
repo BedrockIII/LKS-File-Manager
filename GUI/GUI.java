@@ -11,6 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
+import GUI.FileInfo.GenericFileInfoGUI;
+import GUI.FileList.FileListPanel;
+import GUI.FileList.Package;
+
 public class GUI extends JFrame
 {
 	private static final long serialVersionUID = 8648666561327794462L;
@@ -36,8 +40,8 @@ public class GUI extends JFrame
 	}
 	//private static JPanel openedFile = new Package();
 	private static FileListPanel openedFileList = new FileListPanel();
-	private static JScrollPane leftPanel = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	private static GenericFileInfoGUI fileInfo = new GenericFileInfoGUI();
+	private static JScrollPane fileInfoPanel = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	private static GenericFileInfoGUI fileInfo = null;
 	static JSplitPane contents = new JSplitPane();
 	public static JFrame frame = new JFrame();
 	public static final int assetHeight = 20;
@@ -56,6 +60,7 @@ public class GUI extends JFrame
 		frame.setLayout(new BorderLayout());
 		GridBagConstraints layout = new GridBagConstraints();
 		layout.anchor = GridBagConstraints.NORTH;
+		layout.weighty = 1.0;
 	    layout.gridwidth = GridBagConstraints.REMAINDER;
 		MenuBar menuBar = new MenuBar();
         frame.add(menuBar, BorderLayout.NORTH);
@@ -68,7 +73,9 @@ public class GUI extends JFrame
         openedFileList.setMinimumSize(buttonSize);
         contents.setTopComponent(openedFileList);
         contents.setDividerSize(3);
-        contents.setBottomComponent(leftPanel);
+        contents.setResizeWeight(0);
+        contents.setBottomComponent(fileInfoPanel);
+        
         frame.add(contents);
         frame.setSize(new Dimension(rowWidth, assetHeight*5));
         //frame.pack();
@@ -89,9 +96,13 @@ public class GUI extends JFrame
 	public static void update() 
 	{
 		openedFileList.update();
-		if(leftPanel.getViewport().getView()!=null)leftPanel.getViewport().getView().repaint();
-		fileInfo.update();
-		fileInfo.repaint();
+		if(fileInfoPanel.getViewport().getView()!=null)fileInfoPanel.getViewport().getView().repaint();
+		if(fileInfo!=null)
+		{
+			fileInfo.update();
+			fileInfo.repaint();
+		}
+		
 		frame.repaint();
 		//System.out.println(openedFileList.getHeight());
 		frame.setSize(Math.max(Math.max(rowWidth+20, 300), frame.getWidth()), Math.max(openedFileList.getHeight()+45+assetHeight, frame.getHeight()));
@@ -111,12 +122,12 @@ public class GUI extends JFrame
 	public static void setFileInfo(GenericFileInfoGUI gui) 
 	{
 		fileInfo = gui;
-		leftPanel.setViewportView(gui);
+		fileInfoPanel.setViewportView(gui);
 	}
 	public static Dimension getRightSize() 
 	{
 		//System.out.println(leftPanel.getSize());
-		return leftPanel.getSize();
+		return fileInfoPanel.getSize();
 	}
 	public static void deselectAll() 
 	{

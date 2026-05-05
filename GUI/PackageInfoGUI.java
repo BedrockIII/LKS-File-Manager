@@ -4,6 +4,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
+
+import GUI.FileInfo.GenericFileInfoGUI;
 import PCKGManager.PCKGManager;
 
 @SuppressWarnings("serial")
