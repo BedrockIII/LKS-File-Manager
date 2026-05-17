@@ -12,9 +12,11 @@ public class PCKGManagerMain
 	public static void printVersionData()
 	{
 		System.out.println("Pac File Manager");
-		System.out.println("Version 2.3");
-		System.out.println("     Fixed some bugs");
-		System.out.println("     Extracting Pacs now tells which files were found");
+		System.out.println("Version 3.1");
+		System.out.println("     Fixed several GUI bugs");
+		System.out.println("     Adding Packages to Packages no longer breaks everything");
+		System.out.println("     File list no longer breaks randomly");
+		System.out.println("     File list no longer breaks randomly");
 	}
 	public static void main(String args[]) throws IOException 
 	{ 
