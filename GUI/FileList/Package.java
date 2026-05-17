@@ -166,7 +166,7 @@ public class Package extends Generic
 		//spacer.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		constraints.weightx = 1.0;
 		JLabel pacName = new JLabel(packageFile.getName(), SwingConstants.LEFT);
-		pacName.setBorder(BorderFactory.createLineBorder(Color.PINK));
+		//pacName.setBorder(BorderFactory.createLineBorder(Color.PINK));
 		pacName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
 		headerPanel.add(pacName, constraints);
 		
