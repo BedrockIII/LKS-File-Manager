@@ -10,13 +10,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import CameraData.CameraZoneList;
+import DebugModeManager.Event.EventViewer;
 import LZ10Convertor.LZ10Manager;
-import MSDBManager.ConstantEnemyManager;
-import MSDBManager.MobModList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import ResourceManagers.ItemDatabaseManager.itemPlaceManager;
+import ResourceManagers.MSDBManager.MissionObjectPlacementManager;
+import ResourceManagers.MSDBManager.MobModList;
 import ResourceManagers.MapDatabaseManager.BuildingResourceList;
 import ResourceManagers.MapDatabaseManager.exteriorPlaceList;
 import ResourceManagers.MapDatabaseManager.mapDataBaseManager;
@@ -31,7 +32,7 @@ public class Main
 	public static boolean grid = true;
 	final public static String importPath = "D:\\LKS Mod\\";
 	final public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\";
-	static String name = "0202";//0510 soba
+	static String name = "1211";//0510 soba
 	static byte [] colData;
 	static byte [] fpData;
 	static String fpType = ".vfp";	
@@ -39,14 +40,15 @@ public class Main
 	{
 		bFM.Utils.setDebugOutput(true);
 		bFM.Utils.DebugPrint("Debug Data Enabled");
-		//{tester();} catch (IOException e) {e.printStackTrace();}
+		//try{tester();} catch (IOException e) {e.printStackTrace();}
 		//decodeCollision();
 		//encodeCollision();
 		//encodeFixedPoints();
 		//decodeFixedPoints();
 		//menuDBManager();
-		//packGrid();
-		//mapDataBase();			
+		//packBuilding("SurfaceToCaveHole");
+		packGrid();
+		//mapDataBase();
 		//decodeLightZones();
 		//encodeLightZones();
 		//message();				
@@ -60,7 +62,8 @@ public class Main
 		//deCompressEventText();
 		//compressEventText(1);
 		//characterDataBaseManager();
-		encodeVMC("CH03_EVT_001");
+		//encodeVMC("CH01_EVT_000");
+		//encodeDebugEventViewer();
 	}
 	private static void decodeEnemyData(String outputFileName)	
 	{
@@ -82,7 +85,7 @@ public class Main
 			bFM.Utils.DebugPrint("Program will return as it cannot continue.");
 			return;
 		}
-		ConstantEnemyManager bMos = new ConstantEnemyManager(MonsterDataPack.getFile("MOP_14_CONST_PLACE.lst"), 
+		MissionObjectPlacementManager bMos = new MissionObjectPlacementManager(MonsterDataPack.getFile("MOP_14_CONST_PLACE.lst"), 
 				MonsterDataPack.getFile("MOP_14_GROUP.lst"), MonsterDataPack.getFile("MOP_14_OBJECT.lst"), 
 				MonsterDataPack.getFile("MOP_14_RANDOM_AREA.lst"), MonsterDataPack.getFile("MOP_14_RANDOM_POINT.lst"), 
 				MonsterDataPack.getFile("MOP_14_AREA_DATA.lst"));
@@ -429,11 +432,11 @@ public class Main
 		String outputPath = Main.outputPath + "Resources\\";
 		String importPath = Main.importPath + "Resources\\Monster Database\\";
 		bFM.Utils.DebugPrint("Encoding Enemies "+ difficulty);
-		ConstantEnemyManager bMos;
+		MissionObjectPlacementManager bMos;
 		MobModList enemyModifications = null;
 		try
 		{
-			bMos = new ConstantEnemyManager(Files.readAllLines(Paths.get(importPath+"Enemies.bMos")));
+			bMos = new MissionObjectPlacementManager(Files.readAllLines(Paths.get(importPath+"Enemies.bMos")));
 		}
 		catch (IOException e)
 		{
@@ -517,15 +520,15 @@ public class Main
 		//exteriorPlaceList buildings = new exteriorPlaceList(Files.readAllLines(Paths.get(importPath+"extPlaceTemp.lst")));
 		//Files.write(Paths.get(importPath+"extPlace1.lst"), buildings.toString().getBytes());
 		
-		byte[] vmcData = Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Events\\New folder\\CH01_EVT_001.vmc0"));
+		//byte[] vmcData = Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Events\\New folder\\CH01_EVT_001.vmc0"));
 		//byte[] vmcData = Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\event\\script\\event\\CH02_EVT_101.vmc0"));
-		VMCConverter vmcData1 = new VMCConverter(vmcData);
-		bFM.Utils.testDifferences(vmcData, vmcData1.toBytes());
-		Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest.txt"), vmcData1.toString().getBytes(Charset.forName("Shift-JIS")));
-		VMCConverter vmcData2 = new VMCConverter(Files.readAllLines(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest.txt"), Charset.forName("Shift-JIS")));
-		bFM.Utils.testDifferences(vmcData, vmcData2.toBytes());
-		Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest.vmc"), vmcData1.toBytes());
-		Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest2.vmc"), vmcData2.toBytes());
+		//VMCConverter vmcData1 = new VMCConverter(vmcData);
+		//bFM.Utils.testDifferences(vmcData, vmcData1.toBytes());
+		//Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest.txt"), vmcData1.toString().getBytes(Charset.forName("Shift-JIS")));
+		//VMCConverter vmcData2 = new VMCConverter(Files.readAllLines(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest.txt"), Charset.forName("Shift-JIS")));
+		//bFM.Utils.testDifferences(vmcData, vmcData2.toBytes());
+		//Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest.vmc"), vmcData1.toBytes());
+		//Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\eventTest2.vmc"), vmcData2.toBytes());
 		//byte[] file1 = new PCKGManager(LZ10Manager.decompress("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\event\\message\\1\\mes_LZ.bin")).getFile(7);
 		//byte[] file2 = LZ10Manager.compress(LZ10Manager.decompress(new PCKGManager(LZ10Manager.decompress("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\event\\message\\1\\mes_LZ.bin")).getFile(7)));
 		//byte[] file3
@@ -540,9 +543,19 @@ public class Main
 		//PCKGManager test = new PCKGManager(Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Characters\\cbData1.pac")));
 		//PCKGManager tests = new PCKGManager("cb0010.pac");
 		//tests.addFile("cb0010.brres", Files.readAllBytes(Paths.get("D:\\LKS Mod\\cb0010.brres")));
-		//tests.addFile("chr.cfg", Files.readAllBytes(Paths.get("D:\\LKS Mod\\chr.cfg")));
-		//test.addFile("cb0010.pcha", tests.getFile());
+		////tests.addFile("chr.cfg", Files.readAllBytes(Paths.get("D:\\LKS Mod\\chr.cfg")));
+		//test.addFile("cb0150.pcha", Files.readAllBytes(Paths.get("D:\\LKS Mod\\cb0150.pcha")));
 		//Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Characters\\cbData1.pac"), test.getFile());
+		
+		
+		
+		final String outputPath = Main.outputPath + "Debug\\EventViewer\\";
+		final String importPath = Main.importPath + "Debug\\EventViewer\\";
+		final String NormalEvents = "evlist.bin";
+		final String NormalEventCSV = "Event List.csv";
+		//EventViewer eventData = new EventViewer(Files.readAllBytes(Paths.get(outputPath + NormalEvents)));
+		EventViewer eventData = new EventViewer(Files.readAllLines(Paths.get(importPath + NormalEventCSV), Charset.forName("Shift-JIS")));
+		bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(outputPath + NormalEvents)), eventData.toBytes());
 	}
 	private static String getLanguage(int languageCode)
 	{
@@ -567,7 +580,7 @@ public class Main
 	}
 	private static void compressEventText(int languageCode)
 	{
-		String importPath = Main.importPath + "Event\\Text\\" + getLanguage(languageCode);
+		String importPath = Main.importPath + "Events\\Text\\" + getLanguage(languageCode);
 		String outputPath = Main.outputPath + "Message\\" + getLanguage(languageCode);
 		
 		//read the compressed pack file
@@ -693,7 +706,7 @@ public class Main
 		}
 		else
 		{
-			importPath += "Building\\";
+			importPath += "Buildings\\";
 		}
 		ColReader colFile;
 		ColReader.optimizeCollision(true);
@@ -783,6 +796,103 @@ public class Main
 		}
 		//Adding .fp File
 		String fpPath = importPath + name + ".fp";
+		try
+		{
+			packFile.addFile(name +".fp", Files.readAllBytes(Paths.get(fpPath)));
+		}
+		catch(IOException e) 
+		{
+			bFM.Utils.DebugPrint("Warning Could not find .fp file at \"" + fpPath + "\". Program will continue without one.");
+		}
+		//Adding .vfp File
+		String vfpPath = importPath + name + ".vfp";
+		try
+		{
+			packFile.addFile(name +".vfp", Files.readAllBytes(Paths.get(vfpPath)));
+		}
+		catch(IOException e) 
+		{
+			bFM.Utils.DebugPrint("Warning Could not find .vfp file at \"" + vfpPath + "\". Program will continue without one.");
+		}
+		//Adding .sfp File
+		String sfpPath = importPath + name + ".sfp";
+		try
+		{
+			packFile.addFile(name +".sfp", Files.readAllBytes(Paths.get(sfpPath)));
+		}
+		catch(IOException e) 
+		{
+			bFM.Utils.DebugPrint("Warning Could not find .sfp file at \"" + sfpPath + "\". Program will continue without one.");
+		}
+		//Adding .lfp File
+		String lfpPath = importPath + name + ".lfp";
+		try
+		{
+			packFile.addFile(name +".lfp", Files.readAllBytes(Paths.get(lfpPath)));
+		}
+		catch(IOException e) 
+		{
+			bFM.Utils.DebugPrint("Warning Could not find .lfp file at \"" + lfpPath + "\". Program will continue without one.");
+		}
+		//Repacking File
+		try
+		{
+			Files.write(Paths.get(PCKGPath) , packFile.getFile());
+		}
+		catch(IOException e) 
+		{
+			bFM.Utils.DebugPrint("Failed to create .pac file at \"" + PCKGPath + "\".");
+		}
+	}
+	private static void packBuilding(String name) 
+	{
+		String fileName = "bl" + name + ".pac";
+		String modelPath = importPath + "bl" + name + ".brres";
+		String colPath = importPath + name + ".col";
+		String fpPath = importPath + name + ".fp";
+		String importPath = Main.importPath;
+		String outputPath = Main.outputPath + "Map\\" + fileName;
+		importPath += "Buildings\\";
+		outputPath += "Building\\";
+		//Create .pac File
+		PCKGManager packFile = new PCKGManager(fileName);
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "Package", outputPath);
+			packFile = new PCKGManager(Files.readAllBytes(Paths.get(outputPath)));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "Package");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureCreateNew, "Package", outputPath, "Package");
+		}
+		//Adding Model File
+		try
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "Brres Model", modelPath);
+			packFile = new PCKGManager(Files.readAllBytes(Paths.get(modelPath)));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "Brres Model");
+		}
+		catch(IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureEnd, "Brres Model");
+			if(packFile.indexOf("bl" + name + ".brres")==-1)
+			{
+				bFM.Utils.DebugPrintF(bFM.DebugStrings.RequiredFileNotInPackageEnd, "Brres Model");
+				return;
+			}
+		}
+		//Adding .col File
+		try
+		{
+			if(colData==null) packFile.addFile(name +".col", Files.readAllBytes(Paths.get(colPath)));
+			else packFile.addFile(name +".col", colData);
+		}
+		catch(IOException e) 
+		{
+			bFM.Utils.DebugPrint("Warning Could not find .col file at \"" + colPath + "\" or in memory. Program will continue without one.");
+		}
+		//Adding .fp File
+		
 		try
 		{
 			packFile.addFile(name +".fp", Files.readAllBytes(Paths.get(fpPath)));
@@ -926,7 +1036,7 @@ public class Main
 			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "Event Code");
 		} catch (IOException e) 
 		{
-			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureContinue, "Event Code", "decode", "VMC", outputPath);
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureNewMode, "Event Code", "decode", "VMC", outputPath);
 			decodeVMC(VMC_Code);
 			return;
 		}
@@ -969,5 +1079,149 @@ public class Main
 			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "Event Code");
 		}
 		
+	}
+	private static void encodeDebugEventViewer()
+	{
+		EventViewer eventData = null;
+		final String outputPath = Main.outputPath + "Debug\\EventViewer\\";
+		final String importPath = Main.importPath + "Debug\\EventViewer\\";
+		final String NormalEvents = "evlist.bin";
+		final String SubEvents = "evslist.bin";
+		final String QuestEvents = "evqlist.bin";
+		final String NormalEventCSV = "Event List.csv";
+		final String SubEventCSV = "Sub Event List.csv";
+		final String QuestEventCSV = "Quest Event List.csv";
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "Event List", importPath + NormalEventCSV);
+			eventData = new EventViewer(Files.readAllLines(Paths.get(importPath + NormalEventCSV)));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureNewMode, "Event List", "decode", "Debug Event List", outputPath + NormalEvents);
+			decodeDebugEventViewer();
+			return;
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "Debug Event List", outputPath + NormalEvents);
+			Files.write(Paths.get(outputPath + NormalEvents), eventData.toBytes());
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "Debug Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "Debug Event List");
+			return;
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "Event List", importPath + SubEventCSV);
+			eventData = new EventViewer(Files.readAllLines(Paths.get(importPath + SubEventCSV)));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureNewMode, "Event List", "decode", "Debug Event List", outputPath + SubEvents);
+			decodeDebugEventViewer();
+			return;
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "Debug Event List", outputPath + SubEvents);
+			Files.write(Paths.get(outputPath + SubEvents), eventData.toBytes());
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "Debug Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "Debug Event List");
+			return;
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "Event List", importPath + QuestEventCSV);
+			eventData = new EventViewer(Files.readAllLines(Paths.get(importPath + QuestEventCSV)));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureNewMode, "Event List", "decode", "Debug Event List", outputPath + QuestEvents);
+			decodeDebugEventViewer();
+			return;
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "Debug Event List", outputPath + QuestEvents);
+			Files.write(Paths.get(outputPath + QuestEvents), eventData.toBytes());
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "Debug Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "Debug Event List");
+			return;
+		}
+	}
+	private static void decodeDebugEventViewer()
+	{
+		EventViewer eventData = null;
+		final String outputPath = Main.outputPath + "Debug\\EventViewer\\";
+		final String importPath = Main.importPath + "Debug\\EventViewer\\";
+		final String NormalEvents = "evlist.bin";
+		final String SubEvents = "evslist.bin";
+		final String QuestEvents = "evqlist.bin";
+		final String NormalEventCSV = "Event List.csv";
+		final String SubEventCSV = "Sub Event List.csv";
+		final String QuestEventCSV = "Quest Event List.csv";
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "Debug Event List", outputPath + NormalEvents);
+			eventData = new EventViewer(Files.readAllBytes(Paths.get(outputPath + NormalEvents)));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "Debug Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureEnd, "Debug Event List");
+			return;
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "Event List", importPath + NormalEventCSV);
+			Files.write(Paths.get(importPath + NormalEventCSV), eventData.toString().getBytes(Charset.forName("Shift-JIS")));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "Event List");
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "Debug Event List", outputPath + SubEvents);
+			eventData = new EventViewer(Files.readAllBytes(Paths.get(outputPath + SubEvents)));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "Debug Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureEnd, "Debug Event List");
+			return;
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "Event List", importPath + SubEventCSV);
+			Files.write(Paths.get(importPath + SubEventCSV), eventData.toString().getBytes(Charset.forName("Shift-JIS")));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "Event List");
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "Debug Event List", outputPath + QuestEvents);
+			eventData = new EventViewer(Files.readAllBytes(Paths.get(outputPath + QuestEvents)));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileSuccess, "Debug Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileFailureEnd, "Debug Event List");
+			return;
+		}
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "Event List", importPath + QuestEventCSV);
+			Files.write(Paths.get(importPath + QuestEventCSV), eventData.toString().getBytes(Charset.forName("Shift-JIS")));
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "Event List");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "Event List");
+		}
 	}
 }

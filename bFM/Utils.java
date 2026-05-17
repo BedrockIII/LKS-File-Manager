@@ -2,10 +2,13 @@ package bFM;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import PCKGManager.OpenedFile;
 
 public class Utils 
 {
@@ -401,11 +404,18 @@ public class Utils
 	public static byte[] readFile(String name, String path)
 	{
 		byte[] ret = null;
-		try 
+		if(ClassLoader.getSystemResourceAsStream(name)!=null)
 		{
-			ret = ClassLoader.getSystemResourceAsStream(name).readAllBytes();
+			try 
+			{
+				ret = ClassLoader.getSystemResourceAsStream(name).readAllBytes();
+			} 
+			catch (IOException error) 
+			{
+				System.out.println("Failed to read internal file: " + name);
+			}
 		}
-		catch (NullPointerException e)
+		else
 		{
 			try 
 			{
@@ -416,10 +426,7 @@ public class Utils
 				System.out.println("Failed to read file at: " + Paths.get(path + name));
 			}
 		}
-		catch (IOException error) 
-		{
-			System.out.println("Failed to read internal file: " + name);
-		}
+		
 		return ret;
 	}
 	public static int byteToInt(byte b)
@@ -457,5 +464,19 @@ public class Utils
 			
 		}
 		return 0;
+	}
+	public static int getShort(ByteBuffer data)
+	{
+		int ret = (0xFFFF & data.getShort());
+		if(ret == 65535) return -1;
+		return ret;
+	}
+	public static String getFileType(OpenedFile file) 
+	{
+		return getFileType(file.getName(), file.getData());
+	}
+	public static boolean isGenericPAC(byte[] fileContents, String name) 
+	{
+		return getFileType(name, fileContents).equals("Package");
 	}
 }

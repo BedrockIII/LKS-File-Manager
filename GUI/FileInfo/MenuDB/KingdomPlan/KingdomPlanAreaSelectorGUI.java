@@ -12,17 +12,19 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import GUI.FileInfo.GenericFileInfoGUI;
+import PCKGManager.OpenedFile;
 import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
 import SystemDataManagers.KingdomPlanManager.KingdomPlanArea;
 
 @SuppressWarnings("serial")
 public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 {
+	OpenedFile file = null;
 	kingdomPlanManager plans = null;
 	ArrayList<KingdomPlanArea> Areas = new ArrayList<KingdomPlanArea>();
 	ArrayList<KingdomPlanAreaGUI> AreaGUIs = new ArrayList<KingdomPlanAreaGUI>();
 	JComboBox<KingdomPlanAreaGUI> AreaList = new JComboBox<KingdomPlanAreaGUI>();
-	public KingdomPlanAreaSelectorGUI(byte[] data) 
+	private void initializeFromBytes(byte[] data)
 	{
 		removeAll();
 		setPreferredSize(GUI.GUI.getRightSize());
@@ -69,6 +71,11 @@ public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 		add(Box.createVerticalGlue(), layout);
 		layout.weighty = 0.0;
 	}
+	public KingdomPlanAreaSelectorGUI(OpenedFile file) 
+	{
+		this.file = file;
+		initializeFromBytes(file.getData());
+	}
 	//have a dropdown of all areas and then an area panel
 	public void updateList() 
 	{
@@ -85,9 +92,15 @@ public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 		{
 			area.update();;
 		}
+		file.setData(getBytes());
 	}
 	public byte[] getBytes() 
 	{
 		return plans.toBytes();
+	}
+	public void replaceData(byte[] data) 
+	{
+		file.setData(data);
+		initializeFromBytes(data);
 	}
 }

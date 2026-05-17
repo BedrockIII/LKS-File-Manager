@@ -27,31 +27,22 @@ public class FileListPanel extends JScrollPane
 	}
 	public int getHeight()
 	{
-		//System.out.println(getViewport(). instanceof Package);
-		try
-		{
-			return Math.max(getViewport().getView().getHeight(),GUI.assetHeight*5);
-		}
-		catch (NullPointerException e)
+		if(getViewport()==null||getViewport().getView()==null)
 		{
 			return GUI.assetHeight*5;
 		}
+		//System.out.println(getViewport(). instanceof Package);
+		return Math.max(getViewport().getView().getHeight(),GUI.assetHeight*5)+GUI.assetHeight;
 	}
 	//bar.
 	//frame.add(bar);
 	//frame.setVisible(true);
 	public void update() 
 	{
-		try
-		{
-			//setMaximumSize(new Dimension(GUI.rowWidth,((Package)getViewport().getView()).getHeight()));
-			getViewport().setSize(getWidth(), getHeight());
-			((Package)getViewport().getView()).update();
-		}
-		catch (NullPointerException e)
-		{
-			
-		}
+		if(getViewport()==null||getViewport().getView()==null) return;
+		//setMaximumSize(new Dimension(GUI.rowWidth,((Package)getViewport().getView()).getHeight()));
+		getViewport().setSize(getWidth(), getHeight());
+		((Package)getViewport().getView()).update();
 	}
 	public void deselectAll() 
 	{

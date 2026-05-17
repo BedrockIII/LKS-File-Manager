@@ -9,6 +9,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -20,43 +22,46 @@ import javax.swing.SwingUtilities;
 import GUI.GUI;
 import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.FileInfo.MenuDB.KingdomPlan.KingdomPlanAreaSelectorGUI;
+import PCKGManager.OpenedFile;
 import PCKGManager.PCKGManager;
 
 @SuppressWarnings("serial")
 public class Generic extends JPanel
 {
-	protected byte[] data;
-	protected String name = "";
-	GenericFileInfoGUI gui = null;
+	protected OpenedFile file = null;
+	protected GenericFileInfoGUI gui = null;
 	JLabel fileName = new JLabel();
 	protected Generic()
 	{
 		
 	}
-	public Generic(PCKGManager pac, int parentY, int parentX, int displacement)
+	public Generic(PCKGManager pac, int parentX, int index)
 	{
-		data = pac.getFile(displacement);
-		name = pac.getName(displacement);
-		makeGUI(parentX);
+		file = pac.getPackedFile(index);
+		initializeGUI(parentX);
 	}
 	public Generic(String name, byte[] data, int padding)
 	{
-		this.name = name;
-		this.data = data;
-		makeGUI(padding);
+		file = new OpenedFile(name, data);
+		initializeGUI(padding);
+	}
+	public Generic(OpenedFile file, int padding)
+	{
+		this.file = file;
+		initializeGUI(padding);
 	}
 	public Generic(String name, int padding) 
 	{
-		this.name = name;
-		this.data = new byte[0];
-		makeGUI(padding);
+		file = new OpenedFile(name, new byte[0]);
+		initializeGUI(padding);
 	}
-	private void makeGUI(int padding) 
+	private void initializeGUI(int padding) 
 	{
+		//setBorder(BorderFactory.createLineBorder(Color.GREEN));
 		GridBagConstraints constraints = new GridBagConstraints();  
 		constraints.weightx = 0.0;
 		constraints.anchor = GridBagConstraints.NORTHWEST;
-		gui = makeInfoGUI(name, data);
+		gui = makeInfoGUI(file);
 		setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
 		//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
 		setLayout(new GridBagLayout());
@@ -66,7 +71,7 @@ public class Generic extends JPanel
 		spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
 		add(spacer, constraints);
 		constraints.weightx = 1.0;
-		fileName = new JLabel(name, SwingConstants.LEFT);
+		fileName = new JLabel(file.getName(), SwingConstants.LEFT);
 		fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
 		add(fileName, constraints);
 		
@@ -79,12 +84,12 @@ public class Generic extends JPanel
 		JMenuItem export = new JMenuItem("Export File");
 		export.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
-			chooseFile.setSelectedFile(new File(name));
+			chooseFile.setSelectedFile(new File(file.getName()));
 			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
 			{
 				try 
 				{
-					Files.write(chooseFile.getSelectedFile().toPath(),data);
+					Files.write(chooseFile.getSelectedFile().toPath(),file.getData());
 				}
 				catch(IOException i)
 				{
@@ -107,11 +112,11 @@ public class Generic extends JPanel
 			{
 				try 
 				{
-					data = Files.readAllBytes(chooseFile.getSelectedFile().toPath());
+					file.setData(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
 					//System.out.println(data.length);
-					gui.updateGUI(data);
-					name = chooseFile.getSelectedFile().toPath().getFileName().toString();
-					fileName.setText(name);
+					gui.updateGUI(file.getData());
+					file.setName(chooseFile.getSelectedFile().toPath().getFileName().toString());
+					fileName.setText(file.getName());
 					GUI.update();
 				} catch (IOException i) 
 				{
@@ -143,18 +148,18 @@ public class Generic extends JPanel
 		    }
 		});
 	}
-	protected GenericFileInfoGUI makeInfoGUI(String name, byte[] data)
+	protected GenericFileInfoGUI makeInfoGUI(OpenedFile file)
 	{
-		String type = bFM.Utils.getFileType(name, data);
+		String type = bFM.Utils.getFileType(file.getName(), file.getData());
 		if(type.equals("KingdomPlanDB"))
 		{
-			return new KingdomPlanAreaSelectorGUI(data);
+			return new KingdomPlanAreaSelectorGUI(file);
 		}
 		else if(type.equals("Package"))
 		{
 			throw new IllegalArgumentException();
 		}
-		return new GenericFileInfoGUI(data);
+		return new GenericFileInfoGUI(file);
 	}
 	public int getHeight()
 	{
@@ -162,7 +167,7 @@ public class Generic extends JPanel
 	}
 	public byte[] getBytes() 
 	{
-		System.out.println(name);
+		System.out.println(file.getName());
 		if(gui==null) return new byte[0];
 		return gui.getBytes();
 	}

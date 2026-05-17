@@ -1,15 +1,9 @@
 package GUI;
 
-import java.io.IOException;
-import java.nio.file.Files;
-
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import GUI.FileList.Package;
-import PCKGManager.PCKGManager;
 
 @SuppressWarnings("serial")
 public class FileDropDownBox extends JMenu
@@ -27,17 +21,7 @@ public class FileDropDownBox extends JMenu
 			int num = chooseFile.showOpenDialog(null);
 			if(num==JFileChooser.APPROVE_OPTION)
 			{
-				try {
-						
-					PCKGManager pac = new PCKGManager(Files.readAllBytes(chooseFile.getSelectedFile().toPath()), chooseFile.getSelectedFile().getName());
-					//openedFileList.setFile(new Package(pac));
-					
-					GUI.setFileList(new Package(pac));
-				} catch (IOException error) 
-				{
-					System.out.println("Failed to read File");
-					error.printStackTrace();
-				}
+				Main.MainGUI.fileManager.setOpenFile(chooseFile.getSelectedFile().toString());
 			}
 		});
 		add(openButton);

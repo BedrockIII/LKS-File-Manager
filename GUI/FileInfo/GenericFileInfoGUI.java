@@ -7,26 +7,27 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import GUI.LabeledInputBox;
+import PCKGManager.OpenedFile;
 
 @SuppressWarnings("serial")
 public class GenericFileInfoGUI extends JPanel
 {
-	byte[] data = null;
+	OpenedFile file = null;
 	LabeledInputBox fileSize = null;
 	protected GenericFileInfoGUI() 
 	{
 		fileSize = new LabeledInputBox("File Size: ",  new JLabel("0"), 1.5);
 		addGUI();
 	}
-	public GenericFileInfoGUI(byte[] data) 
+	public GenericFileInfoGUI(OpenedFile file) 
 	{
-		this.data = data;
+		this.file = file;
 		makeGUI();
 		addGUI();
 	}
 	private void makeGUI()
 	{
-		fileSize = new LabeledInputBox("File Size: ",  new JLabel("" + data.length), 1.5);
+		fileSize = new LabeledInputBox("File Size: ",  new JLabel("" + file.getData().length), 1.5);
 	}
 	private void addGUI()
 	{
@@ -41,18 +42,18 @@ public class GenericFileInfoGUI extends JPanel
 	}
 	public void updateGUI(byte[] data)
 	{
-		this.data = data;
+		file.setData(data);
 		//System.out.println(data.length);
 		fileSize.replaceComponent(new JLabel("" + data.length));
 		//repaint();
 	}
 	public byte[] getBytes() 
 	{
-		return data;
+		return file.getData();
 	}
 	public void update() 
 	{
-		if(data==null) fileSize.replaceComponent(new JLabel("0"));
-		else fileSize.replaceComponent(new JLabel("" + data.length));
+		if(file==null) fileSize.replaceComponent(new JLabel("0"));
+		else fileSize.replaceComponent(new JLabel("" + file.getData().length));
 	}
 }

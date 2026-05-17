@@ -7,7 +7,7 @@ import java.util.Arrays;
 class colObject 
 {
 	String name = "";
-	ArrayList<otherObject> normalsList = new ArrayList<otherObject>();
+	ArrayList<CollisionMaterial> normalsList = new ArrayList<CollisionMaterial>();
 	int value;
 	int referenceValue;
 	int amountNormalObjects;
@@ -113,7 +113,7 @@ class colObject
 		}
 		for(int i = 0; i < amountNormalObjects; i++)
 		{
-			normalsList.add(new otherObject(Arrays.copyOfRange(data, i*160+normalObjectLocation, i*160+normalObjectLocation+160)));
+			normalsList.add(new CollisionMaterial(Arrays.copyOfRange(data, i*160+normalObjectLocation, i*160+normalObjectLocation+160)));
 		}
 		VERTEX = new ArrayList<vertex>();
 		if(vertexAmount != 0 && vertexPos != 0) 
@@ -179,7 +179,7 @@ class colObject
 		{
 			amountNormalObjects = 1;
 			headerAmount = 1;
-			normalsList.add(new otherObject(name+" normals",0));
+			normalsList.add(new CollisionMaterial(name+" normals",0));
 		}
 		listAmount = 0;
 		listPos = 0;
@@ -239,13 +239,13 @@ class colObject
 			
 			if(name.indexOf("Wall")!=0) 
 			{
-				normalsList.add(new otherObject("collision",1));
+				normalsList.add(new CollisionMaterial("collision",1));
 			}
 			else if(name.indexOf("Ground")!=0) 
 			{
-				normalsList.add(new otherObject("collision",1));
+				normalsList.add(new CollisionMaterial("collision",1));
 			}
-			normalsList.add(new otherObject("37097291_0",0));
+			normalsList.add(new CollisionMaterial("37097291_0",0));
 			
 			
 		}

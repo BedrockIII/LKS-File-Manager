@@ -6,6 +6,12 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -14,6 +20,7 @@ import javax.swing.JSplitPane;
 import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.FileList.FileListPanel;
 import GUI.FileList.Package;
+import PCKGManager.PCKGManager;
 
 public class GUI extends JFrame
 {
@@ -47,7 +54,7 @@ public class GUI extends JFrame
 	public static final int assetHeight = 20;
 	public static final int buttonWidth = 150;
 	public static final int pacOffset = 50;
-	public static final int rowWidth = 1000;
+	public static final int rowWidth = 300;
 	public static final int indentSize = 15;
 	JPanel fileArea = new JPanel();
 	public static final Dimension buttonSize = new Dimension(GUI.buttonWidth,GUI.assetHeight);
@@ -79,6 +86,7 @@ public class GUI extends JFrame
         frame.add(contents);
         frame.setSize(new Dimension(rowWidth, assetHeight*5));
         //frame.pack();
+        update();
 		frame.setVisible(true);
 	}
 	public static void testGUI(Component c)
@@ -109,9 +117,6 @@ public class GUI extends JFrame
 	}
 	public static void setFileList(Package package1) 
 	{
-		
-		
-		
 		openedFileList.setFile(package1);
 		contents.setDividerLocation(.33);
 		//JScrollPane LeftWindow = new JScrollPane((Package)package1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -132,5 +137,12 @@ public class GUI extends JFrame
 	public static void deselectAll() 
 	{
 		openedFileList.deselectAll();
+	}
+	public void setOpenFile(String path) 
+	{
+		Path filePath = Paths.get(path);
+		PCKGManager pac = new PCKGManager(filePath);
+		GUI.setFileList(new Package(pac));
+		update();
 	}
 }

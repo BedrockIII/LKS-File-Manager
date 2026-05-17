@@ -12,17 +12,18 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import GUI.FileList.Generic;
+import PCKGManager.OpenedFile;
 import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
 
 @SuppressWarnings("serial")
 public class KingdomPlanFileList extends Generic
 {
 	KingdomPlanAreaSelectorGUI gui = null;
-	public KingdomPlanFileList(byte[] data, int padding)
+	public KingdomPlanFileList(OpenedFile file, int padding)
 	{
 		super("Kingdom Plan Config", padding);
 		//setBackground(color);
-		gui = (KingdomPlanAreaSelectorGUI)makeInfoGUI("KingdomPlan.bin",data);
+		gui = (KingdomPlanAreaSelectorGUI)makeInfoGUI(file);
 		//System.out.println("Made");
 	}
 	public void addActions()
@@ -60,8 +61,8 @@ public class KingdomPlanFileList extends Generic
 			{
 				try 
 				{
-					data = new kingdomPlanManager(Files.readAllLines(chooseFile.getSelectedFile().toPath())).toBytes();
-					gui = new KingdomPlanAreaSelectorGUI(data);
+					file.setData(new kingdomPlanManager(Files.readAllLines(chooseFile.getSelectedFile().toPath())).toBytes());
+					gui.replaceData(file.getData());
 				} catch (IOException i) 
 				{
 					i.printStackTrace();

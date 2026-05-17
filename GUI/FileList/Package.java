@@ -1,5 +1,6 @@
 package GUI.FileList;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -19,9 +21,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import GUI.GUI;
-import GUI.PackageInfoGUI;
 import GUI.FileInfo.GenericFileInfoGUI;
+import GUI.FileInfo.PackageInfoGUI;
 import GUI.FileInfo.MenuDB.KingdomPlan.KingdomPlanFileList;
+import PCKGManager.OpenedFile;
 import PCKGManager.PCKGManager;
 
 public class Package extends Generic
@@ -90,12 +93,16 @@ public class Package extends Generic
 		//System.out.println("Package depth: " + ((padding/5)+1));
 		//System.out.println("Height: " + getHeight());
 		//GUI.update();
+		if(info instanceof PackageInfoGUI)
+		{
+			((PackageInfoGUI)info).updateGUI();
+		}
 	}
 	private void initializeGUIS()
 	{
 		try
 		{
-			info = makeInfoGUI(packageFile.getName(), packageFile.getFile());
+			info = makeInfoGUI(new OpenedFile(packageFile.getName(), packageFile.getFile()));
 		}
 		catch(IllegalArgumentException e)
 		{
@@ -106,18 +113,21 @@ public class Package extends Generic
 		
 		for(int i =0; i<packageFile.getFileAmount(); i++)
 		{
-			byte[] data = packageFile.getFile(i);
-			String name = packageFile.getName(i);
-			createGUI(name, data);
+			createGUI(packageFile.getPackedFile(i));
 		}
 	}
 	private void updateFull() 
 	{
 		FilesGUI = new JPanel();
 		removeAll();
-		
+		layout.anchor = GridBagConstraints.NORTHWEST;
+		layout.weightx = 1.0;
 		for(int j = 0; j<files.size();j++)
 		{
+			if(files.get(j) instanceof Package)
+			{
+				((Package)files.get(j)).update();
+			}
 			add(files.get(j), layout);
 		}
 		setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
@@ -135,31 +145,28 @@ public class Package extends Generic
 	{
 		int increment = GUI.assetHeight;
 		if(isExtended == false) return increment+increment;
-		int ret = 0;
-		for(int i = 0; i < files.size(); i++)
-		{
-			if(files.get(i) instanceof Package)
-			{
-				ret += ((Package)files.get(i)).getHeight();
-			}
-			else ret += increment;
-		}
-		return ret;
+		return increment * (packageFile.getAbsoluteFileAmount());
 	}
 	private void createPackageHeader()
 	{
+		//setBorder(BorderFactory.createLineBorder(Color.RED));
 		headerPanel.setPreferredSize(new Dimension(GUI.rowWidth, GUI.assetHeight));
+		//headerPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		//headerPanel.setMinimumSize(new Dimension(GUI.rowWidth, GUI.assetHeight));
 		headerPanel.setLayout(new GridBagLayout());
 		headerPanel.setMaximumSize(new Dimension(100000,GUI.assetHeight));
 		JPanel spacer = new JPanel();
 		spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
 		spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-		GridBagConstraints constraints = new GridBagConstraints();  
+		spacer.setMaximumSize(new Dimension(padding, GUI.assetHeight));
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.anchor = GridBagConstraints.NORTHWEST;
 		constraints.weightx = 0.0;
 		headerPanel.add(spacer); 
+		//spacer.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		constraints.weightx = 1.0;
 		JLabel pacName = new JLabel(packageFile.getName(), SwingConstants.LEFT);
+		pacName.setBorder(BorderFactory.createLineBorder(Color.PINK));
 		pacName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
 		headerPanel.add(pacName, constraints);
 		
@@ -215,7 +222,7 @@ public class Package extends Generic
 		actions.add(export);
 	}
 	private void addFileButton()
-	{
+	{ 
 		JMenuItem addFile = new JMenuItem("Add New File");
 		addFile.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
@@ -225,15 +232,16 @@ public class Package extends Generic
 				chooseFile.showOpenDialog(null);
 				byte[] data = Files.readAllBytes(chooseFile.getSelectedFile().toPath());
 				String name = chooseFile.getSelectedFile().getName().toString();
+				boolean newFile = !packageFile.hasFile(name);
 				packageFile.addFile(name, data);
-				createGUI(name, data);
+				if(newFile)createGUI(packageFile.getPackedFile(packageFile.getFileAmount()-1));
 				
 				System.out.println("Added File to Package");
-				if(parent!=null)
+				if(info instanceof PackageInfoGUI)
 				{
-					parent.updateChildPack(packageFile);
-					System.out.println("Told Parent about new Package");
+					((PackageInfoGUI)info).updateGUI();
 				}
+				
 				GUI.update();
 			} catch (IOException i) 
 			{
@@ -242,10 +250,10 @@ public class Package extends Generic
 		});
 		actions.add(addFile);
 	}
-	private void createGUI(String name, byte[] data) 
+	private void createGUI(OpenedFile file) 
 	{
 		int padding = this.padding + GUI.indentSize;
-		String fileType = bFM.Utils.getFileType(name, data);
+		String fileType = bFM.Utils.getFileType(file);
 		if(fileType.equals("Fixed Point"))
 		{
 			//files.add(new FixedPoint(packageFile,files.size(),padding+5,i));
@@ -256,21 +264,15 @@ public class Package extends Generic
 		}
 		else if (fileType.equals("Package"))
 		{
-			Package packagePanel = new Package(new PCKGManager(data,name), padding, this);
-			files.add(packagePanel);
+			files.add(new Package((PCKGManager)file, padding, this));
 		}else if (fileType.equals("KingdomPlanDB"))
 		{
-			files.add(new KingdomPlanFileList(data, padding));
+			files.add(new KingdomPlanFileList(file, padding));
 		}
 		else
 		{
-			files.add(new Generic(name, data, padding+5));
+			files.add(new Generic(file, padding+5));
 		}
-	}
-	private void updateChildPack(PCKGManager kidPack) 
-	{
-		packageFile.addFile(kidPack.getName(), kidPack.getFile());
-		if(parent!=null)parent.updateChildPack(packageFile);
 	}
 	private void addExportAllButton()
 	{
