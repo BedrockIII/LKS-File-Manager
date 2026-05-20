@@ -14,9 +14,10 @@ public class FileListPanel extends JScrollPane
 	public FileListPanel()
 	{
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		
+		setBackground(GUI.bgColor);
 		panel = getViewport();
 		Rectangle topRect = new Rectangle(0, 0, 1, 1);
+		panel.setBackground(GUI.bgColor);
 		panel.scrollRectToVisible(topRect);
 	}
 	public void setFile(Generic panel) 

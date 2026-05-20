@@ -12,11 +12,14 @@ public class PCKGManagerMain
 	public static void printVersionData()
 	{
 		System.out.println("Pac File Manager");
-		System.out.println("Version 3.1");
+		System.out.println("Version 3.2");
 		System.out.println("     Fixed several GUI bugs");
-		System.out.println("     Adding Packages to Packages no longer breaks everything");
-		System.out.println("     File list no longer breaks randomly");
-		System.out.println("     File list no longer breaks randomly");
+		System.out.println("     Added ablility to grow and shrink packages");
+		System.out.println("     Added special Collision File info");
+		System.out.println("     Improved Collision File Manager to be byte specific");
+		System.out.println("     Added settings, which must be edited via a text editor for now");
+		System.out.println("     Added ability to rename most files");
+		System.out.println("     Fixed all buttons");
 	}
 	public static void main(String args[]) throws IOException 
 	{ 

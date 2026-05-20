@@ -40,14 +40,14 @@ public class Main
 	{
 		bFM.Utils.setDebugOutput(true);
 		bFM.Utils.DebugPrint("Debug Data Enabled");
-		//try{tester();} catch (IOException e) {e.printStackTrace();}
+		try{tester();} catch (IOException e) {e.printStackTrace();}
 		//decodeCollision();
 		//encodeCollision();
 		//encodeFixedPoints();
 		//decodeFixedPoints();
 		//menuDBManager();
 		//packBuilding("SurfaceToCaveHole");
-		packGrid();
+		//packGrid();
 		//mapDataBase();
 		//decodeLightZones();
 		//encodeLightZones();
@@ -549,13 +549,20 @@ public class Main
 		
 		
 		
-		final String outputPath = Main.outputPath + "Debug\\EventViewer\\";
-		final String importPath = Main.importPath + "Debug\\EventViewer\\";
-		final String NormalEvents = "evlist.bin";
-		final String NormalEventCSV = "Event List.csv";
+		//final String outputPath = Main.outputPath + "Debug\\EventViewer\\";
+		//final String importPath = Main.importPath + "Debug\\EventViewer\\";
+		//final String NormalEvents = "evlist.bin";
+		//final String NormalEventCSV = "Event List.csv";
 		//EventViewer eventData = new EventViewer(Files.readAllBytes(Paths.get(outputPath + NormalEvents)));
-		EventViewer eventData = new EventViewer(Files.readAllLines(Paths.get(importPath + NormalEventCSV), Charset.forName("Shift-JIS")));
-		bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(outputPath + NormalEvents)), eventData.toBytes());
+		//EventViewer eventData = new EventViewer(Files.readAllLines(Paths.get(importPath + NormalEventCSV), Charset.forName("Shift-JIS")));
+		//bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(outputPath + NormalEvents)), eventData.toBytes());
+		
+		//Finally testing the col reader, the og file
+		ColReader.optimizeCollision(false);
+		ColReader colFile = new ColReader(Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col")));
+		byte[] data = colFile.getBytes();
+		bFM.Utils.testDifferences(Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col")), data);
+		Files.write(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col2"), data);
 	}
 	private static String getLanguage(int languageCode)
 	{

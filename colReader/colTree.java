@@ -2,7 +2,6 @@ package colReader;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 class colTree 
 {
@@ -21,26 +20,6 @@ class colTree
 	byte[] indexData;
 	int indexSize;
 	ArrayList<colTree> trees = new ArrayList<colTree>();
-	
-	public colTree(byte[] treeData, ArrayList<vertex> VERTEX, byte[] data)
-	{
-		boundingBoxXMin = ByteBuffer.wrap(treeData).getFloat(0);
-		boundingBoxXMax = ByteBuffer.wrap(treeData).getFloat(4);
-		boundingBoxZMin = ByteBuffer.wrap(treeData).getFloat(8);
-		boundingBoxZMax = ByteBuffer.wrap(treeData).getFloat(12);
-		treeRefVal1 = ByteBuffer.wrap(treeData).getInt(16);
-		treeRefVal2 = ByteBuffer.wrap(treeData).getInt(20);
-		treeRefVal3 = ByteBuffer.wrap(treeData).getInt(24);
-		treeRefVal4 = ByteBuffer.wrap(treeData).getInt(28);
-		indexAmount = ByteBuffer.wrap(treeData).getInt(32);
-		indexPos = ByteBuffer.wrap(treeData).getInt(36);
-		for(int i = 40; i<treeData.length; i++)
-		{
-			if(treeData[i]!=0x00)System.out.print("Tree ending is weird, check it out");
-		}
-		//System.out.println("Pos: "+ indexPos);
-		if(indexAmount > 0 && indexPos > 0) makeIndex(indexAmount, indexPos, VERTEX, data);
-	}
 	public colTree(float x1, float z1, float x2, float z2, int t1, int t2, int t3, int t4)
 	{
 		boundingBoxXMin = x1;
@@ -97,9 +76,21 @@ class colTree
 		for(int i = 0; i<faces.size();i++)
 		{
 			this.faces[i] = faces.get(i);
-			this.faces[i]=this.faces[i].updateV(VERTEX);
 		}
-		updateIndex();
+	}
+	public colTree(ByteBuffer data) 
+	{
+		boundingBoxXMin = data.getFloat();
+		boundingBoxXMax = data.getFloat();
+		boundingBoxZMin = data.getFloat();
+		boundingBoxZMax = data.getFloat();
+		treeRefVal1 = data.getInt();
+		treeRefVal2 = data.getInt();
+		treeRefVal3 = data.getInt();
+		treeRefVal4 = data.getInt();
+		indexAmount = data.getInt();
+		indexPos = data.getInt();
+		if(indexAmount > 0 && indexPos > 0) makeIndex(data);
 	}
 	public byte[] getBytes()
 	{
@@ -133,17 +124,23 @@ class colTree
 	{
 		this.indexPos = indexPos;
 	}
-	private void makeIndex(int indexAmount, int indexPos, ArrayList<vertex> VERTEX, byte[] data) 
+	private void makeIndex(ByteBuffer data) 
 	{
 		faces = new face[indexAmount];
-		if(indexAmount>0&&indexPos>0)indexData = Arrays.copyOfRange(data, indexPos, indexPos + indexAmount*6);
-		int index = 0;
-		for(int i = 0; i<indexData.length-5; i+=6)
+		data.position(indexPos);
+		for(int i = 0; i<indexAmount; i++)
 		{
-			faces[index] = new face(new byte[]{indexData[i], indexData[i+1], indexData[i+2], indexData[i+3], indexData[i+4], indexData[i+5]}, VERTEX);
-			index++;
-			//System.out.println(faces[index].toString(0));
+			faces[i] = new face(data);
 		}
+	}
+	public int getIndexDataSize()
+	{
+		int ret = indexAmount * 6;
+		if(ret % 32 != 0)
+		{
+			ret = ((ret / 32) + 1) * 32;
+		}
+		return ret;
 	}
 	public int getIndexSize()
 	{
@@ -153,9 +150,8 @@ class colTree
  	{
  		return faces.length;
  	}
- 	private void updateIndex()
+	public byte[] getIndex()
 	{
-
 		if(faces!=null)
 		{
 			byte[] ret = new byte[0];
@@ -164,18 +160,10 @@ class colTree
 				ret = bFM.Utils.mergeArrays(ret, faces[i].toBytes());
 			}	
 			int rem = ret.length%32;
-			rem = 32-rem;
-			if(rem==32)rem = 0;
-			if(ret.length<32) {
-				rem = ret.length%32;
-				rem = 32-rem;
-			}
+			if(rem!=0) rem = 32-rem;
 			indexData =  bFM.Utils.mergeArrays(ret, new byte[rem]);
 			indexSize = indexData.length;
 		}
-	}
-	public byte[] getIndex()
-	{
 		return indexData;
 	}
 	public int getMaxIndex()

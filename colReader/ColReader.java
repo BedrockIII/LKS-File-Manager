@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import PCKGManager.OpenedFile;
@@ -22,10 +21,18 @@ public class ColReader extends OpenedFile
 	{
 		
 	}
-	public ColReader(byte[] data)
+	public ColReader(byte[] file)
 	{
-		name = "all_field";
-		objects = ByteBuffer.wrap(data, 64, 4).getInt();
+		ByteBuffer data = ByteBuffer.wrap(file);
+		data.position(32);
+		byte chara = data.get();
+		name = "";
+		while(chara!=0)
+		{
+			name += (char)chara;
+			chara = data.get();
+		}
+		objects = data.getInt(64);
 		makeColObjects(data);
 	}
 	public ColReader(String name)
@@ -47,17 +54,19 @@ public class ColReader extends OpenedFile
 		}
 		
 	}
-	public ColReader(byte[] data, String name) 
+	public ColReader(byte[] file, String name) 
 	{
 		this.name = name;
-		objects = ByteBuffer.wrap(data, 64, 4).getInt();
+		ByteBuffer data = ByteBuffer.wrap(file);
+		objects = data.getInt(64);
 		makeColObjects(data);
 	}
-	private void makeColObjects(byte[] data) 
+	private void makeColObjects(ByteBuffer data) 
 	{
 		for(int i = 96; i<objects*160; i+=160)
 		{
-			COLOBJECTS.add(new colObject(Arrays.copyOfRange(data, i, i+160),data));
+			data.position(i);
+			COLOBJECTS.add(new colObject(data));
 		}
 	}
 	public static boolean same(byte[] arr1, byte[] arr2)
@@ -107,7 +116,7 @@ public class ColReader extends OpenedFile
 			{
 				headerPos = pos;
 			}
-			pos+=32*COLOBJECTS.get(i).getHeaderAmount();
+			pos+=COLOBJECTS.get(i).getHeaderDataSize();
 		}
 		pos+=32;
 		for(int i = 0; i<COLOBJECTS.size(); i++)
@@ -125,7 +134,7 @@ public class ColReader extends OpenedFile
 			{
 				treePos = pos;
 			}
-			pos+=48*COLOBJECTS.get(i).getTreeAmount();
+			pos+=COLOBJECTS.get(i).getTreeDataSize();
 		}
 		pos+=32;
 		for(int i = 0; i<COLOBJECTS.size(); i++)
@@ -143,7 +152,7 @@ public class ColReader extends OpenedFile
 			{
 				vertexPos = pos;
 			}
-			pos+=16*COLOBJECTS.get(i).getVertexAmount();
+			pos+=COLOBJECTS.get(i).getVertexDataSize();
 		}
 		object.updatePositions(otherObjectPos, headerPos, listPos, treePos, indexPos, vertexPos);
 	}
@@ -204,6 +213,10 @@ public class ColReader extends OpenedFile
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getVertex());
+			if(ret.length%32!=0)
+			{
+				ret = bFM.Utils.mergeArrays(ret, new byte[32-ret.length%32]);
+			}
 		}
 		return ret;
 	}
@@ -376,14 +389,15 @@ public class ColReader extends OpenedFile
 		for(int i = 0; i<COLOBJECTS.size();i++)
 		{
 			ret = ret + COLOBJECTS.get(i).toString(vertOffset);
-			vertOffset+= COLOBJECTS.get(i).vertexAmount();
+			vertOffset+= COLOBJECTS.get(i).getVertexAmount();
 			//System.out.println(vertOffset);
 		}
 		return ret;
 	}
-	public void setData(byte[] data)
+	public void setData(byte[] file)
 	{
-		objects = ByteBuffer.wrap(data, 64, 4).getInt();
+		ByteBuffer data = ByteBuffer.wrap(file);
+		objects = data.getInt(64);
 		makeColObjects(data);
 	}
 	public byte[] getData()

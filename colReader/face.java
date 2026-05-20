@@ -8,7 +8,6 @@ class face
 	public short v1;
 	public short v2;
 	public short v3;
-	ArrayList<vertex> vertexs;
 	int offset;
 	public face(short v1, short v2, short v3) 
 	{
@@ -16,21 +15,14 @@ class face
 		this.v2 = v2;
 		this.v3 = v3;
 	}
-	public face(byte[] arr, ArrayList<vertex> vertexs) 
+	public face(ByteBuffer data) 
 	{
-		this.vertexs = vertexs;
-		if(arr.length!=6) 
-		{
-			System.out.println("Error making face from byte array: Array wrong length!");
-			return;
-		}
-		v1 = (short) (ByteBuffer.wrap(arr).getShort(0));
-		v2 = (short) (ByteBuffer.wrap(arr).getShort(2));
-		v3 = (short) (ByteBuffer.wrap(arr).getShort(4));
+		v1 = data.getShort();
+		v2 = data.getShort();
+		v3 = data.getShort();
 	}
 	public face(String line, int vertexOffset, ArrayList<vertex> vertexs) 
 	{
-		this.vertexs = vertexs;
 		offset = vertexOffset;
 		//System.out.println(vertexOffset);
 		if(line.indexOf('/')!=-1)
@@ -67,11 +59,6 @@ class face
 		//System.out.println(offset);
 		return "f " + (v1+offset) + " " + (v2+offset) + " " + (v3+offset) + "\n";
 	}
-	public face updateV(ArrayList<vertex> v)
-	{
-		vertexs=v;
-		return this;
-	}
 	public byte[] toBytes()
 	{
 		//orderIndex
@@ -79,15 +66,6 @@ class face
 		ret = bFM.Utils.mergeArrays(ret, ColReader.longToBytes(v2, 2));
 		ret = bFM.Utils.mergeArrays(ret, ColReader.longToBytes(v3, 2));
 		return ret;
-	}
-	public boolean sharesSide(face other)
-	{
-		int sharedVerts = 0;
-		if(vertexs.get(v1)==vertexs.get(other.v1)||vertexs.get(v1)==vertexs.get(other.v2)||vertexs.get(v1)==vertexs.get(other.v3)) sharedVerts++;
-		if(vertexs.get(v2)==vertexs.get(other.v1)||vertexs.get(v2)==vertexs.get(other.v2)||vertexs.get(v2)==vertexs.get(other.v3)) sharedVerts++;
-		if(vertexs.get(v3)==vertexs.get(other.v1)||vertexs.get(v3)==vertexs.get(other.v2)||vertexs.get(v3)==vertexs.get(other.v3)) sharedVerts++;
-		if(sharedVerts!=0)System.out.println("Shared verts: "+sharedVerts);
-		return sharedVerts==2;
 	}
 	public int[] getVerts() 
 	{

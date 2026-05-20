@@ -29,7 +29,7 @@ class vertex
 	}
 	private void roundY()
 	{
-		y = ((float)((int)(y*100+.5)))/100;
+		y = ((float)((int)(y*10000+.5)))/10000;
 	}
 	public vertex(byte[] bytes)
 	{
@@ -41,13 +41,19 @@ class vertex
 		byte[] zArr = {bytes[8],bytes[9],bytes[10],bytes[11]};
 		z = ByteBuffer.wrap(zArr).order(ByteOrder.BIG_ENDIAN).getFloat();
 	}
+	public vertex(ByteBuffer data) 
+	{
+		x = data.getFloat();
+		y = data.getFloat();
+		z = data.getFloat();
+	}
 	public String toString()
 	{
 		return "v " + x + " " + y + " " + z + " \n";
 	}
 	public byte[] getBytes()
 	{
-		roundY();
+		//roundY();
 		return bFM.Utils.mergeArrays(bFM.Utils.mergeArrays(ByteBuffer.allocate(4).putFloat(x).array(), ByteBuffer.allocate(4).putFloat(y).array()), bFM.Utils.mergeArrays(ByteBuffer.allocate(4).putFloat(z).array(), new byte[4]));
 	}
 	public float getX()

@@ -6,7 +6,6 @@ import java.util.Arrays;
 class CollisionMaterial 
 {
 	//With the Debug Mode I have discovered the Use of these, they are for materials
-	byte[] data;
 	String name;
 	float num1;
 	float num2;
@@ -19,20 +18,27 @@ class CollisionMaterial
 	float num9;
 	float num10;
 	float num11;
-	public CollisionMaterial(byte[] data)
+	public CollisionMaterial(ByteBuffer data)
 	{
-		name = new String(Arrays.copyOfRange(data, 0, byteArrIndex(data,(byte)0)));
-		num1 = ByteBuffer.wrap(data).getFloat(76);
-		num2 = ByteBuffer.wrap(data).getFloat(80);
-		num3 = ByteBuffer.wrap(data).getFloat(84);
-		num4 = ByteBuffer.wrap(data).getFloat(88);
-		num5 = ByteBuffer.wrap(data).getFloat(92);
-		num6 = ByteBuffer.wrap(data).getFloat(96);
-		num7 = ByteBuffer.wrap(data).getFloat(100);
-		num8 = ByteBuffer.wrap(data).getFloat(104);
-		num9 = ByteBuffer.wrap(data).getFloat(108);
-		num10 = ByteBuffer.wrap(data).getFloat(124);
-		num11 = ByteBuffer.wrap(data).getFloat(128);
+		int StartPos = data.position();
+		byte chara = data.get();
+		name = "";
+		while(chara!=0)
+		{
+			name += (char)chara;
+			chara = data.get();
+		}
+		num1 = data.getFloat(StartPos + 76);
+		num2 = data.getFloat(StartPos + 80);
+		num3 = data.getFloat(StartPos + 84);
+		num4 = data.getFloat(StartPos + 88);
+		num5 = data.getFloat(StartPos + 92);
+		num6 = data.getFloat(StartPos + 96);
+		num7 = data.getFloat(StartPos + 100);
+		num8 = data.getFloat(StartPos + 104);
+		num9 = data.getFloat(StartPos + 108);
+		num10 = data.getFloat(StartPos + 124);
+		num11 = data.getFloat(StartPos + 128);
 	}
 	public CollisionMaterial(String name, int preset)
 	{

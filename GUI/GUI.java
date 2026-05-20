@@ -5,12 +5,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,7 +24,7 @@ import GUI.FileList.FileListFactory;
 import GUI.FileList.FileListPanel;
 import GUI.FileList.Generic;
 import PCKGManager.OpenedFile;
-import PCKGManager.PCKGManager;
+import colReader.ColReader;
 
 public class GUI extends JFrame
 {
@@ -64,6 +67,7 @@ public class GUI extends JFrame
 	public GUI()
 	{
 		frame.setName("LKS File Manager");
+		getSettings();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.setLayout(new GridBagLayout());
 		frame.setLayout(new BorderLayout());
@@ -76,10 +80,11 @@ public class GUI extends JFrame
         frame.add(menuBar, BorderLayout.NORTH);
         //openedFile = new Package();
         //frame.add(openedFile, layout);
-        
+        frame.setBackground(GUI.bgColor);
        
         
-        
+        openedFileList.setBackground(GUI.bgColor);
+        fileInfoPanel.setBackground(GUI.bgColor);
         openedFileList.setMinimumSize(buttonSize);
         contents.setTopComponent(openedFileList);
         contents.setDividerSize(3);
@@ -88,10 +93,59 @@ public class GUI extends JFrame
         
         frame.add(contents);
         frame.setSize(new Dimension(rowWidth*2, assetHeight*25));
+        
         //frame.pack();
         update();
 		frame.setVisible(true);
+		frame.addWindowListener(new WindowAdapter()
+		{
+			public void windowClosing(WindowEvent e)
+			{
+				System.out.println("Thanks for Using this!");
+				setSettings();
+				dispose();
+				System.exit(0);
+			}
+		});
 	}
+	private void setSettings() 
+	{
+		String ret = "Little King's Story File Manager Settings\n";
+		ret += bFM.Utils.getAsSetting("Debug Output", bFM.Utils.debugOutput);
+		ret += bFM.Utils.getAsSetting("Optimize Collision", ColReader.optimizeCollision);
+		try 
+		{
+			System.out.println(Paths.get("LKS File Manager Config.cfg").toAbsolutePath());
+			Files.write(Paths.get("LKS File Manager Config.cfg"), ret.getBytes());
+		} catch (IOException e) 
+		{
+			System.out.println("Failed to save settings file");
+			e.printStackTrace();
+		}
+	}
+	private static void getSettings()
+	{
+		try
+		{
+			List<String> lines = Files.readAllLines(Paths.get("LKS File Manager Config.cfg"));
+			for(String line : lines)
+			{
+				if(line.indexOf("Optimize Collision")!=-1)
+				{
+					ColReader.optimizeCollision = bFM.Utils.getSettingValue(line);
+				}
+				else if(line.indexOf("Debug Output")!=-1)
+				{
+					bFM.Utils.debugOutput = bFM.Utils.getSettingValue(line);
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			System.out.println("Failed to read User Settings, assuming defaults");
+		}
+	}
+	
 	public static void testGUI(Component c)
 	{
 		frame.removeAll();
@@ -116,6 +170,7 @@ public class GUI extends JFrame
 		
 		frame.repaint();
 		//System.out.println(openedFileList.getHeight());
+		if(frame.getExtendedState() != Frame.MAXIMIZED_BOTH)
 		frame.setSize(Math.max(Math.max(rowWidth+20, 300), frame.getWidth()), Math.max(openedFileList.getHeight()+45+assetHeight, frame.getHeight()));
 	}
 	public static void setFileList(Generic generic) 

@@ -406,6 +406,10 @@ public class Utils
 		{
 			System.out.println("First Difference at: " + firstDifference + ". File 1 is: " + file1[firstDifference] + ". File 2 is: " + file2[firstDifference] + ".");
 		}
+		else
+		{
+			System.out.println("No Differences!!!");
+		}
 	}
 	public static byte[] readFile(String name, String path)
 	{
@@ -484,5 +488,15 @@ public class Utils
 	public static boolean isGenericPAC(byte[] fileContents, String name) 
 	{
 		return getFileType(name, fileContents).equals("Package");
+	}
+	public static String getAsSetting(String settingName, boolean value) 
+	{
+		String ret = "<<" + settingName + ">> " + value + "\n"; 
+		return ret;
+	}
+	public static boolean getSettingValue(String line) 
+	{
+		line = line.substring(line.indexOf(">>") + 1);
+		return line.toLowerCase().indexOf("true")!=-1;
 	}
 }

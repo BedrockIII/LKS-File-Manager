@@ -95,6 +95,7 @@ public class Generic extends JPanel
 		layout.weightx = 1.0;
 		fileName = new JLabel(file.getName(), SwingConstants.LEFT);
 		fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
+		fileName.setBackground(GUI.bgColor);
 		add(fileName, layout);
 	}
 	public static FileNameExtensionFilter getFileExtensions()
@@ -176,17 +177,6 @@ public class Generic extends JPanel
 	        	renameWindow.dispose();
 	        });
 	        contentPanel.add(Confirm, layout);
-	       // myTitle = new JTextField();   
-	        //myTitle.setBounds(80, 40, 225, 20); 
-	        //myTitle.add(labelOptions); 
-	        //JButton newName = new JButton("Set New Name");  
-	        //newName.setBounds(60, 80, 150, 20);  
-	        //newName.addActionListener(this);  
-	       // options.add(newName);  
-	        //JButton Exit = new JButton("Exit");  
-	        //Exit.setBounds(250, 80, 80, 20);  
-	        //Exit.addActionListener(this);  
-	        //options.add(Exit);  
 		});
 		actions.add(rename);
 	}

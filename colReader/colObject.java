@@ -2,7 +2,7 @@
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class colObject 
 {
@@ -25,7 +25,7 @@ public class colObject
 	float yPos;//up down
 	float wPos;
 	int vertexAmount;
-	int vertexPos;
+	int VertexPos;
 	int headerAmount;
 	int headerPos;
 	
@@ -46,107 +46,6 @@ public class colObject
 	colTree[] forest;
 	face[] faces;
 	ArrayList<vertex> VERTEX;
-	public colObject(byte[] colData, byte[] data) 
-	{
-		name = new String(Arrays.copyOfRange(colData, 0, byteArrIndex(colData,(byte)0)));
-		value = ByteBuffer.wrap(colData).getInt(32);
-		System.out.println(name);
-		referenceValue = ByteBuffer.wrap(colData).getInt(36);
-		amountNormalObjects = ByteBuffer.wrap(colData).getInt(40);
-		normalObjectLocation = ByteBuffer.wrap(colData).getInt(44);
-		val1 = ByteBuffer.wrap(colData).getFloat(48);
-		val2 = ByteBuffer.wrap(colData).getFloat(68);
-		val3 = ByteBuffer.wrap(colData).getFloat(88);
-		zPos = ByteBuffer.wrap(colData).getFloat(96);
-		yPos = ByteBuffer.wrap(colData).getFloat(100);
-		xPos = ByteBuffer.wrap(colData).getFloat(104);
-		wPos = ByteBuffer.wrap(colData).getFloat(108);
-		vertexAmount = ByteBuffer.wrap(colData).getInt(112);
-		vertexPos = ByteBuffer.wrap(colData).getInt(116);
-		headerAmount = ByteBuffer.wrap(colData).getInt(120);
-		headerPos = ByteBuffer.wrap(colData).getInt(124);
-		val5 = ByteBuffer.wrap(colData).getInt(128);
-		val6 = ByteBuffer.wrap(colData).getInt(132);
-		float136 = ByteBuffer.wrap(colData).getFloat(136);
-		float140 = ByteBuffer.wrap(colData).getFloat(140);
-		float144 = ByteBuffer.wrap(colData).getFloat(144);
-		float148 = ByteBuffer.wrap(colData).getFloat(148);
-		float152 = ByteBuffer.wrap(colData).getFloat(152);
-		float156 = ByteBuffer.wrap(colData).getFloat(156);
-		if(ColReader.optimizeCollision==false)
-		{
-			if(headerAmount == 0 && headerPos == 0)
-			{
-				listAmount = 0;
-				listPos = 0;
-			}
-			else
-			{
-				listAmount = ByteBuffer.wrap(data).getInt(headerPos)/2;
-				listPos = ByteBuffer.wrap(data).getInt(headerPos+4);
-			}
-			
-		}
-		else
-		{
-			amountNormalObjects = 0;
-			normalObjectLocation = 0;
-			if(referenceValue==0||referenceValue==-1)
-			{
-				headerAmount = 0;
-				headerPos = 0;
-				VERTEX = new ArrayList<vertex>();
-				vertexAmount =0;
-				vertexPos=0;
-				
-			}
-			if(headerAmount == 0 && headerPos == 0)
-			{
-				listAmount = 0;
-				listPos = 0;
-			}
-			else
-			{
-				listAmount = ByteBuffer.wrap(data).getInt(headerPos);
-				listPos = ByteBuffer.wrap(data).getInt(headerPos+4);
-			}
-		}
-		for(int i = 0; i < amountNormalObjects; i++)
-		{
-			normalsList.add(new CollisionMaterial(Arrays.copyOfRange(data, i*160+normalObjectLocation, i*160+normalObjectLocation+160)));
-		}
-		VERTEX = new ArrayList<vertex>();
-		if(vertexAmount != 0 && vertexPos != 0) 
-		{
-			for(int i = vertexPos; i<vertexPos+vertexAmount*16; i+=16)
-			{
-				VERTEX.add(new vertex(Arrays.copyOfRange(data, i, i+12)));
-			}
-		}
-		if(listAmount != 0 && listPos != 0)
-		{
-			treePos = ByteBuffer.wrap(data).getInt(listPos);
-		}
-		if(treePos>0)
-		{
-			ArrayList<colTree> trees = new ArrayList<colTree>();
-			trees.add(new colTree(Arrays.copyOfRange(data, treePos, treePos+48), VERTEX, data));
-			int tempTreePos = treePos+48;
-			int maxTree = trees.get(0).getMaxIndex();
-			for(int i = 1; i<=maxTree; i++)
-			{
-				trees.add(new colTree(Arrays.copyOfRange(data, tempTreePos, tempTreePos+48), VERTEX, data));
-				if(maxTree<trees.get(i).getMaxIndex()) maxTree = trees.get(i).getMaxIndex();
-				tempTreePos+=48;
-			}
-			System.out.println("max tree Index = "+ maxTree);
-			forest = new colTree[trees.size()];
-			for(int i =0; i<trees.size();i++)
-			{
-				forest[i] = trees.get(i);
-			}
-		}
-	}
 	public colObject(String name, int ref, int value)
 	{
 		//this.name = name;
@@ -191,6 +90,10 @@ public class colObject
 		float156 = ByteBuffer.wrap(new byte[] {(byte) 0x7f, (byte) 0x7f, (byte) 0xff, (byte) 0xff}).getFloat();
 	}
 	public colObject(ArrayList<String> lines, int ref, int vertexOffset, int value) 
+	{
+		addFromOBJ(lines, ref, vertexOffset, value);
+	}
+	private void addFromOBJ(List<String> lines, int ref, int vertexOffset, int value)
 	{
 		ArrayList<vertex> verticies = new ArrayList<vertex>();
 		ArrayList<face> faces = new ArrayList<face>();
@@ -262,6 +165,119 @@ public class colObject
 		float152 = getMinY();
 		float156 = getMinZ();
 	}
+	public colObject(ByteBuffer data) 
+	{
+		int StartPos = data.position();
+		byte chara = data.get();
+		name = "";
+		//System.out.println("aab");
+		while(chara!=0)
+		{
+			name += (char)chara;
+			//System.out.println((char)chara);
+			chara = data.get();
+		}
+		//System.out.println("aaa");
+		value = data.getInt(StartPos + 32);
+		//System.out.println(name);
+		referenceValue = data.getInt(StartPos + 36);
+		amountNormalObjects = data.getInt(StartPos + 40);
+		normalObjectLocation = data.getInt(StartPos + 44);
+		val1 = data.getFloat(StartPos + 48);
+		val2 = data.getFloat(StartPos + 68);
+		val3 = data.getFloat(StartPos + 88);
+		zPos = data.getFloat(StartPos + 96);
+		yPos = data.getFloat(StartPos + 100);
+		xPos = data.getFloat(StartPos + 104);
+		wPos = data.getFloat(StartPos + 108);
+		vertexAmount = data.getInt(StartPos + 112);
+		VertexPos = data.getInt(StartPos + 116);
+		headerAmount = data.getInt(StartPos + 120);
+		headerPos = data.getInt(StartPos + 124);
+		val5 = data.getInt(StartPos + 128);
+		val6 = data.getInt(StartPos + 132);
+		float136 = data.getFloat(StartPos + 136);
+		float140 = data.getFloat(StartPos + 140);
+		float144 = data.getFloat(StartPos + 144);
+		float148 = data.getFloat(StartPos + 148);
+		float152 = data.getFloat(StartPos + 152);
+		float156 = data.getFloat(StartPos + 156);
+		if(ColReader.optimizeCollision==false)
+		{
+			if(headerAmount == 0 && headerPos == 0)
+			{
+				listAmount = 0;
+				listPos = 0;
+			}
+			else
+			{
+				listAmount = data.getInt(headerPos)/2;
+				listPos = data.getInt(headerPos+4);
+			}
+			
+		}
+		else if(ColReader.optimizeCollision == true)
+		{
+			amountNormalObjects = 0;
+			normalObjectLocation = 0;
+			if(referenceValue==0||referenceValue==-1) // Erase Entries for Wall Ground and Generic
+			{
+				headerAmount = 0;
+				headerPos = 0;
+				VERTEX = new ArrayList<vertex>();
+				vertexAmount =0;
+				VertexPos=0;
+				
+			}
+			if(headerAmount == 0 && headerPos == 0)
+			{
+				listAmount = 0;
+				listPos = 0;
+			}
+			else
+			{
+				listAmount = data.getInt(headerPos);
+				listPos = data.getInt(headerPos+4);
+			}
+		}
+		for(int i = 0; i < amountNormalObjects; i++)
+		{
+			data.position(i*160+normalObjectLocation);
+			normalsList.add(new CollisionMaterial(data));
+		}
+		VERTEX = new ArrayList<vertex>();
+		if(vertexAmount != 0 && VertexPos != 0) 
+		{
+			for(int i = VertexPos; i<VertexPos+vertexAmount*16; i+=16)
+			{
+				data.position(i);
+				VERTEX.add(new vertex(data));
+			}
+		}
+		if(listAmount != 0 && listPos != 0)
+		{
+			treePos = data.getInt(listPos);
+		}
+		if(treePos>0)
+		{
+			ArrayList<colTree> trees = new ArrayList<colTree>();
+			data.position(treePos);
+			trees.add(new colTree(data));
+			int maxTree = trees.get(0).getMaxIndex();
+			for(int i = 1; i<=maxTree; i++)
+			{
+				data.position(treePos + i * 48);
+				trees.add(new colTree(data));
+				if(maxTree<trees.get(i).getMaxIndex()) maxTree = trees.get(i).getMaxIndex();
+			}
+			System.out.println("max tree Index = "+ maxTree);
+			forest = new colTree[trees.size()];
+			for(int i =0; i<trees.size();i++)
+			{
+				forest[i] = trees.get(i);
+			}
+		}
+	}
 	public byte[] getObjects()
 	{
 		byte[] ret = new byte[32];
@@ -294,7 +310,7 @@ public class colObject
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(xPos).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(wPos).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(vertexAmount).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(vertexPos).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(VertexPos).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(headerAmount).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(headerPos).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(val5).array());
@@ -317,6 +333,7 @@ public class colObject
 	{
 		if(ColReader.optimizeCollision&&headerAmount==0)return new byte[0];
 		if(listAmount!=0)listAmount=1;
+		if(listAmount == 0) listPos = 0;
 		byte[] ret = bFM.Utils.mergeArrays(ByteBuffer.allocate(4).putInt(listAmount*2).array(), ByteBuffer.allocate(4).putInt(listPos).array());
 		ret = bFM.Utils.mergeArrays(ret, new byte[24]);
 		return ret ;
@@ -349,7 +366,7 @@ public class colObject
 	public byte[] getIndex()
 	{
 		byte[] ret = new byte[0];
-		if(forest==null)
+		if(forest==null||listAmount == 0)
 		{
 			return ret;
 		}
@@ -378,7 +395,7 @@ public class colObject
 		if(forest==null)return ret;
 		for(int i = 0; i<forest.length; i++)
 		{
-			ret += forest[i].getIndexSize();
+			ret += forest[i].getIndexDataSize();
 		}
 		return ret;
 	}
@@ -429,7 +446,7 @@ public class colObject
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(xPos).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(wPos).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(vertexAmount).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(vertexPos).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(VertexPos).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(headerAmount).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(headerPos).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(val5).array());
@@ -461,10 +478,6 @@ public class colObject
 			}
 		}
 		return ret;
-	}
-	public int vertexAmount()
-	{
-		return vertexAmount;
 	}
 	public String getName()
 	{
@@ -586,7 +599,7 @@ public class colObject
 			this.listPos = listPos;
 			this.treePos = treePos;
 			if(forest!=null)forest[0].updateTree(indexPos);
-			this.vertexPos = vertexPos;
+			this.VertexPos = vertexPos;
 		}
 		else
 		{
@@ -595,7 +608,40 @@ public class colObject
 			this.listPos = listPos;
 			this.treePos = treePos;
 			if(forest!=null)forest[0].updateTree(indexPos);
-			if(VERTEX!=null&&VERTEX.size()>0)this.vertexPos = vertexPos;
+			if(VERTEX!=null&&VERTEX.size()>0)this.VertexPos = vertexPos;
 		}
+	}
+	public int getTreeDataSize() 
+	{
+		if(forest==null) return 0;
+		int ret = forest.length * 48;
+		if(ret % 32 != 0)
+		{
+			//ret = ((ret / 32) + 1) * 32;
+		}
+		return ret;
+	}
+	public int getVertexDataSize() 
+	{
+		if(VERTEX==null) return 0;
+		int ret = VERTEX.size() * 16;
+		if(ret % 32 != 0)
+		{
+			ret = ((ret / 32) + 1) * 32;
+		}
+		return ret;
+	}
+	public int getHeaderDataSize() 
+	{
+		if(headerAmount>2 || ColReader.optimizeCollision) return headerAmount * 32;
+		return 32;
+	}
+	public void replaceFromOBJ(List<String> lines, int ref, int vertexOffset, int value) 
+	{
+		addFromOBJ(lines, ref, vertexOffset, value);
+	}
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 }

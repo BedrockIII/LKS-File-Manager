@@ -51,6 +51,11 @@ public class CollisionObjectInfoGUI extends GenericFileInfoGUI
 	}
 	public void update() 
 	{
+		FaceCount.replaceComponent(new JLabel("" + object.getFaceAmount()));
+		VertexCount.replaceComponent(new JLabel("" + object.getVertexAmount()));
+		xOffset.replaceComponent(new JLabel("" + object.getXOffset()));
+		yOffset.replaceComponent(new JLabel("" + object.getYOffset()));
+		zOffset.replaceComponent(new JLabel("" + object.getZOffset()));
 		repaint();
 	}
 }

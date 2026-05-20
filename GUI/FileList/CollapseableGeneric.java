@@ -7,11 +7,14 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -79,12 +82,25 @@ public class CollapseableGeneric extends Generic
 		headerPanel.add(spacer, layout);
 		
 		isExtended = new JCheckBox();
+		//isExtended.setBorderPainted(false);
+		//isExtended.setContentAreaFilled(false);
+		isExtended.setBackground(GUI.bgColor);
 		isExtended.setSelected(false);
 		isExtended.setPreferredSize(new Dimension(GUI.assetHeight, GUI.assetHeight));
+		
+		
 		isExtended.addItemListener(new ItemListener() {
 		    @Override
 		    public void itemStateChanged(ItemEvent e) 
 		    {
+		    	if(isExtended.isSelected())
+		    	{
+		    		//isExtended.setText("─");
+		    	}
+		    	else
+		    	{
+		    		//isExtended.setText("┼");
+		    	}
 		    	GUI.update();
 		    }
 		});
@@ -94,6 +110,7 @@ public class CollapseableGeneric extends Generic
 		fileName = new JLabel(file.getName(), SwingConstants.LEFT);
 		fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding-GUI.assetHeight, GUI.assetHeight));
 		//fileName.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		fileName.setBackground(GUI.bgColor);
 		headerPanel.add(fileName, layout);
 	}
 	public int getHeight()
