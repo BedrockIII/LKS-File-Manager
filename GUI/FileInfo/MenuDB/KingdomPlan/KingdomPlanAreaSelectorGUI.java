@@ -12,19 +12,17 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import GUI.FileInfo.GenericFileInfoGUI;
-import PCKGManager.OpenedFile;
 import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
 import SystemDataManagers.KingdomPlanManager.KingdomPlanArea;
 
 @SuppressWarnings("serial")
 public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 {
-	OpenedFile file = null;
 	kingdomPlanManager plans = null;
 	ArrayList<KingdomPlanArea> Areas = new ArrayList<KingdomPlanArea>();
 	ArrayList<KingdomPlanAreaGUI> AreaGUIs = new ArrayList<KingdomPlanAreaGUI>();
 	JComboBox<KingdomPlanAreaGUI> AreaList = new JComboBox<KingdomPlanAreaGUI>();
-	private void initializeFromBytes(byte[] data)
+	private void initializeGUI()
 	{
 		removeAll();
 		setPreferredSize(GUI.GUI.getRightSize());
@@ -35,7 +33,6 @@ public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 		layout.weightx = 1.0;
 		layout.weighty = 0.0;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
-		plans = new kingdomPlanManager(data);
 		//System.out.println(plans);
 		//System.out.println(plans.getAreas());
 		Areas = plans.getAreas();
@@ -71,10 +68,10 @@ public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 		add(Box.createVerticalGlue(), layout);
 		layout.weighty = 0.0;
 	}
-	public KingdomPlanAreaSelectorGUI(OpenedFile file) 
+	public KingdomPlanAreaSelectorGUI(kingdomPlanManager file) 
 	{
-		this.file = file;
-		initializeFromBytes(file.getData());
+		plans = file;
+		initializeGUI();
 	}
 	//have a dropdown of all areas and then an area panel
 	public void updateList() 
@@ -92,7 +89,7 @@ public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 		{
 			area.update();;
 		}
-		file.setData(getBytes());
+		//file.setData(getBytes());
 	}
 	public byte[] getBytes() 
 	{
@@ -100,7 +97,7 @@ public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 	}
 	public void replaceData(byte[] data) 
 	{
-		file.setData(data);
-		initializeFromBytes(data);
+		plans = new kingdomPlanManager(data);
+		initializeGUI();
 	}
 }

@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,8 +17,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import GUI.FileInfo.GenericFileInfoGUI;
+import GUI.FileList.FileListFactory;
 import GUI.FileList.FileListPanel;
-import GUI.FileList.Package;
+import GUI.FileList.Generic;
+import PCKGManager.OpenedFile;
 import PCKGManager.PCKGManager;
 
 public class GUI extends JFrame
@@ -56,6 +57,7 @@ public class GUI extends JFrame
 	public static final int pacOffset = 50;
 	public static final int rowWidth = 300;
 	public static final int indentSize = 15;
+	public static Color bgColor = new Color(169, 169, 169);
 	JPanel fileArea = new JPanel();
 	public static final Dimension buttonSize = new Dimension(GUI.buttonWidth,GUI.assetHeight);
 	public static final Color selectedColor = Color.YELLOW;
@@ -65,6 +67,7 @@ public class GUI extends JFrame
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.setLayout(new GridBagLayout());
 		frame.setLayout(new BorderLayout());
+		bgColor = frame.getBackground();
 		GridBagConstraints layout = new GridBagConstraints();
 		layout.anchor = GridBagConstraints.NORTH;
 		layout.weighty = 1.0;
@@ -84,7 +87,7 @@ public class GUI extends JFrame
         contents.setBottomComponent(fileInfoPanel);
         
         frame.add(contents);
-        frame.setSize(new Dimension(rowWidth, assetHeight*5));
+        frame.setSize(new Dimension(rowWidth*2, assetHeight*25));
         //frame.pack();
         update();
 		frame.setVisible(true);
@@ -115,9 +118,9 @@ public class GUI extends JFrame
 		//System.out.println(openedFileList.getHeight());
 		frame.setSize(Math.max(Math.max(rowWidth+20, 300), frame.getWidth()), Math.max(openedFileList.getHeight()+45+assetHeight, frame.getHeight()));
 	}
-	public static void setFileList(Package package1) 
+	public static void setFileList(Generic generic) 
 	{
-		openedFileList.setFile(package1);
+		openedFileList.setFile(generic);
 		contents.setDividerLocation(.33);
 		//JScrollPane LeftWindow = new JScrollPane((Package)package1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		//LeftWindow.setMinimumSize(buttonSize);
@@ -141,8 +144,16 @@ public class GUI extends JFrame
 	public void setOpenFile(String path) 
 	{
 		Path filePath = Paths.get(path);
-		PCKGManager pac = new PCKGManager(filePath);
-		GUI.setFileList(new Package(pac));
-		update();
+		byte[] data;
+		try {
+			data = Files.readAllBytes(filePath);
+			OpenedFile file = OpenedFile.makeFile(filePath.getFileName().toString(), data);
+			GUI.setFileList(FileListFactory.makeListGUI(file, 0));
+			update();
+		} catch (IOException e) 
+		{
+			System.out.println("Failed to read file: " + filePath);
+		}
+		
 	}
 }

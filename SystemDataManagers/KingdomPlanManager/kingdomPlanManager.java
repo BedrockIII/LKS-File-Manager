@@ -4,19 +4,28 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import PCKGManager.OpenedFile;
 import PCKGManager.PCKGManager;
 
-public class kingdomPlanManager 
+public class kingdomPlanManager extends OpenedFile
 {
 	ArrayList<KingdomPlanArea> Areas = new ArrayList<KingdomPlanArea>();
 	PCKGManager KingdomPlan = new PCKGManager("");
 	public kingdomPlanManager(byte[] data)
 	{
+		name = "Kingdom Plan Config";
+		KingdomPlan = new PCKGManager(data);
+		decodeData();
+	}
+	public void replaceFromBytes(byte[] data)
+	{
+		name = "Kingdom Plan Config";
 		KingdomPlan = new PCKGManager(data);
 		decodeData();
 	}
 	public kingdomPlanManager(List<String> lines)
 	{
+		name = "Kingdom Plan Config";
 		boolean inAreaString = false;
 		boolean inElemString = false;
 		boolean inTitle = false;
@@ -291,5 +300,21 @@ public class kingdomPlanManager
 	public ArrayList<KingdomPlanArea> getAreas()
 	{
 		return Areas;
+	}
+	public void setData(byte[] data)
+	{
+		KingdomPlan = new PCKGManager(data);
+	}
+	public byte[] getData()
+	{
+		return toBytes();
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name) 
+	{
+		this.name = name;
 	}
 }

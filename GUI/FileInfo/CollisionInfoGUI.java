@@ -1,28 +1,18 @@
 package GUI.FileInfo;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 import GUI.LabeledInputBox;
-import PCKGManager.OpenedFile;
+import colReader.ColReader;
 
 @SuppressWarnings("serial")
-public class GenericFileInfoGUI extends JPanel
+public class CollisionInfoGUI extends GenericFileInfoGUI 
 {
-	OpenedFile file = null;
-	LabeledInputBox fileSize = null;
-	JTextArea data = new JTextArea();
-	protected GenericFileInfoGUI() 
-	{
-		fileSize = new LabeledInputBox("File Size: ",  new JLabel("0"), 1.5);
-		addGUI();
-	}
-	public GenericFileInfoGUI(OpenedFile file) 
+	LabeledInputBox ObjectCount = null;
+	public CollisionInfoGUI(ColReader file) 
 	{
 		this.file = file;
 		makeGUI();
@@ -31,11 +21,7 @@ public class GenericFileInfoGUI extends JPanel
 	private void makeGUI()
 	{
 		fileSize = new LabeledInputBox("File Size: ",  new JLabel("" + file.getData().length), 1.5);
-		if(file.getData().length<50000)
-		{
-			data.setText(new String(file.getData()));
-		}
-		
+		ObjectCount = new LabeledInputBox("Collision Object Count: ",  new JLabel("" + ((ColReader)file).getObjects().size()), 1.5);
 	}
 	private void addGUI()
 	{
@@ -49,8 +35,8 @@ public class GenericFileInfoGUI extends JPanel
 		add(fileSize, layout);
 		layout.weighty = 1.0;
 		layout.weightx = 1.0;
-		data.setMinimumSize(new Dimension(10,20));
-		add(data, layout);
+		 
+		add(ObjectCount, layout);
 		
 	}
 	public void updateGUI(byte[] data)
@@ -58,15 +44,21 @@ public class GenericFileInfoGUI extends JPanel
 		file.setData(data);
 		//System.out.println(data.length);
 		fileSize.replaceComponent(new JLabel("" + data.length));
+		ObjectCount.replaceComponent(new JLabel("" + ((ColReader)file).getObjects().size()));
 		//repaint();
-	}
-	public byte[] getBytes() 
-	{
-		return file.getData();
 	}
 	public void update() 
 	{
-		if(file==null) fileSize.replaceComponent(new JLabel("0"));
-		else fileSize.replaceComponent(new JLabel("" + file.getData().length));
+		if(file==null)
+		{
+			fileSize.replaceComponent(new JLabel("0"));
+			ObjectCount.replaceComponent(new JLabel("" + ((ColReader)file).getObjects().size()));
+		}
+		else 
+		{
+			fileSize.replaceComponent(new JLabel("" + file.getData().length));
+			ObjectCount.replaceComponent(new JLabel("" + ((ColReader)file).getObjects().size()));
+		}
 	}
+	
 }

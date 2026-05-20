@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import GUI.FileInfo.FileInfoFactory;
 import GUI.FileList.Generic;
 import PCKGManager.OpenedFile;
 import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
@@ -18,13 +19,12 @@ import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
 @SuppressWarnings("serial")
 public class KingdomPlanFileList extends Generic
 {
-	KingdomPlanAreaSelectorGUI gui = null;
 	public KingdomPlanFileList(OpenedFile file, int padding)
 	{
 		super("Kingdom Plan Config", padding);
 		//setBackground(color);
-		gui = (KingdomPlanAreaSelectorGUI)makeInfoGUI(file);
-		//System.out.println("Made");
+		infoGUI = FileInfoFactory.makeInfoGUI(file);
+		System.out.println("Made");
 	}
 	public void addActions()
 	{
@@ -38,7 +38,7 @@ public class KingdomPlanFileList extends Generic
 			{
 				try 
 				{
-					Files.write(chooseFile.getSelectedFile().toPath(),gui.getKPData());
+					Files.write(chooseFile.getSelectedFile().toPath(),((KingdomPlanAreaSelectorGUI)infoGUI).getKPData());
 				}
 				catch(IOException i)
 				{
@@ -62,7 +62,7 @@ public class KingdomPlanFileList extends Generic
 				try 
 				{
 					file.setData(new kingdomPlanManager(Files.readAllLines(chooseFile.getSelectedFile().toPath())).toBytes());
-					gui.replaceData(file.getData());
+					((KingdomPlanAreaSelectorGUI)infoGUI).replaceData(file.getData());
 				} catch (IOException i) 
 				{
 					i.printStackTrace();
@@ -81,7 +81,7 @@ public class KingdomPlanFileList extends Generic
 		        else if(SwingUtilities.isLeftMouseButton(e))
 		        {
 		        	//System.out.println("hit");
-		        	GUI.GUI.setFileInfo(gui);
+		        	GUI.GUI.setFileInfo(infoGUI);
 		        	GUI.GUI.deselectAll();
 		        	setBackground(GUI.GUI.selectedColor);
 		        }

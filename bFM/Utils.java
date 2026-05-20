@@ -359,15 +359,21 @@ public class Utils
 	}
 	public static String getFileType(String name, byte[] file) 
 	{
-		if(name.equals("KingdomPlan.bin"))
-		{
-			return "KingdomPlanDB";
-		}
+		
 		if(PCKGManager.PCKGManager.isPAC(file))
 		{
+			if(name.equals("KingdomPlan.bin")||name.equals("Kingdom Plan Config"))
+			{
+				System.out.println("aaa");
+				return "KingdomPlanDB";
+			}
 			//Check if special TODO
 			//else return "Package"
 			return "Package";
+		}
+		else if(colReader.ColReader.isCollisionFile(file))
+		{
+			return "Collision";
 		}
 		return "Todo";
 	}

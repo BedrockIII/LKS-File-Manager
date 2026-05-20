@@ -149,7 +149,10 @@ class colTree
 	{
 		return indexSize;
 	}
- 	
+ 	public int getFaceAmount()
+ 	{
+ 		return faces.length;
+ 	}
  	private void updateIndex()
 	{
 

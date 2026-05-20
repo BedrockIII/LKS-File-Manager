@@ -54,11 +54,6 @@ public class PCKGManager extends OpenedFile
 			e.printStackTrace();
 		}
 	}
-	public PCKGManager(OpenedFile file) 
-	{
-		name = file.getName();
-		extractPAC(file.getData());
-	}
 	private void extractPAC(byte[] file)
 	{//turns the pacFile into ArrayLists
 		/*PCKG File layout
@@ -111,8 +106,7 @@ public class PCKGManager extends OpenedFile
 			
 			bFM.Utils.DebugPrint("Found File: " + theName + " File Size: " + Math.abs(data.getInt(nextHeaderPos+4)));
 			bFM.Utils.DebugPrint("\tHeader Size: " + headerSize);
-			if(bFM.Utils.isGenericPAC(fileContents, theNewName))files.add(new PCKGManager(fileContents, theNewName));
-			else files.add(new OpenedFile(theNewName, fileContents));
+			files.add(OpenedFile.makeFile(theNewName, fileContents));
 			
 			
 			nextCnt = data.getInt(nextHeaderPos);
@@ -172,9 +166,26 @@ public class PCKGManager extends OpenedFile
 		data[3] = 'G';
 		for (int i = 0; i < files.size(); i++) 
 		{
-			data = bFM.Utils.mergeArrays(data, getFileWithHeader(files.get(i), files.size()-1==i));
-		}
+			data = bFM.Utils.mergeArrays(data, getFileWithHeader(files.get(i), files.size()-1!=i));
+		} 
 		return data;
+	}
+	public int getSize()
+	{
+		int ret = 32;
+		for (int i = 0; i < files.size(); i++) 
+		{
+			ret = getFileSizeWithHeader(files.get(i));
+		} 
+		return ret;
+	}
+	private int getFileSizeWithHeader(OpenedFile file) 
+	{
+		int ret = HeaderSizeWithoutName + file.getName().length(); //Get the size of the header
+		if(ret % 32 != 0) ret = (ret / 32 + 1) * 32;
+		ret += file.getSize();
+		if(AlignedFiles && ret % 32 != 0) ret = (ret / 32 + 1) * 32;
+		return ret;
 	}
 	public byte[] getData()
 	{
@@ -220,7 +231,7 @@ public class PCKGManager extends OpenedFile
 			}
 		}
 		if(isPAC(bytes))files.add(new PCKGManager(bytes, name));
-		else files.add(new OpenedFile(name, bytes));
+		else files.add(OpenedFile.makeFile(name, bytes));
 	}
 	public void writePac(String outputName) 
 	{
@@ -236,10 +247,6 @@ public class PCKGManager extends OpenedFile
 	public int getFileAmount()
 	{
 		return files.size();
-	}
-	public String getName()
-	{
-		return name;
 	}
 	public String getName(int i)
 	{

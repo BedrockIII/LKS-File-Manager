@@ -1,25 +1,30 @@
-package GUI.FileList;
+package GUI.FileInfo;
 
 import java.awt.Rectangle;
 
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import GUI.GUI;
+import GUI.FileList.Package;
 
 @SuppressWarnings("serial")
-public class FileListPanel extends JScrollPane
+public class FileInfoPanel extends JScrollPane
 {
 	JViewport panel = null;
-	public FileListPanel()
+	
+	
+	public FileInfoPanel()
 	{
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		
+		setBackground(GUI.bgColor);
 		panel = getViewport();
 		Rectangle topRect = new Rectangle(0, 0, 1, 1);
 		panel.scrollRectToVisible(topRect);
+		panel.setBackground(GUI.bgColor);
 	}
-	public void setFile(Generic panel) 
+	public void setFile(JPanel panel) 
 	{
 		setViewportView(panel);
 		GUI.update();
@@ -41,24 +46,10 @@ public class FileListPanel extends JScrollPane
 		if(getViewport()==null||getViewport().getView()==null) return;
 		//setMaximumSize(new Dimension(GUI.rowWidth,((Package)getViewport().getView()).getHeight()));
 		getViewport().setSize(getWidth(), getHeight());
-		if(getViewport().getView() instanceof Package)
-		{
-			((Package)getViewport().getView()).update();
-		}
-		else
-		{
-			((Generic)getViewport().getView()).update();
-		}
+		((Package)getViewport().getView()).update();
 	}
 	public void deselectAll() 
 	{
-		if(getViewport().getView() instanceof Package)
-		{
-			((Package)getViewport().getView()).deselectAll();
-		}
-		else
-		{
-			((Generic)getViewport().getView()).deselectAll();
-		}
+		((Package)getViewport().getView()).deselectAll();
 	}
 }

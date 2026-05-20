@@ -1,111 +1,103 @@
 package GUI.FileList;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.SwingUtilities;
 
 import GUI.GUI;
-import GUI.GUI.Actions;
-import PCKGManager.PCKGManager;
+import GUI.FileInfo.CollisionObjectInfoGUI;
+import PCKGManager.OpenedFile;
+import colReader.ColReader;
+import colReader.colObject;
 
 @SuppressWarnings("serial")
-public class Collision extends JPanel implements ActionListener
+public class Collision extends CollapseableGeneric
 {
-	byte[] data;
-	String name = "";
-	public Collision(PCKGManager pac, int parentY, int parentX, int displacement)
+	ArrayList<colObject> objects = new ArrayList<colObject>();
+	public Collision(OpenedFile file, int padding) 
 	{
-		data = pac.getFile(displacement);
-		name = pac.getName(displacement);
-		super.setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-		super.setLayout(new GridBagLayout());
-		super.setMaximumSize(new Dimension(100000,GUI.assetHeight));
-		JPanel spacer = new JPanel();
-		spacer.setPreferredSize(new Dimension(parentX, GUI.assetHeight));
-		spacer.setMinimumSize(new Dimension(parentX, GUI.assetHeight));
-		super.add(spacer);
-		GridBagConstraints constraints = new GridBagConstraints();  
-		constraints.weightx = 1.0;
-		JLabel fileName = new JLabel(pac.getName(displacement), SwingConstants.LEFT);
-		fileName.setPreferredSize(new Dimension(10000, GUI.assetHeight));
-		super.add(fileName, constraints);
-		
-		JButton export = new JButton("Export File");
-		export.setActionCommand(Actions.EXPORT.name());
-		export.addActionListener(this);
-		export.setPreferredSize(GUI.buttonSize);
-		export.setMinimumSize(GUI.buttonSize);
-		super.add(export);
-		
-		JButton replace = new JButton("Replace File");
-		replace.setActionCommand(Actions.REPLACE.name());
-		replace.setPreferredSize(GUI.buttonSize);
-		replace.setMinimumSize(GUI.buttonSize);
-		super.add(replace);
-		
-		JButton extract = new JButton("Extract File");
-		extract.setActionCommand(Actions.EXPORTCOLASOBJ.name());
-		extract.addActionListener(this);
-		extract.setPreferredSize(GUI.buttonSize);
-		extract.setMinimumSize(GUI.buttonSize);
-		//super.add(extract);
-		
-		JButton addFile = new JButton("Import File");
-		addFile.setActionCommand(Actions.IMPORTCOLASOBJ.name());
-		addFile.addActionListener(this);
-		addFile.setPreferredSize(GUI.buttonSize);
-		addFile.setMinimumSize(GUI.buttonSize);
-		//super.add(addFile);
-		//coloring
-		if(displacement%2==0)
+		this.file = file;
+		System.out.println(file);
+		initializeGUI(padding);
+		fileName.setText(file.getName());
+		initializeSubGUI(padding);
+		addExportAction();
+		addReplaceButton();
+		addActions();
+		headerPanel.add(actions);
+		//isExtended.setSelected(true);
+		update();
+	}
+	private void initializeSubGUI(int padding) 
+	{
+		objects = ((ColReader)file).getObjects();
+		for(colObject object : objects)
 		{
-			super.setBackground(new Color(179, 245, 244)); //blue
-		}
-		else
-		{
-			super.setBackground(new Color(191, 191, 191)); //grey
+			System.out.println(object.getName());
+			subEntries.add(new ColObjectListGUI(object, padding + GUI.indentSize));
 		}
 	}
-	@Override
-	public void actionPerformed(ActionEvent event) 
+	protected void addActions()
 	{
-		JFileChooser chooseFile = new JFileChooser();
-		if(event.getActionCommand()== Actions.EXPORT.name())
+		addMouseListener(new MouseAdapter() {
+		    public void mousePressed(MouseEvent e) {
+		    	System.out.println("aaa");
+		        if (e.isPopupTrigger()) showMenu(e);
+		        else if(SwingUtilities.isLeftMouseButton(e))
+		        {
+		        	GUI.deselectAll();
+		        	headerPanel.setBackground(GUI.selectedColor);
+		        	GUI.setFileInfo(infoGUI);
+		        }
+		    }
+		    public void mouseReleased(MouseEvent e) {
+		        if (e.isPopupTrigger()) showMenu(e);
+		    }
+		    private void showMenu(MouseEvent e) {
+		    	actions.show(e.getComponent(), e.getX(), e.getY());
+		    }
+		});
+	}
+	public void deselect()
+	{
+		headerPanel.setBackground(GUI.bgColor);
+	}
+	private class ColObjectListGUI extends Generic
+	{
+		colObject object = null;
+		public ColObjectListGUI(colObject object, int padding) 
 		{
-			 
-			chooseFile.setSelectedFile(new File(name));
-			int num = chooseFile.showSaveDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
-			{
-				try {Files.write(chooseFile.getSelectedFile().toPath(),data);}catch(IOException e){e.printStackTrace();System.out.println("Failed to Export COL File");}
-				System.out.println("Exported COL File");
-			}
-		}else if(event.getActionCommand()== Actions.REPLACE.name())
+			this.object = object;
+			this.initializeGUI(padding);
+			addActions();
+		}
+		protected void initializeGUI(int padding) 
 		{
-			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			chooseFile.setFileFilter(new FileNameExtensionFilter("Collision File", "col"));
-			chooseFile.showOpenDialog(null);
-			try {data = Files.readAllBytes(chooseFile.getSelectedFile().toPath());} catch (IOException e) {e.printStackTrace();System.out.println("Failed to Import Collision File");}
-			System.out.println("Imported Collision File");
-		}else if(event.getActionCommand()== Actions.EXPORTCOLASOBJ.name())
-		{
-			//TODO
-		}else if(event.getActionCommand()== Actions.IMPORTCOLASOBJ.name())
-		{
-			//TODO
-			
+			//setBorder(BorderFactory.createLineBorder(Color.GREEN));
+			GridBagConstraints constraints = new GridBagConstraints();  
+			constraints.weightx = 0.0;
+			constraints.anchor = GridBagConstraints.NORTHWEST;
+			infoGUI = new CollisionObjectInfoGUI(object);
+			setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
+			//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
+			setLayout(new GridBagLayout());
+			//setMaximumSize(new Dimension(100000,GUI.assetHeight));
+			JPanel spacer = new JPanel();
+			spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
+			spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
+			add(spacer, constraints);
+			constraints.weightx = 1.0;
+			fileName = new JLabel(object.getName(), SwingConstants.LEFT);
+			fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
+			add(fileName, constraints);
 		}
 	}
 }

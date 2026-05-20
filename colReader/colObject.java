@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-class colObject 
+public class colObject 
 {
 	String name = "";
 	ArrayList<CollisionMaterial> normalsList = new ArrayList<CollisionMaterial>();
@@ -547,9 +547,35 @@ class colObject
 		if(forest==null)return 0;
 		return forest.length;
 	}
+	public int getFaceAmount()
+	{
+		if(forest==null)return 0;
+		int ret = 0;
+		for(colTree tree : forest)
+		{
+			ret += tree.getFaceAmount();
+		}
+		return ret;
+	}
 	public int getVertexAmount() 
 	{
 		return vertexAmount;
+	}
+	public float getXOffset() 
+	{
+		return xPos;
+	}
+	public float getYOffset() 
+	{
+		return yPos;
+	}
+	public float getZOffset() 
+	{
+		return zPos;
+	}
+	public int getReferenceIndex()
+	{
+		return referenceValue;
 	}
 	public void updatePositions(int otherObjectPos, int headerPos, int listPos, int treePos, int indexPos, int vertexPos) 
 	{

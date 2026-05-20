@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ColReader {
-	String type;
+import PCKGManager.OpenedFile;
+
+public class ColReader extends OpenedFile
+{
+	static final String type = "MDF_COL_WII_100";
 	public static boolean optimizeCollision = true;
-	String name;
-	int startPos;
+	static final int startPos = 96;
 	int index = 0;
 	ArrayList<colObject> COLOBJECTS = new ArrayList<colObject>();
 	int objects;
@@ -22,16 +24,12 @@ public class ColReader {
 	}
 	public ColReader(byte[] data)
 	{
-		type = "MDF_COL_WII_100";
 		name = "all_field";
-		startPos = 96;
 		objects = ByteBuffer.wrap(data, 64, 4).getInt();
 		makeColObjects(data);
 	}
 	public ColReader(String name)
 	{
-		type = "MDF_COL_WII_100";
-		startPos = 96;
 		boolean grid = true;
 		if(Main.grid&&grid )
 		{
@@ -48,6 +46,12 @@ public class ColReader {
 			COLOBJECTS.add(new colObject("Wall", 0, 2));
 		}
 		
+	}
+	public ColReader(byte[] data, String name) 
+	{
+		this.name = name;
+		objects = ByteBuffer.wrap(data, 64, 4).getInt();
+		makeColObjects(data);
 	}
 	private void makeColObjects(byte[] data) 
 	{
@@ -349,6 +353,22 @@ public class ColReader {
 	{
 		optimizeCollision = bool;
 	}
+	public static boolean isCollisionFile(byte[] data)
+	{
+		String header = "MDF_COL_WII_100";
+		if(data.length<header.length())
+		{
+			return false;
+		}
+		for(int i = 0; i < header.length(); i++)
+		{
+			if((char)(data[i])!=header.charAt(i))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 	public String toString()
 	{
 		String ret = "LKS Collision File \n";
@@ -360,5 +380,26 @@ public class ColReader {
 			//System.out.println(vertOffset);
 		}
 		return ret;
+	}
+	public void setData(byte[] data)
+	{
+		objects = ByteBuffer.wrap(data, 64, 4).getInt();
+		makeColObjects(data);
+	}
+	public byte[] getData()
+	{
+		return getBytes();
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+	public ArrayList<colObject> getObjects()
+	{
+		return COLOBJECTS;
 	}
 }

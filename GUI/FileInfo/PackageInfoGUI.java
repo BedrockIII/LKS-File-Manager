@@ -19,11 +19,11 @@ public class PackageInfoGUI extends GenericFileInfoGUI
 		this.packageFile = packageFile;
 		makeGUI();
 		addGUI();
-		updateGUI();
+		update();
 	}
 	private void makeGUI()
 	{
-		pacSize = new LabeledInputBox("File Size: ",  new JLabel("" + packageFile.getFile().length), 1.5);
+		pacSize = new LabeledInputBox("File Size: ",  new JLabel("" + packageFile.getSize()), 1.5);
 		fileCount = new LabeledInputBox("Packed File Count: ",  new JLabel("" + packageFile.getFileAmount()), 1.5);
 	}
 	private void addGUI()
@@ -39,9 +39,10 @@ public class PackageInfoGUI extends GenericFileInfoGUI
 		add(fileCount, layout);
 		layout.weighty = 0.0;
 	}
-	public void updateGUI()
+	public void update()
 	{
-		pacSize.replaceComponent(new JLabel("" + packageFile.getFile().length));
+		pacSize.replaceComponent(new JLabel("" + packageFile.getSize()));
 		fileCount.replaceComponent(new JLabel("" + packageFile.getFileAmount()));
+		repaint();
 	}
 }

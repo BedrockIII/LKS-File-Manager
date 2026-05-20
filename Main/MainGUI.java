@@ -12,6 +12,7 @@ public class MainGUI
 	public static void main(String args[]) throws IOException 
 	{
 		PCKGManagerMain.printVersionData();
+		bFM.Utils.debugOutput = true;
 		fileManager = new GUI();
 		if(args.length > 0)
 		{
