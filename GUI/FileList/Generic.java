@@ -20,6 +20,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
 import GUI.FileInfo.FileInfoFactory;
@@ -35,38 +36,36 @@ public class Generic extends JPanel
 	JLabel fileName = new JLabel();
 	JPopupMenu actions = new JPopupMenu();
 	GridBagConstraints layout = new GridBagConstraints();
+	static FileNameExtensionFilter fileTypes = null;
 	protected Generic()
 	{
-		
 	}
-	public Generic(PCKGManager pac, int parentX, int index)
+	public Generic(PCKGManager pac, int padding, int index)
 	{
 		file = pac.getPackedFile(index);
-		initializeGUI(parentX);
+		initializeAll(padding);
 	}
 	public Generic(String name, byte[] data, int padding)
 	{
 		file = OpenedFile.makeFile(name, data);
-		initializeGUI(padding);
-		addExportAction();
-		addRenameAction();
-		addReplaceButton();
-		addActions();
-		add(actions);
+		initializeAll(padding);
 	}
 	public Generic(OpenedFile file, int padding)
 	{
 		this.file = file;
-		initializeGUI(padding);
-		addExportAction();
-		addRenameAction();
-		addReplaceButton();
-		addActions();
-		add(actions);
+		initializeAll(padding);
 	}
 	public Generic(String name, int padding) 
 	{
 		file = OpenedFile.makeFile(name, new byte[0]);
+		initializeAll(padding);
+	}
+	protected void initializeAll()
+	{
+		initializeAll(0);
+	}
+	private void initializeAll(int padding)
+	{
 		initializeGUI(padding);
 		addExportAction();
 		addRenameAction();
@@ -98,9 +97,13 @@ public class Generic extends JPanel
 		fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
 		add(fileName, layout);
 	}
+	public static FileNameExtensionFilter getFileExtensions()
+	{
+		return fileTypes;
+	}
 	protected void addExportAction()
 	{
-		JMenuItem export = new JMenuItem("Export File");
+		JMenuItem export = new JMenuItem("Export Raw Data");
 		export.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
 			chooseFile.setSelectedFile(new File(file.getName()));
@@ -112,10 +115,10 @@ public class Generic extends JPanel
 				}
 				catch(IOException i)
 				{
-					System.out.println("Failed to Export Generic File");
+					System.out.println("Failed to Export Raw File");
 					i.printStackTrace();
 				}
-				System.out.println("Exported Generic File");
+				System.out.println("Exported Raw File");
 			}
 		});
 		actions.add(export);
@@ -193,7 +196,7 @@ public class Generic extends JPanel
 		replace.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
 			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			//chooseFile.setFileFilter(new FileNameExtensionFilter("Collision File", "col"));
+			if(getFileExtensions()!=null) chooseFile.setFileFilter(getFileExtensions());
 			
 			int num =chooseFile.showOpenDialog(null);
 			if(num==JFileChooser.APPROVE_OPTION)
@@ -219,7 +222,8 @@ public class Generic extends JPanel
 	protected void addActions()
 	{
 		addMouseListener(new MouseAdapter() {
-		    public void mousePressed(MouseEvent e) {
+		    public void mousePressed(MouseEvent e) 
+		    {
 		    	//System.out.println("aaa");
 		        if (e.isPopupTrigger()) showMenu(e);
 		        else if(SwingUtilities.isLeftMouseButton(e))

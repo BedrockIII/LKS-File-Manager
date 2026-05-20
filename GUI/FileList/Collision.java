@@ -3,14 +3,12 @@ package GUI.FileList;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
 import GUI.FileInfo.CollisionObjectInfoGUI;
@@ -25,7 +23,11 @@ public class Collision extends CollapseableGeneric
 	public Collision(OpenedFile file, int padding) 
 	{
 		this.file = file;
-		System.out.println(file);
+		initializeAll(padding);
+	}
+	private void initializeAll(int padding)
+	{
+		fileTypes = new FileNameExtensionFilter("LKS Collision File", "col");
 		initializeGUI(padding);
 		fileName.setText(file.getName());
 		initializeSubGUI(padding);
@@ -45,27 +47,6 @@ public class Collision extends CollapseableGeneric
 			subEntries.add(new ColObjectListGUI(object, padding + GUI.indentSize));
 		}
 	}
-	protected void addActions()
-	{
-		addMouseListener(new MouseAdapter() {
-		    public void mousePressed(MouseEvent e) {
-		    	System.out.println("aaa");
-		        if (e.isPopupTrigger()) showMenu(e);
-		        else if(SwingUtilities.isLeftMouseButton(e))
-		        {
-		        	GUI.deselectAll();
-		        	headerPanel.setBackground(GUI.selectedColor);
-		        	GUI.setFileInfo(infoGUI);
-		        }
-		    }
-		    public void mouseReleased(MouseEvent e) {
-		        if (e.isPopupTrigger()) showMenu(e);
-		    }
-		    private void showMenu(MouseEvent e) {
-		    	actions.show(e.getComponent(), e.getX(), e.getY());
-		    }
-		});
-	}
 	public void deselect()
 	{
 		headerPanel.setBackground(GUI.bgColor);
@@ -76,8 +57,13 @@ public class Collision extends CollapseableGeneric
 		public ColObjectListGUI(colObject object, int padding) 
 		{
 			this.object = object;
+			this.initializeAll(padding);
+		}
+		private void initializeAll(int padding)
+		{
 			this.initializeGUI(padding);
 			addActions();
+			add(actions);
 		}
 		protected void initializeGUI(int padding) 
 		{

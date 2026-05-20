@@ -1,13 +1,19 @@
 package GUI.FileList;
 
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import GUI.GUI;
 import GUI.FileInfo.FileInfoFactory;
+import PCKGManager.OpenedFile;
 import PCKGManager.PCKGManager;
 
 public class Package extends CollapseableGeneric
@@ -16,33 +22,25 @@ public class Package extends CollapseableGeneric
 	public Package(PCKGManager packageFile, int padding)
 	{
 		this.file = packageFile;
-	    //System.out.println("Package depth: " + ((padding/5)+1));
-	    initializeGUI(padding);
+		initializeAll(padding);
+	}
+	public Package(PCKGManager packageFile)
+	{
+		this.file = packageFile;
+		initializeAll();
+	}
+	private void initializeAll(int padding)
+	{
+		fileTypes = new FileNameExtensionFilter("Package File", "pac", "pcha", "bin", "pac0");
+		initializeGUI(padding);
 		addRenameAction();
 		addExportAction();
 		addFileButton(padding);
 		addExportAllButton();
 		addActions();
-		add(actions);
 		initializeSubGUI();
+		add(actions);
 		isExtended.setSelected(true);
-		update();
-		
-	}
-	public Package(PCKGManager packageFile)
-	{
-		this.file = packageFile;
-		
-		
-		initializeGUI(0);
-		addRenameAction();
-		addExportAction();
-		addFileButton(0);
-		addExportAllButton();
-		addActions();
-		add(actions);
-		initializeSubGUI();
-		update();
 	}
 	public Package() 
 	{
@@ -89,9 +87,45 @@ public class Package extends CollapseableGeneric
 			int num = chooseFile.showSaveDialog(null);
 			if(num==JFileChooser.APPROVE_OPTION)
 			{
-				//updatePacContents();
-				((PCKGManager)file).extractAll(chooseFile.getSelectedFile().toPath().toString()+ "/");
-				System.out.println("Exported all files");
+				Path directory = Paths.get(chooseFile.getSelectedFile().toPath().toString()+ "\\" + file.getName());
+				try 
+				{
+					Files.createDirectories(directory);
+				}
+				catch(FileAlreadyExistsException e1)
+				{
+					System.out.println("Failed to create directory at: " + directory.toString() + " File Already Exists!!!");
+					System.out.println("Attempting to create directory without file extension");
+					directory = Paths.get(chooseFile.getSelectedFile().toPath().toString()+ "\\" + file.getName().substring(0, file.getName().lastIndexOf('.')));
+					try 
+					{
+						Files.createDirectories(directory);
+						System.out.println("Sucess!");
+					}
+					catch (IOException e2) 
+					{
+						System.out.println("Failed to create directory at: " + directory.toString());
+						e2.printStackTrace();
+						return;
+					}
+				} 
+				catch (IOException e1) 
+				{
+					System.out.println("Failed to create directory at: " + directory.toString());
+					e1.printStackTrace();
+					return;
+				}
+				for(OpenedFile file : ((PCKGManager)file).getFiles())
+				{
+					try 
+					{
+						Files.write(Paths.get(directory.toString() + "\\" + file.getName()), file.getData());
+					} catch (IOException e1) 
+					{
+						System.out.println("Failed to write file at: " + directory.toString() + "\\" + file.getName());
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
 		actions.add(exportAll);

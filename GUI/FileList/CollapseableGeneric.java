@@ -28,41 +28,29 @@ public class CollapseableGeneric extends Generic
 	JPanel headerPanel = new JPanel();
 	protected CollapseableGeneric()
 	{
-		
 	}
-	public CollapseableGeneric(PCKGManager pac, int parentX, int index)
+	public CollapseableGeneric(PCKGManager pac, int padding, int index)
 	{
 		file = pac.getPackedFile(index);
-		initializeGUI(parentX);
-		addExportAction();
-		addReplaceButton();
-		addActions();
-		add(actions);
-		update();
+		initializeAll(padding);
 	}
 	public CollapseableGeneric(String name, byte[] data, int padding)
 	{
 		file = OpenedFile.makeFile(name, data);
-		initializeGUI(padding);
-		addExportAction();
-		addReplaceButton();
-		addActions();
-		add(actions);
-		update();
+		initializeAll(padding);
 	}
 	public CollapseableGeneric(OpenedFile file, int padding)
 	{
 		this.file = file;
-		initializeGUI(padding);
-		addExportAction();
-		addReplaceButton();
-		addActions();
-		add(actions);
-		update();
+		initializeAll(padding);
 	}
 	public CollapseableGeneric(String name, int padding) 
 	{
 		file = OpenedFile.makeFile(name, new byte[0]);
+		initializeAll(padding);
+	}
+	private void initializeAll(int padding)
+	{
 		initializeGUI(padding);
 		addExportAction();
 		addReplaceButton();
@@ -113,6 +101,7 @@ public class CollapseableGeneric extends Generic
 		int increment = GUI.assetHeight;
 		if(isExtended!=null && isExtended.isSelected() == false) return increment;
 		int ret = increment;
+		if(subEntries == null) return ret;
 		for(Generic entry : subEntries)
 		{
 			ret += entry.getHeight();

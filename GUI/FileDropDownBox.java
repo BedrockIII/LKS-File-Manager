@@ -17,7 +17,7 @@ public class FileDropDownBox extends JMenu
 		JMenuItem openButton = new JMenuItem("Open File");
 		openButton.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
-			chooseFile.setFileFilter(new FileNameExtensionFilter("Pac File", "pac", "pcha", "bin", "pac0"));
+			chooseFile.setFileFilter(new FileNameExtensionFilter("Package File", "pac", "pcha", "bin", "pac0"));
 			int num = chooseFile.showOpenDialog(null);
 			if(num==JFileChooser.APPROVE_OPTION)
 			{

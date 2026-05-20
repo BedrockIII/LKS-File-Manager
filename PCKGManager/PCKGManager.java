@@ -314,4 +314,8 @@ public class PCKGManager extends OpenedFile
 		}
 		return ret;
 	}
+	public ArrayList<OpenedFile> getFiles() 
+	{
+		return files;
+	}
 }
