@@ -50,13 +50,7 @@ public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 			{
 				  if (e.getStateChange() == ItemEvent.SELECTED) 
 				  {
-					 removeAll();
-					 add(AreaList, layout);
-					 add((KingdomPlanAreaGUI) AreaList.getSelectedItem(), layout);
-					 layout.weighty = 1.0;
-					 add(Box.createVerticalGlue(), layout);
-					 layout.weighty = 0.0;
-					 GUI.GUI.update();
+					  update();
 			      }
 			}
 			
@@ -84,14 +78,28 @@ public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 	}
 	public void update() 
 	{
+		GridBagConstraints layout = new GridBagConstraints();
+		layout.anchor = GridBagConstraints.NORTHWEST;
+		layout.fill = GridBagConstraints.HORIZONTAL;
+		layout.weightx = 1.0;
+		layout.weighty = 0.0;
+		layout.gridwidth = GridBagConstraints.REMAINDER;
+		//System.out.println(plans);
+		removeAll();
+		add(AreaList, layout);
+		add((KingdomPlanAreaGUI) AreaList.getSelectedItem(), layout);
+		layout.weighty = 1.0;
+		add(Box.createVerticalGlue(), layout);
+		layout.weighty = 0.0;
 		setPreferredSize(new Dimension(GUI.GUI.getRightSize().width-10, getHeight()));
 		for(KingdomPlanAreaGUI area : AreaGUIs)
 		{
 			area.update();;
 		}
 		//file.setData(getBytes());
+		repaint();
 	}
-	public byte[] getBytes() 
+	public byte[] toBytes() 
 	{
 		return plans.toBytes();
 	}

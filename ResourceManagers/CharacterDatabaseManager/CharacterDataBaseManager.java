@@ -7,8 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import PCKGManager.PCKGManager;
+import ResourceManagers.CharacterDatabaseManager.indBinList.ind;
+import bFM.GenericFile;
 
-public class CharacterDataBaseManager 
+public class CharacterDataBaseManager extends GenericFile
 {
 	PCKGManager CharacterDataBase = new PCKGManager("chrDB0");
 	CharacterResourceList chrDB2 = null;
@@ -17,8 +19,10 @@ public class CharacterDataBaseManager
 	JoinBinList join = null;
 	SoundEffectCoordinateList seCrd = null;
 	TextAnimationList texanim = null;
+	//PCKGManager texanim = null;
 	public CharacterDataBaseManager(String characterDBPath)
 	{
+		name = "Character Data Base File";
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to read chrDB package at: " + characterDBPath);
@@ -31,6 +35,7 @@ public class CharacterDataBaseManager
 	}
 	public CharacterDataBaseManager(byte[] characterDataBaseData) 
 	{
+		name = "Character Data Base File";
 		CharacterDataBase = new PCKGManager(characterDataBaseData);
 		initialize(CharacterDataBase);
 	}
@@ -40,11 +45,13 @@ public class CharacterDataBaseManager
 		//bFM.Utils.testDifferences(CharacterDataBase.getFile("chrDB2.lst"), chrDB2.toString().getBytes(Charset.forName("SHIFT-JIS")));
 		ind3 = new indBinList(CharacterDataBase.getFile("ind3.bin"));
 		//bFM.Utils.testDifferences(CharacterDataBase.getFile("ind3.bin"), ind3.toBytes());
-		JobChangePrice = new JobChangePriceList(CharacterDataBase.getFile("JobChangePrice.cfg"));
+		JobChangePrice = new JobChangePriceList(CharacterDataBase.getFile("JobChangePrice.cfg"), this);
 		join = new JoinBinList(CharacterDataBase.getFile("join.bin"));
 		//bFM.Utils.testDifferences(CharacterDataBase.getFile("join.bin"), join.toBytes());
-		//seCrd = ;
-		//texanim = ;
+		seCrd = new SoundEffectCoordinateList(CharacterDataBase.getFile("seCrd.bin"));
+		//bFM.Utils.testDifferences(CharacterDataBase.getFile("seCrd.bin"), seCrd.toBytes());
+		texanim = new TextAnimationList(CharacterDataBase.getFile("texanim.bin"));
+		//bFM.Utils.testDifferences(CharacterDataBase.getFile("texanim.bin"), texanim.toBytes());
 	}
 	public void importIndex(String importDirectory)
 	{
@@ -80,6 +87,8 @@ public class CharacterDataBaseManager
 		CharacterDataBase.addFile("ind3.bin", ind3.toBytes());
 		CharacterDataBase.addFile("join.bin", join.toBytes());
 		CharacterDataBase.addFile("chrDB2.lst", chrDB2.toString().getBytes());
+		CharacterDataBase.addFile("seCrd.bin", seCrd.toBytes());
+		CharacterDataBase.addFile("texanim.bin", texanim.toBytes());
 		return CharacterDataBase.getFile();
 	}
 	public void writeFile(String outputPath) 
@@ -160,7 +169,7 @@ public class CharacterDataBaseManager
 	{
 		try 
 		{
-			JobChangePrice = new JobChangePriceList(Files.readAllLines(Paths.get(importDirectory+"JobChangePrice.csv"), Charset.forName("Shift-JIS")));
+			JobChangePrice = new JobChangePriceList(Files.readAllLines(Paths.get(importDirectory+"JobChangePrice.csv"), Charset.forName("Shift-JIS")), this);
 			bFM.Utils.DebugPrint("Sucessfully added Job Change Price File");
 		} catch (IOException e) 
 		{
@@ -179,5 +188,58 @@ public class CharacterDataBaseManager
 		{
 			bFM.Utils.DebugPrint("Failed to extract file");
 		}
+	}
+	public void setData(byte[] data)
+	{
+		CharacterDataBase = new PCKGManager(data);
+		initialize(CharacterDataBase);
+	}
+	public byte[] toBytes()
+	{
+		return getFile();
+	}
+	public String getName()
+	{
+		return name;
+	}
+	public String toString()
+	{
+		return "File: " + name + " File Size: " + getFile().length + "\n";
+	}
+	public int getSize()
+	{
+		return getFile().length;
+	}
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+	public CharacterResourceList getCharacterResource() 
+	{
+		return chrDB2;
+	}
+	public indBinList getCharacterIndex() 
+	{
+		return ind3;
+	}
+	public JoinBinList getCharacterJoin() 
+	{
+		return join;
+	}
+	public SoundEffectCoordinateList getCharacterSoundEffect()
+	{
+		return seCrd;
+	}
+	public TextAnimationList getTextureAnimations()
+	{
+		return texanim;
+	}
+	public String getNameByCode(int jobCode) 
+	{
+		return ind3.getNameByCode(jobCode);
+	}
+	public ind getCharacterIndex(int jobCode) 
+	{
+		return ind3.getByCode(jobCode);
 	}
 }

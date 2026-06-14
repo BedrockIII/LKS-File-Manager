@@ -14,5 +14,7 @@ public class MenuBar extends JMenuBar
 		setMinimumSize(new Dimension(GUI.rowWidth, GUI.assetHeight));
 		FileDropDownBox fileMenu = new FileDropDownBox();
 		add(fileMenu);
+		ToolDropDownBox toolMenu = new ToolDropDownBox();
+		add(toolMenu);
 	}
 }

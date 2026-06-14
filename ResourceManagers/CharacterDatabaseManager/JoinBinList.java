@@ -4,12 +4,16 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import bFM.Data;
+import bFM.GenericFile;
 
-class JoinBinList
+
+public class JoinBinList extends GenericFile
 {
 	ArrayList<join> list = new ArrayList<join>();
 	protected JoinBinList(byte[] data)
 	{
+		name = "Character Join List";
 		ByteBuffer bytes = ByteBuffer.wrap(data);
 		for(int i = 8; i < data.length; i+=32)
 		{
@@ -20,6 +24,7 @@ class JoinBinList
 	}
 	public JoinBinList(List<String> lines) 
 	{
+		name = "Character Join List";
 		for(String line : lines)
 		{
 			if(line.indexOf("Join")!=-1)
@@ -38,7 +43,7 @@ class JoinBinList
 		}
 		return ret;
 	}
-	protected byte[] toBytes()
+	public byte[] toBytes()
 	{
 		byte[] ret = bFM.Utils.longToBytes(list.size(), 2);
 		ret = bFM.Utils.mergeArrays(ret, new byte[6]);
@@ -49,7 +54,7 @@ class JoinBinList
 		}
 		return ret;
 	}
-	private class join
+	public class join implements Data
 	{
 		int index = 0;
 		int num1 = 0;
@@ -98,7 +103,11 @@ class JoinBinList
 			yPos = Float.parseFloat(readNextValue(data));
 			zPos = Float.parseFloat(readNextValue(data));
 		}
-		private byte[] toBytes() 
+		public join(int index) 
+		{
+			this.index = index;
+		}
+		public byte[] toBytes() 
 		{
 			byte[] ret = bFM.Utils.longToBytes(index, 2);
 			ret = bFM.Utils.mergeArrays(ret, new byte[]{(byte)num1, (byte)num2, (byte)num3, (byte)num4});
@@ -125,6 +134,169 @@ class JoinBinList
 			String ret = "Join " + index + ", " + num1 + ", " + num2 + ", " + num3 + ", " + num4 + ", " + num5 + ", " + 
 					 num6 + ", "+ num7 + ", " + num8 + ", " + num9 + ", " + xPos + ", " + yPos + ", " + zPos;
 			return ret;
+		}
+		public boolean equals(String name) 
+		{
+			throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+		}
+		public void setData(byte[] data) 
+		{
+			throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+		}
+		public void setName(String name) 
+		{
+			throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+		}
+		public String getName() 
+		{
+			return "Join " + index;
+		}
+		public int getSize() 
+		{
+			return 28;
+		}
+		public int getIndex() 
+		{
+			return index;
+		}
+		public void setIndex(int num) 
+		{
+			index = num;
+		}
+		
+		public int getNum1() 
+		{
+			return num1;
+		}
+		public void setNum1(int num) 
+		{
+			num1 = num;
+		}
+
+		public int getNum2() 
+		{
+			return num2;
+		}
+		public void setNum2(int num) 
+		{
+			num2 = num;
+		}
+
+		public int getNum3() 
+		{
+			return num3;
+		}
+		public void setNum3(int num) 
+		{
+			num3 = num;
+		}
+
+		public int getNum4() 
+		{
+			return num4;
+		}
+		public void setNum4(int num) 
+		{
+			num4 = num;
+		}
+
+		public int getNum5() 
+		{
+			return num5;
+		}
+		public void setNum5(int num) 
+		{
+			num5 = num;
+		}
+
+		public int getNum6() 
+		{
+			return num6;
+		}
+		public void setNum6(int num) 
+		{
+			num6 = num;
+		}
+
+		public int getNum7() 
+		{
+			return num7;
+		}
+		public void setNum7(int num) 
+		{
+			num7 = num;
+		}
+
+		public int getNum8() 
+		{
+			return num8;
+		}
+		public void setNum8(int num) 
+		{
+			num8 = num;
+		}
+
+		public int getNum9() 
+		{
+			return num9;
+		}
+		public void setNum9(int num) 
+		{
+			num9 = num;
+		}
+
+		public float getXPos() 
+		{
+			return xPos;
+		}
+		public void setXPos(float num) 
+		{
+			xPos = num;
+		}
+
+		public float getYPos() 
+		{
+			return yPos;
+		}
+		public void setYPos(float num) 
+		{
+			yPos = num;
+		}
+
+		public float getZPos() 
+		{
+			return zPos;
+		}
+		public void setZPos(float num) 
+		{
+			zPos = num;
+		}
+	}
+	public ArrayList<join> getObjects() 
+	{
+		return list;
+	}
+	public void addJob(int index) 
+	{
+		list.add(new join(index));
+	}
+	public join getLastObject() 
+	{
+		return list.get(list.size()-1);
+	}
+	public int getAmountOfJoins() 
+	{
+		return list.size();
+	}
+	public void removeJoin(join file) 
+	{
+		int code = file.getIndex();
+		for(int i = list.size()-1; i >= 0; i--)
+		{
+			if(list.get(i).getIndex() == code)
+			{
+				list.remove(i);
+			}
 		}
 	}
 }

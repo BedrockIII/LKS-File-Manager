@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -20,44 +22,76 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
 import GUI.FileInfo.CollisionObjectInfoGUI;
-import PCKGManager.OpenedFile;
+import GUI.FileInfo.FileInfoFactory;
+import bFM.OpenedFile;
 import colReader.ColReader;
-import colReader.colObject;
+import colReader.CollisionObject;
 
 @SuppressWarnings("serial")
-public class Collision extends CollapseableGeneric
+public class Collision extends CollapseableFileList
 {
-	ArrayList<colObject> objects = new ArrayList<colObject>();
+	ArrayList<CollisionObject> objects = new ArrayList<CollisionObject>();
 	public Collision(OpenedFile file, int padding) 
 	{
 		this.file = file;
 		initializeAll(padding);
 	}
-	private void initializeAll(int padding)
+	protected void initializeAll(int padding)
 	{
 		fileTypes = new FileNameExtensionFilter("LKS Collision File", "col");
-		initializeGUI(padding);
-		fileName.setText(file.getName());
+		initializeListGUI(padding);
+		
+		addActions();
+		reAddComponents();
+	}
+	protected void initializeListGUI(int padding)
+	{
+		addExportOBJAction();
 		initializeSubGUI(padding);
+		super.initializeListGUI(padding);
+		initializeInfoGUI();
+		//super.addActions();
+	}
+	private void addExportOBJAction() 
+ 	{
+ 		JMenuItem export = new JMenuItem("Export As OBJ");
+		export.addActionListener(e -> {
+			JFileChooser chooseFile = new JFileChooser();
+			if(GUI.lastFileSavePath != null) 
+			{
+				chooseFile.setCurrentDirectory(Paths.get(GUI.lastFileSavePath).toFile().getParentFile());
+			}
+			chooseFile.setSelectedFile(new File(file.getName().substring(0, file.getName().lastIndexOf('.')) + ".obj"));
+			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
+			{
+				try 
+				{
+					Files.write(chooseFile.getSelectedFile().toPath(),((ColReader)file).toString().getBytes());
+					GUI.lastFileSavePath = chooseFile.getSelectedFile().toString();
+				}
+				catch(IOException i)
+				{
+					System.out.println("Failed to Export Collison File as OBJ");
+					i.printStackTrace();
+				}
+				System.out.println("Exported Collision OBJ File");
+			}
+		});
+		actions.add(export);
+	}
+	protected void addActions()
+	{
 		addExportAction();
 		addReplaceButton();
-		addActions();
-		headerPanel.add(actions);
-		//isExtended.setSelected(true);
-		update();
+		add(actions);
 	}
 	private void initializeSubGUI(int padding) 
 	{
 		objects = ((ColReader)file).getObjects();
-		for(colObject object : objects)
+		for(CollisionObject object : objects)
 		{
-			System.out.println(object.getName());
 			subEntries.add(new ColObjectListGUI(object, padding + GUI.indentSize));
 		}
-	}
-	public void deselect()
-	{
-		headerPanel.setBackground(GUI.bgColor);
 	}
 	protected void replaceAsOBJAction()
 	{
@@ -90,24 +124,62 @@ public class Collision extends CollapseableGeneric
 		});
 		actions.add(replace);
 	}
-	private class ColObjectListGUI extends Generic
+	public void removeFile(Generic file) 
 	{
-		colObject object = null;
-		public ColObjectListGUI(colObject object, int padding) 
+		remove(file);
+		objects.remove(((ColObjectListGUI)file).getObject());
+		subEntries.remove(file);
+	}
+	public class ColObjectListGUI extends Generic
+	{
+		CollisionObject object = null;
+		public ColObjectListGUI(CollisionObject object, int padding) 
 		{
 			this.object = object;
 			this.initializeAll(padding);
 		}
-		private void initializeAll(int padding)
+		protected void initializeAll(int padding)
 		{
-			this.initializeGUI(padding);
-			//replaceAsOBJAction();
+			this.initializeListGUI(padding);
+			addActions();
+		}
+		private void addExportOBJAction() 
+	 	{
+	 		JMenuItem export = new JMenuItem("Export As OBJ");
+			export.addActionListener(e -> {
+				JFileChooser chooseFile = new JFileChooser();
+				chooseFile.setSelectedFile(new File(object.getName() + ".obj"));
+				if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
+				{
+					try 
+					{
+						Files.write(chooseFile.getSelectedFile().toPath(),((CollisionObject)object).toOBJ().getBytes());
+					}
+					catch(IOException i)
+					{
+						System.out.println("Failed to Export Collison File as OBJ");
+						i.printStackTrace();
+					}
+					System.out.println("Exported Collision OBJ File");
+				}
+			});
+			actions.add(export);
+		}
+		protected void addActions()
+		{
 			if(object.getReferenceIndex()>0)
 			{
 				this.addRenameAction();
+				this.addDeleteAction();
+				this.addExportOBJAction();
 			}
-			addActions();
-			add(actions);
+			this.addMouseListener();
+			this.add(actions);
+			this.update();
+		}
+		private CollisionObject getObject()
+		{
+			return object;
 		}
 		protected void addRenameAction()
 		{
@@ -170,7 +242,7 @@ public class Collision extends CollapseableGeneric
 			fileName.setText(name);
 			GUI.update();
 		}
-		protected void initializeGUI(int padding) 
+		protected void initializeListGUI(int padding) 
 		{
 			//setBorder(BorderFactory.createLineBorder(Color.GREEN));
 			setBackground(GUI.bgColor);
@@ -222,5 +294,9 @@ public class Collision extends CollapseableGeneric
 			});
 			actions.add(replace);
 		}
+	}
+	protected void initializeInfoGUI() 
+	{
+		infoGUI = FileInfoFactory.makeInfoGUI(file);
 	}
 }

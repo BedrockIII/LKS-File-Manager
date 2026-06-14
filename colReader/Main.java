@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +23,7 @@ import ResourceManagers.MapDatabaseManager.BuildingResourceList;
 import ResourceManagers.MapDatabaseManager.exteriorPlaceList;
 import ResourceManagers.MapDatabaseManager.mapDataBaseManager;
 import WorldFileManager.fpInterpreter;
+import bFM.Data;
 import SystemDataManagers.CockpitLogManager;
 import SystemDataManagers.MailManager;
 import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
@@ -30,15 +32,17 @@ import VMC.VMCConverter;
 public class Main 
 {
 	public static boolean grid = true;
-	final public static String importPath = "D:\\LKS Mod\\";
-	final public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\";
-	static String name = "1211";//0510 soba
+	public static String importPath = "D:\\LKS Mod\\";
+	public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\";
+	static String name = "0314";//0510 soba
 	static byte [] colData;
 	static byte [] fpData;
 	static String fpType = ".vfp";	
 	public static void main(String[] args) 
 	{
 		bFM.Utils.setDebugOutput(true);
+		colReader.ColReader.optimizeCollision = false;
+		//bFM.Utils.autoEditSubPackFile = false;
 		bFM.Utils.DebugPrint("Debug Data Enabled");
 		try{tester();} catch (IOException e) {e.printStackTrace();}
 		//decodeCollision();
@@ -187,7 +191,7 @@ public class Main
 		}
 		
 		//menuDatabase.replaceFile("CockpitLog.bin",encodeCockpitLog(menuDatabase.getFile("CockpitLog.bin")));
-		menuDatabase.replaceFile("KingdomPlan.bin",encodeKingdomPlan(menuDatabase.getFile("KingdomPlan.bin"))); // TODO
+		//menuDatabase.replaceFile("KingdomPlan.bin",encodeKingdomPlan(menuDatabase.getFile("KingdomPlan.bin")));
 		//menuDatabase.replaceFile("Movie.bin", MovieManager(menuDatabase.getFile("Movie.bin")));
 		menuDatabase.replaceFile("CameraData.bin", encodeCameraZones(menuDatabase.getFile("CameraData.bin")));
 		
@@ -297,7 +301,7 @@ public class Main
 			decodeLightZones();
 			return;
 		}
-		byte[] lfpData = fixedPoints.getBytes();
+		byte[] lfpData = fixedPoints.toBytes();
 		PCKGManager mapBootPack = new PCKGManager("mapBoot");
 		try 
 		{
@@ -543,7 +547,7 @@ public class Main
 		//PCKGManager test = new PCKGManager(Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Characters\\cbData1.pac")));
 		//PCKGManager tests = new PCKGManager("cb0010.pac");
 		//tests.addFile("cb0010.brres", Files.readAllBytes(Paths.get("D:\\LKS Mod\\cb0010.brres")));
-		////tests.addFile("chr.cfg", Files.readAllBytes(Paths.get("D:\\LKS Mod\\chr.cfg")));
+		//tests.addFile("chr.cfg", Files.readAllBytes(Paths.get("D:\\LKS Mod\\chr.cfg")));
 		//test.addFile("cb0150.pcha", Files.readAllBytes(Paths.get("D:\\LKS Mod\\cb0150.pcha")));
 		//Files.write(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Characters\\cbData1.pac"), test.getFile());
 		
@@ -558,11 +562,13 @@ public class Main
 		//bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(outputPath + NormalEvents)), eventData.toBytes());
 		
 		//Finally testing the col reader, the og file
-		ColReader.optimizeCollision(false);
-		ColReader colFile = new ColReader(Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col")));
-		byte[] data = colFile.getBytes();
-		bFM.Utils.testDifferences(Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col")), data);
-		Files.write(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col2"), data);
+		//ColReader.optimizeCollision(false);
+		//ColReader colFile = new ColReader(Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col")));
+		//byte[] data = colFile.getBytes();
+		//bFM.Utils.testDifferences(Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col")), data);
+		//Files.write(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col2"), data);
+		
+		bFM.Utils.testDifferences(Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Resources\\chrDB0.pac")), Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Resources\\chrDB0 - Copy.pac")));
 	}
 	private static String getLanguage(int languageCode)
 	{
@@ -618,7 +624,6 @@ public class Main
 			//Files.write(Paths.get(outputPath + "mes_LZ.bin2"), eventTextPac.getFile());
 			Files.write(Paths.get(outputPath + "mes_LZ.bin"), LZ10Manager.compress(eventTextPac.getFile()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -663,12 +668,12 @@ public class Main
 	{
 		String importDirectory = importPath + "Resources\\Character Database\\";
 		CharacterDataBaseManager cdb = new CharacterDataBaseManager(outputPath + "Resources\\chrDB0.pac");
-		cdb.importIndex(importDirectory);
-		cdb.importJoin(importDirectory);
-		cdb.importCharacters(importDirectory);
-		cdb.importPrice(importDirectory);
+		//cdb.importIndex(importDirectory);
+		//cdb.importJoin(importDirectory);
+		//cdb.importCharacters(importDirectory);
+		//cdb.importPrice(importDirectory);
 		
-		cdb.writeFile(outputPath + "Resources\\chrDB0.pac");
+		cdb.writeFile(outputPath + "Resources\\chrDB02.pac");
 	}
 	private static void decodeCollision()
 	{
@@ -939,13 +944,13 @@ public class Main
 			bFM.Utils.DebugPrint("Warning Could not find .lfp file at \"" + lfpPath + "\". Program will continue without one.");
 		}
 		//Repacking File
-		try
+		//try
 		{
-			Files.write(Paths.get(PCKGPath) , packFile.getFile());
+			//Files.write(Paths.get(PCKGPath) , packFile.getFile());
 		}
-		catch(IOException e) 
+		//catch(IOException e) 
 		{
-			bFM.Utils.DebugPrint("Failed to create .pac file at \"" + PCKGPath + "\".");
+			//bFM.Utils.DebugPrint("Failed to create .pac file at \"" + PCKGPath + "\".");
 		}
 	}
 	private static void message()
@@ -1017,7 +1022,7 @@ public class Main
 			return;
 		}
 		 
-		fpData = fixedPoints.getBytes();
+		fpData = fixedPoints.toBytes();
 
 		try 
 		{
@@ -1229,6 +1234,81 @@ public class Main
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "Event List");
+		}
+	}
+	public static void createModdingDirectory(String modPath)
+	{
+		importPath = modPath;
+		Path directory = Paths.get(modPath);
+		directory.toFile().mkdirs();
+		directory.resolve("Buildings").toFile().mkdirs();
+		directory.resolve("Debug/EventViewer").toFile().mkdirs();
+		directory.resolve("Events/Text").toFile().mkdirs();
+		directory.resolve("Resource/Character Database").toFile().mkdirs();
+		directory.resolve("Resource/Map Database").toFile().mkdirs();
+		directory.resolve("Resource/Monster Database").toFile().mkdirs();
+	}
+	public static void createRiivolutionDirectory(String modPath, String modName)
+	{
+		outputPath = modPath;
+		Path directory = Paths.get(modPath);
+		directory.toFile().mkdirs();
+		directory.resolve(modName + "/Characters").toFile().mkdirs();
+		directory.resolve(modName + "/Debug/EventViewer").toFile().mkdirs();
+		directory.resolve(modName + "/Events").toFile().mkdirs();
+		directory.resolve(modName + "/Map/Building").toFile().mkdirs();
+		directory.resolve(modName + "/Map/World").toFile().mkdirs();
+		directory.resolve(modName + "/Message/English").toFile().mkdirs();
+		directory.resolve(modName + "/Message/French").toFile().mkdirs();
+		directory.resolve(modName + "/Message/German").toFile().mkdirs();
+		directory.resolve(modName + "/Message/Italian").toFile().mkdirs();
+		directory.resolve(modName + "/Message/Japanese").toFile().mkdirs();
+		directory.resolve(modName + "/Message/Spanish").toFile().mkdirs();
+		directory.resolve(modName + "/Movie").toFile().mkdirs();
+		directory.resolve(modName + "/Resources").toFile().mkdirs();
+		directory.resolve(modName + "/System Data/Menu Data").toFile().mkdirs();
+		directory.resolve(modName + "/System Data/Menu Layout/Kingdom Plan").toFile().mkdirs();
+		directory.resolve("riivolution").toFile().mkdirs();
+		Path xmlPath = directory.resolve("riivolution/" + modName + ".xml");
+		String xml = "<wiidisc version=\"1\">\r\n";
+		xml += "\t<id game=\"RO3\" />\r\n";
+		xml += "<options>\r\n"
+				+ "\t\t<section name=\"LKS3\">\r\n"
+				+ "\t\t\t<option name=\"/LKS3\">\r\n"
+				+ "\t\t\t<choice name=\"Enabled\">\r\n"
+				+ "\t\t\t\t\t<patch id=\"LKS Mods\" />\r\n"
+				+ "\t\t\t\t</choice>\r\n"
+				+ "\t\t\t</option>\r\n"
+				+ "\t\t</section>\r\n"
+				+ "\t</options>\r\n";
+		xml += "\t<patch id=\"LKS Mods\">\r\n"
+				+ "\t\t<savegame external=\"/riivolution/" + modName + "\" clone=\"true\" />\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/Map/World\" disc=\"/map/wg\" />\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/Movie\" disc=\"/0_movie\" create=\"true\"/>\r\n"
+				+ "\t\t<file external=\"/" + modName + "/Characters/cbData1.pac\" disc=\"/chr/cbData1.pac\" />\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/Map/Building\" disc=\"/map/wb/\" create=\"true\"/>\r\n"
+				+ "\t\t<file external=\"/" + modName + "/Message/English/mes_LZ.bin\" disc=\"/event/message/1/mes_LZ.bin\" />\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/Message/English\" disc=\"/event/message/1/\" create=\"true\"/>\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/Map/Building\" disc=\"/map/wb\" create=\"true\"/>\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/Resources\" disc=\"/res\" />\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/Events\" disc=\"/event/script/sub\" create=\"true\"/>/>\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/Events\" disc=\"/event/script/event\" create=\"true\"/>/>\r\n"
+				+ "\t\t<folder external=\"/" + modName + "\" disc=\"/event/funcpoint\" />\r\n"
+				+ "\t\t<folder external=\"/" + modName + "\" disc=\"/zpack\" />\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/Message\" disc=\"/mes/1\" />\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/System Data/Menu Data\" disc=\"/sys/menuDB\" />\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/Debug/EventViewer\" disc=\"/Debug/EventViewer\" />\r\n"
+				+ "\t\t<folder external=\"/" + modName + "/System Data/Menu Layout/Kingdom Plan\" disc=\"/sys/Layout/KingdomPlanbrres\" create=\"true\"/>\r\n"
+				+ "\t</patch>\r\n";
+		xml += "</wiidisc>\r\n";
+		try 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "Riivolution XML File", xmlPath.toString());
+			Files.write(xmlPath, xml.getBytes());
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "Riivolution XML File");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileFailureEnd, "Riivolution XML File");
 		}
 	}
 }

@@ -4,20 +4,27 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import GUI.LabeledInputBox;
-import colReader.colObject;
+import colReader.CollisionObject;
 
+@SuppressWarnings("serial")
 public class CollisionObjectInfoGUI extends GenericFileInfoGUI 
 {
-	colObject object = null;
+	CollisionObject object = null;
 	LabeledInputBox FaceCount = null;
 	LabeledInputBox VertexCount = null;
 	LabeledInputBox xOffset = null;
 	LabeledInputBox yOffset = null;
 	LabeledInputBox zOffset = null;
+	JTextField xOffsetText = null;
+	JTextField yOffsetText = null;
+	JTextField zOffsetText = null;
 	
-	public CollisionObjectInfoGUI(colObject object) 
+	public CollisionObjectInfoGUI(CollisionObject object) 
 	{
 		this.object = object;
 		makeGUI();
@@ -27,9 +34,52 @@ public class CollisionObjectInfoGUI extends GenericFileInfoGUI
 	{
 		FaceCount = new LabeledInputBox("Face Count: ",  new JLabel("" + object.getFaceAmount()), 1.5);
 		VertexCount = new LabeledInputBox("Vertex Count: ",  new JLabel("" + object.getVertexAmount()), 1.5);
-		xOffset = new LabeledInputBox("X Offset: ",  new JLabel("" + object.getXOffset()), 1.5);
-		yOffset = new LabeledInputBox("Y Offset: ",  new JLabel("" + object.getYOffset()), 1.5);
-		zOffset = new LabeledInputBox("Z Offset: ",  new JLabel("" + object.getZOffset()), 1.5);
+		
+		xOffsetText = new JTextField("" + object.getXOffset());
+		xOffsetText.getDocument().addDocumentListener(new DocumentListener() 
+		{
+			public void insertUpdate(DocumentEvent e) 
+			{
+				object.setXOffset(bFM.Utils.strToFloat(xOffsetText.getText()));
+			}
+			public void removeUpdate(DocumentEvent e) 
+			{
+				object.setXOffset(bFM.Utils.strToFloat(xOffsetText.getText()));
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		yOffsetText = new JTextField("" + object.getYOffset());
+		yOffsetText.getDocument().addDocumentListener(new DocumentListener() 
+		{
+			public void insertUpdate(DocumentEvent e) 
+			{
+				object.setYOffset(bFM.Utils.strToFloat(yOffsetText.getText()));
+			}
+			public void removeUpdate(DocumentEvent e) 
+			{
+				object.setYOffset(bFM.Utils.strToFloat(yOffsetText.getText()));
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		zOffsetText = new JTextField("" + object.getZOffset());
+		zOffsetText.getDocument().addDocumentListener(new DocumentListener() 
+		{
+			public void insertUpdate(DocumentEvent e) 
+			{
+				object.setZOffset(bFM.Utils.strToFloat(zOffsetText.getText()));
+			}
+			public void removeUpdate(DocumentEvent e) 
+			{
+				object.setZOffset(bFM.Utils.strToFloat(zOffsetText.getText()));
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		xOffset = new LabeledInputBox("X Offset: ",  xOffsetText, 1.5);
+		yOffset = new LabeledInputBox("Y Offset: ",  yOffsetText, 1.5);
+		zOffset = new LabeledInputBox("Z Offset: ",  zOffsetText, 1.5);
 	}
 	private void addGUI()
 	{
@@ -53,9 +103,9 @@ public class CollisionObjectInfoGUI extends GenericFileInfoGUI
 	{
 		FaceCount.replaceComponent(new JLabel("" + object.getFaceAmount()));
 		VertexCount.replaceComponent(new JLabel("" + object.getVertexAmount()));
-		xOffset.replaceComponent(new JLabel("" + object.getXOffset()));
-		yOffset.replaceComponent(new JLabel("" + object.getYOffset()));
-		zOffset.replaceComponent(new JLabel("" + object.getZOffset()));
+		xOffsetText.setText("" + object.getXOffset());
+		yOffsetText.setText("" + object.getYOffset());
+		zOffsetText.setText("" + object.getZOffset());
 		repaint();
 	}
 }

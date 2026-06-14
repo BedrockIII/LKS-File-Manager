@@ -3,24 +3,33 @@ package ResourceManagers.CharacterDatabaseManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JobChangePriceList 
+import ResourceManagers.CharacterDatabaseManager.indBinList.ind;
+import bFM.Data;
+import bFM.GenericFile;
+
+public class JobChangePriceList extends GenericFile
 {
+	private CharacterDataBaseManager parent = null;
 	private ArrayList<JobPrices> jobs = new ArrayList<JobPrices>();
-	protected JobChangePriceList(byte[] file) 
+	protected JobChangePriceList(byte[] file, CharacterDataBaseManager parent) 
 	{
+		this.parent = parent;
+		name = "Job Change Price List";
 		String data = new String(file);
 		String[] lines = data.split("\n");
 		//Skip First Line
 		for(String line : lines)
 		{
-			if(line.indexOf("PRICE")!=-1) jobs.add(new JobPrices(line));
+			if(line.indexOf("PRICE")!=-1) jobs.add(new JobPrices(line, this));
 		}
 	}
-	protected JobChangePriceList(List<String> lines) 
+	protected JobChangePriceList(List<String> lines, CharacterDataBaseManager parent) 
 	{
+		this.parent = parent;
+		name = "Job Change Price List";
 		for(String line : lines)
 		{
-			if(line.indexOf("PRICE")!=-1) jobs.add(new JobPrices(line));
+			if(line.indexOf("PRICE")!=-1) jobs.add(new JobPrices(line, this));
 		}
 	}
 	public String toString()
@@ -87,22 +96,38 @@ public class JobChangePriceList
 			j.setPrice(indexOf(j.getJobCode()), -1);
 		}
 	}
-	private class JobPrices 
+	public class JobPrices implements Data
 	{
+		JobChangePriceList parentList;
+		ind index;
 		int jobCode = -1;
 		ArrayList<Integer> prices = new ArrayList<Integer>();
-		private JobPrices(String line) 
+		private JobPrices(String line, JobChangePriceList parent2) 
 		{
+			parentList = parent2;
+			
 			if(line.indexOf("PRICE ")==-1) return;
 			String[] numbers = line.split(",");
 			jobCode = Integer.parseInt(numbers[0].substring(6 + numbers[0].indexOf("PRICE ")));
+			index = parent.getCharacterIndex(jobCode);
 			//Skip First Part
 			for(int i = 1; i < numbers.length; i++)
 			{
 				prices.add(bFM.Utils.strToInt(numbers[i]));
 			}
 		}
-		private void setPrice(int index, int newPrice)
+		public JobPrices(int jobCode, int jobCount, JobChangePriceList parent) 
+		{
+			parentList = parent;
+			index = parentList.parent.getCharacterIndex(jobCode);
+			this.jobCode = jobCode;
+			prices = new ArrayList<Integer>();
+			for(int i = 0; i < jobCount; i++)
+			{
+				prices.add(-1);
+			}
+		}
+		public void setPrice(int index, int newPrice)
 		{
 			//Set the Price for a specific job to become this job
 			prices.set(index, newPrice);
@@ -115,6 +140,10 @@ public class JobChangePriceList
 				prices.set(i, newPrice);
 			}
 		}
+		public int getPriceAmount()
+		{
+			return prices.size();
+		}
 		public String toString()
 		{
 			String ret = "PRICE " + jobCode;
@@ -126,17 +155,98 @@ public class JobChangePriceList
 			}
 			return ret + ";\r\n";
 		}
-		private int getJobCode()
+		public int getJobCode()
 		{
 			return jobCode;
+		}
+		public boolean equals(String name) 
+		{
+			throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+		}
+		public void setData(byte[] data) 
+		{
+			throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+		}
+		public byte[] toBytes() 
+		{
+			throw new UnsupportedOperationException("getData() should not be called on type " + this.getClass());
+		}
+		public void setName(String name) 
+		{
+			throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+		}
+		public String getName() 
+		{
+			return parent.getNameByCode(jobCode) + " (" + jobCode + ")";
+		}
+		public int getSize() 
+		{
+			throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
+		}
+		public String getNameByIndex(int index)
+		{
+			return parentList.getNameByIndex(index);
+		}
+		public int getPrice(int index) 
+		{
+			return prices.get(index);
+		}
+		public void removeJob(int index) 
+{
+			prices.remove(index);
+		}
+		public void setCode(int code) 
+		{
+			jobCode = code;
+			index.setJobCode(code);
+		}
+		public void addPrice(int newPrice) 
+		{
+			prices.add(newPrice);
+		}
+		public void updateCode()
+		{
+			jobCode = index.getJobCode();
 		}
 	}
 	public int getAmountOfJobs() 
 	{
 		return jobs.size();
 	}
+	public String getNameByIndex(int index) 
+	{
+		return jobs.get(index).getName();
+	}
 	public void setFromIndex(int row, int col, int price) 
 	{
 		jobs.get(row).setPrice(col, price);
+	}
+	public ArrayList<JobPrices> getObjects() 
+	{
+		return jobs;
+	}
+	public void removePrice(JobPrices file) 
+	{
+		int index = indexOf(file.jobCode);
+		for(JobPrices job : jobs)
+		{
+			job.removeJob(index);
+		}
+		jobs.remove(index);
+	}
+	public void addPrice(int newPrice) 
+	{
+		for(JobPrices job : jobs)
+		{
+			job.addPrice(newPrice);
+		}
+	}
+	public void addJob(int jobCode) 
+	{
+		jobs.add(new JobPrices(jobCode, jobs.size()+1, this));
+	}
+	public JobPrices getLastObject() 
+	{
+		return jobs.get(jobs.size()-1);
 	}
 }

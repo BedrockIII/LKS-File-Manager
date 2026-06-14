@@ -20,7 +20,7 @@ public class CollisionInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		fileSize = new LabeledInputBox("File Size: ",  new JLabel("" + file.getData().length), 1.5);
+		fileSize = new LabeledInputBox("File Size: ",  new JLabel("" + file.toBytes().length), 1.5);
 		ObjectCount = new LabeledInputBox("Collision Object Count: ",  new JLabel("" + ((ColReader)file).getObjects().size()), 1.5);
 	}
 	private void addGUI()
@@ -56,7 +56,7 @@ public class CollisionInfoGUI extends GenericFileInfoGUI
 		}
 		else 
 		{
-			fileSize.replaceComponent(new JLabel("" + file.getData().length));
+			fileSize.replaceComponent(new JLabel("" + file.toBytes().length));
 			ObjectCount.replaceComponent(new JLabel("" + ((ColReader)file).getObjects().size()));
 		}
 	}

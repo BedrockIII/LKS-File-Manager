@@ -8,11 +8,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import PCKGManager.OpenedFile;
-
 public class Utils 
 {
 	public static boolean debugOutput = false;
+	public static boolean autoEditSubPackFile = true;
 	public static void DebugPrint(String message)
 	{
 		if(debugOutput)
@@ -300,6 +299,11 @@ public class Utils
 				finalLine += "\t";
 				i++;
 			}
+			else if(ret.charAt(i)=='\\'&&ret.charAt(i+1)=='\\')
+			{
+				finalLine += "\\";
+				i++;
+			}
 			else
 			{
 				finalLine += ret.charAt(i);
@@ -364,8 +368,11 @@ public class Utils
 		{
 			if(name.equals("KingdomPlan.bin")||name.equals("Kingdom Plan Config"))
 			{
-				System.out.println("aaa");
 				return "KingdomPlanDB";
+			}
+			else if(name.equals("chrDB0.pac")||name.equals("Character Data Base"))
+			{
+				return "CharacterDB";
 			}
 			//Check if special TODO
 			//else return "Package"
@@ -374,6 +381,10 @@ public class Utils
 		else if(colReader.ColReader.isCollisionFile(file))
 		{
 			return "Collision";
+		}
+		else if(WorldFileManager.fpInterpreter.isFixedPointFile(file))
+		{
+			return "Fixed Point";
 		}
 		return "Todo";
 	}
@@ -483,7 +494,7 @@ public class Utils
 	}
 	public static String getFileType(OpenedFile file) 
 	{
-		return getFileType(file.getName(), file.getData());
+		return getFileType(file.getName(), file.toBytes());
 	}
 	public static boolean isGenericPAC(byte[] fileContents, String name) 
 	{
@@ -498,5 +509,49 @@ public class Utils
 	{
 		line = line.substring(line.indexOf(">>") + 1);
 		return line.toLowerCase().indexOf("true")!=-1;
+	}
+	public static int getSettingValueInt(String line) 
+	{
+		return formatFlag(line);
+	}
+	public static String getSettingValueString(String line) 
+	{
+		String ret = "";
+		String lineAfterHeader = line.substring(Math.max(line.indexOf(">>"), 0));
+		int startIndex = lineAfterHeader.indexOf('\"');
+		int endIndex = lineAfterHeader.lastIndexOf('\"');
+		if(startIndex!=-1&&endIndex!=-1)
+		{
+			ret = lineAfterHeader.substring(startIndex+1, endIndex);
+		}
+		else
+		{
+			ret = lineAfterHeader;
+		}
+		return ret;
+	}
+	public static String getAsSetting(String settingName, int value) 
+	{
+		String ret = "<<" + settingName + ">> " + value + "\n"; 
+		return ret;
+	}
+	public static String getAsSetting(String settingName, String value) 
+	{
+		String ret = "<<" + settingName + ">> \"" + value + "\"\n"; 
+		return ret;
+	}
+	public static int byteArrIndex(byte[] arr, byte is)
+	{
+		for(int i = 0; i<arr.length; i++)
+		if(arr[i]==is) return i;
+		return -1;
+	}
+	public static int arrIndex(byte[] a, char c)
+	{
+		for(int i = 0; i<a.length; i++)
+		{
+			if(a[i]==(byte)i) return i;
+		}
+		return -1;
 	}
 }

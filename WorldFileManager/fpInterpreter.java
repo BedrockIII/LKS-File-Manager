@@ -3,11 +3,12 @@ package WorldFileManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import bFM.GenericFile;
 import java.nio.ByteBuffer;
 
-public class fpInterpreter 
+public class fpInterpreter extends GenericFile
 {
-	byte[] file;
 	String fpType;
 	//VFP = Visual FP
 	//LFP = Light FP
@@ -15,14 +16,19 @@ public class fpInterpreter
 	int numObjects;
 	int headerSize;
 	static boolean DEGREEMODE = true;
-	ArrayList<fpObject> objects = new ArrayList<fpObject>();
+	ArrayList<FixedPointObject> objects = new ArrayList<FixedPointObject>();
 	ArrayList<String> objectTypes = new ArrayList<String>();
 	public fpInterpreter(byte[] data)
 	{
-		file = data;
-		extractObjects(); 
+		extractObjects(data); 
+		name = "NewFP." + fpType.toLowerCase();
 	}
-	private void extractObjects() 
+	public fpInterpreter(byte[] data, String name)
+	{
+		extractObjects(data); 
+		this.name = name;
+	}
+	private void extractObjects(byte[] file) 
 	{ 
 		if(file.length<36) return;
 		//Get Type
@@ -39,7 +45,7 @@ public class fpInterpreter
 		{
 			objectArr = Arrays.copyOfRange(file, offset, offset+160);
 			offset+=160;
-			objects.add(new fpObject(objectArr));
+			objects.add(new FixedPointObject(objectArr));
 		}
 		for(int i = 0; i < objects.size(); i++)
 		{
@@ -50,12 +56,12 @@ public class fpInterpreter
 	public fpInterpreter(List<String> lines, String type)
 	{
 		fpType = type;
-		fpObject object = null;
+		FixedPointObject object = null;
 		for(int i =1; i<lines.size(); i++)
 		{
 			if(lines.get(i).indexOf("<<Name>>")!=-1)
 			{
-				object = new fpObject(lines.get(i), objects);
+				object = new FixedPointObject(lines.get(i), objects);
 				objects.add(object);
 			}
 			else if(lines.get(i).indexOf("<<Object>>")!=-1||lines.get(i).indexOf("<<Position>>")!=-1||
@@ -87,7 +93,6 @@ public class fpInterpreter
 		int ret = 0;
 		for(int i = 0; i<objects.size(); i++)
 		{
-			object = "tree00_G";
 			if(objects.get(i).getObjectType()!=-1 && objectTypes.get(objects.get(i).getObjectType()).equals(object))
 			{
 				ret++;
@@ -119,7 +124,7 @@ public class fpInterpreter
 		}
 		return ret;
 	}
-	public byte[] getBytes()
+	public byte[] toBytes()
 	{
 		String Fp = "MDF_FP_WII_100";
 		byte[] ret = new byte[32];
@@ -138,7 +143,7 @@ public class fpInterpreter
 		ret = bFM.Utils.mergeArrays(ret, new byte[24]);
 		for(int i = 0; i<objects.size(); i++)
 		{
-			ret = bFM.Utils.mergeArrays(ret, objects.get(i).getBytes());
+			ret = bFM.Utils.mergeArrays(ret, objects.get(i).toBytes());
 		}
 		return ret;
 	}
@@ -157,5 +162,33 @@ public class fpInterpreter
 			
 		}
 		return ret;
+	}
+	public void setData(byte[] data)
+	{
+		extractObjects(data);
+	}
+	public int getSize()
+	{
+		return 96 + objects.size() * 160;
+	}
+	public ArrayList<FixedPointObject> getObjects() 
+	{
+		return objects;
+	}
+	public static boolean isFixedPointFile(byte[] file) 
+	{
+		String header = "MDF_FP_WII_100";
+		if(file.length<header.length())
+		{
+			return false;
+		}
+		for(int i = 0; i < header.length(); i++)
+		{
+			if((char)(file[i])!=header.charAt(i))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

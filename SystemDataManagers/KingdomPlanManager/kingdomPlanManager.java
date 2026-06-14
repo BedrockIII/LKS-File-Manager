@@ -4,10 +4,10 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import PCKGManager.OpenedFile;
 import PCKGManager.PCKGManager;
+import bFM.GenericFile;
 
-public class kingdomPlanManager extends OpenedFile
+public class kingdomPlanManager extends GenericFile
 {
 	ArrayList<KingdomPlanArea> Areas = new ArrayList<KingdomPlanArea>();
 	PCKGManager KingdomPlan = new PCKGManager("");
@@ -304,10 +304,6 @@ public class kingdomPlanManager extends OpenedFile
 	public void setData(byte[] data)
 	{
 		KingdomPlan = new PCKGManager(data);
-	}
-	public byte[] getData()
-	{
-		return toBytes();
 	}
 	public String getName()
 	{

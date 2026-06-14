@@ -8,7 +8,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-public class PCKGManager extends OpenedFile
+
+import bFM.GenericFile;
+import bFM.OpenedFile;
+public class PCKGManager extends GenericFile
 {
 	final static private int HeaderSizeWithoutName = 12;
 	private static boolean AlignedFiles = true; // Whether or not files have extra bytes appended onto them so they are exactly a multiple of 32
@@ -93,7 +96,7 @@ public class PCKGManager extends OpenedFile
 			fileName = Arrays.copyOfRange(file, nextHeaderPos+12, nextHeaderPos+headerSize);
 			try {theName = new String(fileName);} catch (Exception error) {System.out.println("Failed to Extract due to being an unsupported encoding");break;}
 			
-			String letters =  "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890,.;'/`~<>?_:";
+			String letters =  "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890,.;'/`~<>?_: ";
 			String theNewName = "";
 			theName = theName.replaceAll("\0+$", "");
 			for(int i = 0; i<theName.length(); i++)
@@ -106,7 +109,8 @@ public class PCKGManager extends OpenedFile
 			
 			bFM.Utils.DebugPrint("Found File: " + theName + " File Size: " + Math.abs(data.getInt(nextHeaderPos+4)));
 			bFM.Utils.DebugPrint("\tHeader Size: " + headerSize);
-			files.add(OpenedFile.makeFile(theNewName, fileContents));
+			if(!bFM.Utils.autoEditSubPackFile) files.add(new GenericFile(name, fileContents));
+			else files.add(OpenedFile.makeFile(theNewName, fileContents));
 			
 			
 			nextCnt = data.getInt(nextHeaderPos);
@@ -120,7 +124,7 @@ public class PCKGManager extends OpenedFile
 		{
 			if(file.equals(name))
 			{
-				return file.getData();
+				return file.toBytes();
 			}
 		}
 		return new byte[0];
@@ -175,7 +179,7 @@ public class PCKGManager extends OpenedFile
 		int ret = 32;
 		for (int i = 0; i < files.size(); i++) 
 		{
-			ret = getFileSizeWithHeader(files.get(i));
+			ret += getFileSizeWithHeader(files.get(i));
 		} 
 		return ret;
 	}
@@ -187,7 +191,7 @@ public class PCKGManager extends OpenedFile
 		if(AlignedFiles && ret % 32 != 0) ret = (ret / 32 + 1) * 32;
 		return ret;
 	}
-	public byte[] getData()
+	public byte[] toBytes()
 	{
 		//Override
 		return getFile();
@@ -203,7 +207,7 @@ public class PCKGManager extends OpenedFile
 		{
 			try 
 			{
-				Files.write(Paths.get(dest + file.getName()), file.getData());
+				Files.write(Paths.get(dest + file.getName()), file.toBytes());
 			} catch (IOException e) 
 			{
 				System.out.println("Failed to Create File \"" + file.getName() + "\"");
@@ -226,11 +230,13 @@ public class PCKGManager extends OpenedFile
 		{
 			if(file.equals(name))
 			{
+				bFM.Utils.DebugPrint("Found Packed File: " + name + " File Type: " + file.getClass());
 				file.setData(bytes);
 				return;
 			}
 		}
-		if(isPAC(bytes))files.add(new PCKGManager(bytes, name));
+		if(!bFM.Utils.autoEditSubPackFile) files.add(new GenericFile(name, bytes));
+		else if(isPAC(bytes))files.add(new PCKGManager(bytes, name));
 		else files.add(OpenedFile.makeFile(name, bytes));
 	}
 	public void writePac(String outputName) 
@@ -254,25 +260,25 @@ public class PCKGManager extends OpenedFile
 	}
 	public byte[] getFile(int i) 
 	{
-		return files.get(i).getData();
+		return files.get(i).toBytes();
 	}
 	private byte[] getFileWithHeader(OpenedFile file, boolean isLast)
 	{
 		int headerSize = HeaderSizeWithoutName + file.getName().length(); //Get the size of the header
 		if(headerSize % 32 != 0) headerSize = (headerSize / 32 + 1) * 32; //round the header to be the correct length
 		
-		int nextFileOffset = file.getData().length + headerSize;
+		int nextFileOffset = file.toBytes().length + headerSize;
 		if(nextFileOffset % 32 != 0 && AlignedFiles) nextFileOffset = (nextFileOffset / 32 + 1) * 32; //round the offset to be the correct length if needed
 		
 		ByteBuffer ret = ByteBuffer.allocate(nextFileOffset);
 		
 		if(isLast)ret.putInt(nextFileOffset);
 		else ret.putInt(0);
-		ret.putInt(file.getData().length);
+		ret.putInt(file.toBytes().length);
 		ret.putInt(headerSize);
 		ret.put(file.getName().getBytes(Charset.forName("Shift-JIS")));
 		ret.position(headerSize);
-		ret.put(file.getData());
+		ret.put(file.toBytes());
 		if(LZMode)
 		{
 			while(ret.remaining()>0)
@@ -317,5 +323,10 @@ public class PCKGManager extends OpenedFile
 	public ArrayList<OpenedFile> getFiles() 
 	{
 		return files;
+	}
+	public void setData(byte[] data)
+	{
+		files = new ArrayList<OpenedFile>();
+		extractPAC(data);
 	}
 }

@@ -1,9 +1,9 @@
 package colReader;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
+import bFM.Data;
 
-class CollisionMaterial 
+class CollisionMaterial implements Data
 {
 	//With the Debug Mode I have discovered the Use of these, they are for materials
 	String name;
@@ -103,31 +103,47 @@ class CollisionMaterial
 		num10 = 1;
 		num11 = 1;
 	}
-	public int byteArrIndex(byte[] arr, byte is)
+	public boolean equals(String name) 
 	{
-		for(int i = 0; i<arr.length; i++)
-		if(arr[i]==is) return i;
-		return -1;
+		return this.name.equals(name);
 	}
-	public byte[] getObjects()
+	public void setData(byte[] data) 
 	{
-		byte[] ret = name.getBytes();
-		ret = bFM.Utils.mergeArrays(ret, new byte[76-name.length()]);
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num1).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num2).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num3).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num4).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num5).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num6).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num7).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num8).array());
-		
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num9).array());
-		ret = bFM.Utils.mergeArrays(ret, new byte[12]);
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num10).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num11).array());
-		ret = bFM.Utils.mergeArrays(ret, new byte[28]);
-		return ret;
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public byte[] toBytes() 
+	{
+		ByteBuffer ret = ByteBuffer.allocate(160);
+		for(int i = 0; i < name.length() && i < 76; i++)
+		{
+			ret.put((byte) name.charAt(i));
+		}
+		ret.position(76);
+		ret.putFloat(num1);
+		ret.putFloat(num2);
+		ret.putFloat(num3);
+		ret.putFloat(num4);
+		ret.putFloat(num5);
+		ret.putFloat(num6);
+		ret.putFloat(num7);
+		ret.putFloat(num8);
+		ret.putFloat(num9);
+		ret.position(112);
+		ret.putFloat(num10);
+		ret.putFloat(num11);
+		return ret.array();
+	}
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+	public String getName() 
+	{
+		return name;
+	}
+	public int getSize() 
+	{
+		return 160;
 	}
 
 }

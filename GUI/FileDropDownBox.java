@@ -1,5 +1,7 @@
 package GUI;
 
+import java.nio.file.Paths;
+
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -18,14 +20,17 @@ public class FileDropDownBox extends JMenu
 		openButton.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
 			chooseFile.setFileFilter(new FileNameExtensionFilter("Package File", "pac", "pcha", "bin", "pac0"));
-			int num = chooseFile.showOpenDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
+			chooseFile.addChoosableFileFilter(new FileNameExtensionFilter("Collision File", "col"));
+			if(GUI.lastFileOpenPath != null) 
+			{
+				chooseFile.setSelectedFile(Paths.get(GUI.lastFileOpenPath).toFile());
+			}
+			if(chooseFile.showOpenDialog(null)==JFileChooser.APPROVE_OPTION)
 			{
 				Main.MainGUI.fileManager.setOpenFile(chooseFile.getSelectedFile().toString());
 			}
 		});
 		add(openButton);
-		GUI.update();
 	}
 		
 }

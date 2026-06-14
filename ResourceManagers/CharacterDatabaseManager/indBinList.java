@@ -5,11 +5,15 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-class indBinList
+import bFM.Data;
+import bFM.GenericFile;
+
+public class indBinList extends GenericFile
 {
 	ArrayList<ind> list = new ArrayList<ind>();
 	protected indBinList(byte[] data)
 	{
+		name = "Index List";
 		ByteBuffer bytes = ByteBuffer.wrap(data);
 		for(int i = 16; i < data.length; i+=196)
 		{
@@ -20,6 +24,7 @@ class indBinList
 	}
 	public indBinList(List<String> lines) 
 	{
+		name = "Index List";
 		for(String line : lines)
 		{
 			if(line.indexOf("Index")!=-1)
@@ -38,7 +43,7 @@ class indBinList
 		}
 		return ret;
 	}
-	protected byte[] toBytes()
+	public byte[] toBytes()
 	{
 		byte[] ret = bFM.Utils.longToBytes(list.size(), 4);
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.longToBytes(32, 2));
@@ -50,7 +55,19 @@ class indBinList
 		}
 		return ret;
 	}
-	private class ind
+	public String getNameByCode(int jobCode)
+	{
+		for(ind index : list)
+		{
+			if(index.jobCode == jobCode)
+			{
+				return index.getName();
+			}
+		}
+		System.err.println("The Job Code " + jobCode + " has no defined index");
+		return "Not A Job";
+	}
+	public class ind implements Data
 	{
 		int jobCode = -1;
 		int num8 = -1;
@@ -62,7 +79,7 @@ class indBinList
 		int num12 = -1;
 		String word1 = ""; //16 bytes
 		String word2 = ""; //16 bytes
-		String word3 = ""; //32 bytes
+		String name = ""; //32 bytes
 		int num13a = -1;
 		int num13b = -1;
 		int num14a = -1;
@@ -144,7 +161,7 @@ class indBinList
 			word2 = (new String(tempStringData, Charset.forName("Shift-JIS"))).replace((char)0x00, ' ').stripTrailing(); //16 bytes
 			data.get(data.position(), tempStringData, 0, 32);
 			data.position(data.position()+32);
-			word3 = (new String(tempStringData, Charset.forName("Shift-JIS"))).replace((char)0x00, ' ').stripTrailing(); //32 bytes
+			name = (new String(tempStringData, Charset.forName("Shift-JIS"))).replace((char)0x00, ' ').stripTrailing(); //32 bytes
 			num13a = bFM.Utils.byteToInt(data.get());
 			num13b = bFM.Utils.byteToInt(data.get());
 			num14a = bFM.Utils.byteToInt(data.get());
@@ -223,7 +240,7 @@ class indBinList
 			//num12 = bFM.Utils.strToInt(readNextValue(data));
 			word1 = bFM.Utils.formatString(readNextValue(data));
 			word2 = bFM.Utils.formatString(readNextValue(data));
-			word3 = bFM.Utils.formatString(readNextValue(data));
+			name = bFM.Utils.formatString(readNextValue(data));
 			num13a = bFM.Utils.strToInt(readNextValue(data));
 			num13b = bFM.Utils.strToInt(readNextValue(data));
 			num14a = bFM.Utils.strToInt(readNextValue(data));
@@ -283,7 +300,12 @@ class indBinList
 			word4 = bFM.Utils.formatString(readNextValue(data));
 			word5 = bFM.Utils.formatString(readNextValue(data));
 		}
-		private byte[] toBytes()
+		public ind(int jobCode2, String name2) 
+		{
+			jobCode = jobCode2;
+			name = name2;
+		}
+		public byte[] toBytes()
 		{
 			byte[] ret = null;
 			ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(jobCode, 2));
@@ -306,7 +328,7 @@ class indBinList
 			}
 			ret = bFM.Utils.mergeArrays(ret, string1);
 			string1 = new byte[32];
-			string2 = word3.getBytes(Charset.forName("Shift-JIS"));
+			string2 = name.getBytes(Charset.forName("Shift-JIS"));
 			for(int i = 0; i<32&&i<string2.length; i++)
 			{
 				string1[i] = string2[i];
@@ -500,7 +522,7 @@ class indBinList
 		public String toString()
 		{
 			String ret = "Index " + jobCode + ", " + num8 + ", " + handheldItemCode + ", " + helmetItemCode + ", \"" + word1 + "\", \"" + word2 + "\", \"" + 
-					word3 + "\", "+ num13a + ", " + num13b + ", " + num14a + ", " + num14b + ", " + num15a + ", " + num15b + ", " + 
+					name + "\", "+ num13a + ", " + num13b + ", " + num14a + ", " + num14b + ", " + num15a + ", " + num15b + ", " + 
 					num16a + ", " + num16b + ", " + num17a + ", " + num17b + ", " + num18a + ", " + num18b + ", " + num19a + ", " + 
 					num19b + ", " + num20a + ", " + num20b + ", " + num21a + ", " + num21b + ", " + num22a + ", " + num22b + ", " + 
 					num23a + ", " + num23b + ", " + num24a + ", " + num24b + ", " + num25a + ", " + num25b + ", " + num26a + ", " + 
@@ -517,6 +539,657 @@ class indBinList
 					//num32 + ", " + num33 + ", " + num34 + ", " + num35 + ", " + num36 + ", " + num37 + ", " + num38 + ", " + 
 					//num39 + ", " + num40 + ", " + word4 + ", " + word5 + ", " + num41 + ", " + num42 + ";";
 			return ret;
+		}
+		public boolean equals(String name) 
+		{
+			throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+		}
+		public void setData(byte[] data) 
+		{
+			throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+		}
+		public void setName(String name) 
+		{
+			this.name = name;
+		}
+		public String getName() 
+		{
+			return name;
+		}
+		public int getSize() 
+		{
+			throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
+		}
+		public int getJobCode() 
+		{
+			return jobCode;
+		}
+		public void setJobCode(int num) 
+		{
+			jobCode = num;
+		}
+		
+		public int getNum8() 
+		{
+			return num8;
+		}
+		public void setNum8(int num) 
+		{
+			num8 = num;
+		}
+
+		public int getHandheldItemCode() 
+		{
+			return handheldItemCode;
+		}
+		public void setHandheldItemCode(int num) 
+		{
+			handheldItemCode = num;
+		}
+
+		public int getHelmetItemCode() 
+		{
+			return helmetItemCode;
+		}
+		public void setHelmetItemCode(int num) 
+		{
+			helmetItemCode = num;
+		}
+
+		public int getNum11() 
+		{
+			return num11;
+		}
+		public void setNum11(int num) 
+		{
+			num11 = num;
+		}
+
+		public int getNum12() 
+		{
+			return num12;
+		}
+		public void setNum12(int num) 
+		{
+			num12 = num;
+		}
+
+		public String getWord1() 
+		{
+			return word1;
+		}
+		public void setWord1(String str) 
+		{
+			word1 = str;
+		}
+
+		public String getWord2() 
+		{
+			return word2;
+		}
+		public void setWord2(String str) 
+		{
+			word2 = str;
+		}
+
+		public int getNum13a() 
+		{
+			return num13a;
+		}
+		public void setNum13a(int num) 
+		{
+			num13a = num;
+		}
+
+		public int getNum13b() 
+		{
+			return num13b;
+		}
+		public void setNum13b(int num) 
+		{
+			num13b = num;
+		}
+
+		public int getNum14a() 
+		{
+			return num14a;
+		}
+		public void setNum14a(int num) 
+		{
+			num14a = num;
+		}
+
+		public int getNum14b() 
+		{
+			return num14b;
+		}
+		public void setNum14b(int num) 
+		{
+			num14b = num;
+		}
+
+		public int getNum15a() 
+		{
+			return num15a;
+		}
+		public void setNum15a(int num) 
+		{
+			num15a = num;
+		}
+
+		public int getNum15b() 
+		{
+			return num15b;
+		}
+		public void setNum15b(int num) 
+		{
+			num15b = num;
+		}
+
+		public int getNum16a() 
+		{
+			return num16a;
+		}
+		public void setNum16a(int num) 
+		{
+			num16a = num;
+		}
+
+		public int getNum16b() 
+		{
+			return num16b;
+		}
+		public void setNum16b(int num) 
+		{
+			num16b = num;
+		}
+
+		public int getNum17a() 
+		{
+			return num17a;
+		}
+		public void setNum17a(int num) 
+		{
+			num17a = num;
+		}
+
+		public int getNum17b() 
+		{
+			return num17b;
+		}
+		public void setNum17b(int num) 
+		{
+			num17b = num;
+		}
+
+		public int getNum18a() 
+		{
+			return num18a;
+		}
+		public void setNum18a(int num) 
+		{
+			num18a = num;
+		}
+
+		public int getNum18b() 
+		{
+			return num18b;
+		}
+		public void setNum18b(int num) 
+		{
+			num18b = num;
+		}
+
+		public int getNum19a() 
+		{
+			return num19a;
+		}
+		public void setNum19a(int num) 
+		{
+			num19a = num;
+		}
+
+		public int getNum19b() 
+		{
+			return num19b;
+		}
+		public void setNum19b(int num) 
+		{
+			num19b = num;
+		}
+
+		public int getNum20a() 
+		{
+			return num20a;
+		}
+		public void setNum20a(int num) 
+		{
+			num20a = num;
+		}
+
+		public int getNum20b() 
+		{
+			return num20b;
+		}
+		public void setNum20b(int num) 
+		{
+			num20b = num;
+		}
+
+		public int getNum21a() 
+		{
+			return num21a;
+		}
+		public void setNum21a(int num) 
+		{
+			num21a = num;
+		}
+
+		public int getNum21b() 
+		{
+			return num21b;
+		}
+		public void setNum21b(int num) 
+		{
+			num21b = num;
+		}
+
+		public int getNum22a() 
+		{
+			return num22a;
+		}
+		public void setNum22a(int num) 
+		{
+			num22a = num;
+		}
+
+		public int getNum22b() 
+		{
+			return num22b;
+		}
+		public void setNum22b(int num) 
+		{
+			num22b = num;
+		}
+
+		public int getNum23a() 
+		{
+			return num23a;
+		}
+		public void setNum23a(int num) 
+		{
+			num23a = num;
+		}
+
+		public int getNum23b() 
+		{
+			return num23b;
+		}
+		public void setNum23b(int num) 
+		{
+			num23b = num;
+		}
+
+		public int getNum24a() 
+		{
+			return num24a;
+		}
+		public void setNum24a(int num) 
+		{
+			num24a = num;
+		}
+
+		public int getNum24b() 
+		{
+			return num24b;
+		}
+		public void setNum24b(int num) 
+		{
+			num24b = num;
+		}
+
+		public int getNum25a() 
+		{
+			return num25a;
+		}
+		public void setNum25a(int num) 
+		{
+			num25a = num;
+		}
+
+		public int getNum25b() 
+		{
+			return num25b;
+		}
+		public void setNum25b(int num) 
+		{
+			num25b = num;
+		}
+
+		public int getNum26a() 
+		{
+			return num26a;
+		}
+		public void setNum26a(int num) 
+		{
+			num26a = num;
+		}
+
+		public int getNum26b() 
+		{
+			return num26b;
+		}
+		public void setNum26b(int num) 
+		{
+			num26b = num;
+		}
+
+		public int getNum27a() 
+		{
+			return num27a;
+		}
+		public void setNum27a(int num) 
+		{
+			num27a = num;
+		}
+
+		public int getNum27b() 
+		{
+			return num27b;
+		}
+		public void setNum27b(int num) 
+		{
+			num27b = num;
+		}
+
+		public int getNum28a() 
+		{
+			return num28a;
+		}
+		public void setNum28a(int num) 
+		{
+			num28a = num;
+		}
+
+		public int getNum28b() 
+		{
+			return num28b;
+		}
+		public void setNum28b(int num) 
+		{
+			num28b = num;
+		}
+
+		public int getNum29a() 
+		{
+			return num29a;
+		}
+		public void setNum29a(int num) 
+		{
+			num29a = num;
+		}
+
+		public int getNum29b() 
+		{
+			return num29b;
+		}
+		public void setNum29b(int num) 
+		{
+			num29b = num;
+		}
+
+		public int getNum30a() 
+		{
+			return num30a;
+		}
+		public void setNum30a(int num) 
+		{
+			num30a = num;
+		}
+
+		public int getNum30b() 
+		{
+			return num30b;
+		}
+		public void setNum30b(int num) 
+		{
+			num30b = num;
+		}
+
+		public int getNum31a() 
+		{
+			return num31a;
+		}
+		public void setNum31a(int num) 
+		{
+			num31a = num;
+		}
+
+		public int getNum31b() 
+		{
+			return num31b;
+		}
+		public void setNum31b(int num) 
+		{
+			num31b = num;
+		}
+
+		public int getNum32a() 
+		{
+			return num32a;
+		}
+		public void setNum32a(int num) 
+		{
+			num32a = num;
+		}
+
+		public int getNum32b() 
+		{
+			return num32b;
+		}
+		public void setNum32b(int num) 
+		{
+			num32b = num;
+		}
+
+		public int getNum33a() 
+		{
+			return num33a;
+		}
+		public void setNum33a(int num) 
+		{
+			num33a = num;
+		}
+
+		public int getNum33b() 
+		{
+			return num33b;
+		}
+		public void setNum33b(int num) 
+		{
+			num33b = num;
+		}
+
+		public int getJobMinHP() 
+		{
+			return jobMinHP;
+		}
+		public void setJobMinHP(int num) 
+		{
+			jobMinHP = num;
+		}
+
+		public int getNum34b() 
+		{
+			return num34b;
+		}
+		public void setNum34b(int num) 
+		{
+			num34b = num;
+		}
+
+		public int getNum35a() 
+		{
+			return num35a;
+		}
+		public void setNum35a(int num) 
+		{
+			num35a = num;
+		}
+
+		public int getNum35b() 
+		{
+			return num35b;
+		}
+		public void setNum35b(int num) 
+		{
+			num35b = num;
+		}
+
+		public int getNum36a() 
+		{
+			return num36a;
+		}
+		public void setNum36a(int num) 
+		{
+			num36a = num;
+		}
+
+		public int getNum36b() 
+		{
+			return num36b;
+		}
+		public void setNum36b(int num) 
+		{
+			num36b = num;
+		}
+
+		public int getNum37a() 
+		{
+			return num37a;
+		}
+		public void setNum37a(int num) 
+		{
+			num37a = num;
+		}
+
+		public int getNum37b() 
+		{
+			return num37b;
+		}
+		public void setNum37b(int num) 
+		{
+			num37b = num;
+		}
+
+		public int getNum38a() 
+		{
+			return num38a;
+		}
+		public void setNum38a(int num) 
+		{
+			num38a = num;
+		}
+
+		public int getNum38b() 
+		{
+			return num38b;
+		}
+		public void setNum38b(int num) 
+		{
+			num38b = num;
+		}
+
+		public int getNum39a() 
+		{
+			return num39a;
+		}
+		public void setNum39a(int num) 
+		{
+			num39a = num;
+		}
+
+		public int getAttackCharges() 
+		{
+			return attackCharges;
+		}
+		public void setAttackCharges(int num) 
+		{
+			attackCharges = num;
+		}
+
+		public int getNum40a() 
+		{
+			return num40a;
+		}
+		public void setNum40a(int num) 
+		{
+			num40a = num;
+		}
+
+		public int getNum40b() 
+		{
+			return num40b;
+		}
+		public void setNum40b(int num) 
+		{
+			num40b = num;
+		}
+
+		public String getWord4() 
+		{
+			return word4;
+		}
+		public void setWord4(String str) 
+		{
+			word4 = str;
+		}
+
+		public String getWord5() 
+		{
+			return word5;
+		}
+		public void setWord5(String str) 
+		{
+			word5 = str;
+		}
+	}
+	public ArrayList<ind> getIndicies() 
+	{
+		return list;
+	}
+	public int getAmountOfIndicies() 
+	{
+		return list.size();
+	}
+	public ind getByCode(int jobCode) 
+	{
+		for(ind index : list)
+		{
+			if(index.jobCode == jobCode)
+			{
+				return index;
+			}
+		}
+		throw new IllegalArgumentException("The Job Code " + jobCode + " has no defined index");
+	}
+	public void addJob(int jobCode, String name) 
+	{
+		list.add(new ind(jobCode, name));
+	}
+	public ind getLastObject() 
+	{
+		return list.get(list.size() - 1);
+	}
+	public void removeIndex(ind file) 
+	{
+		int code = file.getJobCode();
+		for(int i = list.size()-1; i >= 0; i--)
+		{
+			if(list.get(i).getJobCode() == code)
+			{
+				list.remove(i);
+			}
 		}
 	}
 }

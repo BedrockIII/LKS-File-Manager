@@ -1,9 +1,8 @@
 package GUI.FileList;
 
-import java.awt.Rectangle;
-
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
 
 import GUI.GUI;
 
@@ -14,13 +13,11 @@ public class FileListPanel extends JScrollPane
 	public FileListPanel()
 	{
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		setBackground(GUI.bgColor);
+		setBackground(null);
 		panel = getViewport();
-		Rectangle topRect = new Rectangle(0, 0, 1, 1);
-		panel.setBackground(GUI.bgColor);
-		panel.scrollRectToVisible(topRect);
+		panel.setBackground(null);
 	}
-	public void setFile(Generic panel) 
+	public void setFile(FileList panel) 
 	{
 		setViewportView(panel);
 		GUI.update();
@@ -40,26 +37,33 @@ public class FileListPanel extends JScrollPane
 	public void update() 
 	{
 		if(getViewport()==null||getViewport().getView()==null) return;
+		int scroll = getVerticalScrollBar().getValue();
 		//setMaximumSize(new Dimension(GUI.rowWidth,((Package)getViewport().getView()).getHeight()));
 		getViewport().setSize(getWidth(), getHeight());
-		if(getViewport().getView() instanceof Package)
+		if(getViewport().getView() instanceof Generic)
 		{
-			((Package)getViewport().getView()).update();
+			((FileList)getViewport().getView()).update();
 		}
 		else
 		{
-			((Generic)getViewport().getView()).update();
+			((FileList)getViewport().getView()).update();
 		}
+		int finalS = Math.min(getVerticalScrollBar().getMaximum(), scroll);
+		SwingUtilities.invokeLater(() -> {
+			getVerticalScrollBar().setValue(finalS);
+		});
 	}
 	public void deselectAll() 
 	{
-		if(getViewport().getView() instanceof Package)
+		int scroll = getVerticalScrollBar().getValue();
+		if(getViewport().getView() instanceof Generic)
 		{
-			((Package)getViewport().getView()).deselectAll();
+			((FileList)getViewport().getView()).deselectAll();
 		}
 		else
 		{
-			((Generic)getViewport().getView()).deselectAll();
+			((FileList)getViewport().getView()).deselectAll();
 		}
+		getVerticalScrollBar().setValue(Math.min(getVerticalScrollBar().getMaximum(), scroll));
 	}
 }

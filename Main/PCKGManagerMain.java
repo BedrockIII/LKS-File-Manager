@@ -12,14 +12,16 @@ public class PCKGManagerMain
 	public static void printVersionData()
 	{
 		System.out.println("Pac File Manager");
-		System.out.println("Version 3.2");
-		System.out.println("     Fixed several GUI bugs");
-		System.out.println("     Added ablility to grow and shrink packages");
-		System.out.println("     Added special Collision File info");
-		System.out.println("     Improved Collision File Manager to be byte specific");
-		System.out.println("     Added settings, which must be edited via a text editor for now");
-		System.out.println("     Added ability to rename most files");
-		System.out.println("     Fixed all buttons");
+		System.out.println("Version 3.3");
+		System.out.println("     Fixed more GUI bugs");
+		System.out.println("     Added ablility to open non-package LKS Files");
+		System.out.println("     Added Collision File Editing");
+		System.out.println("     Added Fixed Point Editing");
+		System.out.println("     Added more export options for Collision and Fixed Point files");
+		System.out.println("     Added Feature to remember paths of important directories");
+		System.out.println("     Added Tools to help create Bedrock-Styled Riivolution Mods");
+		System.out.println("     Added Character Database Editing");
+		System.err.println("     Broke Camera Zone Text-Based Editing... Somehow");
 	}
 	public static void main(String args[]) throws IOException 
 	{ 

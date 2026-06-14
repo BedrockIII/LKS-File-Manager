@@ -13,11 +13,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
 import GUI.FileInfo.FileInfoFactory;
-import PCKGManager.OpenedFile;
 import PCKGManager.PCKGManager;
+import bFM.OpenedFile;
 
-public class Package extends CollapseableGeneric
+public class Package extends CollapseableFileList
 {
+	int padding = 0;
 	private static final long serialVersionUID = 1L;
 	public Package(PCKGManager packageFile, int padding)
 	{
@@ -29,31 +30,36 @@ public class Package extends CollapseableGeneric
 		this.file = packageFile;
 		initializeAll();
 	}
-	private void initializeAll(int padding)
+	protected void initializeAll(int padding)
 	{
+		this.padding = padding;
 		fileTypes = new FileNameExtensionFilter("Package File", "pac", "pcha", "bin", "pac0");
-		initializeGUI(padding);
-		addRenameAction();
-		addExportAction();
-		addFileButton(padding);
-		addExportAllButton();
+		initializeListGUI(padding);
 		addActions();
-		initializeSubGUI();
-		add(actions);
+		initializeSubGUI(padding);
 		isExtended.setSelected(true);
+		reAddComponents();
 	}
 	public Package() 
 	{
 		file = new PCKGManager("New Package");
 	}
-	private void initializeSubGUI()
+	private void initializeSubGUI(int padding)
 	{
 		infoGUI = FileInfoFactory.makeInfoGUI(file);
-		subEntries = new ArrayList<Generic>();		
+		subEntries = new ArrayList<FileList>();		
 		for(int i =0; i<((PCKGManager)file).getFileAmount(); i++)
 		{
-			subEntries.add(FileListFactory.makeListGUI(((PCKGManager)file).getPackedFile(i), GUI.indentSize));
+			subEntries.add(FileListFactory.makeListGUI(((PCKGManager)file).getPackedFile(i), GUI.indentSize + padding));
 		}
+	}
+	protected void addActions()
+	{
+		addRenameAction();
+		addExportAction();
+		addFileButton(padding);
+		addExportAllButton();
+		add(actions);
 	}
 	private void addFileButton(int padding)
 	{ 
@@ -84,8 +90,11 @@ public class Package extends CollapseableGeneric
 		exportAll.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
 			chooseFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			int num = chooseFile.showSaveDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
+			if(GUI.lastFileSavePath != null) 
+			{
+				chooseFile.setCurrentDirectory(Paths.get(GUI.lastFileSavePath).toFile().getParentFile());
+			}
+			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
 			{
 				Path directory = Paths.get(chooseFile.getSelectedFile().toPath().toString()+ "\\" + file.getName());
 				try 
@@ -119,7 +128,8 @@ public class Package extends CollapseableGeneric
 				{
 					try 
 					{
-						Files.write(Paths.get(directory.toString() + "\\" + file.getName()), file.getData());
+						Files.write(Paths.get(directory.toString() + "\\" + file.getName()), file.toBytes());
+						GUI.lastFileSavePath = chooseFile.getSelectedFile().toString();
 					} catch (IOException e1) 
 					{
 						System.out.println("Failed to write file at: " + directory.toString() + "\\" + file.getName());
@@ -129,5 +139,15 @@ public class Package extends CollapseableGeneric
 			}
 		});
 		actions.add(exportAll);
+	}
+	public void removeFile(Generic file) 
+	{
+		remove(file);
+		((PCKGManager)this.file).removeFile(file.getName());
+		subEntries.remove(file);
+	}
+	protected void initializeInfoGUI() 
+	{
+		infoGUI = FileInfoFactory.makeInfoGUI(file);
 	}
 }

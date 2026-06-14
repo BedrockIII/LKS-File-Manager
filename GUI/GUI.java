@@ -18,52 +18,39 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-
 import GUI.FileInfo.GenericFileInfoGUI;
+import GUI.FileList.FileList;
 import GUI.FileList.FileListFactory;
 import GUI.FileList.FileListPanel;
 import GUI.FileList.Generic;
-import PCKGManager.OpenedFile;
+import bFM.OpenedFile;
 import colReader.ColReader;
 
-public class GUI extends JFrame
+public class GUI
 {
-	private static final long serialVersionUID = 8648666561327794462L;
-	public enum Actions 
-	{
-	    OPENFILE,
-	    //Pac
-	    EXPORTPAC,
-	    IMPORT,
-	    EXPORTALL,
-	    //Generic
-	    EXPORT,
-	    REPLACE,
-	    //FP
-	    EXPORTFIXEDPOINTEXTRACTED,
-	    IMPORTFIXEDPOINTEXTRACTED,
-	    //Collision
-	    EXPORTCOLASOBJ,
-	    IMPORTCOLASOBJ,
-	    //Unused
-	    EXTRACTLZ10,
-	    EXTRACT
-	}
-	//private static JPanel openedFile = new Package();
 	private static FileListPanel openedFileList = new FileListPanel();
 	private static JScrollPane fileInfoPanel = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	private static GenericFileInfoGUI fileInfo = null;
+	static String lastFileOpenPath = null;
+	public static String lastFileSavePath = null;
 	static JSplitPane contents = new JSplitPane();
 	public static JFrame frame = new JFrame();
+	private static Path savePath = null;
 	public static final int assetHeight = 20;
 	public static final int buttonWidth = 150;
 	public static final int pacOffset = 50;
 	public static final int rowWidth = 300;
 	public static final int indentSize = 15;
+	public static int windowX = 0;
+	public static int windowY = 0;
+	public static int windowWidth = rowWidth*2;
+	public static int windowHeight = assetHeight*25;
+	public static boolean windowMaximized = false;
 	public static Color bgColor = new Color(169, 169, 169);
 	JPanel fileArea = new JPanel();
 	public static final Dimension buttonSize = new Dimension(GUI.buttonWidth,GUI.assetHeight);
 	public static final Color selectedColor = Color.YELLOW;
+	@SuppressWarnings("deprecation")
 	public GUI()
 	{
 		frame.setName("LKS File Manager");
@@ -78,6 +65,7 @@ public class GUI extends JFrame
 	    layout.gridwidth = GridBagConstraints.REMAINDER;
 		MenuBar menuBar = new MenuBar();
         frame.add(menuBar, BorderLayout.NORTH);
+        frame.reshape(windowX, windowY, windowWidth, windowHeight);
         //openedFile = new Package();
         //frame.add(openedFile, layout);
         frame.setBackground(GUI.bgColor);
@@ -92,8 +80,11 @@ public class GUI extends JFrame
         contents.setBottomComponent(fileInfoPanel);
         
         frame.add(contents);
-        frame.setSize(new Dimension(rowWidth*2, assetHeight*25));
-        
+        frame.setMinimumSize(new Dimension(rowWidth*2, assetHeight*25));
+        if(windowMaximized)
+        {
+        	frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+        }
         //frame.pack();
         update();
 		frame.setVisible(true);
@@ -103,7 +94,7 @@ public class GUI extends JFrame
 			{
 				System.out.println("Thanks for Using this!");
 				setSettings();
-				dispose();
+				frame.dispose();
 				System.exit(0);
 			}
 		});
@@ -112,11 +103,27 @@ public class GUI extends JFrame
 	{
 		String ret = "Little King's Story File Manager Settings\n";
 		ret += bFM.Utils.getAsSetting("Debug Output", bFM.Utils.debugOutput);
+		ret += bFM.Utils.getAsSetting("X Pos", frame.getX());
+		ret += bFM.Utils.getAsSetting("Y Pos", frame.getY());
+		ret += bFM.Utils.getAsSetting("Window Width", frame.getWidth());
+		ret += bFM.Utils.getAsSetting("Window Height", frame.getHeight());
+		ret += bFM.Utils.getAsSetting("Window Maximized", frame.getExtendedState() == Frame.MAXIMIZED_BOTH);
 		ret += bFM.Utils.getAsSetting("Optimize Collision", ColReader.optimizeCollision);
+		ret += bFM.Utils.getAsSetting("Modding Path", colReader.Main.importPath);
+		ret += bFM.Utils.getAsSetting("Riivolution Mod Path", colReader.Main.outputPath);
+		ret += bFM.Utils.getAsSetting("Last Save Path", lastFileSavePath);
+		ret += bFM.Utils.getAsSetting("Last Open Path", lastFileOpenPath);
 		try 
 		{
-			System.out.println(Paths.get("LKS File Manager Config.cfg").toAbsolutePath());
-			Files.write(Paths.get("LKS File Manager Config.cfg"), ret.getBytes());
+			//System.out.println(Paths.get("LKS File Manager Config.cfg").toAbsolutePath());
+			if(savePath==null)
+			{
+				Files.write(Paths.get("LKS File Manager Config.cfg"), ret.getBytes());
+			}
+			else
+			{
+				Files.write(savePath.resolve("LKS File Manager Config.cfg"), ret.getBytes());
+			}
 		} catch (IOException e) 
 		{
 			System.out.println("Failed to save settings file");
@@ -127,7 +134,16 @@ public class GUI extends JFrame
 	{
 		try
 		{
-			List<String> lines = Files.readAllLines(Paths.get("LKS File Manager Config.cfg"));
+			List<String> lines;
+			if(savePath==null)
+			{
+				lines = Files.readAllLines(Paths.get("LKS File Manager Config.cfg"));
+			}
+			else
+			{
+				lines = Files.readAllLines(savePath.resolve("LKS File Manager Config.cfg"));
+			}
+			
 			for(String line : lines)
 			{
 				if(line.indexOf("Optimize Collision")!=-1)
@@ -138,11 +154,52 @@ public class GUI extends JFrame
 				{
 					bFM.Utils.debugOutput = bFM.Utils.getSettingValue(line);
 				}
+				else if(line.indexOf("X Pos")!=-1)
+				{
+					windowX = bFM.Utils.getSettingValueInt(line);
+				}
+				else if(line.indexOf("Y Pos")!=-1)
+				{
+					windowY = bFM.Utils.getSettingValueInt(line);
+				}
+				else if(line.indexOf("Window Width")!=-1)
+				{
+					windowWidth = bFM.Utils.getSettingValueInt(line);
+				}
+				else if(line.indexOf("Window Height")!=-1)
+				{
+					windowHeight = bFM.Utils.getSettingValueInt(line);
+				}
+				else if(line.indexOf("Window Maximized")!=-1)
+				{
+					windowMaximized = bFM.Utils.getSettingValue(line);
+				}
+				else if(line.indexOf("Modding Path")!=-1)
+				{
+					colReader.Main.importPath = bFM.Utils.getSettingValueString(line);
+				}
+				else if(line.indexOf("Riivolution Mod Path")!=-1)
+				{
+					colReader.Main.outputPath = bFM.Utils.getSettingValueString(line);
+				}
+				else if(line.indexOf("Last Save Path")!=-1)
+				{
+					lastFileSavePath = bFM.Utils.getSettingValueString(line);
+				}
+				else if(line.indexOf("Last Open Path")!=-1)
+				{
+					lastFileOpenPath = bFM.Utils.getSettingValueString(line);
+				}
 			}
 		}
 		catch (IOException e)
 		{
-			System.out.println("Failed to read User Settings, assuming defaults");
+			if(savePath == null) 
+			{
+				//System.out.println("Failed to read User Settings Due to Null Path assuming defaults");
+				return;
+			}
+			System.out.println("Failed to read User Settings at " + savePath.toString() + ", assuming defaults");
 		}
 	}
 	
@@ -167,13 +224,12 @@ public class GUI extends JFrame
 			fileInfo.update();
 			fileInfo.repaint();
 		}
-		
 		frame.repaint();
 		//System.out.println(openedFileList.getHeight());
-		if(frame.getExtendedState() != Frame.MAXIMIZED_BOTH)
-		frame.setSize(Math.max(Math.max(rowWidth+20, 300), frame.getWidth()), Math.max(openedFileList.getHeight()+45+assetHeight, frame.getHeight()));
+		//if(frame.getExtendedState() != Frame.MAXIMIZED_BOTH)
+		//frame.setSize(Math.max(Math.max(rowWidth+20, 300), frame.getWidth()), Math.max(openedFileList.getHeight()+45+assetHeight, frame.getHeight()));
 	}
-	public static void setFileList(Generic generic) 
+	public static void setFileList(FileList generic) 
 	{
 		openedFileList.setFile(generic);
 		contents.setDividerLocation(.33);
@@ -186,6 +242,7 @@ public class GUI extends JFrame
 	{
 		fileInfo = gui;
 		fileInfoPanel.setViewportView(gui);
+		update();
 	}
 	public static Dimension getRightSize() 
 	{
@@ -198,6 +255,7 @@ public class GUI extends JFrame
 	}
 	public void setOpenFile(String path) 
 	{
+		lastFileOpenPath = path;
 		Path filePath = Paths.get(path);
 		byte[] data;
 		try {
@@ -210,5 +268,11 @@ public class GUI extends JFrame
 			System.out.println("Failed to read file: " + filePath);
 		}
 		
+	}
+	public void setSettingsFile(String string) 
+	{
+		System.out.println("Setting Save Directory to: " + string);
+		savePath = Paths.get(string);
+		getSettings();
 	}
 }

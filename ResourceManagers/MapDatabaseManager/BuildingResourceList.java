@@ -3,7 +3,9 @@ package ResourceManagers.MapDatabaseManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BuildingResourceList 
+import bFM.OpenedFile;
+
+public class BuildingResourceList
 {
 	ArrayList<BuildingResource> Buildings = new ArrayList<BuildingResource>();
 	ArrayList<String> Connections = new ArrayList<String>();

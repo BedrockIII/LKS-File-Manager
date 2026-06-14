@@ -7,20 +7,17 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import PCKGManager.OpenedFile;
+import bFM.GenericFile;
 
-public class ColReader extends OpenedFile
+public class ColReader extends GenericFile
 {
 	static final String type = "MDF_COL_WII_100";
-	public static boolean optimizeCollision = true;
+	public static boolean optimizeCollision = false;
 	static final int startPos = 96;
 	int index = 0;
-	ArrayList<colObject> COLOBJECTS = new ArrayList<colObject>();
+	ArrayList<CollisionObject> COLOBJECTS = new ArrayList<CollisionObject>();
 	int objects;
-	public ColReader()
-	{
-		
-	}
+	public ColReader() {}
 	public ColReader(byte[] file)
 	{
 		ByteBuffer data = ByteBuffer.wrap(file);
@@ -37,24 +34,12 @@ public class ColReader extends OpenedFile
 	}
 	public ColReader(String name)
 	{
-		boolean grid = true;
-		if(Main.grid&&grid )
-		{
-			this.name = "all_field";
-			COLOBJECTS.add(new colObject("col"+name,-1, 0));
-			COLOBJECTS.add(new colObject("Ground_"+name, 0, 1));
-			COLOBJECTS.add(new colObject("Wall_"+name, 0, 2));
-		}
-		else
-		{
-			this.name = name;
-			COLOBJECTS.add(new colObject("Collision",-1, 0));
-			COLOBJECTS.add(new colObject("Ground", 0, 1));
-			COLOBJECTS.add(new colObject("Wall", 0, 2));
-		}
-		
+		this.name = name;
+		COLOBJECTS.add(new CollisionObject("Collision",-1, 0));
+		COLOBJECTS.add(new CollisionObject("Ground", 0, 1));
+		COLOBJECTS.add(new CollisionObject("Wall", 0, 2));
 	}
-	public ColReader(byte[] file, String name) 
+	public ColReader(byte[] file, String name)
 	{
 		this.name = name;
 		ByteBuffer data = ByteBuffer.wrap(file);
@@ -66,7 +51,8 @@ public class ColReader extends OpenedFile
 		for(int i = 96; i<objects*160; i+=160)
 		{
 			data.position(i);
-			COLOBJECTS.add(new colObject(data));
+			bFM.Utils.DebugPrint("File Index: " + i);
+			COLOBJECTS.add(new CollisionObject(data));
 		}
 	}
 	public static boolean same(byte[] arr1, byte[] arr2)
@@ -90,7 +76,7 @@ public class ColReader extends OpenedFile
 		
 		return ret;
 	}
-	private void updateColObject(colObject object)
+	private void updateColObject(CollisionObject object)
 	{
 		int otherObjectPos = 0;
 		int vertexPos = 0;
@@ -213,154 +199,78 @@ public class ColReader extends OpenedFile
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getVertex());
-			if(ret.length%32!=0)
-			{
-				ret = bFM.Utils.mergeArrays(ret, new byte[32-ret.length%32]);
-			}
 		}
 		return ret;
 	}
-	public void importOBJ(Path file, String name) throws IOException
+	private void importOBJ(List<String> lines)
 	{
-		COLOBJECTS.add(new colObject(name, 0, COLOBJECTS.size()));
+		int vertexCount = 1;
+		int totalVertexCount = 1;
+		
+		COLOBJECTS = new ArrayList<CollisionObject>();
+		COLOBJECTS.add(new CollisionObject(name, -1, COLOBJECTS.size()));
 		if(Main.grid)
 		{
-			COLOBJECTS.add(new colObject("Ground_"+name, 0, COLOBJECTS.size()));
-			COLOBJECTS.add(new colObject("Wall_"+name, 0, COLOBJECTS.size()));
+			COLOBJECTS.add(new CollisionObject("Ground_"+name, 0, COLOBJECTS.size()));
+			COLOBJECTS.add(new CollisionObject("Wall_"+name, 0, COLOBJECTS.size()));
 		}
 		else
 		{
-			COLOBJECTS.add(new colObject("Ground", 0, COLOBJECTS.size()));
-			COLOBJECTS.add(new colObject("Wall", 0, COLOBJECTS.size()));
+			COLOBJECTS.add(new CollisionObject("Ground", 0, COLOBJECTS.size()));
+			COLOBJECTS.add(new CollisionObject("Wall", 0, COLOBJECTS.size()));
 		}
-		List<String> lines = Files.readAllLines(file);
-		ArrayList<String> objectLines = new ArrayList<String>();
-		int oCount = 0;
-		int vertexCount = 0;
-		int totalVertexCount = 0;
+
+		CollisionObject lastColObject = null;
 		
-		for(int i =0; i<lines.size(); i++)
+		
+		for(String line : lines)
 		{
-			if(lines.get(i).length()>1&&lines.get(i).charAt(0)=='o')
+			if (line.length() < 2)
 			{
-				oCount += 1;
-				if(oCount<2)objectLines.add(lines.get(i));
+				//If line is empty, do nothing
+			}
+			else if(line.charAt(0)=='o')
+			{
+				//If it is an object line
+				line = line.substring(2);
+				if(line.indexOf("Ground") != -1)
+				{
+					lastColObject = new CollisionObject(line, 1, COLOBJECTS.size());
+				}
+				else if(line.indexOf("Wall") != -1)
+				{
+					lastColObject = new CollisionObject(line, 2, COLOBJECTS.size());
+				}
 				else
 				{
-					if(lines.get(i).indexOf("Ground")!=-1)
+					if(COLOBJECTS.size()<4)
 					{
-						COLOBJECTS.add(new colObject(objectLines, 1, totalVertexCount, COLOBJECTS.size()));
-					}
-					else if(lines.get(i).indexOf("Wall")!=-1)
-					{
-						COLOBJECTS.add(new colObject(objectLines, 2, totalVertexCount, COLOBJECTS.size()));
-					}
-					else if(lines.get(i).indexOf("G")!=-1)
-					{
-						COLOBJECTS.add(new colObject(objectLines, 1, totalVertexCount, COLOBJECTS.size()));
-					}
-					else if(lines.get(i).indexOf("W")!=-1)
-					{
-						COLOBJECTS.add(new colObject(objectLines, 2, totalVertexCount, COLOBJECTS.size()));
-					}
-					else if(vertexCount==0)
-					{
-						//COLOBJECTS.add(new colObject(name, 1));
+						//likely a header
+						System.err.println("Objects must be named with either \"Ground\" or \"Wall\" in their names while this object was named: " + line);
 					}
 					else
 					{
-						COLOBJECTS.add(new colObject(objectLines, 0, totalVertexCount, COLOBJECTS.size()));
+						throw(new IllegalArgumentException("Objects must be named with either \"Ground\" or \"Wall\" in their names while this object was named: " + line));
 					}
-					totalVertexCount=vertexCount;
-					
-					objectLines.removeAll(objectLines);
-					oCount = 1;
-					objectLines.add(lines.get(i));
 				}
+				totalVertexCount = vertexCount;
+				COLOBJECTS.add(lastColObject);
 			}
-			if(lines.get(i).length()>2&&lines.get(i).charAt(0)=='v'&&lines.get(i).charAt(1)==' ')
+			else if(line.charAt(0)=='v'&&line.charAt(1)==' ')
 			{
+				lastColObject.addVertexLine(line);
 				vertexCount++;
-				//System.out.println(vertexCount);
-				objectLines.add(lines.get(i));
 			}
-			if(lines.get(i).length()>2&&lines.get(i).charAt(0)=='v'&&lines.get(i).charAt(1)=='n')
+			if(line.charAt(0)=='f')
 			{
-				//objectLines.add(lines.get(i));
-				//normals are not normal
-			}
-			if(lines.get(i).length()>1&&lines.get(i).charAt(0)=='f')
-			{
-				objectLines.add(lines.get(i));
+				lastColObject.addFaceLine(line, totalVertexCount);
 			}
 		}
-		
 	}
 	public void importOBJ(Path file) throws IOException
 	{
-		int refVal = COLOBJECTS.size();//before adding it because it needs to be -1 otherwise
 		List<String> lines = Files.readAllLines(file);
-		ArrayList<String> objectLines = new ArrayList<String>();
-		int oCount = 0;
-		int vertexCount = 0;
-		int totalVertexCount = 0;
-		
-		for(int i =0; i<lines.size(); i++)
-		{
-			if(lines.get(i).length()>1&&lines.get(i).charAt(0)=='o')
-			{
-				oCount += 1;
-				if(oCount<2)objectLines.add(lines.get(i));
-				else
-				{
-					if(objectLines.get(0).indexOf("Ground")!=-1)
-					{
-						COLOBJECTS.add(new colObject(objectLines, 1, totalVertexCount,COLOBJECTS.size()));
-					}
-					else if(objectLines.get(0).indexOf("Wall")!=-1)
-					{
-						COLOBJECTS.add(new colObject(objectLines, 2, totalVertexCount,COLOBJECTS.size()));
-					}
-					else if(vertexCount==0)
-					{
-						COLOBJECTS.add(new colObject(objectLines, 1, totalVertexCount,COLOBJECTS.size()));
-					}
-					else
-					{
-						COLOBJECTS.add(new colObject(objectLines, refVal, totalVertexCount,COLOBJECTS.size()));
-					}
-					totalVertexCount=vertexCount;
-					objectLines.removeAll(objectLines);
-					oCount = 1;
-					objectLines.add(lines.get(i));
-				}
-			}
-			if(lines.get(i).length()>2&&lines.get(i).charAt(0)=='v'&&lines.get(i).charAt(1)==' ')
-			{
-				vertexCount++;
-				objectLines.add(lines.get(i));
-			}
-			if(lines.get(i).length()>1&&lines.get(i).charAt(0)=='f')
-			{
-				objectLines.add(lines.get(i));
-			}
-		}
-		if(objectLines.get(0).indexOf("Ground")!=-1)
-		{
-			COLOBJECTS.add(new colObject(objectLines, 1, totalVertexCount,COLOBJECTS.size()));
-		}
-		else if(objectLines.get(0).indexOf("Wall")!=-1)
-		{
-			COLOBJECTS.add(new colObject(objectLines, 2, totalVertexCount,COLOBJECTS.size()));
-		}
-		else if(vertexCount==0)
-		{
-			COLOBJECTS.add(new colObject(objectLines, 1, totalVertexCount,COLOBJECTS.size()));
-		}
-		else
-		{
-			COLOBJECTS.add(new colObject(objectLines, refVal, totalVertexCount,COLOBJECTS.size()));
-		}
+		importOBJ(lines);
 	}
 	public static void optimizeCollision(boolean bool)
 	{
@@ -388,7 +298,7 @@ public class ColReader extends OpenedFile
 		int vertOffset = 1;
 		for(int i = 0; i<COLOBJECTS.size();i++)
 		{
-			ret = ret + COLOBJECTS.get(i).toString(vertOffset);
+			ret = ret + COLOBJECTS.get(i).toOBJ(vertOffset);
 			vertOffset+= COLOBJECTS.get(i).getVertexAmount();
 			//System.out.println(vertOffset);
 		}
@@ -400,7 +310,7 @@ public class ColReader extends OpenedFile
 		objects = data.getInt(64);
 		makeColObjects(data);
 	}
-	public byte[] getData()
+	public byte[] toBytes()
 	{
 		return getBytes();
 	}
@@ -412,7 +322,7 @@ public class ColReader extends OpenedFile
 	{
 		this.name = name;
 	}
-	public ArrayList<colObject> getObjects()
+	public ArrayList<CollisionObject> getObjects()
 	{
 		return COLOBJECTS;
 	}

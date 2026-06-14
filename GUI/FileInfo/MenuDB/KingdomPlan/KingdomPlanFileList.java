@@ -5,16 +5,18 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
+import GUI.GUI;
 import GUI.FileInfo.FileInfoFactory;
 import GUI.FileList.Generic;
-import PCKGManager.OpenedFile;
 import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
+import bFM.OpenedFile;
 
 @SuppressWarnings("serial")
 public class KingdomPlanFileList extends Generic
@@ -33,12 +35,17 @@ public class KingdomPlanFileList extends Generic
 		JMenuItem export = new JMenuItem("Export File");
 		export.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
+			if(GUI.lastFileSavePath != null) 
+			{
+				chooseFile.setCurrentDirectory(Paths.get(GUI.lastFileSavePath).toFile().getParentFile());
+			}
 			chooseFile.setSelectedFile(new File("Kingdom Plan Config.txt"));
 			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
 			{
 				try 
 				{
 					Files.write(chooseFile.getSelectedFile().toPath(),((KingdomPlanAreaSelectorGUI)infoGUI).getKPData());
+					GUI.lastFileSavePath = chooseFile.getSelectedFile().toString();
 				}
 				catch(IOException i)
 				{
@@ -62,7 +69,7 @@ public class KingdomPlanFileList extends Generic
 				try 
 				{
 					file.setData(new kingdomPlanManager(Files.readAllLines(chooseFile.getSelectedFile().toPath())).toBytes());
-					((KingdomPlanAreaSelectorGUI)infoGUI).replaceData(file.getData());
+					((KingdomPlanAreaSelectorGUI)infoGUI).replaceData(file.toBytes());
 				} catch (IOException i) 
 				{
 					i.printStackTrace();
@@ -81,9 +88,9 @@ public class KingdomPlanFileList extends Generic
 		        else if(SwingUtilities.isLeftMouseButton(e))
 		        {
 		        	//System.out.println("hit");
-		        	GUI.GUI.setFileInfo(infoGUI);
-		        	GUI.GUI.deselectAll();
-		        	setBackground(GUI.GUI.selectedColor);
+		        	GUI.setFileInfo(infoGUI);
+		        	GUI.deselectAll();
+		        	setBackground(GUI.selectedColor);
 		        }
 		    }
 		    public void mouseReleased(MouseEvent e) {

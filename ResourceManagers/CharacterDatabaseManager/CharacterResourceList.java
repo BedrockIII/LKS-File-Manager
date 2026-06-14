@@ -4,16 +4,21 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-class CharacterResourceList
+import bFM.Data;
+import bFM.GenericFile;
+
+public class CharacterResourceList extends GenericFile
 {
 	ArrayList<CharacterBody> bodies = null;
 	ArrayList<CharacterFace> faces = null;
 	protected CharacterResourceList(List<String> lines)
 	{
+		name = "Character Resource List";
 		initialize(lines.toArray(new String[0]));
 	}
 	protected CharacterResourceList(byte[] file) 
 	{
+		name = "Character Resource List";
 		String data = new String(file, Charset.forName("Shift-JIS"));
 		String[] lines = data.split(";");
 		initialize(lines);
@@ -85,7 +90,7 @@ class CharacterResourceList
 		}
 		return ret;
 	}
-	private class CharacterBody
+	public class CharacterBody implements Data
 	{
 		int characterCode = -1;
 		int jobCode = -1;
@@ -130,6 +135,11 @@ class CharacterResourceList
 			num7 = Float.parseFloat(data[10]);
 			name = bFM.Utils.formatString(data[11]);
 		}
+		public CharacterBody(String name, int jobCode) 
+		{
+			this.name = name;
+			this.jobCode = jobCode;
+		}
 		private void addVData(String line)
 		{
 			String[] data = bFM.Utils.toStrArr(line);
@@ -154,8 +164,130 @@ class CharacterResourceList
 			num4 + "," + num5 + "," + num6 + "," + num7 + "," + name;
 			return ret;
 		}
+		public boolean equals(String name) 
+		{
+			throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+		}
+		public void setData(byte[] data) 
+		{
+			throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+		}
+		public byte[] toBytes() 
+		{
+			throw new UnsupportedOperationException("getData() should not be called on type " + this.getClass());
+		}
+		public void setName(String name) 
+		{
+			this.name = name;
+		}
+		public String getName() 
+		{
+			return name;
+		}
+		public int getSize() 
+		{
+			throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
+		}
+		public void setCharacterCode(int characterCode) 
+		{
+			this.characterCode = characterCode;
+		}
+		public int getCharacterCode() 
+		{
+			return characterCode;
+		}
+
+		public void setJobCode(int jobCode) 
+		{
+			this.jobCode = jobCode;
+		}
+		public int getJobCode() 
+		{
+			return jobCode;
+		}
+
+		public void setNum1(int num1) 
+		{
+			this.num1 = num1;
+		}
+		public int getNum1() 
+		{
+			return num1;
+		}
+
+		public void setGenderCode(int genderCode) 
+		{
+			this.genderCode = genderCode;
+		}
+		public int getGenderCode() 
+		{
+			return genderCode;
+		}
+
+		public void setNum2(int num2) 
+		{
+			this.num2 = num2;
+		}
+		public int getNum2() 
+		{
+			return num2;
+		}
+
+		public void setModel(String model) 
+		{
+			this.model = model;
+		}
+		public String getModel() 
+		{
+			return model;
+		}
+
+		public void setNum3(int num3) 
+		{
+			this.num3 = num3;
+		}
+		public int getNum3() 
+		{
+			return num3;
+		}
+
+		public void setNum4(int num4) 
+		{
+			this.num4 = num4;
+		}
+		public int getNum4() 
+		{
+			return num4;
+		}
+
+		public void setNum5(int num5) 
+		{
+			this.num5 = num5;
+		}
+		public int getNum5() 
+		{
+			return num5;
+		}
+		
+		public void setNum6(int num6) 
+		{
+			this.num6 = num6;
+		}
+		public int getNum6() 
+		{
+			return num6;
+		}
+		
+		public void setNum7(float num7) 
+		{
+			this.num7 = num7;
+		}
+		public float getNum7() 
+		{
+			return num7;
+		}
 	}
-	private class CharacterFace
+	public class CharacterFace implements Data
 	{
 		int characterCode = -1;
 		int jobCode = -1;
@@ -200,6 +332,11 @@ class CharacterResourceList
 			num5 = bFM.Utils.strToInt(data[10]);
 			name = bFM.Utils.formatString(data[11]);
 		}
+		public CharacterFace(String name, int jobCode) 
+		{
+			this.name = name;
+			this.jobCode = jobCode;
+		}
 		private void addVData(String line)
 		{
 			String[] data = bFM.Utils.toStrArr(line);
@@ -224,5 +361,181 @@ class CharacterResourceList
 			referenceCharacterCode + "," + num3 + "," + num4 + "," + num5 + ",\"" + name + "\"";
 			return ret;
 		}
+		public boolean equals(String name) 
+		{
+			throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+		}
+		public void setData(byte[] data) 
+		{
+			throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+		}
+		public byte[] toBytes() 
+		{
+			throw new UnsupportedOperationException("getData() should not be called on type " + this.getClass());
+		}
+		public void setName(String name) 
+		{
+			this.name = name;
+		}
+		public String getName() 
+		{
+			return name;
+		}
+		public int getSize() 
+		{
+			throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
+		}
+		public void setCharacterCode(int characterCode) 
+		{
+			this.characterCode = characterCode;
+		}
+		public int getCharacterCode() 
+		{
+			return characterCode;
+		}
+
+		public void setJobCode(int jobCode) 
+		{
+			this.jobCode = jobCode;
+		}
+		public int getJobCode() 
+		{
+			return jobCode;
+		}
+
+		public void setNum1(int num1) 
+		{
+			this.num1 = num1;
+		}
+		public int getNum1() 
+		{
+			return num1;
+		}
+
+		public void setGenderCode(int genderCode) 
+		{
+			this.genderCode = genderCode;
+		}
+		public int getGenderCode() 
+		{
+			return genderCode;
+		}
+
+		public void setNum2(int num2) 
+		{
+			this.num2 = num2;
+		}
+		public int getNum2() 
+		{
+			return num2;
+		}
+
+		public void setModel(String model) 
+		{
+			this.model = model;
+		}
+		public String getModel() 
+		{
+			return model;
+		}
+
+		public void setModelType(String modelType) 
+		{
+			this.modelType = modelType;
+		}
+		public String getModelType() 
+		{
+			return modelType;
+		}
+
+		public void setReferenceCharacterCode(int referenceCharacterCode) 
+		{
+			this.referenceCharacterCode = referenceCharacterCode;
+		}
+		public int getReferenceCharacterCode() 
+		{
+			return referenceCharacterCode;
+		}
+
+		public void setNum3(int num3) 
+		{
+			this.num3 = num3;
+		}
+		public int getNum3() 
+		{
+			return num3;
+		}
+
+		public void setNum4(int num4) 
+		{
+			this.num4 = num4;
+		}
+		public int getNum4() 
+		{
+			return num4;
+		}
+
+		public void setNum5(int num5) 
+		{
+			this.num5 = num5;
+		}
+		public int getNum5() 
+		{
+			return num5;
+		}
+	}
+	public ArrayList<CharacterBody> getBodies() 
+	{
+		return bodies;
+	}
+	public ArrayList<CharacterFace> getFaces() 
+	{
+		return faces;
+	}
+	public void removeBody(CharacterBody file)
+	{
+		int code = file.getCharacterCode();
+		for(int i = bodies.size()-1; i >= 0; i--)
+		{
+			if(bodies.get(i).getCharacterCode() == code)
+			{
+				bodies.remove(i);
+			}
+		}
+	}
+	public void removeFace(CharacterFace file)
+	{
+		int code = file.getCharacterCode();
+		for(int i = faces.size()-1; i >= 0; i--)
+		{
+			if(faces.get(i).getCharacterCode() == code)
+			{
+				faces.remove(i);
+			}
+		}
+	}
+	public void addFace(String face, int jobCode) 
+	{
+		faces.add(new CharacterFace(face, jobCode));
+	}
+	public void addBody(String body, int jobCode) 
+	{
+		bodies.add(new CharacterBody(body, jobCode));
+	}
+	public CharacterFace getLastFace() 
+	{
+		return faces.get(faces.size() - 1);
+	}
+	public CharacterBody getLastBody() 
+	{
+		return bodies.get(bodies.size() - 1);
+	}
+	public int getAmountOfBodies() 
+	{
+		return bodies.size();
+	}
+	public int getAmountOfFaces() 
+	{
+		return faces.size();
 	}
 }

@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 @SuppressWarnings("serial")
 public class LabeledInputBox extends JPanel
@@ -23,24 +24,25 @@ public class LabeledInputBox extends JPanel
 		setLayout(new GridBagLayout());
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.fill = GridBagConstraints.HORIZONTAL;
-		layout.weightx = 1.0;
 		layout.weighty = 1.0;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
-		setLayout(new GridBagLayout());
+		layout.gridwidth = 1;
 		text = new JLabel(labelText);
-		text.setPreferredSize(GUI.buttonSize);
-		add(text);
-		add(comp, layout);
 		update();
 	}
 	public void update()
 	{
 		removeAll();
-		add(text);
+		layout.weightx = 0.0;
+		add(text, layout);
+		layout.weightx = 1.0;
 		add(comp, layout);
 		
-		comp.setPreferredSize(new Dimension((int) GUI.getRightSize().getWidth() - GUI.buttonWidth, height));
-		comp.setMinimumSize(new Dimension(250 - GUI.buttonWidth, height));
+		
+		text.setPreferredSize(new Dimension((int) GUI.getRightSize().getWidth() / 2, height));
+		text.setMinimumSize(new Dimension(GUI.buttonWidth, height));
+		
+		comp.setPreferredSize(new Dimension((int) GUI.getRightSize().getWidth() / 2 - GUI.buttonWidth, height));
+		comp.setMinimumSize(new Dimension(250 - GUI.buttonWidth-5, height));
 		setPreferredSize(new Dimension((int) GUI.getRightSize().getWidth(), height));
 		setMinimumSize(new Dimension(250, height));
 		repaint();
@@ -49,5 +51,9 @@ public class LabeledInputBox extends JPanel
 	{
 		this.comp = comp;
 		update();
+	}
+	public void replaceText(String text) 
+	{
+		this.text.setText(text);
 	}
 }

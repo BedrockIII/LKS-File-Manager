@@ -220,5 +220,6 @@ public class KingdomPlanAreaGUI extends JPanel
 		{
 			Element.update();
 		}
+		repaint();
 	}
 }

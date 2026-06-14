@@ -1,111 +1,215 @@
 package GUI.FileList;
 
-import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
-import GUI.GUI.Actions;
-import PCKGManager.PCKGManager;
+import GUI.FileInfo.FileInfoFactory;
+import GUI.FileInfo.FixedPointObjectInfoGUI;
+import WorldFileManager.fpInterpreter;
+import bFM.OpenedFile;
+import WorldFileManager.FixedPointObject;
 
 @SuppressWarnings("serial")
-public class FixedPoint extends JPanel implements ActionListener
+public class FixedPoint extends CollapseableFileList
 {
-	byte[] data;
-	String name = "";
-	public FixedPoint(PCKGManager pac, int parentY, int parentX, int displacement)
+	ArrayList<FixedPointObject> objects = new ArrayList<FixedPointObject>();
+	public FixedPoint(OpenedFile file, int padding) 
 	{
-		data = pac.getFile(displacement);
-		name = pac.getName(displacement);
-		super.setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-		super.setLayout(new GridBagLayout());
-		super.setMaximumSize(new Dimension(100000,GUI.assetHeight));
-		GridBagConstraints constraints = new GridBagConstraints();  
-		constraints.weightx = 1.0;
-		JPanel spacer = new JPanel();
-		spacer.setPreferredSize(new Dimension(parentX, GUI.assetHeight));
-		spacer.setMinimumSize(new Dimension(parentX, GUI.assetHeight));
-		super.add(spacer);
-		JLabel fileName = new JLabel(pac.getName(displacement), SwingConstants.LEFT);
-		fileName.setPreferredSize(new Dimension(10000, GUI.assetHeight));
-		super.add(fileName, constraints);
-		
-		JButton export = new JButton("Export File");
-		export.setActionCommand(Actions.EXPORT.name());
-		export.addActionListener(this);
-		export.setPreferredSize(GUI.buttonSize);
-		export.setMinimumSize(GUI.buttonSize);
-		super.add(export);
-		
-		JButton replace = new JButton("Replace File");
-		replace.setActionCommand(Actions.REPLACE.name());
-		replace.setPreferredSize(GUI.buttonSize);
-		replace.setMinimumSize(GUI.buttonSize);
-		super.add(replace);
-		
-		JButton extract = new JButton("Extract File");
-		extract.setActionCommand(Actions.EXPORTFIXEDPOINTEXTRACTED.name());
-		extract.addActionListener(this);
-		extract.setPreferredSize(GUI.buttonSize);
-		extract.setMinimumSize(GUI.buttonSize);
-		//super.add(extract);not implemented
-		
-		JButton addFile = new JButton("Import File");
-		addFile.setActionCommand(Actions.IMPORTFIXEDPOINTEXTRACTED.name());
-		addFile.addActionListener(this);
-		addFile.setPreferredSize(GUI.buttonSize);
-		addFile.setMinimumSize(GUI.buttonSize);
-		//super.add(addFile);//not implemented
-		
-		//coloring
-		if(displacement%2==0)
+		this.file = file;
+		initializeAll(padding);
+	}
+	protected void initializeAll(int padding)
+	{
+		fileTypes = new FileNameExtensionFilter("LKS Fixed Placement File", "fp", "vfp", "sfp", "lfp", "plfp");
+		initializeListGUI(padding);
+		fileName.setText(file.getName());
+		initializeSubGUI(padding);
+		addActions();
+		reAddComponents();
+	} 
+	protected void addActions()
+	{
+		addExportAction();
+		addReplaceButton();
+		addExportBFPAction();
+		add(actions);
+	}
+	private void addExportBFPAction() 
+	{
+		JMenuItem export = new JMenuItem("Export As BFP");
+		export.addActionListener(e -> {
+			JFileChooser chooseFile = new JFileChooser();
+			if(GUI.lastFileSavePath != null) 
+			{
+				chooseFile.setCurrentDirectory(Paths.get(GUI.lastFileSavePath).toFile().getParentFile());
+			}
+			chooseFile.setSelectedFile(new File(file.getName().substring(0, file.getName().lastIndexOf('.')) + ".bfp"));
+			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
+			{
+				try 
+				{
+					Files.write(chooseFile.getSelectedFile().toPath(),((fpInterpreter)file).toBFP().getBytes());
+					GUI.lastFileSavePath = chooseFile.getSelectedFile().toString();
+				}
+				catch(IOException i)
+				{
+					System.out.println("Failed to Export Fixed Point File as BFP");
+					i.printStackTrace();
+				}
+				System.out.println("Exported Fixed Point File as BFP");
+			}
+		});
+		actions.add(export);
+	}
+	private void initializeSubGUI(int padding) 
+	{
+		objects = ((fpInterpreter)file).getObjects();
+		for(FixedPointObject object : objects)
 		{
-			super.setBackground(new Color(179, 245, 244)); //blue
-		}
-		else
-		{
-			super.setBackground(new Color(191, 191, 191)); //grey
+			System.out.println(object.getName());
+			subEntries.add(new FixedPointObjectListGUI(object, padding + GUI.indentSize));
 		}
 	}
-	@Override
-	public void actionPerformed(ActionEvent event) 
+	public void removeFile(Generic file) 
 	{
-		JFileChooser chooseFile = new JFileChooser();
-		if(event.getActionCommand()== Actions.EXPORT.name())
+		remove(file);
+		objects.remove(((FixedPointObjectListGUI)file).getObject());
+		subEntries.remove(file);
+	}
+	private class FixedPointObjectListGUI extends Generic
+	{
+		FixedPointObject object;
+		public FixedPointObjectListGUI(FixedPointObject object, int padding) 
 		{
-			
-			chooseFile.setSelectedFile(new File(name));
-			int num = chooseFile.showSaveDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
-			{
-				try {Files.write(chooseFile.getSelectedFile().toPath(),data);}catch(IOException e){e.printStackTrace();System.out.println("Failed to Export FP File");}
-				System.out.println("Exported FP File");
-			}
-		}else if(event.getActionCommand()== Actions.REPLACE.name())
-		{
-			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			chooseFile.setFileFilter(new FileNameExtensionFilter("Fixed Point File", "fp", "vfp", "lfp", "sfp"));
-			chooseFile.showOpenDialog(null);
-			try {data = Files.readAllBytes(chooseFile.getSelectedFile().toPath());} catch (IOException e) {e.printStackTrace();System.out.println("Failed to Import Generic File");}
-			System.out.println("Imported Generic File");
-		}else if(event.getActionCommand()== Actions.EXPORTFIXEDPOINTEXTRACTED.name())
-		{
-			//TODO
-		}else if(event.getActionCommand()== Actions.IMPORTFIXEDPOINTEXTRACTED.name())
-		{
-			//TODO
+			this.object = object;
+			initializeAll(padding);
 		}
+		protected void initializeAll(int padding)
+		{
+			this.initializeListGUI(padding);
+			addActions();
+		}
+		protected void addActions()
+		{
+			if(object.getReferenceIndex()>0)
+			{
+				this.addRenameAction();
+				this.addDeleteAction();
+				//this.addExportBFPAction();
+			}
+			this.addMouseListener();
+			this.add(actions);
+			this.update();
+		}
+		public Object getObject() 
+		{
+			return object;
+		}
+		protected void addRenameAction()
+		{
+			JMenuItem rename = new JMenuItem("Rename");
+			rename.addActionListener(e -> 
+			{
+				JDialog renameWindow = new JDialog();
+				
+				renameWindow.setVisible(true);  
+				renameWindow.setSize(200, 100);  
+				renameWindow.setPreferredSize(new Dimension(200, 100));  
+				renameWindow.setVisible(true);  
+				renameWindow.setTitle("Rename File");  
+		        JPanel contentPanel = new JPanel();  
+		        contentPanel.setLayout(new BorderLayout());  
+		        renameWindow.getContentPane().add(contentPanel);  
+				
+				contentPanel.setLayout(new GridBagLayout());
+				GridBagConstraints layout = new GridBagConstraints();
+				layout.weightx = 1.0;
+				layout.weighty = 1.0;
+				
+		        JLabel labelOptions = new JLabel("Rename File:");  
+		        labelOptions.setPreferredSize(new Dimension(75, 20));  
+		        contentPanel.add(labelOptions, layout);  
+		        final JTextField newTitle = new JTextField(object.getName()); 
+		        newTitle.setEditable(true);
+		        newTitle.setPreferredSize(new Dimension(100, 20));  
+		        
+		        layout.gridwidth =GridBagConstraints.REMAINDER;
+		        
+		        contentPanel.add(newTitle, layout);
+		        
+		        layout.gridwidth =2;
+		        
+		        JButton Cancel = new JButton();
+		        Cancel.setText("Cancel");
+		        Cancel.addActionListener(g -> 
+		        {
+		        	renameWindow.dispose();
+		        });
+		        contentPanel.add(Cancel, layout);
+		        
+		        layout.gridwidth =GridBagConstraints.REMAINDER;
+		        
+		        JButton Confirm = new JButton();
+		        Confirm.setText("Confirm");
+		        Confirm.addActionListener(g -> 
+		        {
+		        	setName(newTitle.getText());
+		        	renameWindow.dispose();
+		        });
+		        contentPanel.add(Confirm, layout);
+			});
+			actions.add(rename);
+		}
+		public void setName(String name)
+		{
+			object.setName(name);
+			fileName.setText(name);
+			GUI.update();
+		}
+		protected void initializeListGUI(int padding) 
+		{
+			//setBorder(BorderFactory.createLineBorder(Color.GREEN));
+			setBackground(GUI.bgColor);
+			GridBagConstraints constraints = new GridBagConstraints();  
+			constraints.weightx = 0.0;
+			constraints.anchor = GridBagConstraints.NORTHWEST;
+			infoGUI = new FixedPointObjectInfoGUI(object);
+			setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
+			//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
+			setLayout(new GridBagLayout());
+			//setMaximumSize(new Dimension(100000,GUI.assetHeight));
+			JPanel spacer = new JPanel();
+			spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
+			spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
+			spacer.setBackground(GUI.bgColor);
+			add(spacer, constraints);
+			constraints.weightx = 1.0;
+			fileName = new JLabel(object.getName(), SwingConstants.LEFT);
+			fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
+			fileName.setBackground(GUI.bgColor);
+			add(fileName, constraints);
+		}
+	}
+	protected void initializeInfoGUI() 
+	{
+		infoGUI = FileInfoFactory.makeInfoGUI(file);
 	}
 }
