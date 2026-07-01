@@ -16,9 +16,15 @@ public class KingdomPlanElement
 	int PopulationMinimum = -1;
 	int PrereqPurchaseFlag = -1;
 	int PurchaseFlag = -1;
-	int flag12 = -1;
-	int flag13 = -1;
-	int flag14 = -1;
+	int SpecialVariableType = -1;
+	// 11 - BAdge Count _____, change
+	// 10 - Add Unit    JobCode, Count
+	// 9  - Add Item    count, Code
+	// 4  - Add HP      ?????, Change
+	// 3  - Add Pot Spots
+	// 2  - ??? all normal plans
+	int SpecialVar1 = -1;
+	int SpecialVar2 = -1;
 	int cockpitLogCode = -1;
 	int flag16 = -1;
 	public KingdomPlanElement(String Name, String Description, String Image, int[] Flags)
@@ -37,9 +43,9 @@ public class KingdomPlanElement
 		PopulationMinimum = Flags[8];
 		PrereqPurchaseFlag = Flags[9];
 		PurchaseFlag = Flags[10];
-		flag12 = Flags[11];
-		flag13 = Flags[12];
-		flag14 = Flags[13];
+		SpecialVariableType = Flags[11];
+		SpecialVar1 = Flags[12];
+		SpecialVar2 = Flags[13];
 		cockpitLogCode = Flags[14];
 		flag16 = Flags[15];
 	}
@@ -75,9 +81,9 @@ public class KingdomPlanElement
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(PopulationMinimum,4));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(PrereqPurchaseFlag,4));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(PurchaseFlag,4));
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(flag12,4));
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(flag13,4));
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(flag14,4));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(SpecialVariableType,4));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(SpecialVar1,4));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(SpecialVar2,4));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(cockpitLogCode,4));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(flag16,4));
 		return ret;
@@ -110,9 +116,12 @@ public class KingdomPlanElement
 			if(line.indexOf("<<Population Minimum>>")!=-1) PopulationMinimum=bFM.Utils.formatFlag(line);
 			if(line.indexOf("<<Previous Purchase Flag>>")!=-1) PrereqPurchaseFlag=bFM.Utils.formatFlag(line);
 			if(line.indexOf("<<Purchase Flag>>")!=-1) PurchaseFlag=bFM.Utils.formatFlag(line);
-			if(line.indexOf("<<flag12>>")!=-1) flag12=bFM.Utils.formatFlag(line);
-			if(line.indexOf("<<flag13>>")!=-1) flag13=bFM.Utils.formatFlag(line);
-			if(line.indexOf("<<flag14>>")!=-1) flag14=bFM.Utils.formatFlag(line);
+			if(line.indexOf("<<flag12>>")!=-1) SpecialVariableType=bFM.Utils.formatFlag(line);
+			if(line.indexOf("<<Special Variable Type>>")!=-1) SpecialVariableType=bFM.Utils.formatFlag(line);
+			if(line.indexOf("<<flag13>>")!=-1) SpecialVar1=bFM.Utils.formatFlag(line);
+			if(line.indexOf("<<Special Variable 1>>")!=-1) SpecialVar1=bFM.Utils.formatFlag(line);
+			if(line.indexOf("<<flag14>>")!=-1) SpecialVar2=bFM.Utils.formatFlag(line);
+			if(line.indexOf("<<Special Variable 2>>")!=-1) SpecialVar2=bFM.Utils.formatFlag(line);
 			if(line.indexOf("<<Cockpit Log Code>>")!=-1) cockpitLogCode=bFM.Utils.formatFlag(line);
 			if(line.indexOf("<<flag16>>")!=-1) flag16=bFM.Utils.formatFlag(line);
 			return;
@@ -133,9 +142,9 @@ public class KingdomPlanElement
 		if(PopulationMinimum!=-1) ret += "\t\t<<Population Minimum>> " + PopulationMinimum + "\n";
 		if(PrereqPurchaseFlag!=-1) ret += "\t\t<<Previous Purchase Flag>> " + PrereqPurchaseFlag + "\n";
 		if(PurchaseFlag!=-1) ret += "\t\t<<Purchase Flag>> " + PurchaseFlag + "\n";
-		if(flag12!=-1) ret += "\t\t<<flag12>> " + flag12 + "\n";
-		if(flag13!=-1) ret += "\t\t<<flag13>> " + flag13 + "\n";
-		if(flag14!=-1) ret += "\t\t<<flag14>> " + flag14 + "\n";
+		if(SpecialVariableType!=-1) ret += "\t\t<<Special Variable Type>> " + SpecialVariableType + "\n";
+		if(SpecialVar1!=-1) ret += "\t\t<<Special Variable 1>> " + SpecialVar1 + "\n";
+		if(SpecialVar2!=-1) ret += "\t\t<<Special Variable 2>> " + SpecialVar2 + "\n";
 		if(cockpitLogCode!=-1) ret += "\t\t<<Cockpit Log Code>> " + cockpitLogCode + "\n";
 		if(flag16!=-1) ret += "\t\t<<flag16>> " + flag16 + "\n";
 		return ret;
@@ -196,17 +205,17 @@ public class KingdomPlanElement
 	{
 		return flag8;
 	}
-	public int getFlag12() 
+	public int getSpecialVariableType() 
 	{
-		return flag12;
+		return SpecialVariableType;
 	}
-	public int getFlag13() 
+	public int getSpecialVar1() 
 	{
-		return flag13;
+		return SpecialVar1;
 	}
-	public int getFlag14() 
+	public int getSpecialVar2() 
 	{
-		return flag14;
+		return SpecialVar2;
 	}
 	public int getFlag16() 
 	{
@@ -240,17 +249,17 @@ public class KingdomPlanElement
 	{
 		flag8 = num;
 	}
-	public void setFlag12(int num) 
+	public void setSpecialVariableType(int num) 
 	{
-		flag12 = num;
+		SpecialVariableType = num;
 	}
-	public void setFlag13(int num) 
+	public void setSpecialVar1(int num) 
 	{
-		flag13 = num;
+		SpecialVar1 = num;
 	}
-	public void setFlag14(int num) 
+	public void setSpecialVar2(int num) 
 	{
-		flag14 = num;
+		SpecialVar2 = num;
 	}
 	public void setFlag16(int num) 
 	{

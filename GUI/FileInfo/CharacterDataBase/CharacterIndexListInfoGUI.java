@@ -22,7 +22,7 @@ public class CharacterIndexListInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		JobCount = new LabeledInputBox("Index Count", new JLabel("" + object.getAmountOfIndicies()), 1.5);
+		JobCount = new LabeledInputBox("Index Count", new JLabel("" + object.getAmountOfIndicies()));
 	}
 	private void addGUI()
 	{
@@ -31,8 +31,9 @@ public class CharacterIndexListInfoGUI extends GenericFileInfoGUI
 		GridBagConstraints layout = new GridBagConstraints();
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
-		layout.weighty = 1.0;
+		layout.fill = GridBagConstraints.HORIZONTAL;
 		layout.weightx = 1.0;
+		layout.weighty = 1.0;
 		add(JobCount, layout);
 	}
 	public void update() 

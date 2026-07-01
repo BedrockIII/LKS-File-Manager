@@ -7,11 +7,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.OpenedFile;
 
-public class itemDatabaseManager 
+public class itemDatabaseManager implements OpenedFile
 {
 	private ArrayList<Item> items = new ArrayList<Item>();
+	String name = "itemDB3_1.pac";
 	public itemDatabaseManager(byte[] data)
+	{
+		initializeFromBytes(data);
+	}
+	public itemDatabaseManager(String name, byte[] data)
+	{
+		this.name = name;
+		initializeFromBytes(data);
+	}
+	private void initializeFromBytes(byte[] data)
 	{
 		//Initializes an Item Manager using the raw, encrypted, byte code
 		PCKGManager itemDB = new PCKGManager(data);
@@ -120,11 +131,24 @@ public class itemDatabaseManager
 	}
 	public itemDatabaseManager(List<String> lines)
 	{
+		initializeFromLines(lines);
+		
+	}
+	private void initializeFromLines(List<String> lines)
+	{
 		//TODO, do a loop through all lines that adds the line to the last item made, or makes a new item
 		//Initializes an Item Manager using the extracted textfile, for re-encryption
+		
 		Item lastItemCreated = null;
 		for(String Line : lines)
 		{
+			if(Line.indexOf("LKS Item Database File Version")!=-1)
+			{
+				if(Line.indexOf("LKS Item Database File Version 1.1")==-1)
+				{
+					System.err.println("Text Based Item Database file is wrong version. Expected: 1.1 " + Line);
+				}
+			}
 			if(Line.indexOf("<<Item>>")!=-1)
 			{
 				lastItemCreated = new Item(Line);
@@ -135,7 +159,6 @@ public class itemDatabaseManager
 				lastItemCreated.addItemVariableLine(Line);
 			}
 		}
-		
 	}
 	public String toString()
 	{
@@ -202,5 +225,39 @@ public class itemDatabaseManager
 			ret = bFM.Utils.mergeArrays(ret, i.getItemBytes());
 		}
 		return ret;
+	}
+	public boolean equals(String name) 
+	{
+		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+	public String getName() 
+	{
+		return name;
+	}
+	public int getSize() 
+	{
+		throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
+	}
+	public ArrayList<Item> getItems() 
+	{
+		return items;
+	}
+	public void replaceFromText(byte[] data) 
+	{
+		List<String> lines = bFM.Utils.bytesToStrs(data);
+		replaceFromText(lines);
+	}
+	public void replaceFromText(List<String> lines) 
+	{
+		items.removeAll(items);
+		initializeFromLines(lines);
 	}
 }

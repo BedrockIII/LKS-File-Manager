@@ -15,8 +15,8 @@ public class ColReader extends GenericFile
 	public static boolean optimizeCollision = false;
 	static final int startPos = 96;
 	int index = 0;
+	String colName = "all_field";
 	ArrayList<CollisionObject> COLOBJECTS = new ArrayList<CollisionObject>();
-	int objects;
 	public ColReader() {}
 	public ColReader(byte[] file)
 	{
@@ -24,13 +24,14 @@ public class ColReader extends GenericFile
 		data.position(32);
 		byte chara = data.get();
 		name = "";
+		colName = "";
 		while(chara!=0)
 		{
-			name += (char)chara;
+			colName += (char)chara;
 			chara = data.get();
 		}
-		objects = data.getInt(64);
-		makeColObjects(data);
+		int objects = data.getInt(64);
+		makeColObjects(data, objects);
 	}
 	public ColReader(String name)
 	{
@@ -43,10 +44,19 @@ public class ColReader extends GenericFile
 	{
 		this.name = name;
 		ByteBuffer data = ByteBuffer.wrap(file);
-		objects = data.getInt(64);
-		makeColObjects(data);
+		data.position(32);
+		byte chara = data.get();
+		name = "";
+		colName = "";
+		while(chara!=0)
+		{
+			colName += (char)chara;
+			chara = data.get();
+		}
+		int objects = data.getInt(64);
+		makeColObjects(data, objects);
 	}
-	private void makeColObjects(ByteBuffer data) 
+	private void makeColObjects(ByteBuffer data, int objects) 
 	{
 		for(int i = 96; i<objects*160; i+=160)
 		{
@@ -95,6 +105,7 @@ public class ColReader extends GenericFile
 			}
 			pos+=160*COLOBJECTS.get(i).amountNormalObjects;
 		}
+		//bFM.Utils.DebugPrint("Calculated Head Pos: " + pos);
 		pos+=32;
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
@@ -104,6 +115,7 @@ public class ColReader extends GenericFile
 			}
 			pos+=COLOBJECTS.get(i).getHeaderDataSize();
 		}
+		//bFM.Utils.DebugPrint("Calculated List Pos: " + pos);
 		pos+=32;
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
@@ -113,6 +125,7 @@ public class ColReader extends GenericFile
 			}
 			pos+=32*COLOBJECTS.get(i).getListAmount();
 		}
+		//bFM.Utils.DebugPrint("Calculated Tree Pos: " + pos);
 		pos+=32;
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
@@ -122,6 +135,7 @@ public class ColReader extends GenericFile
 			}
 			pos+=COLOBJECTS.get(i).getTreeDataSize();
 		}
+		//bFM.Utils.DebugPrint("Calculated Index Pos: " + pos);
 		pos+=32;
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
@@ -131,6 +145,7 @@ public class ColReader extends GenericFile
 			}
 			pos+=COLOBJECTS.get(i).getIndexSize();
 		}
+		//bFM.Utils.DebugPrint("Calculated Vertex Pos: " + pos);
 		pos+=32;
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
@@ -153,9 +168,9 @@ public class ColReader extends GenericFile
 		{
 			ret[i] = (byte) type.charAt(i);
 		}
-		for(int i = 0; i<name.length(); i++)
+		for(int i = 0; i<colName.length(); i++)
 		{
-			ret[i+32] = (byte) name.charAt(i);
+			ret[i+32] = (byte) colName.charAt(i);
 		}
 		byte[] num = longToBytes(COLOBJECTS.size(), 4);
 		for(int i = 0; i<num.length; i++)
@@ -175,26 +190,31 @@ public class ColReader extends GenericFile
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getOtherObjects());
 		}
+		//bFM.Utils.DebugPrint("Head Pos: " + ret.length);
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(new String("HEAD").getBytes(), new byte[28]));
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getHeader());
 		}
+		//bFM.Utils.DebugPrint("List Pos: " + ret.length);
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(new String("LIST").getBytes(), new byte[28]));
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getList());
 		}
+		//bFM.Utils.DebugPrint("Tree Pos: " + ret.length);
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(new String("TREE").getBytes(), new byte[28]));
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getTree());
 		}
+		//bFM.Utils.DebugPrint("Index Pos: " + ret.length);
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(new String("INDEX").getBytes(), new byte[27]));
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getIndex());
 		}
+		//bFM.Utils.DebugPrint("Vertex Pos: " + ret.length);
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(new String("VERTEX").getBytes(), new byte[26]));
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
@@ -206,16 +226,23 @@ public class ColReader extends GenericFile
 	{
 		int vertexCount = 1;
 		int totalVertexCount = 1;
-		
-		COLOBJECTS = new ArrayList<CollisionObject>();
-		COLOBJECTS.add(new CollisionObject(name, -1, COLOBJECTS.size()));
-		if(Main.grid)
+		String nameForChunks = "all_field";
+		String colCode = name;
+		if(colCode.indexOf(".col")!=-1)
 		{
-			COLOBJECTS.add(new CollisionObject("Ground_"+name, 0, COLOBJECTS.size()));
-			COLOBJECTS.add(new CollisionObject("Wall_"+name, 0, COLOBJECTS.size()));
+			colCode = colCode.substring(0, colCode.indexOf(".col"));
+		}
+		if(Main.grid || colName.equals(nameForChunks))
+		{
+			//A Chunk
+			COLOBJECTS.add(new CollisionObject("col" + colCode, -1, COLOBJECTS.size()));
+			COLOBJECTS.add(new CollisionObject("Ground_"+colCode, 0, COLOBJECTS.size()));
+			COLOBJECTS.add(new CollisionObject("Wall_"+colCode, 0, COLOBJECTS.size()));
 		}
 		else
 		{
+			//A Buidling
+			COLOBJECTS.add(new CollisionObject(colCode, -1, COLOBJECTS.size()));
 			COLOBJECTS.add(new CollisionObject("Ground", 0, COLOBJECTS.size()));
 			COLOBJECTS.add(new CollisionObject("Wall", 0, COLOBJECTS.size()));
 		}
@@ -307,8 +334,8 @@ public class ColReader extends GenericFile
 	public void setData(byte[] file)
 	{
 		ByteBuffer data = ByteBuffer.wrap(file);
-		objects = data.getInt(64);
-		makeColObjects(data);
+		int objects = data.getInt(64);
+		makeColObjects(data, objects);
 	}
 	public byte[] toBytes()
 	{
@@ -325,5 +352,11 @@ public class ColReader extends GenericFile
 	public ArrayList<CollisionObject> getObjects()
 	{
 		return COLOBJECTS;
+	}
+	public void replaceFromOBJ(byte[] data) 
+	{
+		List<String> lines = bFM.Utils.bytesToStrs(data);
+		COLOBJECTS.removeAll(COLOBJECTS);
+		importOBJ(lines);
 	}
 }

@@ -258,6 +258,7 @@ public class CollisionObject implements Data
 	public int getIndexSize()
 	{
 		if(tree == null) return 0;
+		if(referenceValue < 1) return 0;
 		return tree.getIndexSize();
 	}
 
@@ -430,7 +431,7 @@ public class CollisionObject implements Data
 	}
 	public void updatePositions(int otherObjectPos, int headerPos, int listPos, int treePos, int indexPos, int vertexPos) 
 	{
-		bFM.Utils.DebugPrint("Updating Collision Object: " + name);
+		//bFM.Utils.DebugPrint("Updating Collision Object: " + name);
 		if(normalsList.size()>0) normalObjectLocation = otherObjectPos;
 		if(header!=null)this.headerPos = headerPos;
 		if(header!=null)header.setListPos(listPos);

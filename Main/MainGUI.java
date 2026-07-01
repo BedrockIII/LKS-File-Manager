@@ -2,6 +2,7 @@ package Main;
 import java.io.IOException;
 
 import GUI.GUI;
+import bFM.Settings;
 
 public class MainGUI 
 {
@@ -10,7 +11,6 @@ public class MainGUI
 	{
 		PCKGManagerMain.printVersionData();
 		fileManager = new GUI();
-		//System.out.println("args.length = " + args.length);
 		if(args.length > 0)
 		{
 			String BadPath = args[0];
@@ -33,7 +33,7 @@ public class MainGUI
 			{
 				GoodPath = GoodPath.substring(0, GoodPath.length()-1);
 			}
-			fileManager.setSettingsFile(GoodPath);
+			Settings.setSettingsFile(GoodPath);
 		}
 		if(args.length > 1)
 		{

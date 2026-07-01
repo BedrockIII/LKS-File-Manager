@@ -147,8 +147,8 @@ class CollisionTree implements Data
 			{
 				ret = bFM.Utils.mergeArrays(ret, faces.get(i).toBytes());
 			}	
-			int rem = ret.length%32;
-			if(rem!=0) rem = 32-rem;
+			int rem = getIndexSize() - ret.length;
+			if(rem<0) throw new IllegalArgumentException("Collision Index actual size is larger than the expected size\n");
 			indexData =  bFM.Utils.mergeArrays(ret, new byte[rem]);
 			return indexData;
 		}
@@ -166,7 +166,7 @@ class CollisionTree implements Data
 		ret = ret / 32;
 		ret = ret + 1;
 		ret = ret * 32;
-		//Round up
+		//Round up to nearest 32
 		return ret;
 	}
 	public int getMaxIndex()

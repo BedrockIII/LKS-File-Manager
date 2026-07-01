@@ -17,13 +17,13 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
 import GUI.FileInfo.CollisionObjectInfoGUI;
 import GUI.FileInfo.FileInfoFactory;
 import bFM.OpenedFile;
+import bFM.Settings;
 import colReader.ColReader;
 import colReader.CollisionObject;
 
@@ -46,20 +46,18 @@ public class Collision extends CollapseableFileList
 	}
 	protected void initializeListGUI(int padding)
 	{
-		addExportOBJAction();
 		initializeSubGUI(padding);
 		super.initializeListGUI(padding);
 		initializeInfoGUI();
-		//super.addActions();
 	}
 	private void addExportOBJAction() 
  	{
  		JMenuItem export = new JMenuItem("Export As OBJ");
 		export.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
-			if(GUI.lastFileSavePath != null) 
+			if(Settings.lastFileSavePath != null) 
 			{
-				chooseFile.setCurrentDirectory(Paths.get(GUI.lastFileSavePath).toFile().getParentFile());
+				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
 			}
 			chooseFile.setSelectedFile(new File(file.getName().substring(0, file.getName().lastIndexOf('.')) + ".obj"));
 			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
@@ -67,7 +65,7 @@ public class Collision extends CollapseableFileList
 				try 
 				{
 					Files.write(chooseFile.getSelectedFile().toPath(),((ColReader)file).toString().getBytes());
-					GUI.lastFileSavePath = chooseFile.getSelectedFile().toString();
+					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
 				}
 				catch(IOException i)
 				{
@@ -81,8 +79,12 @@ public class Collision extends CollapseableFileList
 	}
 	protected void addActions()
 	{
-		addExportAction();
 		addReplaceButton();
+		replaceAsOBJAction();
+		addExportAction();
+		addExportOBJAction();
+		
+		addMouseListener();
 		add(actions);
 	}
 	private void initializeSubGUI(int padding) 
@@ -90,7 +92,7 @@ public class Collision extends CollapseableFileList
 		objects = ((ColReader)file).getObjects();
 		for(CollisionObject object : objects)
 		{
-			subEntries.add(new ColObjectListGUI(object, padding + GUI.indentSize));
+			subEntries.add(new ColObjectListGUI(object, padding + Settings.indentSize));
 		}
 	}
 	protected void replaceAsOBJAction()
@@ -107,11 +109,7 @@ public class Collision extends CollapseableFileList
 			{
 				try 
 				{
-					((ColReader)file).importOBJ(chooseFile.getSelectedFile().toPath());
-					
-					//System.out.println(data.length);
-					file.setName(chooseFile.getSelectedFile().toPath().getFileName().toString());
-					fileName.setText(file.getName());
+					((ColReader)file).replaceFromOBJ(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
 					objects = ((ColReader)file).getObjects();
 					GUI.update();
 				} catch (IOException i) 
@@ -124,13 +122,13 @@ public class Collision extends CollapseableFileList
 		});
 		actions.add(replace);
 	}
-	public void removeFile(Generic file) 
+	public void removeFile(FileList file) 
 	{
 		remove(file);
 		objects.remove(((ColObjectListGUI)file).getObject());
 		subEntries.remove(file);
 	}
-	public class ColObjectListGUI extends Generic
+	public class ColObjectListGUI extends FileList
 	{
 		CollisionObject object = null;
 		public ColObjectListGUI(CollisionObject object, int padding) 
@@ -141,6 +139,7 @@ public class Collision extends CollapseableFileList
 		protected void initializeAll(int padding)
 		{
 			this.initializeListGUI(padding);
+			this.initializeInfoGUI();
 			addActions();
 		}
 		private void addExportOBJAction() 
@@ -244,26 +243,11 @@ public class Collision extends CollapseableFileList
 		}
 		protected void initializeListGUI(int padding) 
 		{
-			//setBorder(BorderFactory.createLineBorder(Color.GREEN));
-			setBackground(GUI.bgColor);
-			GridBagConstraints constraints = new GridBagConstraints();  
-			constraints.weightx = 0.0;
-			constraints.anchor = GridBagConstraints.NORTHWEST;
-			infoGUI = new CollisionObjectInfoGUI(object);
-			setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-			//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-			setLayout(new GridBagLayout());
-			//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-			JPanel spacer = new JPanel();
-			spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
-			spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-			spacer.setBackground(GUI.bgColor);
-			add(spacer, constraints);
-			constraints.weightx = 1.0;
-			fileName = new JLabel(object.getName(), SwingConstants.LEFT);
-			fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
-			fileName.setBackground(GUI.bgColor);
-			add(fileName, constraints);
+			initializeListGUI(padding, object.getName());
+		}
+		protected void initializeInfoGUI() 
+		{
+			this.infoGUI = new CollisionObjectInfoGUI(object);
 		}
 		protected void replaceAsOBJAction()
 		{

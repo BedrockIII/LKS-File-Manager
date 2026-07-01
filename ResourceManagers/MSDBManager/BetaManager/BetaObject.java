@@ -70,14 +70,14 @@ public class BetaObject extends MobObject
 		xOffset = data.getFloat();
 		yOffset = data.getFloat();
 		zOffset = data.getFloat();
-		num3 = data.getFloat();
+		rotation = data.getFloat();
 		num4 = data.getFloat();
 		mobModNumber = bFM.Utils.getShort(data);
-		num5b = bFM.Utils.getShort(data);
-		num6 = data.getFloat();
-		rotation = data.getFloat();
-		num8 = bFM.Utils.getShort(data);
-		num9 = bFM.Utils.getShort(data);
+		numberOfSubObjects = bFM.Utils.getShort(data);
+		RadiusOfView = data.getFloat();
+		DegreesOfView = data.getFloat();
+		AiCode = bFM.Utils.getShort(data);
+		deathEffects = bFM.Utils.getShort(data);
 		enemyDrop = 0;
 		itemDrop = 0;
 	}
@@ -88,14 +88,14 @@ public class BetaObject extends MobObject
 		xOffset = data.getFloat();
 		yOffset = data.getFloat();
 		zOffset = data.getFloat();
-		num3 = data.getFloat();
+		rotation = data.getFloat();
 		num4 = data.getFloat();
 		mobModNumber = bFM.Utils.getShort(data);
-		num5b = bFM.Utils.getShort(data);
-		num6 = 0;
-		rotation = 0;
-		num8 = 0;
-		num9 = 0;
+		numberOfSubObjects = bFM.Utils.getShort(data);
+		RadiusOfView = 0;
+		DegreesOfView = 0;
+		AiCode = 0;
+		deathEffects = 0;
 		enemyDrop = 0;
 		itemDrop = 0;
 	}
@@ -104,14 +104,14 @@ public class BetaObject extends MobObject
 		xOffset = data.getFloat();
 		yOffset = data.getFloat();
 		zOffset = data.getFloat();
-		num3 = data.getFloat();
+		rotation = data.getFloat();
 		num4 = data.getFloat();
 		mobModNumber = bFM.Utils.getShort(data);
-		num5b = bFM.Utils.getShort(data);
-		num6 = data.getFloat();
-		rotation = data.getFloat();
-		num8 = bFM.Utils.getShort(data);
-		num9 = bFM.Utils.getShort(data);
+		numberOfSubObjects = bFM.Utils.getShort(data);
+		RadiusOfView = data.getFloat();
+		DegreesOfView = data.getFloat();
+		AiCode = bFM.Utils.getShort(data);
+		deathEffects = bFM.Utils.getShort(data);
 		enemyDrop = bFM.Utils.getShort(data);
 		itemDrop = bFM.Utils.getShort(data);
 	}

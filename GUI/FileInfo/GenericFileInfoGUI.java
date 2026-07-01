@@ -1,5 +1,6 @@
 package GUI.FileInfo;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,6 +13,7 @@ import javax.swing.JTextArea;
 import GUI.LabeledInputBox;
 import bFM.Data;
 import bFM.OpenedFile;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class GenericFileInfoGUI extends JPanel
@@ -21,7 +23,7 @@ public class GenericFileInfoGUI extends JPanel
 	JTextArea data = new JTextArea();
 	protected GenericFileInfoGUI() 
 	{
-		fileSize = new LabeledInputBox("File Size: ",  new JLabel("0"), 1.5);
+		fileSize = new LabeledInputBox("File Size: ",  new JLabel("0"));
 		addGUI();
 	}
 	public GenericFileInfoGUI(Data file2) 
@@ -32,7 +34,7 @@ public class GenericFileInfoGUI extends JPanel
 	}
 	private void makeGUI()
 	{
-		fileSize = new LabeledInputBox("File Size: ",  new JLabel("" + file.getSize()), 1.5);
+		fileSize = new LabeledInputBox("File Size: ",  new JLabel("" + file.getSize()));
 		if(file.toBytes().length<50000)
 		{
 			data.setText(new String(file.toBytes(), Charset.forName("Shift-JIS")));
@@ -43,15 +45,9 @@ public class GenericFileInfoGUI extends JPanel
 	{
 		removeAll();
 		setLayout(new GridBagLayout());
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
-		layout.weighty = 0.0;
-		layout.weightx = 0.0;
+		GridBagConstraints layout = Settings.getDefaultConstraints();
 		add(fileSize, layout);
 		layout.weighty = 1.0;
-		layout.weightx = 1.0;
-		layout.fill = GridBagConstraints.BOTH;
 		data.setMinimumSize(new Dimension(10,20));
 		add(data, layout);
 		
@@ -71,5 +67,12 @@ public class GenericFileInfoGUI extends JPanel
 	{
 		if(file==null) fileSize.replaceComponent(new JLabel("0"));
 		else fileSize.replaceComponent(new JLabel("" + file.toBytes().length));
+		for(Component c : this.getComponents())
+		{
+			if(c instanceof LabeledInputBox)
+			{
+				((LabeledInputBox) c).update();
+			}
+		}
 	}
 }

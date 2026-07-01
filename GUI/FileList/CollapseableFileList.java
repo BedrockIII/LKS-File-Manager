@@ -9,13 +9,17 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+
 import GUI.GUI;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public abstract class CollapseableFileList extends FileList
@@ -29,7 +33,6 @@ public abstract class CollapseableFileList extends FileList
 	}
 	protected void initializeListGUI(int padding, String name) 
 	{
-		//setBorder(BorderFactory.createLineBorder(Color.GREEN));
 		setLayout(new GridBagLayout());
 		GridBagConstraints layout = new GridBagConstraints();
 		layout = new GridBagConstraints();
@@ -37,15 +40,10 @@ public abstract class CollapseableFileList extends FileList
 	    layout.anchor = GridBagConstraints.NORTHWEST;
 	    
 	    
-		setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-		setLayout(new GridBagLayout());
+		setPreferredSize(new Dimension(Settings.rowWidth, getHeight()));
 		headerPanel.setLayout(new GridBagLayout());
-		JPanel spacer = new JPanel();
-		//spacer.setBorder(BorderFactory.createLineBorder(Color.RED));
-		spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
-		spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-		spacer.setBackground(null);
-		headerPanel.add(spacer, layout);
+		
+		headerPanel.add(Box.createHorizontalStrut(padding), layout);
 		
 		
 		
@@ -53,13 +51,14 @@ public abstract class CollapseableFileList extends FileList
 		isExtended.setMargin(new Insets(0,0,0,0));
 		isExtended.setBorderPainted(false);
 		isExtended.setContentAreaFilled(false);
-		isExtended.setBackground(GUI.bgColor);
+		isExtended.setBackground(Settings.bgColor);
 		isExtended.setSelected(false);
-		isExtended.setPreferredSize(new Dimension(15, GUI.assetHeight));
+		isExtended.setPreferredSize(new Dimension(15, Settings.assetHeight));
 		try {
 			//ImageIcon grown = );
 			//Image scalar = grown.getImage();
 			isExtended.setSelectedIcon(new ImageIcon(ClassLoader.getSystemResourceAsStream("Grown.png").readAllBytes()));
+			isExtended.setDisabledIcon(new ImageIcon(ClassLoader.getSystemResourceAsStream("Empty.png").readAllBytes()));
 			//System.out.println(grown.getIconHeight());
 			isExtended.setIcon(new ImageIcon(ClassLoader.getSystemResourceAsStream("Shrunk.png").readAllBytes()));
 			
@@ -69,6 +68,7 @@ public abstract class CollapseableFileList extends FileList
 		} catch (NullPointerException e)
 		{
 			isExtended.setSelectedIcon(new ImageIcon("Grown.png"));
+			isExtended.setDisabledIcon(new ImageIcon("Empty.png"));
 			isExtended.setIcon(new ImageIcon("Shrunk.png"));
 		}
 		
@@ -84,14 +84,12 @@ public abstract class CollapseableFileList extends FileList
 		
 		layout.weightx = 1.0;
 		fileName = new JLabel(name, SwingConstants.LEFT);
-		fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding-GUI.assetHeight, GUI.assetHeight));
-		//fileName.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		fileName.setBackground(GUI.bgColor);
+		fileName.setBorder(new EmptyBorder(0, 3, 0, 3));
 		headerPanel.add(fileName, layout);
 	}
 	public int getHeight()
 	{
-		int increment = GUI.assetHeight;
+		int increment = Settings.assetHeight;
 		if(isExtended!=null && isExtended.isSelected() == false) return increment;
 		int ret = increment;
 		if(subEntries == null) return ret;
@@ -100,16 +98,6 @@ public abstract class CollapseableFileList extends FileList
 			ret += entry.getHeight();
 		}
 		return ret;
-	}
-	protected void select()
-	{
-		GUI.deselectAll();
-    	headerPanel.setBackground(GUI.selectedColor);
-    	GUI.setFileInfo(infoGUI);
-	}
-	public void deselect()
-	{
-		headerPanel.setBackground(GUI.bgColor);
 	}
 	public void deselectAll()
 	{
@@ -128,9 +116,14 @@ public abstract class CollapseableFileList extends FileList
 				subEntries.get(j).update();
 			}
 		}
-		setSize(new Dimension(GUI.rowWidth, getHeight()));
-		setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-		setMinimumSize(new Dimension(GUI.rowWidth, getHeight()));
+		setSize(new Dimension(Settings.rowWidth, getHeight()));
+		setPreferredSize(new Dimension(Settings.rowWidth, getHeight()));
+		setMinimumSize(new Dimension(Settings.rowWidth, getHeight()));
+		if(isExtended!=null)
+		{
+			if(subEntries.size() == 0) isExtended.setEnabled(false);
+			else isExtended.setEnabled(true);
+		}
 		if(infoGUI != null)infoGUI.update();
 		else System.out.println(("Collapseable File List: " + fileName.getText() + " lacks an info GUI"));
 	}
@@ -161,9 +154,9 @@ public abstract class CollapseableFileList extends FileList
 				add(subEntries.get(j), layout);
 			}
 		}
-		setSize(new Dimension(GUI.rowWidth, getHeight()));
-		setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-		setMinimumSize(new Dimension(GUI.rowWidth, getHeight()));
+		setSize(new Dimension(Settings.rowWidth, getHeight()));
+		setPreferredSize(new Dimension(Settings.rowWidth, getHeight()));
+		setMinimumSize(new Dimension(Settings.rowWidth, getHeight()));
 		update();
 	}
 	protected void addCollapseAllAction()

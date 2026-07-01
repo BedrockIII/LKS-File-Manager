@@ -15,6 +15,7 @@ import GUI.GUI;
 import GUI.FileInfo.FileInfoFactory;
 import PCKGManager.PCKGManager;
 import bFM.OpenedFile;
+import bFM.Settings;
 
 public class Package extends CollapseableFileList
 {
@@ -35,6 +36,7 @@ public class Package extends CollapseableFileList
 		this.padding = padding;
 		fileTypes = new FileNameExtensionFilter("Package File", "pac", "pcha", "bin", "pac0");
 		initializeListGUI(padding);
+		addMouseListener();
 		addActions();
 		initializeSubGUI(padding);
 		isExtended.setSelected(true);
@@ -50,7 +52,7 @@ public class Package extends CollapseableFileList
 		subEntries = new ArrayList<FileList>();		
 		for(int i =0; i<((PCKGManager)file).getFileAmount(); i++)
 		{
-			subEntries.add(FileListFactory.makeListGUI(((PCKGManager)file).getPackedFile(i), GUI.indentSize + padding));
+			subEntries.add(FileListFactory.makeListGUI(((PCKGManager)file).getPackedFile(i), Settings.indentSize + padding));
 		}
 	}
 	protected void addActions()
@@ -74,7 +76,7 @@ public class Package extends CollapseableFileList
 				String name = chooseFile.getSelectedFile().getName().toString();
 				boolean newFile = !((PCKGManager)file).hasFile(name);
 				((PCKGManager)file).addFile(name, data);
-				if(newFile)subEntries.add(FileListFactory.makeListGUI(((PCKGManager)file).getPackedFile(((PCKGManager)file).getFileAmount()-1), padding + GUI.indentSize));
+				if(newFile)subEntries.add(FileListFactory.makeListGUI(((PCKGManager)file).getPackedFile(((PCKGManager)file).getFileAmount()-1), padding + Settings.indentSize));
 				infoGUI.update();
 				GUI.update();
 			} catch (IOException i) 
@@ -90,9 +92,9 @@ public class Package extends CollapseableFileList
 		exportAll.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
 			chooseFile.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			if(GUI.lastFileSavePath != null) 
+			if(Settings.lastFileSavePath != null) 
 			{
-				chooseFile.setCurrentDirectory(Paths.get(GUI.lastFileSavePath).toFile().getParentFile());
+				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
 			}
 			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
 			{
@@ -129,7 +131,7 @@ public class Package extends CollapseableFileList
 					try 
 					{
 						Files.write(Paths.get(directory.toString() + "\\" + file.getName()), file.toBytes());
-						GUI.lastFileSavePath = chooseFile.getSelectedFile().toString();
+						Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
 					} catch (IOException e1) 
 					{
 						System.out.println("Failed to write file at: " + directory.toString() + "\\" + file.getName());

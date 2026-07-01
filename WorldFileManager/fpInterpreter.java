@@ -56,37 +56,7 @@ public class fpInterpreter extends GenericFile
 	public fpInterpreter(List<String> lines, String type)
 	{
 		fpType = type;
-		FixedPointObject object = null;
-		for(int i =1; i<lines.size(); i++)
-		{
-			if(lines.get(i).indexOf("<<Name>>")!=-1)
-			{
-				object = new FixedPointObject(lines.get(i), objects);
-				objects.add(object);
-			}
-			else if(lines.get(i).indexOf("<<Object>>")!=-1||lines.get(i).indexOf("<<Position>>")!=-1||
-					lines.get(i).indexOf("<<Scale>>")!=-1||lines.get(i).indexOf("<<Shear>>")!=-1||
-					lines.get(i).indexOf("<<Rotation>>")!=-1)
-			{
-				object.addLine(lines.get(i));
-			}
-			else if(lines.get(i).length()>1&&lines.get(i).indexOf("Degree Mode")!=-1)
-			{
-				DEGREEMODE = true;
-			}
-			else if(lines.get(i).length()>1&&lines.get(i).indexOf("Radian Mode")!=-1)
-			{
-				DEGREEMODE = false;
-			}
-			else if(lines.get(i).length()>1&&lines.get(i).indexOf("Randomize Rotation")!=-1)
-			{
-				object.setRandomRotation(true);
-			}
-			else if(lines.get(i).length()>1&&lines.get(i).indexOf("Randomize Scale")!=-1)
-			{
-				object.setRandomScale(true);
-			}
-		}	
+		importFromBFP(lines);
 	}
 	public int getAmountOf(String object)
 	{
@@ -190,5 +160,49 @@ public class fpInterpreter extends GenericFile
 			}
 		}
 		return true;
+	}
+	public void replaceFromBFP(byte[] data) 
+	{
+		List<String> lines = bFM.Utils.bytesToStrs(data);
+		replaceFromBFP(lines);
+	}
+	public void replaceFromBFP(List<String> lines) 
+	{
+		objects.removeAll(objects);
+		importFromBFP(lines);
+	}
+	public void importFromBFP(List<String> lines) 
+	{
+		FixedPointObject object = null;
+		for(String currentLine : lines)
+		{
+			if(currentLine.indexOf("<<Name>>")!=-1)
+			{
+				object = new FixedPointObject(currentLine, objects);
+				objects.add(object);
+			}
+			else if(currentLine.indexOf("<<Object>>")!=-1||currentLine.indexOf("<<Position>>")!=-1||
+					currentLine.indexOf("<<Scale>>")!=-1||currentLine.indexOf("<<Shear>>")!=-1||
+					currentLine.indexOf("<<Rotation>>")!=-1)
+			{
+				object.addLine(currentLine);
+			}
+			else if(currentLine.length()>1&&currentLine.indexOf("Degree Mode")!=-1)
+			{
+				DEGREEMODE = true;
+			}
+			else if(currentLine.length()>1&&currentLine.indexOf("Radian Mode")!=-1)
+			{
+				DEGREEMODE = false;
+			}
+			else if(currentLine.length()>1&&currentLine.indexOf("Randomize Rotation")!=-1)
+			{
+				object.setRandomRotation(true);
+			}
+			else if(currentLine.length()>1&&currentLine.indexOf("Randomize Scale")!=-1)
+			{
+				object.setRandomScale(true);
+			}
+		}	
 	}
 }

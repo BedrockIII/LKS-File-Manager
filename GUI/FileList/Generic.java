@@ -5,6 +5,7 @@ import GUI.FileInfo.FileInfoFactory;
 import PCKGManager.PCKGManager;
 import bFM.Data;
 import bFM.OpenedFile;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class Generic extends FileList
@@ -66,12 +67,12 @@ public class Generic extends FileList
 	protected void select()
 	{
 		GUI.deselectAll();
-    	setBackground(GUI.selectedColor);
+    	setBackground(Settings.selectedColor);
     	GUI.setFileInfo(infoGUI);
 	}
 	public int getHeight()
 	{
-		return GUI.assetHeight;
+		return Settings.assetHeight;
 	}
 	public byte[] getBytes() 
 	{
@@ -81,7 +82,7 @@ public class Generic extends FileList
 	}
 	public void deselect()
 	{
-		setBackground(GUI.bgColor);
+		setBackground(Settings.bgColor);
 	}
 	public void update() 
 	{

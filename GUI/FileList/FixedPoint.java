@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
@@ -25,21 +24,25 @@ import GUI.FileInfo.FileInfoFactory;
 import GUI.FileInfo.FixedPointObjectInfoGUI;
 import WorldFileManager.fpInterpreter;
 import bFM.OpenedFile;
+import bFM.Settings;
 import WorldFileManager.FixedPointObject;
 
 @SuppressWarnings("serial")
 public class FixedPoint extends CollapseableFileList
 {
+	int padding = 0;
 	ArrayList<FixedPointObject> objects = new ArrayList<FixedPointObject>();
 	public FixedPoint(OpenedFile file, int padding) 
 	{
 		this.file = file;
+		this.padding = padding;
 		initializeAll(padding);
 	}
 	protected void initializeAll(int padding)
 	{
 		fileTypes = new FileNameExtensionFilter("LKS Fixed Placement File", "fp", "vfp", "sfp", "lfp", "plfp");
 		initializeListGUI(padding);
+		initializeInfoGUI();
 		fileName.setText(file.getName());
 		initializeSubGUI(padding);
 		addActions();
@@ -47,19 +50,48 @@ public class FixedPoint extends CollapseableFileList
 	} 
 	protected void addActions()
 	{
-		addExportAction();
+		addRenameAction();
 		addReplaceButton();
+		addReplaceAsBFPButton();
+		addExportAction();
 		addExportBFPAction();
+		addMouseListener();
 		add(actions);
+	}
+	protected void addReplaceAsBFPButton()
+	{
+		JMenuItem replace = new JMenuItem("Replace From BFP");
+		replace.addActionListener(e -> {
+			JFileChooser chooseFile = new JFileChooser();
+			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			if(getFileExtensions()!=null) chooseFile.setFileFilter(new FileNameExtensionFilter("Bedrock's Intermediate FP File", "bfp"));
+			
+			int num =chooseFile.showOpenDialog(null);
+			if(num==JFileChooser.APPROVE_OPTION)
+			{
+				try 
+				{
+					((fpInterpreter)file).replaceFromBFP(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
+					initializeSubGUI(padding);
+					GUI.update();
+				} catch (IOException i) 
+				{
+					i.printStackTrace();
+					System.out.println("Failed to Import BFP File");
+				}
+				System.out.println("Imported BFP File");
+			}
+		});
+		actions.add(replace);
 	}
 	private void addExportBFPAction() 
 	{
 		JMenuItem export = new JMenuItem("Export As BFP");
 		export.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
-			if(GUI.lastFileSavePath != null) 
+			if(Settings.lastFileSavePath != null) 
 			{
-				chooseFile.setCurrentDirectory(Paths.get(GUI.lastFileSavePath).toFile().getParentFile());
+				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
 			}
 			chooseFile.setSelectedFile(new File(file.getName().substring(0, file.getName().lastIndexOf('.')) + ".bfp"));
 			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
@@ -67,7 +99,7 @@ public class FixedPoint extends CollapseableFileList
 				try 
 				{
 					Files.write(chooseFile.getSelectedFile().toPath(),((fpInterpreter)file).toBFP().getBytes());
-					GUI.lastFileSavePath = chooseFile.getSelectedFile().toString();
+					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
 				}
 				catch(IOException i)
 				{
@@ -81,20 +113,21 @@ public class FixedPoint extends CollapseableFileList
 	}
 	private void initializeSubGUI(int padding) 
 	{
+		subEntries.removeAll(subEntries);
 		objects = ((fpInterpreter)file).getObjects();
 		for(FixedPointObject object : objects)
 		{
 			System.out.println(object.getName());
-			subEntries.add(new FixedPointObjectListGUI(object, padding + GUI.indentSize));
+			subEntries.add(new FixedPointObjectListGUI(object, padding + Settings.indentSize));
 		}
 	}
-	public void removeFile(Generic file) 
+	public void removeFile(FileList file) 
 	{
 		remove(file);
 		objects.remove(((FixedPointObjectListGUI)file).getObject());
 		subEntries.remove(file);
 	}
-	private class FixedPointObjectListGUI extends Generic
+	private class FixedPointObjectListGUI extends FileList
 	{
 		FixedPointObject object;
 		public FixedPointObjectListGUI(FixedPointObject object, int padding) 
@@ -105,6 +138,7 @@ public class FixedPoint extends CollapseableFileList
 		protected void initializeAll(int padding)
 		{
 			this.initializeListGUI(padding);
+			this.initializeInfoGUI();
 			addActions();
 		}
 		protected void addActions()
@@ -186,26 +220,11 @@ public class FixedPoint extends CollapseableFileList
 		}
 		protected void initializeListGUI(int padding) 
 		{
-			//setBorder(BorderFactory.createLineBorder(Color.GREEN));
-			setBackground(GUI.bgColor);
-			GridBagConstraints constraints = new GridBagConstraints();  
-			constraints.weightx = 0.0;
-			constraints.anchor = GridBagConstraints.NORTHWEST;
-			infoGUI = new FixedPointObjectInfoGUI(object);
-			setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-			//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-			setLayout(new GridBagLayout());
-			//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-			JPanel spacer = new JPanel();
-			spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
-			spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-			spacer.setBackground(GUI.bgColor);
-			add(spacer, constraints);
-			constraints.weightx = 1.0;
-			fileName = new JLabel(object.getName(), SwingConstants.LEFT);
-			fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
-			fileName.setBackground(GUI.bgColor);
-			add(fileName, constraints);
+			initializeListGUI(padding, object.getName());
+		}
+		protected void initializeInfoGUI() 
+		{
+			this.infoGUI = new FixedPointObjectInfoGUI(object);
 		}
 	}
 	protected void initializeInfoGUI() 

@@ -24,27 +24,30 @@ import ResourceManagers.MapDatabaseManager.exteriorPlaceList;
 import ResourceManagers.MapDatabaseManager.mapDataBaseManager;
 import WorldFileManager.fpInterpreter;
 import bFM.Data;
+import bFM.Settings;
 import SystemDataManagers.CockpitLogManager;
 import SystemDataManagers.MailManager;
+import SystemDataManagers.MenuStringManager;
 import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
 import VMC.VMCConverter;
 @SuppressWarnings("unused")
 public class Main 
 {
 	public static boolean grid = true;
-	public static String importPath = "D:\\LKS Mod\\";
-	public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\";
+	
 	static String name = "0314";//0510 soba
 	static byte [] colData;
 	static byte [] fpData;
 	static String fpType = ".vfp";	
 	public static void main(String[] args) 
 	{
+		Settings.importPath = "D:\\LKS Mod\\";
+		Settings.outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\";
 		bFM.Utils.setDebugOutput(true);
 		colReader.ColReader.optimizeCollision = false;
 		//bFM.Utils.autoEditSubPackFile = false;
 		bFM.Utils.DebugPrint("Debug Data Enabled");
-		try{tester();} catch (IOException e) {e.printStackTrace();}
+		//try{tester();} catch (IOException e) {e.printStackTrace();}
 		//decodeCollision();
 		//encodeCollision();
 		//encodeFixedPoints();
@@ -56,7 +59,7 @@ public class Main
 		//decodeLightZones();
 		//encodeLightZones();
 		//message();				
-		//enemyManagers();
+		enemyManagers();
 		//decodeEnemyData("CoinPurse.bMos", 4010);
 		//itemManager();
 		//decodeItems(1);
@@ -81,7 +84,7 @@ public class Main
 		try
 		{
 			bFM.Utils.DebugPrint("Attempting to read msDB27.pac");
-			MonsterDataPack = new PCKGManager(Files.readAllBytes(Paths.get(outputPath+"msDB26.pac")));
+			MonsterDataPack = new PCKGManager(Files.readAllBytes(Paths.get(outputPath+"msDB27.pac")));
 		}
 		catch (IOException e)
 		{
@@ -101,11 +104,11 @@ public class Main
 
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to write raw text at: " + importPath+outputFileName);
-			Files.write(Paths.get(importPath+outputFileName) , bMos.toString().getBytes());
+			bFM.Utils.DebugPrint("Attempting to write raw text at: " + Settings.importPath+outputFileName);
+			Files.write(Paths.get(Settings.importPath+outputFileName) , bMos.toString().getBytes());
 		} catch (IOException e) 
 		{
-			bFM.Utils.DebugPrint("Failed to write bMos file at: " + importPath+outputFileName);
+			bFM.Utils.DebugPrint("Failed to write bMos file at: " + Settings.importPath+outputFileName);
 			return;
 		}
 	}
@@ -124,16 +127,16 @@ public class Main
 		//System.out.println(mail.normalToString());
 		try 
 		{
-			mail = new MailManager(Files.readAllLines(Paths.get(importPath+"NormalMail.txt")), importPath);
+			mail = new MailManager(Files.readAllLines(Paths.get(Settings.importPath+"NormalMail.txt")), Settings.importPath);
 		} catch (IOException e) 
 		{
-			System.out.println("Failed to locate the Normal Quest File in the directory: " + importPath);
+			System.out.println("Failed to locate the Normal Quest File in the directory: " + Settings.importPath);
 			try 
 			{
-				Files.write(Paths.get(importPath+"NormalMail.txt"), mail.normalToString().getBytes());
+				Files.write(Paths.get(Settings.importPath+"NormalMail.txt"), mail.normalToString().getBytes());
 			} catch (IOException q) 
 			{
-				System.out.println("Failed to write Normal Quest File at: " + importPath+"NormalMail.txt");
+				System.out.println("Failed to write Normal Quest File at: " + Settings.importPath+"NormalMail.txt");
 			}
 			
 			
@@ -145,7 +148,7 @@ public class Main
 	}
 	private static void decodeLightZones() 
 	{
-		String mapBootPath = outputPath + "mapBoot2.pac";
+		String mapBootPath = Settings.outputPath + "mapBoot2.pac";
 		PCKGManager mapBootPack = new PCKGManager("mapBoot2.pac");
 		try
 		{
@@ -160,7 +163,7 @@ public class Main
 		byte[] data = mapBootPack.getFile("allfield.lfp");
 		fpInterpreter lightingFixedPoints = new fpInterpreter(data);
 		try {
-			Files.write(Paths.get(importPath+"AllLightZones.blfp"), lightingFixedPoints.toBFP().getBytes());
+			Files.write(Paths.get(Settings.importPath+"AllLightZones.blfp"), lightingFixedPoints.toBFP().getBytes());
 		} catch (IOException e) 
 		{
 			System.out.println("Failed to write .lfp output file");
@@ -178,7 +181,7 @@ public class Main
 	}
 	private static void menuDBManager(int languageCode)
 	{
-		String outputPath = Main.outputPath + "System Data\\Menu Data\\";
+		String outputPath = Settings.outputPath + "System Data\\Menu Data\\";
 		PCKGManager menuDatabase = new PCKGManager("menuDB");
 		try 
 		{
@@ -190,8 +193,9 @@ public class Main
 			return;
 		}
 		
+		//menuDatabase.replaceFile("MenuString.bin",encodeMenuString(menuDatabase.getFile("MenuString.bin")));
 		//menuDatabase.replaceFile("CockpitLog.bin",encodeCockpitLog(menuDatabase.getFile("CockpitLog.bin")));
-		//menuDatabase.replaceFile("KingdomPlan.bin",encodeKingdomPlan(menuDatabase.getFile("KingdomPlan.bin")));
+		menuDatabase.replaceFile("KingdomPlan.bin",encodeKingdomPlan(menuDatabase.getFile("KingdomPlan.bin")));
 		//menuDatabase.replaceFile("Movie.bin", MovieManager(menuDatabase.getFile("Movie.bin")));
 		menuDatabase.replaceFile("CameraData.bin", encodeCameraZones(menuDatabase.getFile("CameraData.bin")));
 		
@@ -208,12 +212,41 @@ public class Main
 			return;
 		}
 	}
+	private static byte[] encodeMenuString(byte[] data) 
+	{
+		throw new IllegalArgumentException("This is broken");
+		bFM.Utils.DebugPrint("Attempting to Encode Menu String Data");
+		MenuStringManager MenuStringData;
+		try {
+			
+			MenuStringData = new MenuStringManager(Files.readAllLines(Paths.get(Settings.importPath+"MenuString.txt")));
+			bFM.Utils.DebugPrint("Success");
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrint("Unable to find an extracted Menu String File. Attempting to extract one");
+			decodeMenuString(data);
+			return data;
+		}
+		return MenuStringData.toBytes();
+	}
+	private static void decodeMenuString(byte[] data)
+	{
+		MenuStringManager MenuStringData = new MenuStringManager(data);
+		try 
+		{
+			bFM.Utils.DebugPrint("Attempting to write Menu String file at: " + Settings.importPath+"MenuString.txt");
+			Files.write(Paths.get(Settings.importPath+"MenuString.txt"), MenuStringData.toString().getBytes(Charset.forName("Ascii")));
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrint("Failed to write file");
+		}
+	}
 	private static byte[] encodeKingdomPlan(byte[] data) 
 	{
 		bFM.Utils.DebugPrint("Attempting to Encode Kingdom Plan Data");
 		kingdomPlanManager kingdomPlanData;
 		try {
-			kingdomPlanData = new kingdomPlanManager(Files.readAllLines(Paths.get(importPath+"KingdomPlan.txt")));
+			kingdomPlanData = new kingdomPlanManager(Files.readAllLines(Paths.get(Settings.importPath+"KingdomPlan.txt")));
 			bFM.Utils.DebugPrint("Success");
 		} catch (IOException e) 
 		{
@@ -228,8 +261,8 @@ public class Main
 		kingdomPlanManager kingdomPlanData = new kingdomPlanManager(data);
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to write Kingdom Plan file at: " + importPath+"KingdomPlan.txt");
-			Files.write(Paths.get(importPath+"KingdomPlan.txt"), kingdomPlanData.toString().getBytes());
+			bFM.Utils.DebugPrint("Attempting to write Kingdom Plan file at: " + Settings.importPath+"KingdomPlan.txt");
+			Files.write(Paths.get(Settings.importPath+"KingdomPlan.txt"), kingdomPlanData.toString().getBytes());
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write file");
@@ -240,7 +273,7 @@ public class Main
 		bFM.Utils.DebugPrint("Attempting to Encode Cockpit Log Data");
 		CockpitLogManager CockpitLogData;
 		try {
-			CockpitLogData = new CockpitLogManager(Files.readAllLines(Paths.get(importPath+"CockpitLog.txt")));
+			CockpitLogData = new CockpitLogManager(Files.readAllLines(Paths.get(Settings.importPath+"CockpitLog.txt")));
 			bFM.Utils.DebugPrint("Success");
 		} catch (IOException e) 
 		{
@@ -255,8 +288,8 @@ public class Main
 		CockpitLogManager CockpitLogData = new CockpitLogManager(data);
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to write Cockpit Log file at: " + importPath+"CockpitLog.txt");
-			Files.write(Paths.get(importPath+"CockpitLog.txt"), CockpitLogData.toString().getBytes());
+			bFM.Utils.DebugPrint("Attempting to write Cockpit Log file at: " + Settings.importPath+"CockpitLog.txt");
+			Files.write(Paths.get(Settings.importPath+"CockpitLog.txt"), CockpitLogData.toString().getBytes());
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write file");
@@ -265,7 +298,7 @@ public class Main
 	private static byte[] MovieManager(byte[] data)
 	{
 		PCKGManager MovieBookPack = new PCKGManager(data);
-		File directory = new File(importPath+"Menu Database\\Movie Book");
+		File directory = new File(Settings.importPath+"Menu Database\\Movie Book");
 		File[] fileList = directory.listFiles();
 		for(int i = 0; i<fileList.length;i++)
 		{
@@ -293,8 +326,8 @@ public class Main
 		fpInterpreter fixedPoints = null;
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to read Light Zone File at: " + importPath+"LightZones.blfp");
-			fixedPoints = new fpInterpreter(Files.readAllLines(Paths.get(importPath+"LightZones.blfp")),"LFP");
+			bFM.Utils.DebugPrint("Attempting to read Light Zone File at: " + Settings.importPath+"LightZones.blfp");
+			fixedPoints = new fpInterpreter(Files.readAllLines(Paths.get(Settings.importPath+"LightZones.blfp")),"LFP");
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read Light Zone File. Will attempt to decode from a pack.");
@@ -305,8 +338,8 @@ public class Main
 		PCKGManager mapBootPack = new PCKGManager("mapBoot");
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to read Map Boot pack at: " + outputPath + "mapBoot2.pac");
-			mapBootPack = new PCKGManager(Files.readAllBytes(Paths.get(outputPath + "mapBoot2.pac")));
+			bFM.Utils.DebugPrint("Attempting to read Map Boot pack at: " + Settings.outputPath + "mapBoot2.pac");
+			mapBootPack = new PCKGManager(Files.readAllBytes(Paths.get(Settings.outputPath + "mapBoot2.pac")));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read Map Boot Pack");
@@ -316,7 +349,7 @@ public class Main
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write Map Boot pack");
-			Files.write(Paths.get(outputPath + "mapBoot2.pac"), mapBootPack.getFile());
+			Files.write(Paths.get(Settings.outputPath + "mapBoot2.pac"), mapBootPack.getFile());
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write Map Boot Pack");
@@ -330,8 +363,8 @@ public class Main
 		CameraZoneList cameraZones = new CameraZoneList(cameraZonePack.getFile("List"),cameraZonePack.getFile("Name"));
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to write Camera Zone file at: " + importPath+"CameraZones.bcz");
-			Files.write(Paths.get(importPath+"CameraZones.bcz"), cameraZones.toString().getBytes());
+			bFM.Utils.DebugPrint("Attempting to write Camera Zone file at: " + Settings.importPath+"CameraZones.bcz");
+			Files.write(Paths.get(Settings.importPath+"CameraZones.bcz"), cameraZones.toString().getBytes());
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write file");
@@ -342,7 +375,7 @@ public class Main
 		bFM.Utils.DebugPrint("Attempting to Encode Camera Zones");
 		CameraZoneList cameraZonesPack;
 		try {
-			cameraZonesPack = new CameraZoneList(Files.readAllLines(Paths.get(importPath+"CameraZones.bcz")));
+			cameraZonesPack = new CameraZoneList(Files.readAllLines(Paths.get(Settings.importPath+"CameraZones.bcz")));
 			bFM.Utils.DebugPrint("Success");
 		} catch (IOException e) 
 		{
@@ -364,8 +397,8 @@ public class Main
 	private static void encodeItems(int language)
 	{
 		bFM.Utils.DebugPrint("Attempting to encode item places");
-		String outputPath = Main.outputPath + "Resources\\";
-		String importPath = Main.importPath + "Resources\\Item Database.txt";
+		String outputPath = Settings.outputPath + "Resources\\";
+		String importPath = Settings.importPath + "Resources\\Item Database.txt";
 		List<String> Lines = null;
 		byte[] data = new byte[0];
 		try 
@@ -410,8 +443,8 @@ public class Main
 	private static void decodeItems(int language)
 	{
 		bFM.Utils.DebugPrint("Attempting to decode item places");
-		String outputPath = Main.outputPath + "Resources\\";
-		String importPath = Main.importPath + "Resources\\";
+		String outputPath = Settings.outputPath + "Resources\\";
+		String importPath = Settings.importPath + "Resources\\";
 		byte[] itemDB = new byte[0];
 		try 
 		{
@@ -433,8 +466,8 @@ public class Main
 	}
 	private static void encodeEnemyData(String difficulty)	
 	{
-		String outputPath = Main.outputPath + "Resources\\";
-		String importPath = Main.importPath + "Resources\\Monster Database\\";
+		String outputPath = Settings.outputPath + "Resources\\";
+		String importPath = Settings.importPath + "Resources\\Monster Database\\";
 		bFM.Utils.DebugPrint("Encoding Enemies "+ difficulty);
 		MissionObjectPlacementManager bMos;
 		MobModList enemyModifications = null;
@@ -568,7 +601,12 @@ public class Main
 		//bFM.Utils.testDifferences(Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col")), data);
 		//Files.write(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\map\\wg\\wg0610.pac\\0610.col2"), data);
 		
-		bFM.Utils.testDifferences(Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Resources\\chrDB0.pac")), Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Resources\\chrDB0 - Copy.pac")));
+		//bFM.Utils.testDifferences(Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Resources\\chrDB0.pac")), Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Resources\\chrDB0 - Copy.pac")));
+		
+		
+		List<String> Lines = Files.readAllLines(Paths.get(Settings.importPath + "Resources\\Item Database.txt"), Charset.forName("Shift_JIS"));
+		itemDatabaseManager itemDB = new itemDatabaseManager(Lines);
+		bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(Settings.outputPath + "Resources\\" +  "itemDB3_"+1+".pac")) , itemDB.toBytes());
 	}
 	private static String getLanguage(int languageCode)
 	{
@@ -593,8 +631,8 @@ public class Main
 	}
 	private static void compressEventText(int languageCode)
 	{
-		String importPath = Main.importPath + "Events\\Text\\" + getLanguage(languageCode);
-		String outputPath = Main.outputPath + "Message\\" + getLanguage(languageCode);
+		String importPath = Settings.importPath + "Events\\Text\\" + getLanguage(languageCode);
+		String outputPath = Settings.outputPath + "Message\\" + getLanguage(languageCode);
 		
 		//read the compressed pack file
 		PCKGManager eventTextPac = new PCKGManager(LZ10Manager.decompress(outputPath + "mes_LZ.bin"));
@@ -642,8 +680,8 @@ public class Main
 	{
 		//deCompress and extract and decompress the event text files
 		
-		String importPath = Main.importPath + "Events\\Text\\" + getLanguage(languageCode);
-		String outputPath = Main.outputPath + "Message\\" + getLanguage(languageCode);
+		String importPath = Settings.importPath + "Events\\Text\\" + getLanguage(languageCode);
+		String outputPath = Settings.outputPath + "Message\\" + getLanguage(languageCode);
 		
 		
 		PCKGManager eventTextPac = new PCKGManager(LZ10Manager.decompress(outputPath + "mes_LZ.bin"));
@@ -666,18 +704,18 @@ public class Main
 	}
 	private static void characterDataBaseManager()
 	{
-		String importDirectory = importPath + "Resources\\Character Database\\";
-		CharacterDataBaseManager cdb = new CharacterDataBaseManager(outputPath + "Resources\\chrDB0.pac");
+		String importDirectory = Settings.importPath + "Resources\\Character Database\\";
+		CharacterDataBaseManager cdb = new CharacterDataBaseManager(Settings.outputPath + "Resources\\chrDB0.pac");
 		//cdb.importIndex(importDirectory);
 		//cdb.importJoin(importDirectory);
 		//cdb.importCharacters(importDirectory);
 		//cdb.importPrice(importDirectory);
 		
-		cdb.writeFile(outputPath + "Resources\\chrDB02.pac");
+		cdb.writeFile(Settings.outputPath + "Resources\\chrDB02.pac");
 	}
 	private static void decodeCollision()
 	{
-		String importPath = Main.importPath;
+		String importPath = Settings.importPath;
 		if(grid)
 		{
 			importPath += name + "\\";
@@ -711,7 +749,7 @@ public class Main
 	}
 	private static void encodeCollision()
 	{
-		String importPath = Main.importPath;
+		String importPath = Settings.importPath;
 		if(grid)
 		{
 			importPath += name + "\\";
@@ -744,8 +782,8 @@ public class Main
 	}
 	private static void packGrid() 
 	{
-		String importPath = Main.importPath;
-		String outputPath = Main.outputPath + "Map\\";
+		String importPath = Settings.importPath;
+		String outputPath = Settings.outputPath + "Map\\";
 		String modelCode = "";
 		if(grid)
 		{
@@ -859,11 +897,11 @@ public class Main
 	private static void packBuilding(String name) 
 	{
 		String fileName = "bl" + name + ".pac";
-		String modelPath = importPath + "bl" + name + ".brres";
-		String colPath = importPath + name + ".col";
-		String fpPath = importPath + name + ".fp";
-		String importPath = Main.importPath;
-		String outputPath = Main.outputPath + "Map\\" + fileName;
+		String modelPath = Settings.importPath + "bl" + name + ".brres";
+		String colPath = Settings.importPath + name + ".col";
+		String fpPath = Settings.importPath + name + ".fp";
+		String importPath = Settings.importPath;
+		String outputPath = Settings.outputPath + "Map\\" + fileName;
 		importPath += "Buildings\\";
 		outputPath += "Building\\";
 		//Create .pac File
@@ -958,8 +996,8 @@ public class Main
 		PCKGManager message = new PCKGManager("mes0.pac");
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to read system text file at: "+importPath+"sys.txt");
-			message.addFile("sys.txt", Files.readAllBytes(Paths.get(importPath+"sys.txt")));
+			bFM.Utils.DebugPrint("Attempting to read system text file at: "+Settings.importPath+"sys.txt");
+			message.addFile("sys.txt", Files.readAllBytes(Paths.get(Settings.importPath+"sys.txt")));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read system text file");
@@ -968,8 +1006,8 @@ public class Main
 		bFM.Utils.DebugPrint("Success");
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to write system text pack at: "+outputPath + "Message\\mes0.pac");
-			Files.write(Paths.get(outputPath + "Message\\mes0.pac") , message.getFile());
+			bFM.Utils.DebugPrint("Attempting to write system text pack at: "+Settings.outputPath + "Message\\mes0.pac");
+			Files.write(Paths.get(Settings.outputPath + "Message\\mes0.pac") , message.getFile());
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write system text pac");
@@ -979,8 +1017,8 @@ public class Main
 	}
 	private static void mapDataBase()
 	{
-		String mapDBPath = outputPath + "Resources\\mapDB0.pac";
-		String inputPath = importPath + "Resources\\Map Database\\";
+		String mapDBPath = Settings.outputPath + "Resources\\mapDB0.pac";
+		String inputPath = Settings.importPath + "Resources\\Map Database\\";
 		mapDataBaseManager mapData = new mapDataBaseManager(mapDBPath);
 		mapData.addFiles(inputPath);
 		mapData.writeFile(mapDBPath);
@@ -991,8 +1029,8 @@ public class Main
 		
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to read Fixed Points file pack at: " + importPath+name+'\\'+name+fpType);
-			fixedPoints = new fpInterpreter(Files.readAllBytes(Paths.get(importPath+name+'\\'+name+fpType)));
+			bFM.Utils.DebugPrint("Attempting to read Fixed Points file pack at: " + Settings.importPath+name+'\\'+name+fpType);
+			fixedPoints = new fpInterpreter(Files.readAllBytes(Paths.get(Settings.importPath+name+'\\'+name+fpType)));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read Fixed Point Pack.");
@@ -1000,8 +1038,8 @@ public class Main
 		}
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to write Fixed Point file at: " + importPath+name+'\\'+name+".bfp");
-			Files.write(Paths.get(importPath+name+'\\'+name+".bfp"), fixedPoints.toBFP().getBytes());
+			bFM.Utils.DebugPrint("Attempting to write Fixed Point file at: " + Settings.importPath+name+'\\'+name+".bfp");
+			Files.write(Paths.get(Settings.importPath+name+'\\'+name+".bfp"), fixedPoints.toBFP().getBytes());
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write Fixed Point File.");
@@ -1013,8 +1051,8 @@ public class Main
 		fpInterpreter fixedPoints = null;
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to read Fixed Points File at: " + importPath+name+'\\'+name+".bfp");
-			fixedPoints = new fpInterpreter(Files.readAllLines(Paths.get(importPath+name+'\\'+name+".bfp")),fpType.toUpperCase().substring(1));
+			bFM.Utils.DebugPrint("Attempting to read Fixed Points File at: " + Settings.importPath+name+'\\'+name+".bfp");
+			fixedPoints = new fpInterpreter(Files.readAllLines(Paths.get(Settings.importPath+name+'\\'+name+".bfp")),fpType.toUpperCase().substring(1));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read Fixed Point File. Will attempt to decode from a pack.");
@@ -1026,8 +1064,8 @@ public class Main
 
 		try 
 		{
-			bFM.Utils.DebugPrint("Attempting to write Fixed Points file at: " + importPath+name+'\\'+name+fpType);
-			Files.write(Paths.get(importPath+name+'\\'+name+fpType), fpData);
+			bFM.Utils.DebugPrint("Attempting to write Fixed Points file at: " + Settings.importPath+name+'\\'+name+fpType);
+			Files.write(Paths.get(Settings.importPath+name+'\\'+name+fpType), fpData);
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write Fixed Point File");
@@ -1036,8 +1074,8 @@ public class Main
 	}
 	private static void encodeVMC(String VMC_Code)
 	{
-		String outputPath = Main.outputPath + "Events\\"+VMC_Code+".vmc0";
-		String importPath = Main.importPath + "Events\\"+VMC_Code+".txt";
+		String outputPath = Settings.outputPath + "Events\\"+VMC_Code+".vmc0";
+		String importPath = Settings.importPath + "Events\\"+VMC_Code+".txt";
 		//This came to me in a series of visions.
 		VMCConverter eventData = null;
 		byte[] vmcData = null;
@@ -1069,8 +1107,8 @@ public class Main
 	private static void decodeVMC(String VMC_Code)
 	{
 		VMCConverter eventData = null;
-		String outputPath = Main.outputPath + "Events\\"+VMC_Code+".vmc0";
-		String importPath = Main.importPath + "Events\\"+VMC_Code+".txt";
+		String outputPath = Settings.outputPath + "Events\\"+VMC_Code+".vmc0";
+		String importPath = Settings.importPath + "Events\\"+VMC_Code+".txt";
 		try 
 		{
 			bFM.Utils.DebugPrintF(bFM.DebugStrings.ReadFileAttempt, "VMC", outputPath);
@@ -1095,8 +1133,8 @@ public class Main
 	private static void encodeDebugEventViewer()
 	{
 		EventViewer eventData = null;
-		final String outputPath = Main.outputPath + "Debug\\EventViewer\\";
-		final String importPath = Main.importPath + "Debug\\EventViewer\\";
+		final String outputPath = Settings.outputPath + "Debug\\EventViewer\\";
+		final String importPath = Settings.importPath + "Debug\\EventViewer\\";
 		final String NormalEvents = "evlist.bin";
 		final String SubEvents = "evslist.bin";
 		final String QuestEvents = "evqlist.bin";
@@ -1170,8 +1208,8 @@ public class Main
 	private static void decodeDebugEventViewer()
 	{
 		EventViewer eventData = null;
-		final String outputPath = Main.outputPath + "Debug\\EventViewer\\";
-		final String importPath = Main.importPath + "Debug\\EventViewer\\";
+		final String outputPath = Settings.outputPath + "Debug\\EventViewer\\";
+		final String importPath = Settings.importPath + "Debug\\EventViewer\\";
 		final String NormalEvents = "evlist.bin";
 		final String SubEvents = "evslist.bin";
 		final String QuestEvents = "evqlist.bin";
@@ -1238,7 +1276,7 @@ public class Main
 	}
 	public static void createModdingDirectory(String modPath)
 	{
-		importPath = modPath;
+		Settings.importPath = modPath;
 		Path directory = Paths.get(modPath);
 		directory.toFile().mkdirs();
 		directory.resolve("Buildings").toFile().mkdirs();
@@ -1250,7 +1288,7 @@ public class Main
 	}
 	public static void createRiivolutionDirectory(String modPath, String modName)
 	{
-		outputPath = modPath;
+		Settings.outputPath = modPath;
 		Path directory = Paths.get(modPath);
 		directory.toFile().mkdirs();
 		directory.resolve(modName + "/Characters").toFile().mkdirs();

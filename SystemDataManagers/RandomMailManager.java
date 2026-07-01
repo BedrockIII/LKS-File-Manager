@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.Settings;
 
 public class RandomMailManager 
 {
@@ -65,7 +66,7 @@ public class RandomMailManager
 		questData = new PCKGManager("randamquestdata.bin");
 		try
 		{
-			questData = new PCKGManager(new PCKGManager(Files.readAllBytes(Paths.get(colReader.Main.outputPath + "System Data\\Menu Data\\questdata4_1.bin"))).getFile("randamquestdata.bin"));
+			questData = new PCKGManager(new PCKGManager(Files.readAllBytes(Paths.get(Settings.outputPath + "System Data\\Menu Data\\questdata4_1.bin"))).getFile("randamquestdata.bin"));
 		}
 		catch (IOException e)
 		{

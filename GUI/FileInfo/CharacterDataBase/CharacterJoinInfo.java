@@ -253,22 +253,23 @@ public class CharacterJoinInfo extends GenericFileInfoGUI
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
 		layout.weighty = 0.0;
+		layout.fill = GridBagConstraints.HORIZONTAL;
 		layout.weightx = 1.0;
-		add(new LabeledInputBox("Index", indexText, 1.5), layout);
-		add(new LabeledInputBox("Num 1", num1Text, 1.5), layout);
-		add(new LabeledInputBox("Num 2", num2Text, 1.5), layout);
-		add(new LabeledInputBox("Num 3", num3Text, 1.5), layout);
-		add(new LabeledInputBox("Num 4", num4Text, 1.5), layout);
-		add(new LabeledInputBox("Num 5", num5Text, 1.5), layout);
-		add(new LabeledInputBox("Num 6", num6Text, 1.5), layout);
-		add(new LabeledInputBox("Num 7", num7Text, 1.5), layout);
-		add(new LabeledInputBox("Num 8", num8Text, 1.5), layout);
-		add(new LabeledInputBox("Num 9", num9Text, 1.5), layout);
-		add(new LabeledInputBox("X Position", xPosText, 1.5), layout);
-		add(new LabeledInputBox("Y Position", yPosText, 1.5), layout);
+		add(new LabeledInputBox("Index", indexText), layout);
+		add(new LabeledInputBox("Num 1", num1Text), layout);
+		add(new LabeledInputBox("Num 2", num2Text), layout);
+		add(new LabeledInputBox("Num 3", num3Text), layout);
+		add(new LabeledInputBox("Num 4", num4Text), layout);
+		add(new LabeledInputBox("Num 5", num5Text), layout);
+		add(new LabeledInputBox("Num 6", num6Text), layout);
+		add(new LabeledInputBox("Num 7", num7Text), layout);
+		add(new LabeledInputBox("Num 8", num8Text), layout);
+		add(new LabeledInputBox("Num 9", num9Text), layout);
+		add(new LabeledInputBox("X Position", xPosText), layout);
+		add(new LabeledInputBox("Y Position", yPosText), layout);
 		
 		layout.weighty = 1.0;
 		layout.weightx = 1.0;
-		add(new LabeledInputBox("Z Position", zPosText, 1.5), layout);
+		add(new LabeledInputBox("Z Position", zPosText), layout);
 	}
 }

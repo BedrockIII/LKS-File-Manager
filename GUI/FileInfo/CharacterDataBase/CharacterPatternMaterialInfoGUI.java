@@ -82,11 +82,13 @@ public class CharacterPatternMaterialInfoGUI extends GenericFileInfoGUI
 		GridBagConstraints layout = new GridBagConstraints();
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
+		layout.fill = GridBagConstraints.HORIZONTAL;
+		layout.weightx = 1.0;
 		layout.weighty = 0;
-		add(new LabeledInputBox("Name", nameText, 1.5), layout);
-		add(new LabeledInputBox("Width", widthText, 1.5), layout);
+		add(new LabeledInputBox("Name", nameText), layout);
+		add(new LabeledInputBox("Width", widthText), layout);
 		layout.weighty = 1.0;
 		layout.weightx = 1.0;
-		add(new LabeledInputBox("Height", heightText, 1.5), layout);;
+		add(new LabeledInputBox("Height", heightText), layout);;
 	}
 }

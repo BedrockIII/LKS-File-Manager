@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
 import ResourceManagers.CharacterDatabaseManager.TextAnimationList.AnimationList;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class CharacterAnimationListInfoGUI extends GenericFileInfoGUI
@@ -28,15 +29,13 @@ public class CharacterAnimationListInfoGUI extends GenericFileInfoGUI
 	{
 		removeAll();
 		setLayout(new GridBagLayout());
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
+		GridBagConstraints layout = Settings.getDefaultConstraints();
 		layout.weighty = 1.0;
-		layout.weightx = 1.0;
-		add(new LabeledInputBox("Animations Count", animationCountText, 1.5), layout);;
+		add(new LabeledInputBox("Animations Count", animationCountText), layout);;
 	}
 	public void update() 
 	{
 		animationCountText.setText("" + object.getAnimations().size());
+		addGUI();
 	}
 }

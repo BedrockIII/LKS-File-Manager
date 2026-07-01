@@ -2,49 +2,58 @@ package GUI;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
+
+import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class LabeledInputBox extends JPanel
+public class LabeledInputBox extends JSplitPane
 {
 	Component comp;
 	JLabel text;
 	int height = 0;
-	GridBagConstraints layout = new GridBagConstraints();
-	public LabeledInputBox(String labelText, Component comp, double yFactor)
+	double xWeight = .5;
+	public LabeledInputBox(String labelText, Component comp)
 	{
 		this.comp = comp;
-		height = (int)(GUI.assetHeight*yFactor);
-		
-		setLayout(new GridBagLayout());
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.fill = GridBagConstraints.HORIZONTAL;
-		layout.weighty = 1.0;
-		layout.gridwidth = 1;
+		height = (int) (Settings.assetHeight*1.5);
 		text = new JLabel(labelText);
+		addGUI();
 		update();
+	}
+	public LabeledInputBox(String labelText, Component comp, double xWeight) 
+	{
+		this.comp = comp;
+		height = (int) (Settings.assetHeight*1.5);
+		text = new JLabel(labelText);
+		this.xWeight = xWeight;
+		addGUI();
+		update();
+	}
+	private void addGUI()
+	{
+		setBorder(null);
+		setContinuousLayout(true);
+		text.setMinimumSize(new Dimension(Settings.buttonWidth, height));
+		comp.setMinimumSize(new Dimension(Settings.buttonWidth, height));
+		
+		setDividerSize(0);
+		setDividerLocation(xWeight);
+		setResizeWeight(xWeight);
+		
+		setLeftComponent(text);
+		setRightComponent(comp);
 	}
 	public void update()
 	{
-		removeAll();
-		layout.weightx = 0.0;
-		add(text, layout);
-		layout.weightx = 1.0;
-		add(comp, layout);
-		
-		
-		text.setPreferredSize(new Dimension((int) GUI.getRightSize().getWidth() / 2, height));
-		text.setMinimumSize(new Dimension(GUI.buttonWidth, height));
-		
-		comp.setPreferredSize(new Dimension((int) GUI.getRightSize().getWidth() / 2 - GUI.buttonWidth, height));
-		comp.setMinimumSize(new Dimension(250 - GUI.buttonWidth-5, height));
-		setPreferredSize(new Dimension((int) GUI.getRightSize().getWidth(), height));
-		setMinimumSize(new Dimension(250, height));
+		SwingUtilities.invokeLater(() -> 
+		{
+			setResizeWeight(xWeight);
+			setDividerLocation(xWeight);
+		});
+
 		repaint();
 	}
 	public void replaceComponent(Component comp) 

@@ -1,8 +1,8 @@
 package GUI.FileList;
 
-import GUI.FileInfo.MenuDB.KingdomPlan.KingdomPlanFileList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
+import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
 import WorldFileManager.fpInterpreter;
 import bFM.OpenedFile;
@@ -26,11 +26,15 @@ public class FileListFactory
 		}
 		else if (file instanceof kingdomPlanManager)
 		{
-			return new KingdomPlanFileList(file, padding);
+			return new KingdomPlanFileList((kingdomPlanManager) file, padding);
 		}
 		else if (file instanceof CharacterDataBaseManager)
 		{
 			return new CharacterDataBaseList(file, padding);
+		}
+		else if (file instanceof itemDatabaseManager)
+		{
+			return new ItemDatabaseList((itemDatabaseManager) file, padding);
 		}
 		return new Generic(file, padding);
 	}

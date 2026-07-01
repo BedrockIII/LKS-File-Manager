@@ -2,6 +2,7 @@ package bFM;
 
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
+import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
 import WorldFileManager.fpInterpreter;
 import colReader.ColReader;
@@ -29,6 +30,10 @@ public interface OpenedFile extends Data
 		}else if (fileType.equals("CharacterDB"))
 		{
 			return new CharacterDataBaseManager(file);
+		}
+		else if (fileType.equals("ItemDB"))
+		{
+			return new itemDatabaseManager(name, file);
 		}
 		return new GenericFile(name, file);
 	}

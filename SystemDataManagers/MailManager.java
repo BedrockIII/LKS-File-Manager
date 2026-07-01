@@ -6,10 +6,11 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.Settings;
 
 public class MailManager 
 {
-	static String questPath = colReader.Main.outputPath + "System Data\\Menu Data\\";
+	static String questPath = Settings.outputPath + "System Data\\Menu Data\\";
 	NormalMailManager normalMail;
 	RandomMailManager randomMail;
 	public MailManager(int languageCode) 

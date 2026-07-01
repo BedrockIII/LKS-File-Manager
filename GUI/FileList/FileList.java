@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import javax.swing.Box;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -17,12 +18,14 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
 import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.PopupWindows.RenameWindow;
 import bFM.Data;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public abstract class FileList extends JPanel
@@ -31,13 +34,12 @@ public abstract class FileList extends JPanel
 	protected GenericFileInfoGUI infoGUI = null;
 	protected JLabel fileName = new JLabel();
 	protected JPopupMenu actions = new JPopupMenu();
-	protected static FileNameExtensionFilter fileTypes = null;
+	protected FileNameExtensionFilter fileTypes = null;
 	protected void initializeAll()
 	{
 		initializeAll(0);
 	}
 	protected abstract void initializeAll(int padding);
-	protected abstract void initializeListGUI(int padding);
 	protected void initializeListGUI(int padding, String name) 
 	{
 		setLayout(new GridBagLayout());
@@ -49,21 +51,18 @@ public abstract class FileList extends JPanel
 		//setBorder(BorderFactory.createLineBorder(Color.GREEN));
 	    
 		
-		setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
+		setPreferredSize(new Dimension(Settings.rowWidth, getHeight()));
 		//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
 		setLayout(new GridBagLayout());
 		//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-		JPanel spacer = new JPanel();
-		spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
-		spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-		spacer.setBackground(null);
-		add(spacer, layout);
+		
+		add(Box.createHorizontalStrut(padding + 15), layout);
 		
 		layout.weightx = 1.0;
 		layout.weighty = 1.0;
 		fileName = new JLabel(name, SwingConstants.LEFT);
-		fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
-		fileName.setBackground(GUI.bgColor);
+		fileName.setPreferredSize(new Dimension(Settings.rowWidth-padding, Settings.assetHeight));
+		fileName.setBorder(new EmptyBorder(0, 3, 0, 3));
 		add(fileName, layout);
 	}
 	protected abstract void initializeInfoGUI();
@@ -92,12 +91,13 @@ public abstract class FileList extends JPanel
 	protected void select()
 	{
 		GUI.deselectAll();
-    	setBackground(GUI.selectedColor);
+		fileName.setBackground(Settings.selectedColor);
+		fileName.setOpaque(true);
     	GUI.setFileInfo(infoGUI);
 	}
 	public int getHeight()
 	{
-		return GUI.assetHeight;
+		return Settings.assetHeight;
 	}
 	public byte[] getBytes() 
 	{
@@ -105,7 +105,9 @@ public abstract class FileList extends JPanel
 	}
 	public void deselect()
 	{
-		setBackground(GUI.bgColor);
+		setBackground(Settings.bgColor);
+		fileName.setBackground(Settings.bgColor);
+		fileName.setOpaque(false);
 	}
 	public void update() 
 	{
@@ -120,7 +122,7 @@ public abstract class FileList extends JPanel
 	{
 		return file;
 	}
-	public static FileNameExtensionFilter getFileExtensions()
+	public FileNameExtensionFilter getFileExtensions()
 	{
 		return fileTypes;
 	}
@@ -138,9 +140,9 @@ public abstract class FileList extends JPanel
 		JMenuItem export = new JMenuItem("Export Raw Data");
 		export.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
-			if(GUI.lastFileSavePath != null) 
+			if(Settings.lastFileSavePath != null) 
 			{
-				chooseFile.setCurrentDirectory(Paths.get(GUI.lastFileSavePath).toFile().getParentFile());
+				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
 			}
 			chooseFile.setSelectedFile(new File(file.getName()));
 			if(chooseFile.showDialog(null, "Save File")==JFileChooser.APPROVE_OPTION)
@@ -148,7 +150,7 @@ public abstract class FileList extends JPanel
 				try 
 				{
 					Files.write(chooseFile.getSelectedFile().toPath(),file.toBytes());
-					GUI.lastFileSavePath = chooseFile.getSelectedFile().toString();
+					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
 				}
 				catch(IOException i)
 				{

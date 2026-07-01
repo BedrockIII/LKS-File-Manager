@@ -42,7 +42,7 @@ public class JobChangePriceListInfoGUI extends GenericFileInfoGUI
 				}
 				public void changedUpdate(DocumentEvent e) {}
 			});
-			prices.add(new LabeledInputBox("Price to Become " + object.getNameByIndex(i),  text, 1.5));
+			prices.add(new LabeledInputBox("Price to Become " + object.getNameByIndex(i),  text));
 		}
 	}
 	private void addGUI()
@@ -52,6 +52,8 @@ public class JobChangePriceListInfoGUI extends GenericFileInfoGUI
 		GridBagConstraints layout = new GridBagConstraints();
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
+		layout.fill = GridBagConstraints.HORIZONTAL;
+		layout.weightx = 1.0;
 		layout.weighty = 0.0;
 		layout.weightx = 1.0;
 		for(int i = 0; i < object.getPriceAmount()-1; i++)
@@ -59,7 +61,6 @@ public class JobChangePriceListInfoGUI extends GenericFileInfoGUI
 			add(prices.get(i), layout);
 		}
 		layout.weighty = 1.0;
-		layout.weightx = 1.0;
 		add(prices.get(object.getPriceAmount()-1), layout);
 	}
 	public void update() 

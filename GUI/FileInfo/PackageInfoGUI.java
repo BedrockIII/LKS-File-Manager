@@ -23,8 +23,8 @@ public class PackageInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		pacSize = new LabeledInputBox("File Size: ",  new JLabel("" + packageFile.getSize()), 1.5);
-		fileCount = new LabeledInputBox("Packed File Count: ",  new JLabel("" + packageFile.getFileAmount()), 1.5);
+		pacSize = new LabeledInputBox("File Size: ",  new JLabel("" + packageFile.getSize()));
+		fileCount = new LabeledInputBox("Packed File Count: ",  new JLabel("" + packageFile.getFileAmount()));
 	}
 	private void addGUI()
 	{
@@ -33,6 +33,7 @@ public class PackageInfoGUI extends GenericFileInfoGUI
 		GridBagConstraints layout = new GridBagConstraints();
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
+		layout.fill = GridBagConstraints.HORIZONTAL;
 		layout.weightx = 1.0;
 		add(pacSize, layout);
 		layout.weighty = 1.0;

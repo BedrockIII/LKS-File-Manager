@@ -6,12 +6,14 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
+import bFM.Settings;
 import colReader.ColReader;
 
 @SuppressWarnings("serial")
 public class CollisionInfoGUI extends GenericFileInfoGUI 
 {
-	LabeledInputBox ObjectCount = null;
+	JLabel fileSizeText = null;
+	JLabel objectCountText = null;
 	public CollisionInfoGUI(ColReader file) 
 	{
 		this.file = file;
@@ -20,45 +22,17 @@ public class CollisionInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		fileSize = new LabeledInputBox("File Size: ",  new JLabel("" + file.toBytes().length), 1.5);
-		ObjectCount = new LabeledInputBox("Collision Object Count: ",  new JLabel("" + ((ColReader)file).getObjects().size()), 1.5);
+		fileSizeText = new JLabel("" + file.toBytes().length);
+		objectCountText = new JLabel("" + ((ColReader)file).getObjects().size());
 	}
 	private void addGUI()
 	{
 		removeAll();
 		setLayout(new GridBagLayout());
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
-		layout.weighty = 0.0;
-		layout.weightx = 0.0;
-		add(fileSize, layout);
-		layout.weighty = 1.0;
-		layout.weightx = 1.0;
-		 
-		add(ObjectCount, layout);
+		GridBagConstraints layout = Settings.getDefaultConstraints();
+		add(new LabeledInputBox("File Size: ", fileSizeText), layout);
 		
+		layout.weighty = 1.0;
+		add(new LabeledInputBox("Collision Object Count: ", objectCountText), layout);
 	}
-	public void updateGUI(byte[] data)
-	{
-		file.setData(data);
-		//System.out.println(data.length);
-		fileSize.replaceComponent(new JLabel("" + data.length));
-		ObjectCount.replaceComponent(new JLabel("" + ((ColReader)file).getObjects().size()));
-		//repaint();
-	}
-	public void update() 
-	{
-		if(file==null)
-		{
-			fileSize.replaceComponent(new JLabel("0"));
-			ObjectCount.replaceComponent(new JLabel("" + ((ColReader)file).getObjects().size()));
-		}
-		else 
-		{
-			fileSize.replaceComponent(new JLabel("" + file.toBytes().length));
-			ObjectCount.replaceComponent(new JLabel("" + ((ColReader)file).getObjects().size()));
-		}
-	}
-	
 }

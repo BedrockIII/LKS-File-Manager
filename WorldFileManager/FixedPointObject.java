@@ -464,4 +464,8 @@ public class FixedPointObject implements Data
 	{
 		this.zStretch = num;
 	}
+	public int getIndex() 
+	{
+		return index;
+	}
 }

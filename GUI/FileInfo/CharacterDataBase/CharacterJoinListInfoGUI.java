@@ -22,7 +22,7 @@ public class CharacterJoinListInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		JoinCount = new LabeledInputBox("Join Count", new JLabel("" + object.getAmountOfJoins()), 1.5);
+		JoinCount = new LabeledInputBox("Join Count", new JLabel("" + object.getAmountOfJoins()));
 	}
 	private void addGUI()
 	{
@@ -32,6 +32,7 @@ public class CharacterJoinListInfoGUI extends GenericFileInfoGUI
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
 		layout.weighty = 1.0;
+		layout.fill = GridBagConstraints.HORIZONTAL;
 		layout.weightx = 1.0;
 		add(JoinCount, layout);
 	}

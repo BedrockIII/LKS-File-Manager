@@ -5,11 +5,13 @@ import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
 import GUI.GUI;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class FileListPanel extends JScrollPane
 {
 	JViewport panel = null;
+	FileList file;
 	public FileListPanel()
 	{
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -19,6 +21,7 @@ public class FileListPanel extends JScrollPane
 	}
 	public void setFile(FileList panel) 
 	{
+		file = panel;
 		setViewportView(panel);
 		GUI.update();
 	}
@@ -26,10 +29,10 @@ public class FileListPanel extends JScrollPane
 	{
 		if(getViewport()==null||getViewport().getView()==null)
 		{
-			return GUI.assetHeight*5;
+			return Settings.assetHeight*5;
 		}
 		//System.out.println(getViewport(). instanceof Package);
-		return Math.max(getViewport().getView().getHeight(),GUI.assetHeight*5)+GUI.assetHeight;
+		return Math.max(getViewport().getView().getHeight(),Settings.assetHeight*5)+Settings.assetHeight;
 	}
 	//bar.
 	//frame.add(bar);
@@ -65,5 +68,10 @@ public class FileListPanel extends JScrollPane
 			((FileList)getViewport().getView()).deselectAll();
 		}
 		getVerticalScrollBar().setValue(Math.min(getVerticalScrollBar().getMaximum(), scroll));
+	}
+	public byte[] getFile() 
+	{
+		// TODO Auto-generated method stub
+		return file.getBytes();
 	}
 }

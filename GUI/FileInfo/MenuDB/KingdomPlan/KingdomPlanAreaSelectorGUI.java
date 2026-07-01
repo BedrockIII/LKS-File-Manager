@@ -1,5 +1,6 @@
 package GUI.FileInfo.MenuDB.KingdomPlan;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,101 +12,45 @@ import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
+import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
 import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
+import bFM.Settings;
 import SystemDataManagers.KingdomPlanManager.KingdomPlanArea;
 
 @SuppressWarnings("serial")
 public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 {
 	kingdomPlanManager plans = null;
+	JLabel numAreas;
 	ArrayList<KingdomPlanArea> Areas = new ArrayList<KingdomPlanArea>();
-	ArrayList<KingdomPlanAreaGUI> AreaGUIs = new ArrayList<KingdomPlanAreaGUI>();
-	JComboBox<KingdomPlanAreaGUI> AreaList = new JComboBox<KingdomPlanAreaGUI>();
-	private void initializeGUI()
-	{
-		removeAll();
-		setPreferredSize(GUI.GUI.getRightSize());
-		setLayout(new GridBagLayout());
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.fill = GridBagConstraints.HORIZONTAL;
-		layout.weightx = 1.0;
-		layout.weighty = 0.0;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
-		//System.out.println(plans);
-		//System.out.println(plans.getAreas());
-		Areas = plans.getAreas();
-		AreaList = new JComboBox<KingdomPlanAreaGUI>();
-		
-		for(int i = 0; i < Areas.size(); i++)
-		{
-			KingdomPlanArea area = Areas.get(i);
-			AreaList.addItem(new KingdomPlanAreaGUI(area, this));
-		}
-		//AreaList.setPreferredSize(new Dimension((int)(GUI.GUI.assetHeight*1.5), 100));
-		AreaList.addItemListener(new ItemListener()
-		{
-			public void itemStateChanged(ItemEvent e) 
-			{
-				  if (e.getStateChange() == ItemEvent.SELECTED) 
-				  {
-					  update();
-			      }
-			}
-			
-		});
-		add(AreaList, layout);
-		if(AreaList.getSelectedItem() != null) add((KingdomPlanAreaGUI) AreaList.getSelectedItem(), layout);
-		else add(new JLabel("No Kingdom Plan Areas Found"), layout);
-		layout.weighty = 1.0;
-		add(Box.createVerticalGlue(), layout);
-		layout.weighty = 0.0;
-	}
 	public KingdomPlanAreaSelectorGUI(kingdomPlanManager file) 
 	{
 		plans = file;
-		initializeGUI();
+		makeGUI();
+		addGUI();
 	}
-	//have a dropdown of all areas and then an area panel
-	public void updateList() 
+	private void makeGUI()
 	{
-		AreaList.repaint();
+		numAreas = new JLabel("" + plans.getAreas().size());
 	}
-	public byte[] getKPData() 
+	private void addGUI()
 	{
-		return plans.toString().getBytes();
+		removeAll();
+		setLayout(new GridBagLayout());
+		GridBagConstraints layout = Settings.getDefaultConstraints();
+		layout.weighty = 1.0;
+		add(new LabeledInputBox("Area Count: ", numAreas), layout);
 	}
 	public void update() 
 	{
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.fill = GridBagConstraints.HORIZONTAL;
-		layout.weightx = 1.0;
-		layout.weighty = 0.0;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
-		//System.out.println(plans);
-		removeAll();
-		add(AreaList, layout);
-		add((KingdomPlanAreaGUI) AreaList.getSelectedItem(), layout);
-		layout.weighty = 1.0;
-		add(Box.createVerticalGlue(), layout);
-		layout.weighty = 0.0;
-		setPreferredSize(new Dimension(GUI.GUI.getRightSize().width-10, getHeight()));
-		for(KingdomPlanAreaGUI area : AreaGUIs)
+		numAreas.setText("" + plans.getAreas().size());
+		for(Component c : getComponents())
 		{
-			area.update();;
+			if(c instanceof LabeledInputBox)
+			{
+				((LabeledInputBox) c).update();
+			}
 		}
-		//file.setData(getBytes());
-		repaint();
-	}
-	public byte[] toBytes() 
-	{
-		return plans.toBytes();
-	}
-	public void replaceData(byte[] data) 
-	{
-		plans = new kingdomPlanManager(data);
-		initializeGUI();
 	}
 }

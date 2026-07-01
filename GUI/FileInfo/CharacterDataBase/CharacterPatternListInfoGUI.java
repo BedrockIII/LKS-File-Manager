@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
 import ResourceManagers.CharacterDatabaseManager.TextAnimationList.PatternList;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class CharacterPatternListInfoGUI extends GenericFileInfoGUI
@@ -27,15 +28,13 @@ public class CharacterPatternListInfoGUI extends GenericFileInfoGUI
 	{
 		removeAll();
 		setLayout(new GridBagLayout());
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
+		GridBagConstraints layout = Settings.getDefaultConstraints();
 		layout.weighty = 1.0;
-		layout.weightx = 1.0;
-		add(new LabeledInputBox("Patterns Count", partCountText, 1.5), layout);;
+		add(new LabeledInputBox("Patterns Count", partCountText), layout);;
 	}
 	public void update() 
 	{
 		partCountText.setText("" + object.getPatterns().size());
+		addGUI();
 	}
 }

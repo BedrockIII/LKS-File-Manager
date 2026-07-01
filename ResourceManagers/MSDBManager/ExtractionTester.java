@@ -1,5 +1,6 @@
 package ResourceManagers.MSDBManager;
 
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -30,11 +31,60 @@ public class ExtractionTester
 			//testAll();
 			//testMod();
 			//RandomMonster();
-			testBeta1();
+			//testBeta1()
+			testPlacement();
+			throw new IOException("all okay");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	private static void testPlacement() 
+	{
+		int modCode = -1; 
+		Rectangle filterZone = null;
+		filterZone = new Rectangle(600, 700, 730, 750); // WIDTH AND HEIGHT ARE ACTUALLY JUST SECOND OFFSETS
+		boolean keepOnlyOutside = false; // if false keep inside
+		String outputFileName = "PlacementTest.bmos";
+		String extractedPath = "D:\\";
+		String resPath = "D:\\LKS Debug!!!!1\\ROMs\\Release Game\\DATA\\files\\res\\";
+		bFM.Utils.DebugPrint("Decoding Enemy Data into raw text");
+		PCKGManager MonsterDataPack = new PCKGManager("MSDB");
+		try
+		{
+			bFM.Utils.DebugPrint("Attempting to read msDB27.pac");
+			MonsterDataPack = new PCKGManager(Files.readAllBytes(Paths.get(resPath+"msDB27.pac")));
+		}
+		catch (IOException e)
+		{
+			bFM.Utils.DebugPrint("Failed to Locate Monster Database Pack at: " + resPath+"msDB27.pac");
+			bFM.Utils.DebugPrint("Program will return as it cannot continue.");
+			return;
+		}
+		MissionObjectPlacementManager bMos = new MissionObjectPlacementManager(MonsterDataPack.getFile("MOP_14_CONST_PLACE.lst"), 
+				MonsterDataPack.getFile("MOP_14_GROUP.lst"), MonsterDataPack.getFile("MOP_14_OBJECT.lst"), 
+				MonsterDataPack.getFile("MOP_14_RANDOM_AREA.lst"), MonsterDataPack.getFile("MOP_14_RANDOM_POINT.lst"), 
+				MonsterDataPack.getFile("MOP_14_AREA_DATA.lst"));
+		
+		if(filterZone!=null)
+		{
+			bMos.setConstraints(filterZone.x, filterZone.width, filterZone.y, filterZone.height, keepOnlyOutside, false);
+		}
+		if(modCode!=-1)
+		{
+			bMos.setFilterCode(modCode);
+		}
+
+		try 
+		{
+			bFM.Utils.DebugPrint("Attempting to write raw text at: " + extractedPath+outputFileName);
+			Files.write(Paths.get(extractedPath+outputFileName) , bMos.toString().getBytes());
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrint("Failed to write bMos file at: " + extractedPath+outputFileName);
+			return;
+		}
+		System.exit(0);
 	}
 	private static void testBeta1() throws IOException
 	{

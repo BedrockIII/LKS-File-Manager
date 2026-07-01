@@ -13,157 +13,60 @@ public class kingdomPlanManager extends GenericFile
 	PCKGManager KingdomPlan = new PCKGManager("");
 	public kingdomPlanManager(byte[] data)
 	{
-		name = "Kingdom Plan Config";
+		name = "KingdomPlan.bin";
 		KingdomPlan = new PCKGManager(data);
 		decodeData();
 	}
 	public void replaceFromBytes(byte[] data)
 	{
-		name = "Kingdom Plan Config";
+		name = "KingdomPlan.bin";
 		KingdomPlan = new PCKGManager(data);
 		decodeData();
 	}
 	public kingdomPlanManager(List<String> lines)
 	{
-		name = "Kingdom Plan Config";
-		boolean inAreaString = false;
-		boolean inElemString = false;
-		boolean inTitle = false;
-		String line = "";
-		KingdomPlanElement Element = null;
-		for(int i = 0; i<lines.size(); i++)
+		name = "KingdomPlan.bin";
+		initializeFromLines(lines);
+	}
+	private void initializeFromLines(List<String> lines) 
+	{
+		KingdomPlanArea lastArea = null;
+		KingdomPlanElement lastElement = null;
+		for(String line : lines)
 		{
-			if(inAreaString == true)
+			if(line.indexOf("<<Area Name>>")!=-1)
 			{
-				//if end
-				if(lines.get(i+1).indexOf("<<")!=-1&&lines.get(i+1).indexOf(">>")!=-1)
-				{
-					if(inTitle)
-					{
-						line += lines.get(i);
-						Areas.add(new KingdomPlanArea(line));
-						inTitle = false;
-					}
-					else
-					{
-						line += lines.get(i);
-						
-						Areas.get(Areas.size()-1).addLine(line);
-					}
-					
-					
-					inAreaString = false;
-					line = "";
-				}
-				else
-				{
-					line += lines.get(i) + "\n";
-				}
+				lastArea = new KingdomPlanArea(line);
+				Areas.add(lastArea);
 			}
-			else if(lines.get(i).indexOf("<<Area Name>>")!=-1)
+			else if(line.indexOf("<<Area ")!=-1)
 			{
-				
-				if((lines.get(i+1).indexOf("<<")==-1)&&lines.get(i+1).indexOf(">>")==-1)//if next line is another object
-				{
-					line = lines.get(i);
-					inTitle = true;
-					inAreaString = true;
-				}
-				else
-				{
-					inTitle = false;
-					inAreaString = false;
-					Areas.add(new KingdomPlanArea(lines.get(i)));
-				}
+				lastArea.addLine(line);
 			}
-			else if(lines.get(i).indexOf("<<Area Description>>")!=-1||lines.get(i).indexOf("<<Area Image>>")!=-1)
+			else if(line.indexOf("<<Element Name>>")!=-1)
 			{
-				if(i+1!=lines.size()&&(lines.get(i+1).indexOf("<<")!=-1)&&lines.get(i+1).indexOf(">>")!=-1)//if next line isny another object
-				{
-					Areas.get(Areas.size()-1).addLine(lines.get(i));
-				}
-				else
-				{
-					line = lines.get(i)+"\n";
-					inAreaString = true;
-				}
+				lastElement = new KingdomPlanElement(line, Areas.size()-1);
+				lastArea.addElement(lastElement);
 			}
-			else if(inElemString == true)
+			else if(line.indexOf("<<")!=-1 && line.indexOf(">>")!=-1)
 			{
-				//if end
-				if((lines.get(i+1).indexOf("<<")!=-1)&&lines.get(i+1).indexOf(">>")!=-1)
-				{
-					if(inTitle)
-					{
-						line += lines.get(i);
-						Element = new KingdomPlanElement(lines.get(i), Areas.size()-1);
-						inTitle = false;
-					}
-					else
-					{
-						line += lines.get(i);
-						
-						Element.addLine(line);
-					}
-					
-					inElemString = false;
-					
-					line = "";
-				}
-				else
-				{
-					line += lines.get(i) + "\n";
-				}
-			}
-			else if(lines.get(i).indexOf("<<Element Name>>")!=-1)
-			{
-				if(Element!=null)
-				{
-					Areas.get(Areas.size()-1).addElement(Element);
-				}
-				if((lines.get(i+1).indexOf("<<")==-1)&&lines.get(i+1).indexOf(">>")==-1)//if next line is another object
-				{
-					line = lines.get(i);
-					inTitle = true;
-					inElemString = true;
-				}
-				else
-				{
-					inTitle = false;
-					inElemString = false;
-					Element = new KingdomPlanElement(lines.get(i), Areas.size()-1);
-				}
-			}
-			else if(lines.get(i).indexOf("<<Element Description>>")!=-1||lines.get(i).indexOf("<<Element Image>>")!=-1)
-			{
-				if((lines.get(i+1).indexOf("<<")!=-1)&&lines.get(i+1).indexOf(">>")!=-1)//if next line is another object
-				{
-					Element.addLine(lines.get(i));
-				}
-				else
-				{
-					line = lines.get(i)+"\n";
-					inElemString = true;
-				}
-				
-			}
-			else if(lines.get(i).indexOf("<<")!=-1&&lines.get(i).indexOf(">>")!=-1)
-			{
-				if(Element!=null)
-				{
-					Element.addLine(lines.get(i));
-				}
+				lastElement.addLine(line);
 			}
 		}
 	}
+	public void replaceFromLines(List<String> lines)
+	{
+		Areas.removeAll(Areas);
+		initializeFromLines(lines);
+	}
 	private void decodeData()
 	{
-		ArrayList<String> AreaNames = bFM.Utils.extractStrings(KingdomPlan.getFile("ListName"));
-		ArrayList<String> AreaDescriptions = bFM.Utils.extractStrings(KingdomPlan.getFile("ListText"));
-		ArrayList<String> AreaImages = bFM.Utils.extractStrings(KingdomPlan.getFile("ListImage"));
-		ArrayList<String> ElemNames = bFM.Utils.extractStrings(KingdomPlan.getFile("ElemName"));
-		ArrayList<String> ElemDescriptions = bFM.Utils.extractStrings(KingdomPlan.getFile("ElemText"));
-		ArrayList<String> ElemImages = bFM.Utils.extractStrings(KingdomPlan.getFile("ElemImage"));
+		ArrayList<String> AreaNames = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ListName"));
+		ArrayList<String> AreaDescriptions = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ListText"));
+		ArrayList<String> AreaImages = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ListImage"));
+		ArrayList<String> ElemNames = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ElemName"));
+		ArrayList<String> ElemDescriptions = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ElemText"));
+		ArrayList<String> ElemImages = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ElemImage"));
 		ArrayList<int[]> ElemFlags = extractFlags(KingdomPlan.getFile("Val"));
 		int AreaSize = Math.min(AreaNames.size(), AreaDescriptions.size());
 		AreaSize = Math.min(AreaSize, AreaImages.size());
@@ -307,7 +210,7 @@ public class kingdomPlanManager extends GenericFile
 	}
 	public String getName()
 	{
-		return name;
+		return "KingdomPlan.bin";
 	}
 	public void setName(String name) 
 	{

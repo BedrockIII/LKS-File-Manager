@@ -23,8 +23,8 @@ public class CharacterResourceListGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		BodyCount = new LabeledInputBox("Body Count", new JLabel("" + object.getAmountOfBodies()), 1.5);
-		FaceCount = new LabeledInputBox("Face Count", new JLabel("" + object.getAmountOfFaces()), 1.5);
+		BodyCount = new LabeledInputBox("Body Count", new JLabel("" + object.getAmountOfBodies()));
+		FaceCount = new LabeledInputBox("Face Count", new JLabel("" + object.getAmountOfFaces()));
 	}
 	private void addGUI()
 	{
@@ -33,6 +33,8 @@ public class CharacterResourceListGUI extends GenericFileInfoGUI
 		GridBagConstraints layout = new GridBagConstraints();
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
+		layout.fill = GridBagConstraints.HORIZONTAL;
+		layout.weightx = 1.0;
 		layout.weighty = 0;
 		add(BodyCount, layout);
 		layout.weighty = 1.0;

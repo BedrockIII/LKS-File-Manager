@@ -83,10 +83,12 @@ public class CharacterAnimationPatternInfoGUI extends GenericFileInfoGUI
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
 		layout.weighty = 0;
-		add(new LabeledInputBox("Name", nameText, 1.5), layout);
-		add(new LabeledInputBox("Num 1", num1Text, 1.5), layout);
+		layout.fill = GridBagConstraints.HORIZONTAL;
+		layout.weightx = 1.0;
+		add(new LabeledInputBox("Name", nameText), layout);
+		add(new LabeledInputBox("Num 1", num1Text), layout);
 		layout.weighty = 1.0;
 		layout.weightx = 1.0;
-		add(new LabeledInputBox("Num 2", num2Text, 1.5), layout);;
+		add(new LabeledInputBox("Num 2", num2Text), layout);;
 	}
 }

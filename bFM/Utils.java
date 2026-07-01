@@ -1,5 +1,7 @@
 package bFM;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -7,6 +9,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+
+import javax.swing.JCheckBox;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import GUI.GUI;
 
 public class Utils 
 {
@@ -228,6 +238,10 @@ public class Utils
 	{
 		return extractStrings(data,0);
 	}
+	public static ArrayList<String> extractStringsNoFormatting(byte[] data)
+	{
+		return extractStringsNoFormatting(data,0);
+	}
 	public static ArrayList<String> extractStrings(byte[] data, int startPos)
 	{
 		ArrayList<String> Strings = new ArrayList<String>();
@@ -255,6 +269,29 @@ public class Utils
 			else if(data[i]==0x09)
 			{
 				temp+="\\t";
+			}
+			else 
+			{
+				temp+=(char)data[i];
+			}
+		}
+		return Strings;
+	}
+	public static ArrayList<String> extractStringsNoFormatting(byte[] data, int startPos)
+	{
+		ArrayList<String> Strings = new ArrayList<String>();
+		String temp = "";
+		for(int i = startPos; i<data.length; i++)
+		{
+			if(data[i]==0x00)
+			{
+				try {
+					Strings.add(new String(temp.getBytes(), "SHIFT-JIS"));
+				} catch (UnsupportedEncodingException e) 
+				{
+					e.printStackTrace();
+				}
+				temp = "";
 			}
 			else 
 			{
@@ -303,6 +340,33 @@ public class Utils
 			{
 				finalLine += "\\";
 				i++;
+			}
+			else
+			{
+				finalLine += ret.charAt(i);
+			}
+		}
+		return finalLine;
+	}
+	public static String toFormatedString(String ret)
+	{
+		String finalLine = "";
+		for(int i = 0; i<ret.length(); i++)
+		{
+			if(ret.charAt(i)=='\n')
+			{
+				finalLine += "\\n";
+			}
+			else if(ret.charAt(i)=='\r')
+			{
+				finalLine += "\\r";
+			} else if(ret.charAt(i)=='\t')
+			{
+				finalLine += "\\t";
+			}
+			else if(ret.charAt(i)=='\\')
+			{
+				finalLine += "\\\\";
 			}
 			else
 			{
@@ -373,6 +437,10 @@ public class Utils
 			else if(name.equals("chrDB0.pac")||name.equals("Character Data Base"))
 			{
 				return "CharacterDB";
+			}
+			else if(name.indexOf("itemDB") != -1||name.equals("Item Data Base"))
+			{
+				return "ItemDB";
 			}
 			//Check if special TODO
 			//else return "Package"
@@ -553,5 +621,105 @@ public class Utils
 			if(a[i]==(byte)i) return i;
 		}
 		return -1;
+	}
+	public static JTextField createFloatTextField(float value, Consumer<Float> setterFunction)
+	{
+		JTextField field = new JTextField("" + value);
+		
+		field.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void insertUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(strToFloat(field.getText()));
+				GUI.update();
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(strToFloat(field.getText()));
+				GUI.update();
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		return field;
+	}
+	public static JTextField createIntTextField(int value, Consumer<Integer> setterFunction)
+	{
+		JTextField field = new JTextField("" + value);
+		
+		field.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void insertUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(strToInt(field.getText()));
+				GUI.update();
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(strToInt(field.getText()));
+				GUI.update();
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		return field;
+	}
+	public static JTextField createStringTextField(String value, Consumer<String> setterFunction)
+	{
+		JTextField field = new JTextField("" + value);
+		
+		field.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void insertUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(field.getText());
+				GUI.update();
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(field.getText());
+				GUI.update();
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		return field;
+	}
+	public static JCheckBox createCheckBox(boolean value, Consumer<Boolean> setterFunction) 
+	{
+		JCheckBox checkBox = new JCheckBox();
+		checkBox.setSelected(value);
+		
+		checkBox.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				setterFunction.accept(checkBox.isSelected());
+			}
+			
+		});
+		
+		return checkBox;
+	}
+	public static JTextField createFormattedTextField(String value, Consumer<String> setterFunction) 
+	{
+		JTextField field = new JTextField(toFormatedString(value));
+		
+		field.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void insertUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(formatStringChars(field.getText()));
+				GUI.update();
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(formatStringChars(field.getText()));
+				GUI.update();
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		return field;
 	}
 }

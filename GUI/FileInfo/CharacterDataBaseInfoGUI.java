@@ -1,5 +1,6 @@
 package GUI.FileInfo;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -28,14 +29,14 @@ public class CharacterDataBaseInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		BodyCount = new LabeledInputBox("Body Count", new JLabel("" + object.getCharacterResource().getAmountOfBodies()), 1.5);
-		FaceCount = new LabeledInputBox("Face Count", new JLabel("" + object.getCharacterResource().getAmountOfFaces()), 1.5);
-		JoinCount = new LabeledInputBox("Join Count", new JLabel("" + object.getCharacterJoin().getAmountOfJoins()), 1.5);
-		IndexCount = new LabeledInputBox("Index Count", new JLabel("" + object.getCharacterIndex().getAmountOfIndicies()), 1.5);
-		CoordinateCount = new LabeledInputBox("Coordinate Count", new JLabel("" + object.getCharacterSoundEffect().getAmountOfCoordinates()), 1.5);
-		AnimationCount = new LabeledInputBox("Animations Count", new JLabel("" + object.getTextureAnimations().getAnimations().getAnimations().size()), 1.5);
-		PatternCount = new LabeledInputBox("Patterns Count", new JLabel("" + object.getTextureAnimations().getPatterns().getPatterns().size()), 1.5);
-		JobCount = new LabeledInputBox("Job Count", new JLabel("" + object.getJobChangePriceList().getAmountOfJobs()), 1.5);
+		BodyCount = new LabeledInputBox("Body Count", new JLabel("" + object.getCharacterResource().getAmountOfBodies()));
+		FaceCount = new LabeledInputBox("Face Count", new JLabel("" + object.getCharacterResource().getAmountOfFaces()));
+		JoinCount = new LabeledInputBox("Join Count", new JLabel("" + object.getCharacterJoin().getAmountOfJoins()));
+		IndexCount = new LabeledInputBox("Index Count", new JLabel("" + object.getCharacterIndex().getAmountOfIndicies()));
+		CoordinateCount = new LabeledInputBox("Coordinate Count", new JLabel("" + object.getCharacterSoundEffect().getAmountOfCoordinates()));
+		AnimationCount = new LabeledInputBox("Animations Count", new JLabel("" + object.getTextureAnimations().getAnimations().getAnimations().size()));
+		PatternCount = new LabeledInputBox("Patterns Count", new JLabel("" + object.getTextureAnimations().getPatterns().getPatterns().size()));
+		JobCount = new LabeledInputBox("Job Count", new JLabel("" + object.getJobChangePriceList().getAmountOfJobs()));
 	}
 	private void addGUI()
 	{
@@ -44,7 +45,9 @@ public class CharacterDataBaseInfoGUI extends GenericFileInfoGUI
 		GridBagConstraints layout = new GridBagConstraints();
 		layout.anchor = GridBagConstraints.NORTHWEST;
 		layout.gridwidth = GridBagConstraints.REMAINDER;
+		layout.fill = GridBagConstraints.HORIZONTAL;
 		layout.weighty = 0;
+		layout.weightx = 1.0;
 		add(BodyCount, layout);
 		add(FaceCount, layout);
 		add(JoinCount, layout);
@@ -54,7 +57,6 @@ public class CharacterDataBaseInfoGUI extends GenericFileInfoGUI
 		add(PatternCount, layout);
 		
 		layout.weighty = 1.0;
-		layout.weightx = 1.0;
 		add(JobCount, layout);
 	}
 	public void update()
@@ -68,5 +70,12 @@ public class CharacterDataBaseInfoGUI extends GenericFileInfoGUI
 		PatternCount.replaceComponent(new JLabel("" + object.getTextureAnimations().getPatterns().getPatterns().size()));
 		JobCount.replaceComponent(new JLabel("" + object.getJobChangePriceList().getAmountOfJobs()));
 		addGUI();
+		for(Component c : this.getComponents())
+		{
+			if(c instanceof LabeledInputBox)
+			{
+				((LabeledInputBox) c).update();
+			}
+		}
 	}
 }

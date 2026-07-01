@@ -1,0 +1,225 @@
+package GUI.FileInfo.ItemDataBase;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JCheckBox;
+import javax.swing.JTextField;
+import GUI.LabeledInputBox;
+import GUI.FileInfo.GenericFileInfoGUI;
+import ResourceManagers.ItemDatabaseManager.Item;
+import bFM.Settings;
+import bFM.Utils;
+
+@SuppressWarnings("serial")
+public class ItemInfoGUI extends GenericFileInfoGUI
+{
+	Item item;
+	private JTextField itemName;
+	private JTextField itemCode;
+	private JTextField num1;
+	private JTextField num2;
+	private JTextField num3;
+	private JTextField SpecialAttackChance;
+	private JCheckBox isImmunePoison;
+	private JCheckBox isImmune2;
+	private JCheckBox isImmune4;
+	private JCheckBox isImmune8;
+	private JCheckBox isImmune10;
+	private JCheckBox isImmune20;
+	private JCheckBox isImmuneCold;
+	private JCheckBox isImmuneFire;
+	private JCheckBox isImmuneWind;
+	private JCheckBox isImmune200;
+	private JCheckBox isImmune400;
+	private JCheckBox isImmune800;
+	private JCheckBox isImmune1000;
+	private JCheckBox isImmune2000;
+	private JCheckBox isImmune4000;
+	private JCheckBox isImmune8000;
+	private JTextField WeaponAttackSpeed;
+	private JTextField num7;
+	private JTextField num8;
+	private JCheckBox isEquippableChild;
+	private JCheckBox isEquippableAdult;
+	private JCheckBox isEquippableGrunt;
+	private JCheckBox isEquippableVeteran;
+	private JCheckBox isEquippableKnight;
+	private JCheckBox isEquippableHunter;
+	private JCheckBox isEquippableWizard;
+	private JCheckBox isEquippableLumberjack;
+	private JCheckBox isEquippableFarmer;
+	private JCheckBox isEquippableMiner;
+	private JCheckBox isEquippableCarpenter1;
+	private JCheckBox isEquippableCarpenter2;
+	private JCheckBox isEquippableCarpenter3;
+	private JCheckBox isEquippableMerchant;
+	private JCheckBox isEquippableCook;
+	private JCheckBox isEquippableDoctor;
+	private JCheckBox isEquippableEggan;
+	private JCheckBox isEquippableBroadcaster;
+	private JCheckBox isEquippableMountie;
+	private JCheckBox isEquippableCraftian;
+	private JTextField num11;
+	private JTextField num12;
+	private JTextField num13;
+	private JTextField num14;
+	private JTextField num15;
+	private JTextField num16;
+	private JTextField num17;
+	private JTextField damageMod;
+	private JTextField hpMod;
+	private JTextField num19;
+	private JTextField num20;
+	private JTextField num21;
+	private JTextField price;
+	private JTextField itemModel;
+	private JTextField newslogName;
+	private JTextField displayName;
+	private JTextField itemDescription;
+	public ItemInfoGUI(Item item) 
+	{
+		this.item = item;
+		makeGUI();
+		addGUI();
+	}
+	private void makeGUI()
+	{
+		itemName = Utils.createStringTextField(item.getItemName(), item::setItemName);
+		itemCode = Utils.createIntTextField(item.getItemCode(), item::setItemCode);
+		
+		num1 = Utils.createIntTextField(item.getNum1(), item::setNum1);
+		num2 = Utils.createIntTextField(item.getNum2(), item::setNum2);
+		num3 = Utils.createIntTextField(item.getGourmetBookIndex(), item::setGourmetBookIndex);
+		SpecialAttackChance = Utils.createIntTextField(item.getSpecialAttackChance(), item::setSpecialAttackChance);
+		isImmunePoison = Utils.createCheckBox(item.getDamageImmunityPoison(), item::setDamageImmunityPoison);
+		isImmune2 = Utils.createCheckBox(item.getDamageImmunity2(), item::setDamageImmunity2);
+		isImmune4 = Utils.createCheckBox(item.getDamageImmunity4(), item::setDamageImmunity4);
+		isImmune8 = Utils.createCheckBox(item.getDamageImmunity8(), item::setDamageImmunity8);
+		isImmune10 = Utils.createCheckBox(item.getDamageImmunity10(), item::setDamageImmunity10);
+		isImmune20 = Utils.createCheckBox(item.getDamageImmunity20(), item::setDamageImmunity20);
+		isImmuneCold = Utils.createCheckBox(item.getDamageImmunityCold(), item::setDamageImmunityCold);
+		isImmuneFire = Utils.createCheckBox(item.getDamageImmunityFire(), item::setDamageImmunityFire);
+		isImmuneWind = Utils.createCheckBox(item.getDamageImmunityWind(), item::setDamageImmunityWind);
+		isImmune200 = Utils.createCheckBox(item.getDamageImmunity200(), item::setDamageImmunity200);
+		isImmune400 = Utils.createCheckBox(item.getDamageImmunity400(), item::setDamageImmunity400);
+		isImmune800 = Utils.createCheckBox(item.getDamageImmunity800(), item::setDamageImmunity800);
+		isImmune1000 = Utils.createCheckBox(item.getDamageImmunity1000(), item::setDamageImmunity1000);
+		isImmune2000 = Utils.createCheckBox(item.getDamageImmunity2000(), item::setDamageImmunity2000);
+		isImmune4000 = Utils.createCheckBox(item.getDamageImmunity4000(), item::setDamageImmunity4000);
+		isImmune8000 = Utils.createCheckBox(item.getDamageImmunity8000(), item::setDamageImmunity8000);
+		WeaponAttackSpeed = Utils.createIntTextField(item.getWeaponAttackSpeed(), item::setWeaponAttackSpeed);
+		num7 = Utils.createIntTextField(item.getNum7(), item::setNum7);
+		num8 = Utils.createIntTextField(item.getNum8(), item::setNum8);
+		isEquippableChild = Utils.createCheckBox(item.getIsEquippableJob23(), item::setIsEquippableJob23);
+		isEquippableAdult = Utils.createCheckBox(item.getIsEquippableJob24(), item::setIsEquippableJob24);
+		isEquippableGrunt = Utils.createCheckBox(item.getIsEquippableJob25(), item::setIsEquippableJob25);
+		isEquippableVeteran = Utils.createCheckBox(item.getIsEquippableJob26(), item::setIsEquippableJob26);
+		isEquippableKnight = Utils.createCheckBox(item.getIsEquippableJob27(), item::setIsEquippableJob27);
+		isEquippableHunter = Utils.createCheckBox(item.getIsEquippableJob28(), item::setIsEquippableJob28);
+		isEquippableWizard = Utils.createCheckBox(item.getIsEquippableJob29(), item::setIsEquippableJob29);
+		isEquippableLumberjack = Utils.createCheckBox(item.getIsEquippableJob30(), item::setIsEquippableJob30);
+		isEquippableFarmer = Utils.createCheckBox(item.getIsEquippableJob31(), item::setIsEquippableJob31);
+		isEquippableMiner = Utils.createCheckBox(item.getIsEquippableJob32(), item::setIsEquippableJob32);
+		isEquippableCarpenter1 = Utils.createCheckBox(item.getIsEquippableJob33(), item::setIsEquippableJob33);
+		isEquippableCarpenter2 = Utils.createCheckBox(item.getIsEquippableJob34(), item::setIsEquippableJob34);
+		isEquippableCarpenter3 = Utils.createCheckBox(item.getIsEquippableJob35(), item::setIsEquippableJob35);
+		isEquippableMerchant = Utils.createCheckBox(item.getIsEquippableJob36(), item::setIsEquippableJob36);
+		isEquippableCook = Utils.createCheckBox(item.getIsEquippableJob37(), item::setIsEquippableJob37);
+		isEquippableDoctor = Utils.createCheckBox(item.getIsEquippableJob38(), item::setIsEquippableJob38);
+		isEquippableEggan = Utils.createCheckBox(item.getIsEquippableJob39(), item::setIsEquippableJob39);
+		isEquippableBroadcaster = Utils.createCheckBox(item.getIsEquippableJob40(), item::setIsEquippableJob40);
+		isEquippableMountie = Utils.createCheckBox(item.getIsEquippableJob41(), item::setIsEquippableJob41);
+		isEquippableCraftian = Utils.createCheckBox(item.getIsEquippableJob42(), item::setIsEquippableJob42);
+		num11 = Utils.createIntTextField(item.getNum11(), item::setNum11);
+		num12 = Utils.createIntTextField(item.getNum12(), item::setNum12);
+		num13 = Utils.createIntTextField(item.getNum13(), item::setNum13);
+		num14 = Utils.createIntTextField(item.getNum14(), item::setNum14);
+		num15 = Utils.createIntTextField(item.getNum15(), item::setNum15);
+		num16 = Utils.createIntTextField(item.getNum16(), item::setNum16);
+		num17 = Utils.createIntTextField(item.getNum17(), item::setNum17);
+		damageMod = Utils.createIntTextField(item.getDamageMod(), item::setDamageMod);
+		hpMod = Utils.createIntTextField(item.getHPMod(), item::setHPMod);
+		num19 = Utils.createIntTextField(item.getNum19(), item::setNum19);
+		num20 = Utils.createIntTextField(item.getNum20(), item::setNum20);
+		num21 = Utils.createIntTextField(item.getNum21(), item::setNum21);
+
+		price = Utils.createIntTextField(item.getPrice(), item::setPrice);
+
+		itemModel = Utils.createStringTextField(item.getItemModel(), item::setItemModel);
+		newslogName = Utils.createStringTextField(item.getNewslogName(), item::setNewslogName);
+		displayName = Utils.createStringTextField(item.getDisplayName(), item::setDisplayName);
+		itemDescription = Utils.createStringTextField(item.getItemDescription(), item::setItemDescription);
+	}
+	private void addGUI()
+	{
+		removeAll();
+		setLayout(new GridBagLayout());
+		GridBagConstraints layout = Settings.getDefaultConstraints();
+		add(new LabeledInputBox("Internal Name", itemName), layout);
+		add(new LabeledInputBox("Item Code", itemCode), layout);
+		
+		add(new LabeledInputBox("Unknown Item Number 1", num1), layout);
+		add(new LabeledInputBox("Menu Index", num2), layout);
+		add(new LabeledInputBox("Gourmet Book Code", num3), layout);
+		add(new LabeledInputBox("Special Attack Chance", SpecialAttackChance), layout);
+		add(new LabeledInputBox("Grants Poison Immunity", isImmunePoison), layout);
+		add(new LabeledInputBox("Grants Damage Type 2 Immunity", isImmune2), layout);
+		add(new LabeledInputBox("Grants Damage Type 3 Immunity", isImmune4), layout);
+		add(new LabeledInputBox("Grants Damage Type 4 Immunity", isImmune8), layout);
+		add(new LabeledInputBox("Grants Damage Type 5 Immunity", isImmune10), layout);
+		add(new LabeledInputBox("Grants Damage Type 6 Immunity", isImmune20), layout);
+		add(new LabeledInputBox("Grants Cold Immunity", isImmuneCold), layout);
+		add(new LabeledInputBox("Grants Fire Immunity", isImmuneFire), layout);
+		add(new LabeledInputBox("Grants Wind Immunity", isImmuneWind), layout);
+		add(new LabeledInputBox("Grants Damage Type 10 Immunity", isImmune200), layout);
+		add(new LabeledInputBox("Grants Damage Type 11 Immunity", isImmune400), layout);
+		add(new LabeledInputBox("Grants Damage Type 12 Immunity", isImmune800), layout);
+		add(new LabeledInputBox("Grants Damage Type 13 Immunity", isImmune1000), layout);
+		add(new LabeledInputBox("Grants Damage Type 14 Immunity", isImmune2000), layout);
+		add(new LabeledInputBox("Grants Damage Type 15 Immunity", isImmune4000), layout);
+		add(new LabeledInputBox("Grants Damage Type 16 Immunity", isImmune8000), layout);
+		add(new LabeledInputBox("Attack Speed", WeaponAttackSpeed), layout);
+		add(new LabeledInputBox("Unknown Item Number 7", num7), layout);
+		add(new LabeledInputBox("Unknown Item Number 8", num8), layout);
+		add(new LabeledInputBox("Is Equippable to Job 23 (Child)", isEquippableChild), layout);
+		add(new LabeledInputBox("Is Equippable to Job 24 (Adult)", isEquippableAdult), layout);
+		add(new LabeledInputBox("Is Equippable to Job 25 (Grunt)", isEquippableGrunt), layout);
+		add(new LabeledInputBox("Is Equippable to Job 26 (Veteran)", isEquippableVeteran), layout);
+		add(new LabeledInputBox("Is Equippable to Job 27 (Knight)", isEquippableKnight), layout);
+		add(new LabeledInputBox("Is Equippable to Job 28 (Hunter)", isEquippableHunter), layout);
+		add(new LabeledInputBox("Is Equippable to Job 29 (Wizard)", isEquippableWizard), layout);
+		add(new LabeledInputBox("Is Equippable to Job 30 (Lumberjack)", isEquippableLumberjack), layout);
+		add(new LabeledInputBox("Is Equippable to Job 31 (Farmer)", isEquippableFarmer), layout);
+		add(new LabeledInputBox("Is Equippable to Job 32 (Miner)", isEquippableMiner), layout);
+		add(new LabeledInputBox("Is Equippable to Job 33 (Carpenter)", isEquippableCarpenter1), layout);
+		add(new LabeledInputBox("Is Equippable to Job 34 (Mega Carpenter)", isEquippableCarpenter2), layout);
+		add(new LabeledInputBox("Is Equippable to Job 35 (Giga Carpenter)", isEquippableCarpenter3), layout);
+		add(new LabeledInputBox("Is Equippable to Job 36 (Merchant)", isEquippableMerchant), layout);
+		add(new LabeledInputBox("Is Equippable to Job 37 (Cook)", isEquippableCook), layout);
+		add(new LabeledInputBox("Is Equippable to Job 38 (Doctor)", isEquippableDoctor), layout);
+		add(new LabeledInputBox("Is Equippable to Job 39 (Eggan)", isEquippableEggan), layout);
+		add(new LabeledInputBox("Is Equippable to Job 40 (Broadcaster)", isEquippableBroadcaster), layout);
+		add(new LabeledInputBox("Is Equippable to Job 41 (Mountie)", isEquippableMountie), layout);
+		add(new LabeledInputBox("Is Equippable to Job 42 (Craftian)", isEquippableCraftian), layout);
+		add(new LabeledInputBox("Unknown Item Number 11", num11), layout);
+		add(new LabeledInputBox("Unknown Item Number 12", num12), layout);
+		add(new LabeledInputBox("Unknown Item Number 13", num13), layout);
+		add(new LabeledInputBox("Unknown Item Number 14", num14), layout);
+		add(new LabeledInputBox("Unknown Item Number 15", num15), layout);
+		add(new LabeledInputBox("Unknown Item Number 16", num16), layout);
+		add(new LabeledInputBox("Unknown Item Number 17", num17), layout);
+		add(new LabeledInputBox("Additional Damage", damageMod), layout);
+		add(new LabeledInputBox("Additional HP", hpMod), layout);
+		add(new LabeledInputBox("Unknown Item Number 19", num19), layout);
+		add(new LabeledInputBox("Unknown Item Number 20", num20), layout);
+		add(new LabeledInputBox("Unknown Item Number 21", num21), layout);
+		
+		add(new LabeledInputBox("Value", price), layout);
+		add(new LabeledInputBox("Model Location", itemModel), layout);
+		add(new LabeledInputBox("Newslog Name", newslogName), layout);
+		add(new LabeledInputBox("Display Name", displayName), layout);
+		layout.weighty = 1.0;
+		add(new LabeledInputBox("Description", itemDescription), layout);
+	}
+}

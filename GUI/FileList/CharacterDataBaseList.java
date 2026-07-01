@@ -1,8 +1,5 @@
 package GUI.FileList;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,10 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
@@ -68,6 +62,7 @@ import ResourceManagers.CharacterDatabaseManager.TextAnimationList.PatternPart;
 import ResourceManagers.CharacterDatabaseManager.indBinList;
 import ResourceManagers.CharacterDatabaseManager.indBinList.ind;
 import bFM.OpenedFile;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class CharacterDataBaseList extends CollapseableFileList
@@ -106,9 +101,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 		JMenuItem export = new JMenuItem("Export Character Database");
 		export.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
-			if(GUI.lastFileSavePath != null) 
+			if(Settings.lastFileSavePath != null) 
 			{
-				chooseFile.setCurrentDirectory(Paths.get(GUI.lastFileSavePath).toFile().getParentFile());
+				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
 			}
 			chooseFile.setSelectedFile(new File("chrDB0.pac"));
 			if(chooseFile.showDialog(null, "Save File")==JFileChooser.APPROVE_OPTION)
@@ -116,7 +111,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				try 
 				{
 					Files.write(chooseFile.getSelectedFile().toPath(),file.toBytes());
-					GUI.lastFileSavePath = chooseFile.getSelectedFile().toString();
+					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
 				}
 				catch(IOException i)
 				{
@@ -134,22 +129,22 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	private void initializeSubGUI(int padding) 
 	{
-		chrList = new CharacterResourceAssignmentList(((CharacterDataBaseManager)file).getCharacterResource(), padding + GUI.indentSize);
+		chrList = new CharacterResourceAssignmentList(((CharacterDataBaseManager)file).getCharacterResource(), padding + Settings.indentSize);
 		subEntries.add(chrList);
 		System.out.print("█");
-		chrIndex = new CharacterIndexList(((CharacterDataBaseManager)file).getCharacterIndex(), padding + GUI.indentSize);
+		chrIndex = new CharacterIndexList(((CharacterDataBaseManager)file).getCharacterIndex(), padding + Settings.indentSize);
 		subEntries.add(chrIndex);
 		System.out.print("█");
-		chrJoin = new CharacterJoinList(((CharacterDataBaseManager)file).getCharacterJoin(), padding + GUI.indentSize);
+		chrJoin = new CharacterJoinList(((CharacterDataBaseManager)file).getCharacterJoin(), padding + Settings.indentSize);
 		subEntries.add(chrJoin);
 		System.out.print("█");
-		chrSeCrd = new CharacterSoundEffectList(((CharacterDataBaseManager)file).getCharacterSoundEffect(), padding + GUI.indentSize);
+		chrSeCrd = new CharacterSoundEffectList(((CharacterDataBaseManager)file).getCharacterSoundEffect(), padding + Settings.indentSize);
 		subEntries.add(chrSeCrd);
 		System.out.print("█");
-		chrTexAnim = new CharacterTextAnimationList(((CharacterDataBaseManager)file).getTextureAnimations(), padding + GUI.indentSize);
+		chrTexAnim = new CharacterTextAnimationList(((CharacterDataBaseManager)file).getTextureAnimations(), padding + Settings.indentSize);
 		subEntries.add(chrTexAnim);
 		System.out.print("█");
-		chrJobPrc = new CharacterJobPriceChangeList(((CharacterDataBaseManager)file).getJobChangePriceList(), padding + GUI.indentSize);
+		chrJobPrc = new CharacterJobPriceChangeList(((CharacterDataBaseManager)file).getJobChangePriceList(), padding + Settings.indentSize);
 		subEntries.add(chrJobPrc);
 		System.out.print("█");
 	}
@@ -183,11 +178,11 @@ public class CharacterDataBaseList extends CollapseableFileList
 			faces = ((CharacterResourceList)file).getFaces();
 			for(CharacterBody object : bodies)
 			{
-				subEntries.add(new CharacterBodyListGUI(object, padding + GUI.indentSize, this));
+				subEntries.add(new CharacterBodyListGUI(object, padding + Settings.indentSize, this));
 			}
 			for(CharacterFace object : faces)
 			{
-				subEntries.add(new CharacterFaceListGUI(object, padding + GUI.indentSize, this));
+				subEntries.add(new CharacterFaceListGUI(object, padding + Settings.indentSize, this));
 			}
 		}
 		protected void addActions()
@@ -218,7 +213,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			});
 			actions.add(replace);
 		}
-		public class CharacterBodyListGUI extends Generic
+		public class CharacterBodyListGUI extends FileList
 		{
 			CharacterResourceAssignmentList parent;
 			CharacterBody object;
@@ -231,30 +226,16 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
+				this.initializeInfoGUI();
 				addActions();
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				//setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				setBackground(GUI.bgColor);
-				GridBagConstraints constraints = new GridBagConstraints();  
-				constraints.weightx = 0.0;
-				constraints.anchor = GridBagConstraints.NORTHWEST;
+				initializeListGUI(padding, object.getName());
+			}
+			protected void initializeInfoGUI() 
+			{
 				infoGUI = new CharacterBodyInfoGUI(object);
-				setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-				//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-				setLayout(new GridBagLayout());
-				//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-				JPanel spacer = new JPanel();
-				spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setBackground(GUI.bgColor);
-				add(spacer, constraints);
-				constraints.weightx = 1.0;
-				fileName = new JLabel(object.getName(), SwingConstants.LEFT);
-				fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
-				fileName.setBackground(GUI.bgColor);
-				add(fileName, constraints);
 			}
 			protected void addActions()
 			{
@@ -286,7 +267,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				return object;
 			}
 		}
-		public class CharacterFaceListGUI extends Generic
+		public class CharacterFaceListGUI extends FileList
 		{
 			CharacterResourceAssignmentList parent;
 			CharacterFace object;
@@ -299,30 +280,16 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
+				this.initializeInfoGUI();
 				addActions();
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				//setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				setBackground(GUI.bgColor);
-				GridBagConstraints constraints = new GridBagConstraints();  
-				constraints.weightx = 0.0;
-				constraints.anchor = GridBagConstraints.NORTHWEST;
+				initializeListGUI(padding, object.getName());
+			}
+			protected void initializeInfoGUI() 
+			{
 				infoGUI = new CharacterFaceInfoGUI(object);
-				setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-				//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-				setLayout(new GridBagLayout());
-				//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-				JPanel spacer = new JPanel();
-				spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setBackground(GUI.bgColor);
-				add(spacer, constraints);
-				constraints.weightx = 1.0;
-				fileName = new JLabel(object.getName(), SwingConstants.LEFT);
-				fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
-				fileName.setBackground(GUI.bgColor);
-				add(fileName, constraints);
 			}
 			protected void addActions()
 			{
@@ -350,7 +317,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				fileName.setText(object.getName());
 			}
 		}
-		public void removeFile(Generic file) 
+		public void removeFile(FileList file) 
 		{
 			remove(file);
 			subEntries.remove(file);
@@ -367,14 +334,14 @@ public class CharacterDataBaseList extends CollapseableFileList
 		public void createFace(String name, int jobCode) 
 		{
 			((CharacterResourceList)file).addFace(name, jobCode);
-			subEntries.add(new CharacterFaceListGUI(((CharacterResourceList)file).getLastFace(), padding + GUI.indentSize, this));
+			subEntries.add(new CharacterFaceListGUI(((CharacterResourceList)file).getLastFace(), padding + Settings.indentSize, this));
 			reAddComponents();
 			GUI.update();
 		}
 		public void createBody(String name, int jobCode) 
 		{
 			((CharacterResourceList)file).addBody(name, jobCode);
-			subEntries.add(new CharacterBodyListGUI(((CharacterResourceList)file).getLastBody(), padding + GUI.indentSize, this));
+			subEntries.add(new CharacterBodyListGUI(((CharacterResourceList)file).getLastBody(), padding + Settings.indentSize, this));
 			reAddComponents();
 			GUI.update();
 		}
@@ -407,7 +374,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			indicies = ((indBinList)file).getIndicies();
 			for(ind object : indicies)
 			{
-				subEntries.add(new IndexListGUI(object, padding + GUI.indentSize, this));
+				subEntries.add(new IndexListGUI(object, padding + Settings.indentSize, this));
 			}
 		}
 		protected void addActions()
@@ -427,7 +394,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			});
 			actions.add(replace);
 		}
-		private class IndexListGUI extends Generic
+		private class IndexListGUI extends FileList
 		{
 			ind object;
 			CharacterIndexList parent;
@@ -440,6 +407,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
+				this.initializeInfoGUI();
 				addActions();
 			}
 			protected void addActions()
@@ -455,26 +423,11 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				//setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				setBackground(GUI.bgColor);
-				GridBagConstraints constraints = new GridBagConstraints();  
-				constraints.weightx = 0.0;
-				constraints.anchor = GridBagConstraints.NORTHWEST;
+				initializeListGUI(padding, object.getName());
+			}
+			protected void initializeInfoGUI() 
+			{
 				infoGUI = new CharacterIndexInfoGUI(object);
-				setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-				//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-				setLayout(new GridBagLayout());
-				//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-				JPanel spacer = new JPanel();
-				spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setBackground(GUI.bgColor);
-				add(spacer, constraints);
-				constraints.weightx = 1.0;
-				fileName = new JLabel(object.getName(), SwingConstants.LEFT);
-				fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
-				fileName.setBackground(GUI.bgColor);
-				add(fileName, constraints);
 			}
 			public void update()
 			{
@@ -498,7 +451,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		public void createIndex(String name, int jobCode) 
 		{
 			((indBinList)file).addJob(jobCode, name);;
-			subEntries.add(new IndexListGUI(((indBinList)file).getLastObject(), padding + GUI.indentSize, this));
+			subEntries.add(new IndexListGUI(((indBinList)file).getLastObject(), padding + Settings.indentSize, this));
 			reAddComponents();
 			GUI.update();
 		}
@@ -537,7 +490,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			objects = ((JoinBinList)file).getObjects();
 			for(join object : objects)
 			{
-				subEntries.add(new JoinListGUI(object, padding + GUI.indentSize, this));
+				subEntries.add(new JoinListGUI(object, padding + Settings.indentSize, this));
 			}
 		}
 		protected void addActions()
@@ -557,43 +510,29 @@ public class CharacterDataBaseList extends CollapseableFileList
 			});
 			actions.add(replace);
 		}
-		private class JoinListGUI extends Generic
+		private class JoinListGUI extends FileList
 		{
 			CharacterJoinList parent;
 			join object;
 			public JoinListGUI(join object, int padding, CharacterJoinList parent) 
 			{
-				 this.parent = parent;
+				this.parent = parent;
 				this.object = object;
 				this.initializeAll(padding);
 			}
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
+				this.initializeInfoGUI();
 				addActions();
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				//setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				setBackground(GUI.bgColor);
-				GridBagConstraints constraints = new GridBagConstraints();  
-				constraints.weightx = 0.0;
-				constraints.anchor = GridBagConstraints.NORTHWEST;
+				initializeListGUI(padding, object.getName());
+			}
+			protected void initializeInfoGUI() 
+			{
 				infoGUI = new CharacterJoinInfo(object);
-				setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-				//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-				setLayout(new GridBagLayout());
-				//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-				JPanel spacer = new JPanel();
-				spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setBackground(GUI.bgColor);
-				add(spacer, constraints);
-				constraints.weightx = 1.0;
-				fileName = new JLabel(object.getName(), SwingConstants.LEFT);
-				fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
-				fileName.setBackground(GUI.bgColor);
-				add(fileName, constraints);
 			}
 			protected void addActions()
 			{
@@ -628,7 +567,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		public void createJoin(int index) 
 		{
 			((JoinBinList)file).addJob(index);;
-			subEntries.add(new JoinListGUI(((JoinBinList)file).getLastObject(), padding + GUI.indentSize, this));
+			subEntries.add(new JoinListGUI(((JoinBinList)file).getLastObject(), padding + Settings.indentSize, this));
 			reAddComponents();
 			GUI.update();
 		}
@@ -671,7 +610,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			objects = ((SoundEffectCoordinateList)file).getObjects();
 			for(SoundEffectCoordinate object : objects)
 			{
-				subEntries.add(new SoundEffectListGUI(object, padding + GUI.indentSize));
+				subEntries.add(new SoundEffectListGUI(object, padding + Settings.indentSize));
 			}
 		}
 		protected void addActions()
@@ -694,13 +633,13 @@ public class CharacterDataBaseList extends CollapseableFileList
 			replace.addActionListener(e -> 
 			{
 				((SoundEffectCoordinateList)file).addCoordinate();;
-				subEntries.add(new SoundEffectListGUI(((SoundEffectCoordinateList)file).getLastObject(), padding + GUI.indentSize));
+				subEntries.add(new SoundEffectListGUI(((SoundEffectCoordinateList)file).getLastObject(), padding + Settings.indentSize));
 				reAddComponents();
 				GUI.update();
 			});
 			actions.add(replace);
 		}
-		private class SoundEffectListGUI extends Generic
+		private class SoundEffectListGUI extends FileList
 		{
 			SoundEffectCoordinate object;
 			public SoundEffectListGUI(SoundEffectCoordinate object, int padding) 
@@ -711,30 +650,16 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
+				this.initializeInfoGUI();
 				addActions();
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				//setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				setBackground(GUI.bgColor);
-				GridBagConstraints constraints = new GridBagConstraints();  
-				constraints.weightx = 0.0;
-				constraints.anchor = GridBagConstraints.NORTHWEST;
+				initializeListGUI(padding, object.getName());
+			}
+			protected void initializeInfoGUI() 
+			{
 				infoGUI = new CharacterSoundEffectInfoGUI(object);
-				setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-				//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-				setLayout(new GridBagLayout());
-				//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-				JPanel spacer = new JPanel();
-				spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setBackground(GUI.bgColor);
-				add(spacer, constraints);
-				constraints.weightx = 1.0;
-				fileName = new JLabel(object.getName(), SwingConstants.LEFT);
-				fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
-				fileName.setBackground(GUI.bgColor);
-				add(fileName, constraints);
 			}
 			protected void addActions()
 			{
@@ -804,7 +729,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			objects = ((JobChangePriceList)file).getObjects();
 			for(JobPrices object : objects)
 			{
-				subEntries.add(new JobChangePriceListGUI(object, padding + GUI.indentSize));
+				subEntries.add(new JobChangePriceListGUI(object, padding + Settings.indentSize));
 			}
 		}
 		public void removeFile(JobChangePriceListGUI file) 
@@ -813,7 +738,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			subEntries.remove(file);
 			((JobChangePriceList)(this.file)).removePrice(file.getFile());
 		}
-		public class JobChangePriceListGUI extends Generic
+		public class JobChangePriceListGUI extends FileList
 		{
 			JobPrices object;
 			public JobChangePriceListGUI(JobPrices object, int padding) 
@@ -824,6 +749,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
+				this.initializeInfoGUI();
 				addActions();
 			}
 			public JobPrices getFile()
@@ -832,26 +758,11 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				//setBorder(BorderFactory.createLineBorder(Color.GREEN));
-				setBackground(GUI.bgColor);
-				GridBagConstraints constraints = new GridBagConstraints();  
-				constraints.weightx = 0.0;
-				constraints.anchor = GridBagConstraints.NORTHWEST;
-				infoGUI = new JobChangePriceListInfoGUI(object);
-				setPreferredSize(new Dimension(GUI.rowWidth, getHeight()));
-				//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
-				setLayout(new GridBagLayout());
-				//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-				JPanel spacer = new JPanel();
-				spacer.setPreferredSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setMinimumSize(new Dimension(padding, GUI.assetHeight));
-				spacer.setBackground(GUI.bgColor);
-				add(spacer, constraints);
-				constraints.weightx = 1.0;
-				fileName = new JLabel(object.getName(), SwingConstants.LEFT);
-				fileName.setPreferredSize(new Dimension(GUI.rowWidth-padding, GUI.assetHeight));
-				fileName.setBackground(GUI.bgColor);
-				add(fileName, constraints);
+				initializeListGUI(padding, object.getName());
+			}
+			protected void initializeInfoGUI() 
+			{
+				infoGUI = new JobChangePriceListInfoGUI((JobPrices) object);
 			}
 			protected void addActions()
 			{
@@ -896,7 +807,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			((JobChangePriceList)file).addPrice(bFM.Utils.strToInt(price));
 			((JobChangePriceList)file).addJob(bFM.Utils.strToInt(code));;
-			subEntries.add(new JobChangePriceListGUI(((JobChangePriceList)file).getLastObject(), padding + GUI.indentSize));
+			subEntries.add(new JobChangePriceListGUI(((JobChangePriceList)file).getLastObject(), padding + Settings.indentSize));
 			reAddComponents();
 			GUI.update();
 		}
@@ -931,8 +842,8 @@ public class CharacterDataBaseList extends CollapseableFileList
 		}
 		private void initializeSubGUI(int padding) 
 		{
-			subEntries.add(new CharacterAnimationList(((TextAnimationList)file).getAnimations(), padding + GUI.indentSize));
-			subEntries.add(new CharacterPatternList(((TextAnimationList)file).getPatterns(), padding + GUI.indentSize));
+			subEntries.add(new CharacterAnimationList(((TextAnimationList)file).getAnimations(), padding + Settings.indentSize));
+			subEntries.add(new CharacterPatternList(((TextAnimationList)file).getPatterns(), padding + Settings.indentSize));
 		}
 		public class CharacterAnimationList extends CollapseableFileList
 		{
@@ -965,7 +876,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				animations = ((AnimationList)file).getAnimations();
 				for(Animation animation : animations)
 				{
-					subEntries.add(new CharacterAnimationGUI(animation, padding + GUI.indentSize));
+					subEntries.add(new CharacterAnimationGUI(animation, padding + Settings.indentSize));
 				}
 			}
 			protected void addActions()
@@ -1007,7 +918,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				private void initializeSubGUI(int padding) 
 				{
 					part = ((Animation)file).getPart();
-					subEntries.add(new CharacterAnimationPartList(part, padding + GUI.indentSize));
+					subEntries.add(new CharacterAnimationPartList(part, padding + Settings.indentSize));
 				}
 				protected void addActions()
 				{
@@ -1049,7 +960,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						patterns = ((Part)file).getPatterns();
 						for(AnimationPattern pattern : patterns)
 						{
-							subEntries.add(new CharacterAnimationPatternGUI(pattern, padding + GUI.indentSize));
+							subEntries.add(new CharacterAnimationPatternGUI(pattern, padding + Settings.indentSize));
 						}
 					}
 					protected void addActions() 
@@ -1125,7 +1036,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				Patterns = ((PatternList)file).getPatterns();
 				for(PatternPart pattern : Patterns)
 				{
-					subEntries.add(new CharacterPatternGUI(pattern, padding + GUI.indentSize));
+					subEntries.add(new CharacterPatternGUI(pattern, padding + Settings.indentSize));
 				}
 			}
 			public class CharacterPatternGUI extends CollapseableFileList
@@ -1158,7 +1069,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					Parts = ((PatternPart)file).getParts();
 					for(Part2 part : Parts)
 					{
-						subEntries.add(new CharacterPartGUI(part, padding + GUI.indentSize));
+						subEntries.add(new CharacterPartGUI(part, padding + Settings.indentSize));
 					}
 				}
 				public void update()
@@ -1196,10 +1107,10 @@ public class CharacterDataBaseList extends CollapseableFileList
 					{
 						material = ((Part2)file).getMaterial();
 						patterns = ((Part2)file).getPatterns();
-						subEntries.add(new CharacterMaterialGUI(material, padding + GUI.indentSize));
+						subEntries.add(new CharacterMaterialGUI(material, padding + Settings.indentSize));
 						for(Pattern part : patterns)
 						{
-							subEntries.add(new CharacterPatternDetailGUI(part, padding + GUI.indentSize));
+							subEntries.add(new CharacterPatternDetailGUI(part, padding + Settings.indentSize));
 						}
 					}
 					public void update()
