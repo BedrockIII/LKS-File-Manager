@@ -260,4 +260,9 @@ public class itemDatabaseManager implements OpenedFile
 		items.removeAll(items);
 		initializeFromLines(lines);
 	}
+	public byte[] toItemBytes()
+	{
+		return toString().getBytes(Charset.forName("Shift-JIS"));
+		
+	}
 }

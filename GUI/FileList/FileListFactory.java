@@ -1,5 +1,6 @@
 package GUI.FileList;
 
+import CameraData.CameraZoneList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
@@ -35,6 +36,10 @@ public class FileListFactory
 		else if (file instanceof itemDatabaseManager)
 		{
 			return new ItemDatabaseList((itemDatabaseManager) file, padding);
+		}
+		else if (file instanceof CameraZoneList)
+		{
+			return new CameraZoneListGUI((CameraZoneList) file, padding);
 		}
 		return new Generic(file, padding);
 	}

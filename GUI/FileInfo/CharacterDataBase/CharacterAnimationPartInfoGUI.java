@@ -24,7 +24,7 @@ public class CharacterAnimationPartInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		nameText = bFM.Utils.createStringTextField(object.getName(), object::setName);
+		nameText = bFM.Utils.createNameTextField(object.getName(), object::setName);
 		partCountText = new JLabel("" + object.getPatterns().size());
 	}
 	private void addGUI()

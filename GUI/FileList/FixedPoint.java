@@ -4,15 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -25,6 +20,7 @@ import GUI.FileInfo.FixedPointObjectInfoGUI;
 import WorldFileManager.fpInterpreter;
 import bFM.OpenedFile;
 import bFM.Settings;
+import bFM.Utils;
 import WorldFileManager.FixedPointObject;
 
 @SuppressWarnings("serial")
@@ -44,7 +40,7 @@ public class FixedPoint extends CollapseableFileList
 		initializeListGUI(padding);
 		initializeInfoGUI();
 		fileName.setText(file.getName());
-		initializeSubGUI(padding);
+		initializeSubGUI();
 		addActions();
 		reAddComponents();
 	} 
@@ -60,58 +56,13 @@ public class FixedPoint extends CollapseableFileList
 	}
 	protected void addReplaceAsBFPButton()
 	{
-		JMenuItem replace = new JMenuItem("Replace From BFP");
-		replace.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			if(getFileExtensions()!=null) chooseFile.setFileFilter(new FileNameExtensionFilter("Bedrock's Intermediate FP File", "bfp"));
-			
-			int num =chooseFile.showOpenDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					((fpInterpreter)file).replaceFromBFP(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
-					initializeSubGUI(padding);
-					GUI.update();
-				} catch (IOException i) 
-				{
-					i.printStackTrace();
-					System.out.println("Failed to Import BFP File");
-				}
-				System.out.println("Imported BFP File");
-			}
-		});
-		actions.add(replace);
+		actions.add(Utils.createImportAction("Replace From BFP", "Bedrock's Intermediate FP Text File", "bfp", ((fpInterpreter)file)::replaceFromBFP, this));
 	}
 	private void addExportBFPAction() 
 	{
-		JMenuItem export = new JMenuItem("Export As BFP");
-		export.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			if(Settings.lastFileSavePath != null) 
-			{
-				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
-			}
-			chooseFile.setSelectedFile(new File(file.getName().substring(0, file.getName().lastIndexOf('.')) + ".bfp"));
-			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					Files.write(chooseFile.getSelectedFile().toPath(),((fpInterpreter)file).toBFP().getBytes());
-					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
-				}
-				catch(IOException i)
-				{
-					System.out.println("Failed to Export Fixed Point File as BFP");
-					i.printStackTrace();
-				}
-				System.out.println("Exported Fixed Point File as BFP");
-			}
-		});
-		actions.add(export);
+		actions.add(Utils.createExportAction("Export As BFP", file.getName().substring(0, file.getName().lastIndexOf('.')) + ".bfp", "Bedrock's Intermediate FP Text File", ((fpInterpreter)file)::toBFPBytes));
 	}
-	private void initializeSubGUI(int padding) 
+	public void initializeSubGUI() 
 	{
 		subEntries.removeAll(subEntries);
 		objects = ((fpInterpreter)file).getObjects();

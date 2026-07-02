@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -55,6 +56,7 @@ public class GUI
         contents.setResizeWeight(0);
         contents.setContinuousLayout(true);
         contents.setBottomComponent(fileInfoPanel);
+        contents.setDividerLocation((int)(Settings.buttonWidth * 1.5));
         
         frame.add(contents);
         frame.setMinimumSize(new Dimension(Settings.rowWidth*2, Settings.assetHeight*25));

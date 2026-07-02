@@ -1,15 +1,22 @@
 package CameraData;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import PCKGManager.PCKGManager;
+import bFM.OpenedFile;
+import bFM.Utils;
 
-public class CameraZoneList 
+public class CameraZoneList implements OpenedFile
 {
 	ArrayList<CameraZone> Zone = new ArrayList<CameraZone>();
 	public CameraZoneList(byte[] data, byte[] names)
+	{
+		initializeFromBytes(data, names);
+	}
+	private void initializeFromBytes(byte[] data, byte[] names)
 	{
 		ArrayList<String> Names = new ArrayList<String>();
 		int startPos = 0;
@@ -34,24 +41,28 @@ public class CameraZoneList
 	}
 	public CameraZoneList(List<String> lines)
 	{
-		int zoneLinesSize = -1;
-		ArrayList<String> zoneLines = new ArrayList<String>();
-		for(int i =1; i<lines.size(); i++)
+		initializeFromLines(lines);
+	}
+	private void initializeFromLines(List<String> lines)
+	{
+		CameraZone lastZone = null;;
+		for(String line : lines)
 		{
-			if(lines.get(i).length()>1&&lines.get(i).indexOf("<Name>")!=-1)
+			if(line.length()>1&&line.indexOf("<<Name>>")!=-1)
 			{
-				zoneLinesSize += 1;
-				if(zoneLinesSize<0)zoneLines.add(lines.get(i));
-				else if(zoneLines.size()>0)
-				{
-					Zone.add(new CameraZone(new ArrayList<String>(zoneLines)));
-					zoneLines = new ArrayList<String>();
-					zoneLinesSize -= 1;
-				}
+				lastZone = new CameraZone(line);
+				Zone.add(lastZone);
 			}
-			zoneLines.add(lines.get(i));
+			else
+			{
+				if(lastZone != null) lastZone.addLine(line);
+			}
 		}
-		Zone.add(new CameraZone(new ArrayList<String>(zoneLines)));
+	}
+	public CameraZoneList(byte[] file) 
+	{
+		PCKGManager pac = new PCKGManager(file);
+		initializeFromBytes(pac.getFile("List"), pac.getFile("Name"));
 	}
 	public byte[] toPAC()
 	{
@@ -80,11 +91,60 @@ public class CameraZoneList
 	}
 	public String toString()
 	{
-		String ret = "Bedrock's Camera Zone File\n";
+		String ret = "Bedrock's Camera Zone File v 2.0\n";
 		for(int i = 0; i<Zone.size(); i++)
 		{
 			ret = ret + Zone.get(i).toString();
 		}
 		return ret;
+	}
+	public boolean equals(String name) 
+	{
+		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public byte[] toBytes() 
+	{
+		return toPAC();
+	}
+	public void setName(String name) 
+	{
+		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+	}
+	public String getName() 
+	{
+		return "CameraData.bin";
+	}
+	public int getSize() 
+	{
+		return toPAC().length;
+	}
+	public ArrayList<CameraZone> getZones() 
+	{
+		return Zone;
+	}
+	public void replaceFromData(byte[] data) 
+	{
+		PCKGManager pac = new PCKGManager(data);
+		Zone.removeAll(Zone);
+		initializeFromBytes(pac.getFile("List"), pac.getFile("Name"));
+	}
+	public void replaceFromBCZ(byte[] data) 
+	{
+		List<String> lines = Utils.bytesToStrs(data);
+		Zone.removeAll(Zone);
+		initializeFromLines(lines);
+	}
+	public void importFromBCZ(byte[] data) 
+	{
+		List<String> lines = Utils.bytesToStrs(data);
+		initializeFromLines(lines);
+	}
+	public byte[] toBCZ()
+	{
+		return toString().getBytes(Charset.forName("Shift-JIS"));
 	}
 }

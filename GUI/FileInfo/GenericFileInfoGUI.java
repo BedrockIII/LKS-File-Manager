@@ -10,9 +10,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import GUI.CollapseablePanel;
 import GUI.LabeledInputBox;
 import bFM.Data;
-import bFM.OpenedFile;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
@@ -73,6 +73,12 @@ public class GenericFileInfoGUI extends JPanel
 			{
 				((LabeledInputBox) c).update();
 			}
+			else if(c instanceof CollapseablePanel)
+			{
+				((CollapseablePanel) c).update();
+			}
 		}
+		revalidate();
+		repaint();
 	}
 }

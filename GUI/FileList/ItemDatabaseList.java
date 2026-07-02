@@ -1,13 +1,7 @@
 package GUI.FileList;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -22,6 +16,7 @@ import ResourceManagers.ItemDatabaseManager.Item;
 import ResourceManagers.ItemDatabaseManager.Placement;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import bFM.Settings;
+import bFM.Utils;
 
 @SuppressWarnings("serial")
 public class ItemDatabaseList extends CollapseableFileList
@@ -49,7 +44,7 @@ public class ItemDatabaseList extends CollapseableFileList
 		reAddComponents();
 		System.out.println("█\nComplete!");
 	}
-	private void initializeSubGUI() 
+	public void initializeSubGUI() 
 	{
 		subEntries.removeAll(subEntries);
 		items = ((itemDatabaseManager)file).getItems();
@@ -79,57 +74,11 @@ public class ItemDatabaseList extends CollapseableFileList
 	}
 	private void addExportAsTextAction()
 	{
-		JMenuItem export = new JMenuItem("Export As .txt");
-		export.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			if(Settings.lastFileSavePath != null) 
-			{
-				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
-			}
-			chooseFile.setSelectedFile(new File("Item Database.txt"));
-			if(chooseFile.showDialog(null, "Save File")==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					Files.write(chooseFile.getSelectedFile().toPath(),file.toString().getBytes(Charset.forName("Shift-JIS")));
-					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
-				}
-				catch(IOException i)
-				{
-					System.out.println("Failed to Export Item DB as Text File");
-					i.printStackTrace();
-				}
-				System.out.println("Exported Text File");
-			}
-		});
-		actions.add(export);
+		actions.add(Utils.createExportAction("Export as .txt", "Item Database.txt", "Bedrock's Intermediate ItemDB Format", ((itemDatabaseManager)file)::toItemBytes));
 	}
 	private void addImportFromTextAction()
 	{
-		JMenuItem replace = new JMenuItem("Replace From Text");
-		replace.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			if(getFileExtensions()!=null) chooseFile.setFileFilter(new FileNameExtensionFilter("Bedrock's Intermediate ItemDB Format", "txt"));
-			
-			int num =chooseFile.showOpenDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					((itemDatabaseManager)file).replaceFromText(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
-					initializeSubGUI();
-					reAddComponents();
-					GUI.update();
-				} catch (IOException i) 
-				{
-					i.printStackTrace();
-					System.out.println("Failed to Import Text-Based ItemDB File");
-				}
-				System.out.println("Imported Text-Based ItemDB File");
-			}
-		});
-		actions.add(replace);
+		actions.add(Utils.createImportAction("Replace From Text", "Bedrock's Intermediate ItemDB Format", "txt", ((itemDatabaseManager)file)::replaceFromText, this));
 	}
 	protected void addActions() 
 	{
@@ -170,7 +119,7 @@ public class ItemDatabaseList extends CollapseableFileList
 			this.addActions();
 			this.reAddComponents();
 		}
-		protected void initializeSubGUI()
+		public void initializeSubGUI()
 		{
 			
 			if(item.hasWeaponData())

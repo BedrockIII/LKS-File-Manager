@@ -8,6 +8,23 @@ import bFM.Data;
 
 public class Item implements Data
 {
+	//Item Flags
+	final static int item1Mask = 0x0001;
+	final static int item2Mask = 0x0002;
+	final static int item4Mask = 0x0004;
+	final static int item8Mask = 0x0008;
+	final static int item10Mask = 0x0010;
+	final static int item20Mask = 0x0020;
+	final static int item40Mask = 0x0040;
+	final static int item80Mask = 0x0080;
+	final static int item100Mask = 0x0100;
+	final static int item200Mask = 0x0200;
+	final static int item400Mask = 0x0400;
+	final static int item800Mask = 0x0800;
+	final static int item1000Mask = 0x1000;
+	final static int item2000Mask = 0x2000;
+	final static int item4000Mask = 0x4000;
+	final static int item8000Mask = 0x8000;
 	//Equip Flags
 	final static int childMask = 0x0001;
 	final static int adultMask = 0x0002;
@@ -48,17 +65,18 @@ public class Item implements Data
 	final static int immunity8000Mask = 0x8000;
 	String ItemName = "";
 	int itemCode = -1;
-	int num1 = 0;
-	int num2 = -1;
+	int ItemFlags = 0;
+	int MenuIndex = -1;
 	int GourmetBookIndex = -1;
 	int SpecialAttackChance = 0;
 	int DamageImmunityFlags = 0;
+	int regen = 0;
 	int WeaponAttackSpeed = 0;
 	int num7 = 0;
 	int num8 = 0;
 	int EquippableFlags = 0;
 	String ItemModel = "";//16 bytes
-	int num11 = 0;
+	int ModelSize = 0;
 	int num12 = 0;
 	int num13 = 0;
 	int num14 = 0;
@@ -93,12 +111,13 @@ public class Item implements Data
 		if(data.length!=84) return;
 		ByteBuffer itemData = ByteBuffer.wrap(data);
 		itemCode = itemData.getInt(0);
-		num1 = itemData.getShort(4);
-		num2 = itemData.getShort(6);
+		ItemFlags = itemData.getShort(4);
+		MenuIndex = itemData.getShort(6);
 		GourmetBookIndex = itemData.getShort(8);
 		SpecialAttackChance = itemData.getShort(10);
 		DamageImmunityFlags = itemData.getShort(12);
-		WeaponAttackSpeed = itemData.getShort(14);
+		regen = itemData.get(14);
+		WeaponAttackSpeed = itemData.get(15);
 		num7 = itemData.getShort(16);
 		num8 = itemData.getShort(18);
 		EquippableFlags = itemData.getInt(20);
@@ -106,7 +125,7 @@ public class Item implements Data
 		for(int i = 24; i<40; i++)
 			modelArray[i-24] = data[i];
 		ItemModel = bFM.Utils.formatString(new String(bFM.Utils.removeEmptySpace(modelArray), Charset.forName("Shift-JIS")));
-		num11 = itemData.getShort(40);
+		ModelSize = itemData.getShort(40);
 		num12 = itemData.getShort(42);
 		num13 = itemData.getInt(44);
 		num14 = itemData.getInt(48);
@@ -188,8 +207,8 @@ public class Item implements Data
 		//Return the Item as an easier to edit text file
 		String ret = "<<Item>> \"" + ItemName + "\"\n";
 		ret += "\t<<Item Code>> " + itemCode + "\n";
-		if(num1!=0) ret += "\t<<num1>> " + num1 + "\n";
-		if(num2!=-1) ret += "\t<<num2>> " + num2 + "\n";
+		if(ItemFlags!=0) ret += "\t<<num1>> " + ItemFlags + "\n";
+		if(MenuIndex!=-1) ret += "\t<<Menu Index>> " + MenuIndex + "\n";
 		if(GourmetBookIndex!=-1) ret += "\t<<Gourmet Book Index>> " + GourmetBookIndex + "\n";
 		if(SpecialAttackChance!=0) ret += "\t<<Special Attack Chance>> " + SpecialAttackChance + "\n";
 		if(getDamageImmunityPoison()) ret += "\t<<Is Immune to Poison>>\n";
@@ -208,6 +227,7 @@ public class Item implements Data
 		if(getDamageImmunity2000()) ret += "\t<<Is Immune to Type 2000>>\n";
 		if(getDamageImmunity4000()) ret += "\t<<Is Immune to Type 4000>>\n";
 		if(getDamageImmunity8000()) ret += "\t<<Is Immune to Type 8000>>\n";
+		if(regen!=0) ret += "\t<<Regenerates Health>>\n";
 		if(WeaponAttackSpeed!=0) ret += "\t<<Weapon Attack Speed>> " + WeaponAttackSpeed + "\n";
 		if(num7!=0) ret += "\t<<num7>> " + num7 + "\n";
 		if(num8!=0) ret += "\t<<num8>> " + num8 + "\n";
@@ -232,7 +252,7 @@ public class Item implements Data
 		if(getIsEquippableJob41()) ret += "\t<<Is Equippable Mountie>>\n";
 		if(getIsEquippableJob42()) ret += "\t<<Is Equippable Craftian>>\n";
 		ret += "\t<<Item Model>> \"" + ItemModel + "\"\n";
-		if(num11!=0) ret += "\t<<num11>> " + num11 + "\n";
+		if(ModelSize!=0) ret += "\t<<num11>> " + ModelSize + "\n";
 		if(num12!=0) ret += "\t<<num12>> " + num12 + "\n";
 		if(num13!=0) ret += "\t<<num13>> " + num13 + "\n";
 		if(num14!=0) ret += "\t<<num14>> " + num14 + "\n";
@@ -273,8 +293,8 @@ public class Item implements Data
 	{
 		//Set Variables depending on what the line has
 		if(line.indexOf("<<Item Code>>")!=-1) itemCode = bFM.Utils.formatFlag(line);
-		else if(line.indexOf("<<num1>>")!=-1) num1 = bFM.Utils.formatFlag(line);
-		else if(line.indexOf("<<num2>>")!=-1) num2 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num1>>")!=-1) ItemFlags = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num2>>")!=-1) MenuIndex = bFM.Utils.formatFlag(line);
 		//Legacy
 		else if(line.indexOf("<<num3>>")!=-1) GourmetBookIndex = bFM.Utils.formatFlag(line);
 		else if(line.indexOf("<<num4>>")!=-1) SpecialAttackChance = bFM.Utils.formatFlag(line);
@@ -299,6 +319,7 @@ public class Item implements Data
 		else if(line.indexOf("<<Is Immune to Type 4000>>") != -1) setDamageImmunity4000(true);
 		else if(line.indexOf("<<Is Immune to Type 8000>>") != -1) setDamageImmunity8000(true);
 		else if(line.indexOf("<<num6>>")!=-1) WeaponAttackSpeed = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<Regenerates Health>>")!=-1) regen = 1;
 		else if(line.indexOf("<<Weapon Attack Speed>>")!=-1) WeaponAttackSpeed = bFM.Utils.formatFlag(line);
 		else if(line.indexOf("<<num7>>")!=-1) num7 = bFM.Utils.formatFlag(line);
 		else if(line.indexOf("<<num8>>")!=-1) num8 = bFM.Utils.formatFlag(line);
@@ -328,7 +349,7 @@ public class Item implements Data
 		else if(line.indexOf("<<Is Equippable Craftian>>") != -1) setIsEquippableJob42(true);
 		//
 		else if(line.indexOf("<<Item Model>>")!=-1) ItemModel = bFM.Utils.formatString(line);
-		else if(line.indexOf("<<num11>>")!=-1) num11 = bFM.Utils.formatFlag(line);
+		else if(line.indexOf("<<num11>>")!=-1) ModelSize = bFM.Utils.formatFlag(line);
 		else if(line.indexOf("<<num12>>")!=-1) num12 = bFM.Utils.formatFlag(line);
 		else if(line.indexOf("<<num13>>")!=-1) num13 = bFM.Utils.formatFlag(line);
 		else if(line.indexOf("<<num14>>")!=-1) num14 = bFM.Utils.formatFlag(line);
@@ -434,18 +455,19 @@ public class Item implements Data
 		//im sorry
 		byte[] ret = new byte[0];
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(itemCode).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num1).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num2).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)ItemFlags).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)MenuIndex).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)GourmetBookIndex).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)SpecialAttackChance).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)DamageImmunityFlags).array());
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)WeaponAttackSpeed).array());
+		ret = bFM.Utils.mergeArrays(ret, (byte)regen);
+		ret = bFM.Utils.mergeArrays(ret, (byte)WeaponAttackSpeed);
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num7).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num8).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(EquippableFlags).array());
 		ret = bFM.Utils.mergeArrays(ret, ItemModel.substring(0, Math.min(ItemModel.length(), 16)).getBytes());
 		ret = bFM.Utils.mergeArrays(ret, new byte[40-ret.length]);
-		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num11).array());
+		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)ModelSize).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num12).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num13).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(num14).array());
@@ -513,21 +535,189 @@ public class Item implements Data
 	{
 	    this.itemCode = itemCode;
 	}
-	public int getNum1()
+	public boolean getItemFlag1() 
 	{
-	    return num1;
+		return (ItemFlags & item1Mask) != 0;
 	}
-	public void setNum1(int num1)
+	public void setItemFlag1(boolean flagValue) 
 	{
-	    this.num1 = num1;
+		if (flagValue)
+			ItemFlags |= item1Mask;
+		else
+			ItemFlags &= ~item1Mask;
 	}
-	public int getNum2()
+	public boolean getItemFlag2()
 	{
-	    return num2;
+	    return (ItemFlags & item2Mask) != 0;
 	}
-	public void setNum2(int num2)
+	public void setItemFlag2(boolean flagValue)
 	{
-	    this.num2 = num2;
+	    if (flagValue)
+	        ItemFlags |= item2Mask;
+	    else
+	        ItemFlags &= ~item2Mask;
+	}
+	public boolean getItemFlag4()
+	{
+	    return (ItemFlags & item4Mask) != 0;
+	}
+	public void setItemFlag4(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item4Mask;
+	    else
+	        ItemFlags &= ~item4Mask;
+	}
+	public boolean getItemFlag8()
+	{
+	    return (ItemFlags & item8Mask) != 0;
+	}
+	public void setItemFlag8(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item8Mask;
+	    else
+	        ItemFlags &= ~item8Mask;
+	}
+	public boolean getItemFlag10()
+	{
+	    return (ItemFlags & item10Mask) != 0;
+	}
+	public void setItemFlag10(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item10Mask;
+	    else
+	        ItemFlags &= ~item10Mask;
+	}
+	public boolean getItemFlag20()
+	{
+	    return (ItemFlags & item20Mask) != 0;
+	}
+	public void setItemFlag20(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item20Mask;
+	    else
+	        ItemFlags &= ~item20Mask;
+	}
+	public boolean getItemFlag40()
+	{
+	    return (ItemFlags & item40Mask) != 0;
+	}
+	public void setItemFlag40(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item40Mask;
+	    else
+	        ItemFlags &= ~item40Mask;
+	}
+	public boolean getItemFlag80()
+	{
+	    return (ItemFlags & item80Mask) != 0;
+	}
+	public void setItemFlag80(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item80Mask;
+	    else
+	        ItemFlags &= ~item80Mask;
+	}
+	public boolean getItemFlag100()
+	{
+	    return (ItemFlags & item100Mask) != 0;
+	}
+	public void setItemFlag100(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item100Mask;
+	    else
+	        ItemFlags &= ~item100Mask;
+	}
+	public boolean getItemFlag200()
+	{
+	    return (ItemFlags & item200Mask) != 0;
+	}
+	public void setItemFlag200(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item200Mask;
+	    else
+	        ItemFlags &= ~item200Mask;
+	}
+	public boolean getItemFlag400()
+	{
+	    return (ItemFlags & item400Mask) != 0;
+	}
+	public void setItemFlag400(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item400Mask;
+	    else
+	        ItemFlags &= ~item400Mask;
+	}
+	public boolean getItemFlag800()
+	{
+	    return (ItemFlags & item800Mask) != 0;
+	}
+	public void setItemFlag800(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item800Mask;
+	    else
+	        ItemFlags &= ~item800Mask;
+	}
+	public boolean getItemFlag1000()
+	{
+	    return (ItemFlags & item1000Mask) != 0;
+	}
+	public void setItemFlag1000(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item1000Mask;
+	    else
+	        ItemFlags &= ~item1000Mask;
+	}
+	public boolean getItemFlag2000()
+	{
+	    return (ItemFlags & item2000Mask) != 0;
+	}
+	public void setItemFlag2000(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item2000Mask;
+	    else
+	        ItemFlags &= ~item2000Mask;
+	}
+	public boolean getItemFlag4000()
+	{
+	    return (ItemFlags & item4000Mask) != 0;
+	}
+	public void setItemFlag4000(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item4000Mask;
+	    else
+	        ItemFlags &= ~item4000Mask;
+	}
+	public boolean getItemFlag8000()
+	{
+	    return (ItemFlags & item8000Mask) != 0;
+	}
+	public void setItemFlag8000(boolean flagValue)
+	{
+	    if (flagValue)
+	        ItemFlags |= item8000Mask;
+	    else
+	        ItemFlags &= ~item8000Mask;
+	}
+	public int getMenuIndex()
+	{
+	    return MenuIndex;
+	}
+	public void setMenuIndex(int num2)
+	{
+	    this.MenuIndex = num2;
 	}
 	public int getGourmetBookIndex()
 	{
@@ -973,13 +1163,13 @@ public class Item implements Data
 	{
 	    ItemModel = itemModel;
 	}
-	public int getNum11()
+	public float getModelSize()
 	{
-	    return num11;
+	    return (float) (ModelSize/100.0);
 	}
-	public void setNum11(int num11)
+	public void setModelSize(float ModelSize)
 	{
-	    this.num11 = num11;
+	    this.ModelSize = (int)(ModelSize*100);
 	}
 	public int getNum12()
 	{
@@ -1222,5 +1412,20 @@ public class Item implements Data
 	{
 		SoundEffect1 = "dmy";
 		SoundEffect2 = "dmy";
+	}
+	public boolean getRegen() 
+	{
+		return regen > 0;
+	}
+	public void setRegen(boolean regen) 
+	{
+		if(regen)
+		{
+			this.regen = 1;
+		}
+		else
+		{
+			this.regen = 0;
+		}
 	}
 }

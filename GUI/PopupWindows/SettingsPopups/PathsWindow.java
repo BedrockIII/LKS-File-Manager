@@ -93,6 +93,21 @@ public class PathsWindow extends JDialog
 			public void changedUpdate(DocumentEvent e) {}
 		});
         contentPanel.add(new LabeledInputBox("Default File Open Path: ", lastFileOpenPath, xWeight), layout);
+        
+        JTextField lastFileImportPath = new JTextField(Settings.lastFileImportPath);
+        lastFileImportPath.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void insertUpdate(DocumentEvent e)
+			{
+				Settings.lastFileImportPath = lastFileImportPath.getText();
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				Settings.lastFileImportPath = lastFileImportPath.getText();
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+        contentPanel.add(new LabeledInputBox("Default File Import Path: ", lastFileImportPath, xWeight), layout);
         pack();
 	}
 	

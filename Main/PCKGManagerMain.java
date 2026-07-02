@@ -12,8 +12,15 @@ public class PCKGManagerMain
 	public static void printVersionData()
 	{
 		System.out.println("Pac File Manager");
-		System.out.println("Version 3.4.1");
+		System.out.println("Version 3.5");
 		System.out.println("     Minor Name Updates for the Item Editor based on new discoveries");
+		System.out.println("     Updated Kingdom Plan DB GUI to be more aligned with other editors");
+		System.out.println("     Added: Camera Zone Editor");
+		System.out.println("     Fixed: GUI Now Remembers the last path of imported files");
+		System.out.println("     Fixed: Several GUI Bugs Including");
+		System.out.println("          - Scroll Wheel Occasionally disappears");
+		System.out.println("          - Changing the name of an Item sends you to the top of the list");
+		System.out.println("     Updated GUI to look more modern. Now it looks straight out of 1990 (how fancy!!!)");
 	}
 	public static void main(String args[]) throws IOException 
 	{ 

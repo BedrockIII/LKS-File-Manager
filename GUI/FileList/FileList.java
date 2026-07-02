@@ -5,11 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import javax.swing.Box;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -26,6 +23,7 @@ import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.PopupWindows.RenameWindow;
 import bFM.Data;
 import bFM.Settings;
+import bFM.Utils;
 
 @SuppressWarnings("serial")
 public abstract class FileList extends JPanel
@@ -137,30 +135,7 @@ public abstract class FileList extends JPanel
 	}
 	protected void addExportAction()
 	{
-		JMenuItem export = new JMenuItem("Export Raw Data");
-		export.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			if(Settings.lastFileSavePath != null) 
-			{
-				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
-			}
-			chooseFile.setSelectedFile(new File(file.getName()));
-			if(chooseFile.showDialog(null, "Save File")==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					Files.write(chooseFile.getSelectedFile().toPath(),file.toBytes());
-					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
-				}
-				catch(IOException i)
-				{
-					System.out.println("Failed to Export Raw File");
-					i.printStackTrace();
-				}
-				System.out.println("Exported Raw File");
-			}
-		});
-		actions.add(export);
+		actions.add(actions.add(Utils.createExportAction("Export Raw Data", file.getName(), "Raw File", file::toBytes)));
 	}
 	protected void addReplaceButton()
 	{

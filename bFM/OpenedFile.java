@@ -1,5 +1,6 @@
 package bFM;
 
+import CameraData.CameraZoneList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
@@ -34,6 +35,9 @@ public interface OpenedFile extends Data
 		else if (fileType.equals("ItemDB"))
 		{
 			return new itemDatabaseManager(name, file);
+		}else if (fileType.equals("CameraZoneDB"))
+		{
+			return new CameraZoneList(file);
 		}
 		return new GenericFile(name, file);
 	}

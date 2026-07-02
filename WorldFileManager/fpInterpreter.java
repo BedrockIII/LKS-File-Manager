@@ -205,4 +205,8 @@ public class fpInterpreter extends GenericFile
 			}
 		}	
 	}
+	public byte[] toBFPBytes()
+	{
+		return toBFP().getBytes();
+	}
 }

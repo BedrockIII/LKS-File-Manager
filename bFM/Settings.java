@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,12 +30,15 @@ public class Settings
 	public static boolean windowMaximized = false;
 	public static final Dimension buttonSize = new Dimension(buttonWidth,assetHeight);
 	public static final Color selectedColor = Color.YELLOW;
+	public static final Color DarkerColor = new Color(192, 192, 192);
+	public static final Color LighterColor = new Color(245, 245, 245);
 	//Layout Settings
 	private static GridBagConstraints defaultLayout = null;
 	//Path Settings
 	private static Path savePath = null; // Path of Settings, dont change
 	public static String lastFileOpenPath = null;
 	public static String lastFileSavePath = null;
+	public static String lastFileImportPath = null;
 	public static String importPath = "D:\\LKS Mod\\";
 	public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\";
 	//Tool Settings
@@ -53,6 +57,7 @@ public class Settings
 		ret += bFM.Utils.getAsSetting("Riivolution Mod Path", outputPath);
 		ret += bFM.Utils.getAsSetting("Last Save Path", lastFileSavePath);
 		ret += bFM.Utils.getAsSetting("Last Open Path", lastFileOpenPath);
+		ret += bFM.Utils.getAsSetting("Last Import Path", lastFileImportPath);
 		try 
 		{
 			//System.out.println(Paths.get("LKS File Manager Config.cfg").toAbsolutePath());
@@ -130,6 +135,10 @@ public class Settings
 				{
 					lastFileOpenPath = bFM.Utils.getSettingValueString(line);
 				}
+				else if(line.indexOf("Last Import Path")!=-1)
+				{
+					lastFileImportPath = bFM.Utils.getSettingValueString(line);
+				}
 			}
 		}
 		catch (IOException e)
@@ -165,6 +174,7 @@ public class Settings
 		layout.fill = defaultLayout.fill;
 		layout.weighty = defaultLayout.weighty;
 		layout.weightx = defaultLayout.weightx;
+		layout.insets = new Insets(0, 3, 0, 0);
 		return layout;
 	}
 }

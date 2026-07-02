@@ -359,4 +359,8 @@ public class ColReader extends GenericFile
 		COLOBJECTS.removeAll(COLOBJECTS);
 		importOBJ(lines);
 	}
+	public byte[] toOBJ()
+	{
+		return toString().getBytes();
+	}
 }

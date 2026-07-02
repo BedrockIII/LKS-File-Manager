@@ -25,8 +25,8 @@ public class ItemSoundEffectInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		SoundEffect1 = Utils.createStringTextField(item.getSoundEffect1(), item::setSoundEffect1);
-		SoundEffect2 = Utils.createStringTextField(item.getSoundEffect2(), item::setSoundEffect2);
+		SoundEffect1 = Utils.createNameTextField(item.getSoundEffect1(), item::setSoundEffect1);
+		SoundEffect2 = Utils.createNameTextField(item.getSoundEffect2(), item::setSoundEffect2);
 	}
 	private void addGUI()
 	{

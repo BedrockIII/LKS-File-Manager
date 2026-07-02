@@ -38,7 +38,7 @@ public class Package extends CollapseableFileList
 		initializeListGUI(padding);
 		addMouseListener();
 		addActions();
-		initializeSubGUI(padding);
+		initializeSubGUI();
 		isExtended.setSelected(true);
 		reAddComponents();
 	}
@@ -46,7 +46,7 @@ public class Package extends CollapseableFileList
 	{
 		file = new PCKGManager("New Package");
 	}
-	private void initializeSubGUI(int padding)
+	public void initializeSubGUI()
 	{
 		infoGUI = FileInfoFactory.makeInfoGUI(file);
 		subEntries = new ArrayList<FileList>();		

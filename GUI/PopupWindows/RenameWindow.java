@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import GUI.FileList.FileList;
-import GUI.FileList.Generic;
 
 @SuppressWarnings("serial")
 public class RenameWindow extends JDialog

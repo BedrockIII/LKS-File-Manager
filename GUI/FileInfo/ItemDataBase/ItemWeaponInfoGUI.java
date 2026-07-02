@@ -31,13 +31,13 @@ public class ItemWeaponInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		DigType = Utils.createStringTextField(item.getDigType(), item::setDigType);
+		DigType = Utils.createNameTextField(item.getDigType(), item::setDigType);
 		DigSpeed = Utils.createIntTextField(item.getDigSpeed(), item::setDigSpeed);
-		BuildType = Utils.createStringTextField(item.getBuildType(), item::setBuildType);
+		BuildType = Utils.createNameTextField(item.getBuildType(), item::setBuildType);
 		BuildSpeed = Utils.createIntTextField(item.getBuildSpeed(), item::setBuildSpeed);
-		BreakType = Utils.createStringTextField(item.getBreakType(), item::setBreakType);
+		BreakType = Utils.createNameTextField(item.getBreakType(), item::setBreakType);
 		BreakSpeed = Utils.createIntTextField(item.getBreakSpeed(), item::setBreakSpeed);
-		AttackType = Utils.createStringTextField(item.getAttackType(), item::setAttackType);
+		AttackType = Utils.createNameTextField(item.getAttackType(), item::setAttackType);
 		AttackSpeed = Utils.createIntTextField(item.getAttackSpeed(), item::setAttackSpeed);
 	}
 	private void addGUI()

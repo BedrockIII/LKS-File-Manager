@@ -1,6 +1,5 @@
 package GUI.FileInfo.ItemDataBase;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -37,12 +36,6 @@ public class ItemDataBaseInfoGUI extends GenericFileInfoGUI
 	public void update()
 	{
 		itemCount.setText("" + file.getItems().size());
-		for(Component c : getComponents())
-		{
-			if(c instanceof LabeledInputBox)
-			{
-				((LabeledInputBox) c).update();
-			}
-		}
+		super.update();
 	}
 }

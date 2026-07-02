@@ -1,12 +1,7 @@
 package GUI.FileList;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -67,6 +62,7 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class CharacterDataBaseList extends CollapseableFileList
 {
+	private int padding;
 	private CharacterResourceAssignmentList chrList;
 	private CharacterIndexList chrIndex;
 	private CharacterJoinList chrJoin;
@@ -83,7 +79,8 @@ public class CharacterDataBaseList extends CollapseableFileList
 		System.out.print("Opening Character DB Package File: ");
 		fileTypes = new FileNameExtensionFilter("Character DB Package File", "pac");
 		initializeListGUI(padding);
-		initializeSubGUI(padding);
+		this.padding = padding;
+		initializeSubGUI();
 		initializeInfoGUI();
 		System.out.println("█\nComplete!");
 		addActions();
@@ -96,38 +93,11 @@ public class CharacterDataBaseList extends CollapseableFileList
 		add(actions);
 		update();
 	}
-	protected void addExportAction()
-	{
-		JMenuItem export = new JMenuItem("Export Character Database");
-		export.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			if(Settings.lastFileSavePath != null) 
-			{
-				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
-			}
-			chooseFile.setSelectedFile(new File("chrDB0.pac"));
-			if(chooseFile.showDialog(null, "Save File")==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					Files.write(chooseFile.getSelectedFile().toPath(),file.toBytes());
-					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
-				}
-				catch(IOException i)
-				{
-					System.out.println("Failed to Export Raw File");
-					i.printStackTrace();
-				}
-				System.out.println("Exported Raw File");
-			}
-		});
-		actions.add(export);
-	}
 	protected void initializeInfoGUI() 
 	{
 		this.infoGUI = new CharacterDataBaseInfoGUI((CharacterDataBaseManager)file);
 	}
-	private void initializeSubGUI(int padding) 
+	public void initializeSubGUI()  
 	{
 		chrList = new CharacterResourceAssignmentList(((CharacterDataBaseManager)file).getCharacterResource(), padding + Settings.indentSize);
 		subEntries.add(chrList);
@@ -163,7 +133,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
-			initializeSubGUI(padding);
+			initializeSubGUI();
 			initializeInfoGUI();
 			addActions();
 			reAddComponents();
@@ -172,7 +142,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			this.infoGUI = new CharacterResourceListGUI((CharacterResourceList) file);
 		}
-		private void initializeSubGUI(int padding) 
+		public void initializeSubGUI() 
 		{
 			bodies = ((CharacterResourceList)file).getBodies();
 			faces = ((CharacterResourceList)file).getFaces();
@@ -361,7 +331,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
 			initializeInfoGUI();
-			initializeSubGUI(padding);
+			initializeSubGUI();
 			addActions();
 			reAddComponents();
 		}
@@ -369,7 +339,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			this.infoGUI = new CharacterIndexListInfoGUI((indBinList) file);
 		}
-		private void initializeSubGUI(int padding) 
+		public void initializeSubGUI()  
 		{
 			indicies = ((indBinList)file).getIndicies();
 			for(ind object : indicies)
@@ -477,7 +447,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
 			initializeInfoGUI();
-			initializeSubGUI(padding);
+			initializeSubGUI();
 			addActions();
 			reAddComponents();
 		}
@@ -485,7 +455,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			this.infoGUI = new CharacterJoinListInfoGUI((JoinBinList) file);
 		}
-		private void initializeSubGUI(int padding) 
+		public void initializeSubGUI()  
 		{
 			objects = ((JoinBinList)file).getObjects();
 			for(join object : objects)
@@ -597,7 +567,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
 			initializeInfoGUI();
-			initializeSubGUI(padding);
+			initializeSubGUI();
 			addActions();
 			reAddComponents();
 		}
@@ -605,7 +575,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			this.infoGUI = new SoundEffectListInfoGUI((SoundEffectCoordinateList) file);
 		}
-		private void initializeSubGUI(int padding) 
+		public void initializeSubGUI()  
 		{
 			objects = ((SoundEffectCoordinateList)file).getObjects();
 			for(SoundEffectCoordinate object : objects)
@@ -699,7 +669,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
 			initializeInfoGUI();
-			initializeSubGUI(padding);
+			initializeSubGUI();
 			addActions();
 			reAddComponents();
 		}
@@ -724,7 +694,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			this.infoGUI = new JopChangePriceInfoGUI((JobChangePriceList) file);
 		}
-		private void initializeSubGUI(int padding) 
+		public void initializeSubGUI()  
 		{
 			objects = ((JobChangePriceList)file).getObjects();
 			for(JobPrices object : objects)
@@ -826,7 +796,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			fileTypes = new FileNameExtensionFilter("Character Texture Animation File", "bin");
 			initializeListGUI(padding);
 			initializeInfoGUI();
-			initializeSubGUI(padding);
+			initializeSubGUI();
 			addActions();
 			reAddComponents();
 		}
@@ -840,7 +810,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			this.infoGUI = new CharacterFaceAnimationInfoGUI((TextAnimationList) file);
 		}
-		private void initializeSubGUI(int padding) 
+		public void initializeSubGUI()  
 		{
 			subEntries.add(new CharacterAnimationList(((TextAnimationList)file).getAnimations(), padding + Settings.indentSize));
 			subEntries.add(new CharacterPatternList(((TextAnimationList)file).getPatterns(), padding + Settings.indentSize));
@@ -858,7 +828,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			{
 				this.padding = padding;
 				initializeListGUI(padding);
-				initializeSubGUI(padding);
+				initializeSubGUI();
 				initializeInfoGUI();
 				addActions();
 				reAddComponents();
@@ -871,7 +841,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			{
 				this.infoGUI = new CharacterAnimationListInfoGUI((AnimationList) file);
 			}
-			private void initializeSubGUI(int padding) 
+			public void initializeSubGUI()  
 			{
 				animations = ((AnimationList)file).getAnimations();
 				for(Animation animation : animations)
@@ -897,7 +867,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				{
 					this.padding = padding;
 					initializeListGUI(padding);
-					initializeSubGUI(padding);
+					initializeSubGUI();
 					initializeInfoGUI();
 					addActions();
 					reAddComponents();
@@ -915,7 +885,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					fileName.setText("Animation: " + file.getName());
 					super.update();
 				}
-				private void initializeSubGUI(int padding) 
+				public void initializeSubGUI()  
 				{
 					part = ((Animation)file).getPart();
 					subEntries.add(new CharacterAnimationPartList(part, padding + Settings.indentSize));
@@ -937,7 +907,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					protected void initializeAll(int padding) 
 					{
 						initializeListGUI(padding);
-						initializeSubGUI(padding);
+						initializeSubGUI();
 						initializeInfoGUI();
 						addActions();
 						reAddComponents();
@@ -955,7 +925,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						fileName.setText("Part: " + file.getName());
 						super.update();
 					}
-					private void initializeSubGUI(int padding) 
+					public void initializeSubGUI()  
 					{
 						patterns = ((Part)file).getPatterns();
 						for(AnimationPattern pattern : patterns)
@@ -1014,7 +984,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			{
 				initializeListGUI(padding);
 				initializeInfoGUI();
-				initializeSubGUI(padding);
+				initializeSubGUI();
 				addActions();
 				reAddComponents();
 			}
@@ -1031,7 +1001,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				addMouseListener();
 				add(actions);
 			}
-			private void initializeSubGUI(int padding) 
+			public void initializeSubGUI()  
 			{
 				Patterns = ((PatternList)file).getPatterns();
 				for(PatternPart pattern : Patterns)
@@ -1051,7 +1021,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				{
 					initializeListGUI(padding, "Pattern: " + file.getName());
 					initializeInfoGUI();
-					initializeSubGUI(padding);
+					initializeSubGUI();
 					addActions();
 					reAddComponents();
 				}
@@ -1064,7 +1034,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					addMouseListener();
 					add(actions);
 				}
-				protected void initializeSubGUI(int padding)
+				public void initializeSubGUI()
 				{
 					Parts = ((PatternPart)file).getParts();
 					for(Part2 part : Parts)
@@ -1090,7 +1060,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					{
 						initializeListGUI(padding, "Part: " + file.getName());
 						initializeInfoGUI();
-						initializeSubGUI(padding);
+						initializeSubGUI();
 						addActions();
 						reAddComponents();
 					}
@@ -1103,7 +1073,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						addMouseListener();
 						add(actions);
 					}
-					protected void initializeSubGUI(int padding)
+					public void initializeSubGUI()
 					{
 						material = ((Part2)file).getMaterial();
 						patterns = ((Part2)file).getPatterns();

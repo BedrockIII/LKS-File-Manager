@@ -47,7 +47,7 @@ public class KingdomPlanFileList extends CollapseableFileList
 		reAddComponents();
 		System.out.println("█\nComplete!");
 	}
-	private void initializeSubGUI() 
+	public void initializeSubGUI() 
 	{
 		subEntries.removeAll(subEntries);
 		areas = planManager.getAreas();
@@ -142,7 +142,7 @@ public class KingdomPlanFileList extends CollapseableFileList
 			addActions();
 			reAddComponents();
 		}
-		private void initializeSubGUI() 
+		public void initializeSubGUI() 
 		{
 			subEntries.removeAll(subEntries);
 			elements = area.getElements();

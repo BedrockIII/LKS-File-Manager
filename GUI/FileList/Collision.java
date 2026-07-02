@@ -7,7 +7,6 @@ import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -24,12 +23,14 @@ import GUI.FileInfo.CollisionObjectInfoGUI;
 import GUI.FileInfo.FileInfoFactory;
 import bFM.OpenedFile;
 import bFM.Settings;
+import bFM.Utils;
 import colReader.ColReader;
 import colReader.CollisionObject;
 
 @SuppressWarnings("serial")
 public class Collision extends CollapseableFileList
 {
+	private int padding = 0;
 	ArrayList<CollisionObject> objects = new ArrayList<CollisionObject>();
 	public Collision(OpenedFile file, int padding) 
 	{
@@ -38,6 +39,7 @@ public class Collision extends CollapseableFileList
 	}
 	protected void initializeAll(int padding)
 	{
+		this.padding = padding;
 		fileTypes = new FileNameExtensionFilter("LKS Collision File", "col");
 		initializeListGUI(padding);
 		
@@ -46,36 +48,13 @@ public class Collision extends CollapseableFileList
 	}
 	protected void initializeListGUI(int padding)
 	{
-		initializeSubGUI(padding);
+		initializeSubGUI();
 		super.initializeListGUI(padding);
 		initializeInfoGUI();
 	}
 	private void addExportOBJAction() 
  	{
- 		JMenuItem export = new JMenuItem("Export As OBJ");
-		export.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			if(Settings.lastFileSavePath != null) 
-			{
-				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
-			}
-			chooseFile.setSelectedFile(new File(file.getName().substring(0, file.getName().lastIndexOf('.')) + ".obj"));
-			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					Files.write(chooseFile.getSelectedFile().toPath(),((ColReader)file).toString().getBytes());
-					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
-				}
-				catch(IOException i)
-				{
-					System.out.println("Failed to Export Collison File as OBJ");
-					i.printStackTrace();
-				}
-				System.out.println("Exported Collision OBJ File");
-			}
-		});
-		actions.add(export);
+		actions.add(Utils.createExportAction("Export as OBJ", file.getName().substring(0, file.getName().lastIndexOf('.')) + ".obj", "Collison File as OBJ", ((ColReader)file)::toOBJ));
 	}
 	protected void addActions()
 	{
@@ -87,7 +66,7 @@ public class Collision extends CollapseableFileList
 		addMouseListener();
 		add(actions);
 	}
-	private void initializeSubGUI(int padding) 
+	public void initializeSubGUI() 
 	{
 		objects = ((ColReader)file).getObjects();
 		for(CollisionObject object : objects)
@@ -97,30 +76,7 @@ public class Collision extends CollapseableFileList
 	}
 	protected void replaceAsOBJAction()
 	{
-		JMenuItem replace = new JMenuItem("Replace File (from obj)");
-		replace.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			fileTypes = new FileNameExtensionFilter("Wavefront OBJ File", "obj");
-			if(getFileExtensions()!=null) chooseFile.setFileFilter(getFileExtensions());
-			
-			int num =chooseFile.showOpenDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					((ColReader)file).replaceFromOBJ(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
-					objects = ((ColReader)file).getObjects();
-					GUI.update();
-				} catch (IOException i) 
-				{
-					i.printStackTrace();
-					System.out.println("Failed to Import OBJ File");
-				}
-				System.out.println("Imported OBJ File");
-			}
-		});
-		actions.add(replace);
+		actions.add(Utils.createImportAction("Replace File (From .obj)", "Wavefront OBJ File", "obj", ((ColReader)file)::replaceFromOBJ, this));
 	}
 	public void removeFile(FileList file) 
 	{

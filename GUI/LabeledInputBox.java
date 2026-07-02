@@ -1,29 +1,33 @@
 package GUI;
 
-import java.awt.Component;
 import java.awt.Dimension;
+
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
+import javax.swing.border.BevelBorder;
 
 import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class LabeledInputBox extends JSplitPane
 {
-	Component comp;
+	JComponent comp;
 	JLabel text;
 	int height = 0;
 	double xWeight = .5;
-	public LabeledInputBox(String labelText, Component comp)
+	public LabeledInputBox(String labelText, JComponent comp)
 	{
 		this.comp = comp;
 		height = (int) (Settings.assetHeight*1.5);
 		text = new JLabel(labelText);
 		addGUI();
 		update();
+		setTheme();
 	}
-	public LabeledInputBox(String labelText, Component comp, double xWeight) 
+	public LabeledInputBox(String labelText, JComponent comp, double xWeight) 
 	{
 		this.comp = comp;
 		height = (int) (Settings.assetHeight*1.5);
@@ -31,6 +35,13 @@ public class LabeledInputBox extends JSplitPane
 		this.xWeight = xWeight;
 		addGUI();
 		update();
+		setTheme();
+	}
+	private void setTheme()
+	{
+		setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Settings.LighterColor, Settings.DarkerColor));
+		text.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Settings.LighterColor, Settings.DarkerColor));
+		//comp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Settings.LighterColor, Settings.DarkerColor));
 	}
 	private void addGUI()
 	{
@@ -53,13 +64,14 @@ public class LabeledInputBox extends JSplitPane
 			setResizeWeight(xWeight);
 			setDividerLocation(xWeight);
 		});
-
+		revalidate();
 		repaint();
 	}
-	public void replaceComponent(Component comp) 
+	public void replaceComponent(JComponent comp) 
 	{
 		this.comp = comp;
 		update();
+		setTheme();
 	}
 	public void replaceText(String text) 
 	{

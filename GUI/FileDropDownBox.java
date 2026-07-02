@@ -1,6 +1,5 @@
 package GUI;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,8 +23,9 @@ public class FileDropDownBox extends JMenu
 		JMenuItem openButton = new JMenuItem("Open File");
 		openButton.addActionListener(e -> {
 			JFileChooser chooseFile = new JFileChooser();
-			chooseFile.setFileFilter(new FileNameExtensionFilter("Package File", "pac", "pcha", "bin", "pac0"));
+			chooseFile.setFileFilter(new FileNameExtensionFilter("Package File", "pac", "pcha", "bin", "pac0", "dat"));
 			chooseFile.addChoosableFileFilter(new FileNameExtensionFilter("Collision File", "col"));
+			chooseFile.addChoosableFileFilter(new FileNameExtensionFilter("Fixed Placement File", "fp", "vfp", "sfp", "lfp"));
 			if(Settings.lastFileOpenPath != null) 
 			{
 				chooseFile.setSelectedFile(Paths.get(Settings.lastFileOpenPath).toFile());

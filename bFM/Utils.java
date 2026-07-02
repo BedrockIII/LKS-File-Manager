@@ -2,6 +2,7 @@ package bFM;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -10,13 +11,18 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
+import GUI.FileList.CollapseableFileList;
 
 public class Utils 
 {
@@ -143,6 +149,21 @@ public class Utils
 			}
 		}
 		return Integer.parseInt(integer);
+	}
+	public static float formatFloat(String line) 
+	{
+		//Return whatever number is after a ">>", which is used to denote the variable names 
+		//Rounds down at a decimal
+		String allowedChars = "1234567890-.E";
+		String floatingPoint = "";
+		for(int i = line.indexOf(">>"); i<line.length();i++)
+		{
+			if(allowedChars.indexOf(line.charAt(i))!=-1)
+			{
+				floatingPoint+=line.charAt(i);
+			}
+		}
+		return Float.parseFloat(floatingPoint);
 	}
 	public static float[] formatCoords(String line, boolean blenderCoords) 
 	{
@@ -309,7 +330,16 @@ public class Utils
 		int endIndex = lineAfterHeader.lastIndexOf('\"');
 		if(startIndex!=-1&&endIndex!=-1)
 		{
-			ret = lineAfterHeader.substring(startIndex+1, endIndex);
+			try
+			{
+				ret = lineAfterHeader.substring(startIndex+1, endIndex);
+			}
+			catch(StringIndexOutOfBoundsException e)
+			{
+				System.out.println(line);
+				e.printStackTrace();
+				return line;
+			}
 		}
 		else
 		{
@@ -441,6 +471,10 @@ public class Utils
 			else if(name.indexOf("itemDB") != -1||name.equals("Item Data Base"))
 			{
 				return "ItemDB";
+			}
+			if(name.equals("CameraData.bin")||name.equals("Camera Zone Config"))
+			{
+				return "CameraZoneDB";
 			}
 			//Check if special TODO
 			//else return "Package"
@@ -631,12 +665,10 @@ public class Utils
 			public void insertUpdate(DocumentEvent e)
 			{
 				setterFunction.accept(strToFloat(field.getText()));
-				GUI.update();
 			}
 			public void removeUpdate(DocumentEvent e)
 			{
 				setterFunction.accept(strToFloat(field.getText()));
-				GUI.update();
 			}
 			public void changedUpdate(DocumentEvent e) {}
 		});
@@ -652,19 +684,17 @@ public class Utils
 			public void insertUpdate(DocumentEvent e)
 			{
 				setterFunction.accept(strToInt(field.getText()));
-				GUI.update();
 			}
 			public void removeUpdate(DocumentEvent e)
 			{
 				setterFunction.accept(strToInt(field.getText()));
-				GUI.update();
 			}
 			public void changedUpdate(DocumentEvent e) {}
 		});
 		
 		return field;
 	}
-	public static JTextField createStringTextField(String value, Consumer<String> setterFunction)
+	public static JTextField createNameTextField(String value, Consumer<String> setterFunction)
 	{
 		JTextField field = new JTextField("" + value);
 		
@@ -710,16 +740,97 @@ public class Utils
 			public void insertUpdate(DocumentEvent e)
 			{
 				setterFunction.accept(formatStringChars(field.getText()));
-				GUI.update();
 			}
 			public void removeUpdate(DocumentEvent e)
 			{
 				setterFunction.accept(formatStringChars(field.getText()));
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		return field;
+	}
+	public static JTextField createStringTextField(String value, Consumer<String> setterFunction)
+	{
+		JTextField field = new JTextField("" + value);
+		
+		field.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void insertUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(field.getText());
+				GUI.update();
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(field.getText());
 				GUI.update();
 			}
 			public void changedUpdate(DocumentEvent e) {}
 		});
 		
 		return field;
+	}
+	public static JMenuItem createExportAction(String name, String fileName, String fileType, Supplier<byte[]> dataSource)
+	{
+		JMenuItem export = new JMenuItem(name);
+		export.addActionListener(e -> 
+		{
+			JFileChooser chooseFile = new JFileChooser();
+			if(Settings.lastFileSavePath != null) 
+			{
+				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
+			}
+			chooseFile.setSelectedFile(new File(fileName));
+			if(chooseFile.showDialog(null, "Save File")==JFileChooser.APPROVE_OPTION)
+			{
+				try 
+				{
+					Files.write(chooseFile.getSelectedFile().toPath(),dataSource.get());
+					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
+				}
+				catch(IOException i)
+				{
+					DebugPrint("Failed to Export " + fileType);
+					i.printStackTrace();
+				}
+				DebugPrint("Exported " + fileType);
+			}
+		});
+		return export;
+	}
+	public static JMenuItem createImportAction(String name, String fileName, String fileExtension, Consumer<byte[]> dataSource, CollapseableFileList gui)
+	{
+		JMenuItem importFile = new JMenuItem(name);
+		importFile.addActionListener(e -> 
+		{
+			JFileChooser chooseFile = new JFileChooser();
+			if(Settings.lastFileImportPath != null) 
+			{
+				chooseFile.setSelectedFile(Paths.get(Settings.lastFileImportPath).toFile());
+				chooseFile.setSelectedFile(Paths.get("").toFile());
+			}
+			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			if(gui.getFileExtensions()!=null)chooseFile.setFileFilter(new FileNameExtensionFilter(fileName, fileExtension));
+			
+			int num =chooseFile.showOpenDialog(null);
+			if(num==JFileChooser.APPROVE_OPTION)
+			{
+				try 
+				{
+					dataSource.accept(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
+					Settings.lastFileImportPath = chooseFile.getSelectedFile().toString();
+					gui.initializeSubGUI();
+					gui.reAddComponents();
+					GUI.update();
+				} catch (IOException i) 
+				{
+					i.printStackTrace();
+					System.out.println("Failed to " + fileExtension);
+				}
+				System.out.println("Imported " + fileExtension);
+			}
+		});
+		return importFile;
 	}
 }

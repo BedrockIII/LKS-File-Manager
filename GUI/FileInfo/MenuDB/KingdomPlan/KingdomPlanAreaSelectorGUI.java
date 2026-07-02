@@ -1,15 +1,9 @@
 package GUI.FileInfo.MenuDB.KingdomPlan;
 
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
-import javax.swing.Box;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
@@ -45,12 +39,6 @@ public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI
 	public void update() 
 	{
 		numAreas.setText("" + plans.getAreas().size());
-		for(Component c : getComponents())
-		{
-			if(c instanceof LabeledInputBox)
-			{
-				((LabeledInputBox) c).update();
-			}
-		}
+		super.update();
 	}
 }

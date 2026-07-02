@@ -3,9 +3,6 @@ package GUI.FileInfo.MenuDB.KingdomPlan;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
-
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import GUI.LabeledInputBox;
