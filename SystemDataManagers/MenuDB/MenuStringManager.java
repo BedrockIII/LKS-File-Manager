@@ -1,10 +1,10 @@
-package SystemDataManagers;
+package SystemDataManagers.MenuDB;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 import bFM.Data;
+import bFM.Utils;
 
 public class MenuStringManager implements Data
 {
@@ -28,7 +28,7 @@ public class MenuStringManager implements Data
 		byte[] messageBytes = new byte[0];
 		for(int i = 0; i<Messages.size(); i++)
 		{
-			messageBytes = bFM.Utils.mergeArrays(messageBytes,bFM.Utils.mergeArrays(Messages.get(i).getBytes(Charset.forName("Ascii")),new byte[1]));
+			messageBytes = bFM.Utils.mergeArrays(messageBytes,bFM.Utils.mergeArrays(Utils.encodeStringToBytes(Messages.get(i)),new byte[1]));
 		}
 		return messageBytes;
 	}

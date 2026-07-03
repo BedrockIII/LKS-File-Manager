@@ -9,7 +9,7 @@ public class MainGUI
 	public static GUI fileManager = null;
 	public static void main(String args[]) throws IOException 
 	{
-		PCKGManagerMain.printVersionData();
+		Settings.printVersionData();
 		fileManager = new GUI();
 		if(args.length > 0)
 		{

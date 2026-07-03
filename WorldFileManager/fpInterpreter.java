@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import bFM.GenericFile;
+import bFM.Utils;
+
 import java.nio.ByteBuffer;
 
 public class fpInterpreter extends GenericFile
@@ -33,7 +35,7 @@ public class fpInterpreter extends GenericFile
 		if(file.length<36) return;
 		//Get Type
 		byte[] type = Arrays.copyOfRange(file, 32, 36);
-		try {fpType = new String(type, "ISO-8859-1");} catch (Exception error) {System.out.println("Failed to Extract due to being an unsupported encoding");}
+		fpType = Utils.decodeBytesToString(type);
 		fpType = fpType.replaceAll("\0+$", "");
 		//Get Amounts
 		numObjects = ByteBuffer.wrap(file).getInt(64);
@@ -207,6 +209,6 @@ public class fpInterpreter extends GenericFile
 	}
 	public byte[] toBFPBytes()
 	{
-		return toBFP().getBytes();
+		return Utils.encodeStringToBytes(toBFP());
 	}
 }

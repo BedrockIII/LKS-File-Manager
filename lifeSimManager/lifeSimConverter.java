@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import bFM.Utils;
+
 public class lifeSimConverter {
 
 	public static void main(String[] args) 
@@ -17,7 +19,7 @@ public class lifeSimConverter {
 			{
 				b += a.get(i) + "\n";
 			}
-			Files.write(Paths.get("C:\\Users\\notgonnadoxmyselfnothanks\\OneDrive\\Documents\\BigACastle.obj"),b.getBytes());
+			Files.write(Paths.get("C:\\Users\\notgonnadoxmyselfnothanks\\OneDrive\\Documents\\BigACastle.obj"),Utils.encodeStringToBytes(b));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

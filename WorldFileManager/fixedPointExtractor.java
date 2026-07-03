@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import bFM.Utils;
+
 public class fixedPointExtractor 
 {
 	public static void main(String[] args) 
@@ -56,7 +58,7 @@ public class fixedPointExtractor
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write Fixed Point file at: " + outputPath+'\\'+name);
-			Files.write(Paths.get(outputPath+'\\'+name), fixedPoints.toBFP().getBytes());
+			Files.write(Paths.get(outputPath+'\\'+name), Utils.encodeStringToBytes(fixedPoints.toBFP()));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write Fixed Point File.");

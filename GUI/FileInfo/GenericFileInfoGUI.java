@@ -4,8 +4,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.nio.charset.Charset;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -14,6 +12,7 @@ import GUI.CollapseablePanel;
 import GUI.LabeledInputBox;
 import bFM.Data;
 import bFM.Settings;
+import bFM.Utils;
 
 @SuppressWarnings("serial")
 public class GenericFileInfoGUI extends JPanel
@@ -37,7 +36,7 @@ public class GenericFileInfoGUI extends JPanel
 		fileSize = new LabeledInputBox("File Size: ",  new JLabel("" + file.getSize()));
 		if(file.toBytes().length<50000)
 		{
-			data.setText(new String(file.toBytes(), Charset.forName("Shift-JIS")));
+			data.setText(Utils.decodeBytesToString(file.toBytes()));
 		}
 		
 	}

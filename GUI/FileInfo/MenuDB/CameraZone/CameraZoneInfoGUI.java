@@ -4,9 +4,9 @@ import java.awt.GridBagConstraints;
 
 import javax.swing.JTextField;
 
-import CameraData.CameraZone;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
+import SystemDataManagers.MenuDB.CameraData.CameraZone;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

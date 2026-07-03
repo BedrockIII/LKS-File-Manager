@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bFM.OpenedFile;
+import bFM.Utils;
 
 public class BuildingResourceList
 {
@@ -65,7 +66,13 @@ public class BuildingResourceList
 		return ret;
 	}
 	public byte[] toBytes()
-	{
-		return toString().getBytes();
+	{//Utils.encodeStringToBytes()
+		byte[] ret = Utils.encodeStringToBytes("NUM " + size() + ";\r\n");
+			for(BuildingResource bld : Buildings)
+				ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(bld.toString()));
+			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes("MPJP_NUM " + (Connections.size()+1) +";\r\n"));
+			for(String str : Connections)
+				ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(str + "\r\n"));
+	return ret;
 	}
 }

@@ -14,9 +14,9 @@ import GUI.GUI;
 import GUI.FileInfo.FileInfoFactory;
 import GUI.FileInfo.MenuDB.KingdomPlan.KingdomPlanAreaGUI;
 import GUI.FileInfo.MenuDB.KingdomPlan.KingdomPlanElementGUI;
-import SystemDataManagers.KingdomPlanManager.KingdomPlanArea;
-import SystemDataManagers.KingdomPlanManager.KingdomPlanElement;
-import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
+import SystemDataManagers.MenuDB.KingdomPlanManager.KingdomPlanArea;
+import SystemDataManagers.MenuDB.KingdomPlanManager.KingdomPlanElement;
+import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

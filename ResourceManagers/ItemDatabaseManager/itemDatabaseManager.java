@@ -1,13 +1,12 @@
 package ResourceManagers.ItemDatabaseManager;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
 import bFM.OpenedFile;
+import bFM.Utils;
 
 public class itemDatabaseManager implements OpenedFile
 {
@@ -39,7 +38,7 @@ public class itemDatabaseManager implements OpenedFile
 	{
 		// Add Item List Data to all Corresponding Items
 		String file;
-		file = new String(itemList);
+		file = Utils.decodeBytesToString(itemList);
 		String[] Lines = file.split("\r\n");
 		ArrayList<String> ItemLines = new ArrayList<String>();
 		for(String Line : Lines)
@@ -92,13 +91,7 @@ public class itemDatabaseManager implements OpenedFile
 	{
 		//Add all the lines in the item sub list to the corresponding files
 		String file;
-		try 
-		{
-			file = new String(itemSubList, "Shift-JIS");
-		} catch (UnsupportedEncodingException e) 
-		{
-			file = new String(itemSubList);
-		}
+		file = Utils.decodeBytesToString(itemSubList);
 		String[] Lines = file.split("\r\n");
 		for(String Line : Lines)
 		{
@@ -183,24 +176,23 @@ public class itemDatabaseManager implements OpenedFile
 	private byte[] getItemSubList() 
 	{
 		//returns the item1sub.lst file
-		String ret = "";
+		byte[] ret = null;
 		for(Item i : items)
 		{
-			ret += i.getSubList();
+			ret = Utils.mergeArrays(ret, i.getSubList());
 		}
-		//System.out.println(ret);
-		return ret.getBytes(Charset.forName("Shift_JIS"));
+		return ret;
 	}
 	private byte[] getItemList() 
 	{
 		// returns the item1.lst file
-		String ret = "";
+		byte[] ret = null;
 		for(Item i : items)
 		{
-			ret += i.getList();
+			ret = Utils.mergeArrays(ret, i.getList());
 		}
 		
-		return ret.getBytes();
+		return ret;
 	}
 	private byte[] getItemPlacementData() 
 	{
@@ -262,7 +254,55 @@ public class itemDatabaseManager implements OpenedFile
 	}
 	public byte[] toItemBytes()
 	{
-		return toString().getBytes(Charset.forName("Shift-JIS"));
-		
+		return Utils.encodeStringToBytes(toString());
+	}
+	public byte[] toLng()
+	{
+		byte[] ret = Utils.encodeStringToBytes("LKS Item Database Translation File\n");
+		for(Item i : items)
+		{
+			ret = Utils.mergeArrays(ret, i.toLng());
+		}
+		return ret;
+	}
+	public void importLng(byte[] data)
+	{
+		List<String> lines = bFM.Utils.bytesToStrs(data);
+		int code = -1;
+		Item lastItemCode = null;
+		for(String line : lines)
+		{
+			if(line.indexOf("<<Item Code>>")!=-1)
+			{
+				code = Utils.formatFlag(line);
+				lastItemCode = getItemByCode(code);
+			}
+			else if(line.indexOf("<<Newslog Name>>")!=-1)
+			{
+				if(lastItemCode == null) Utils.DebugPrint("Couldn't Import Item Newslog Name as Item Code: " + code + " is not defined in the current file");
+				else lastItemCode.addItemVariableLine(line);
+			}
+			else if(line.indexOf("<<Display Name>>")!=-1)
+			{
+				if(lastItemCode == null) Utils.DebugPrint("Couldn't Import Item Display Name as Item Code: " + code + " is not defined in the current file");
+				else lastItemCode.addItemVariableLine(line);
+			}
+			else if(line.indexOf("<<Item Description>>")!=-1)
+			{
+				if(lastItemCode == null) Utils.DebugPrint("Couldn't Import Item Description as Item Code: " + code + " is not defined in the current file");
+				else lastItemCode.addItemVariableLine(line);
+			}
+		}
+	}
+	public Item getItemByCode(int itemCode)
+	{
+		for(Item i : items)
+		{
+			if(i.itemCode == itemCode)
+			{
+				return i;
+			}
+		}
+		return null;
 	}
 }

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import CameraData.CameraZone;
-import CameraData.CameraZoneList;
 import GUI.GUI;
 import GUI.FileInfo.MenuDB.CameraZone.CameraZoneInfoGUI;
 import GUI.FileInfo.MenuDB.CameraZone.CameraZoneListInfoGUI;
+import SystemDataManagers.MenuDB.CameraData.CameraZone;
+import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import bFM.Settings;
 import bFM.Utils;
 

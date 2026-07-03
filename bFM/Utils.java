@@ -4,8 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CodingErrorAction;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -26,6 +31,12 @@ import GUI.FileList.CollapseableFileList;
 
 public class Utils 
 {
+	public final static int JAPANESE_LANGUAGE = 0;
+	public final static int ENGLISH_LANGUAGE = 1;
+	public final static int FRENCH_LANGUAGE = 2;
+	public final static int ITALIAN_LANGUAGE = 3;
+	public final static int GERMAN_LANGUAGE = 4;
+	public final static int SPANISH_LANGUAGE = 5;
 	public static boolean debugOutput = false;
 	public static boolean autoEditSubPackFile = true;
 	public static void DebugPrint(String message)
@@ -266,34 +277,41 @@ public class Utils
 	public static ArrayList<String> extractStrings(byte[] data, int startPos)
 	{
 		ArrayList<String> Strings = new ArrayList<String>();
-		String temp = "";
+		byte[] temp = new byte[1024];
+		int k = 0;
 		for(int i = startPos; i<data.length; i++)
 		{
 			if(data[i]==0x00)
 			{
-				try {
-					Strings.add(new String(temp.getBytes(), "SHIFT-JIS"));
-				} catch (UnsupportedEncodingException e) 
-				{
-					e.printStackTrace();
-				}
-				temp = "";
+				Strings.add(decodeBytesToString(temp));
+				temp = new byte[temp.length];
+				k=0;
 			}
 			else if(data[i]==0x0d)
 			{
-				temp+="\\r";
+				temp[k] = (byte)'\\';
+				k++;
+				temp[k] = (byte)'r';
+				k++;
 			}
 			else if(data[i]==0x0a)
 			{
-				temp+="\\n";
+				temp[k] = (byte)'\\';
+				k++;
+				temp[k] = (byte)'n';
+				k++;
 			}
 			else if(data[i]==0x09)
 			{
-				temp+="\\t";
+				temp[k] = (byte)'\\';
+				k++;
+				temp[k] = (byte)'t';
+				k++;
 			}
 			else 
 			{
-				temp+=(char)data[i];
+				temp[k] = data[i];
+				k++;
 			}
 		}
 		return Strings;
@@ -301,22 +319,20 @@ public class Utils
 	public static ArrayList<String> extractStringsNoFormatting(byte[] data, int startPos)
 	{
 		ArrayList<String> Strings = new ArrayList<String>();
-		String temp = "";
+		byte[] temp = new byte[1024];
+		int k = 0;
 		for(int i = startPos; i<data.length; i++)
 		{
 			if(data[i]==0x00)
 			{
-				try {
-					Strings.add(new String(temp.getBytes(), "SHIFT-JIS"));
-				} catch (UnsupportedEncodingException e) 
-				{
-					e.printStackTrace();
-				}
-				temp = "";
+				Strings.add(decodeBytesToString(temp));
+				temp = new byte[temp.length];
+				k=0;
 			}
 			else 
 			{
-				temp+=(char)data[i];
+				temp[k] = data[i];
+				k++;
 			}
 		}
 		return Strings;
@@ -435,14 +451,12 @@ public class Utils
 		{
 			if(data[i]==0x0a||data[i]==0x0d)
 			{
-				try {
-					String line = new String(temp, "SHIFT-JIS");
-					line = line.substring(0, line.indexOf(0x00));
-					if(line.length()>0)Strings.add(line);
-				} catch (UnsupportedEncodingException e) 
-				{
-					e.printStackTrace();
-				}
+				String line = decodeBytesToString(temp);
+				int ending = line.indexOf(0x00);
+				if(ending == -1) ending = line.length();
+				line = line.substring(0, ending);
+				if(line.length()>0)Strings.add(line);
+				
 				temp = new byte[temp.length];
 				k=0;
 			
@@ -470,6 +484,11 @@ public class Utils
 			}
 			else if(name.indexOf("itemDB") != -1||name.equals("Item Data Base"))
 			{
+				if(name.indexOf("itemDB") != -1 && name.length() > 8)
+				{
+					System.out.println("Setting Language to " + name.charAt(8));
+					Settings.LanguageCode = Integer.parseInt("" + name.charAt(8));
+				}
 				return "ItemDB";
 			}
 			if(name.equals("CameraData.bin")||name.equals("Camera Zone Config"))
@@ -832,5 +851,240 @@ public class Utils
 			}
 		});
 		return importFile;
+	}
+	public static JMenuItem createImportLngAction(String name, String fileName, Consumer<byte[]> dataSource, CollapseableFileList gui)
+	{
+		JMenuItem importFile = new JMenuItem(name);
+		importFile.addActionListener(e -> 
+		{
+			JFileChooser chooseFile = new JFileChooser();
+			if(Settings.lastFileImportPath != null) 
+			{
+				chooseFile.setSelectedFile(Paths.get(Settings.lastFileImportPath).toFile());
+				chooseFile.setSelectedFile(Paths.get("").toFile());
+			}
+			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			if(gui.getFileExtensions()!=null)chooseFile.setFileFilter(new FileNameExtensionFilter(fileName, "lng"));
+			
+			int num =chooseFile.showOpenDialog(null);
+			if(num==JFileChooser.APPROVE_OPTION)
+			{
+				try 
+				{
+					dataSource.accept(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
+					Settings.lastFileImportPath = chooseFile.getSelectedFile().toString();
+					String Name = chooseFile.getSelectedFile().getName();
+					Settings.LanguageCode = getLanguageCodeByName(Name);
+					gui.initializeSubGUI();
+					gui.reAddComponents();
+					GUI.update();
+				} catch (IOException i) 
+				{
+					i.printStackTrace();
+					System.out.println("Failed to import Language Tranlation File");
+				}
+				System.out.println("Imported Language Tranlation File");
+			}
+		});
+		return importFile;
+	}
+	public static byte[] encodeStringToBytes(String text)
+	{
+		byte[] ret = null;
+		try
+		{
+			switch(Settings.LanguageCode)
+			{
+			case JAPANESE_LANGUAGE:
+				ret = encodeStringToBytes(text, Charset.forName("Shift-JIS"));
+				break;
+			case ENGLISH_LANGUAGE:
+				try 
+				{
+					ret = encodeStringToBytes(text, StandardCharsets.UTF_8);
+				}
+				catch (Exception e) 
+				{
+					//Must be Japanese Text that was untranslated
+					ret = encodeStringToBytes(text, Charset.forName("Shift-JIS"));
+				}
+				break;
+			case FRENCH_LANGUAGE:
+				try 
+				{
+					ret = encodeStringToBytes(text, StandardCharsets.UTF_8);
+				}
+				catch (Exception e) 
+				{
+					//Must be Japanese Text that was untranslated
+					ret = encodeStringToBytes(text, Charset.forName("Shift-JIS"));
+				}
+				break;
+			case ITALIAN_LANGUAGE:
+				try 
+				{
+					ret = encodeStringToBytes(text, StandardCharsets.UTF_8);
+				}
+				catch (Exception e) 
+				{
+					//Must be Japanese Text that was untranslated
+					ret = encodeStringToBytes(text, Charset.forName("Shift-JIS"));
+				}
+				break;
+			case GERMAN_LANGUAGE:
+				try 
+				{
+					ret = encodeStringToBytes(text, StandardCharsets.UTF_8);
+				}
+				catch (Exception e) 
+				{
+					//Must be Japanese Text that was untranslated
+					ret = encodeStringToBytes(text, Charset.forName("Shift-JIS"));
+				}
+				break;
+			case SPANISH_LANGUAGE:
+				try 
+				{
+					ret = encodeStringToBytes(text, StandardCharsets.UTF_8);
+				}
+				catch (Exception e) 
+				{
+					//Must be Japanese Text that was untranslated
+					ret = encodeStringToBytes(text, Charset.forName("Shift-JIS"));
+				}
+				break;
+			}
+		}
+		catch (Exception e) 
+		{
+			//Panic. The Text is unknown
+			e.printStackTrace();
+			System.err.println("Language Encoding could not be determined, defaulting to Shift-JIS with Special Characters Removed");
+			ret = text.getBytes(Charset.forName("Shift-JIS"));
+		}
+		return ret;
+	}
+	public static byte[] encodeStringToBytes(String text, Charset charset) throws Exception
+	{
+		CharsetEncoder encoder = charset.newEncoder();
+		encoder.onMalformedInput(CodingErrorAction.REPORT);
+		encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+		
+		ByteBuffer data = encoder.encode(CharBuffer.wrap(text));
+		
+		byte[] ret = new byte[data.remaining()];
+		data.get(ret);
+		return ret;
+	}
+	public static String decodeBytesToString(byte[] data)
+	{
+		String ret = "";
+		try 
+		{
+			switch(Settings.LanguageCode)
+			{
+			case JAPANESE_LANGUAGE:
+				ret = decodeBytesToString(data, Charset.forName("Shift-JIS"));
+				break;
+			case ENGLISH_LANGUAGE:
+				try 
+				{
+					ret = decodeBytesToString(data, StandardCharsets.UTF_8);
+				}
+				catch (Exception e) 
+				{
+					//Must be Japanese Text that was untranslated
+					ret = decodeBytesToString(data, Charset.forName("Shift-JIS"));
+				}
+				break;
+			case FRENCH_LANGUAGE:
+				try 
+				{
+					ret = decodeBytesToString(data, StandardCharsets.UTF_8);
+				}
+				catch (Exception e) 
+				{
+					//Must be Japanese Text that was untranslated
+					ret = decodeBytesToString(data, Charset.forName("Shift-JIS"));
+				}
+				break;
+			case ITALIAN_LANGUAGE:
+				try 
+				{
+					ret = decodeBytesToString(data, StandardCharsets.UTF_8);
+				}
+				catch (Exception e) 
+				{
+					//Must be Japanese Text that was untranslated
+					ret = decodeBytesToString(data, Charset.forName("Shift-JIS"));
+				}
+				break;
+			case GERMAN_LANGUAGE:
+				try 
+				{
+					ret = decodeBytesToString(data, StandardCharsets.UTF_8);
+				}
+				catch (Exception e) 
+				{
+					//Must be Japanese Text that was untranslated
+					ret = decodeBytesToString(data, Charset.forName("Shift-JIS"));
+				}
+				break;
+			case SPANISH_LANGUAGE:
+				try 
+				{
+					ret = decodeBytesToString(data, StandardCharsets.UTF_8);
+				}
+				catch (Exception e) 
+				{
+					//Must be Japanese Text that was untranslated
+					ret = decodeBytesToString(data, Charset.forName("Shift-JIS"));
+				}
+				break;
+			}
+		}
+		catch (Exception e) 
+		{
+			//Panic. The Text is unknown
+			System.err.println("Language Encoding could not be determined, defaulting to Shift-JIS with Special Characters Removed");
+			ret = new String(data, Charset.forName("Shift-JIS"));
+		}
+		return ret;
+	}
+	public static String decodeBytesToString(byte[] data, Charset charset) throws Exception
+	{
+		CharsetDecoder decoder = charset.newDecoder();
+		decoder.onMalformedInput(CodingErrorAction.REPORT);
+		decoder.onUnmappableCharacter(CodingErrorAction.REPORT);
+		
+		int len = 0;
+		while (len < data.length && data[len] != 0)
+		    len++;
+
+		return decoder.decode(ByteBuffer.wrap(data, 0, len)).toString();
+	}
+	public static String getLanguage(int languageCode)
+	{
+		//Return the name of the language based off number
+		switch(languageCode)
+		{
+		case JAPANESE_LANGUAGE: return "Japanese";
+		case ENGLISH_LANGUAGE: return "English";
+		case FRENCH_LANGUAGE: return "French";
+		case ITALIAN_LANGUAGE: return "Italian";
+		case GERMAN_LANGUAGE: return "German";
+		case SPANISH_LANGUAGE: return "Spanish";
+		}
+		throw new IllegalArgumentException("Language code: " + languageCode + " is undefined");
+	}
+	public static int getLanguageCodeByName(String name)
+	{
+		if(name.indexOf("Japanese") != -1) return JAPANESE_LANGUAGE;
+		if(name.indexOf("English") != -1) return ENGLISH_LANGUAGE;
+		if(name.indexOf("French") != -1) return FRENCH_LANGUAGE;
+		if(name.indexOf("Italian") != -1) return ITALIAN_LANGUAGE;
+		if(name.indexOf("German") != -1) return GERMAN_LANGUAGE;
+		if(name.indexOf("Spanish") != -1) return SPANISH_LANGUAGE;
+		return -1;
 	}
 }

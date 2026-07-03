@@ -2,7 +2,7 @@ package GUI.FileInfo;
 
 import GUI.FileInfo.MenuDB.KingdomPlan.KingdomPlanAreaSelectorGUI;
 import PCKGManager.PCKGManager;
-import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
+import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import WorldFileManager.fpInterpreter;
 import bFM.Data;
 import colReader.ColReader;

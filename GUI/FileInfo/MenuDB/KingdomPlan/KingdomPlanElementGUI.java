@@ -6,7 +6,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JTextField;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.KingdomPlanManager.KingdomPlanElement;
+import SystemDataManagers.MenuDB.KingdomPlanManager.KingdomPlanElement;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

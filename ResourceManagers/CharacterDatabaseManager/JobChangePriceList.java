@@ -6,6 +6,7 @@ import java.util.List;
 import ResourceManagers.CharacterDatabaseManager.indBinList.ind;
 import bFM.Data;
 import bFM.GenericFile;
+import bFM.Utils;
 
 public class JobChangePriceList extends GenericFile
 {
@@ -15,7 +16,7 @@ public class JobChangePriceList extends GenericFile
 	{
 		this.parent = parent;
 		name = "Job Change Price List";
-		String data = new String(file);
+		String data = Utils.decodeBytesToString(file);
 		String[] lines = data.split("\n");
 		//Skip First Line
 		for(String line : lines)
@@ -40,6 +41,19 @@ public class JobChangePriceList extends GenericFile
 			for(int i = 0; i < jobs.size(); i++)
 			{
 				ret += jobs.get(i).toString();
+			}
+		}
+		return ret;
+	}
+	public byte[] toBytes()
+	{
+		setSelfPrices();
+		byte[] ret = null;
+		ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes("NUM " + jobs.size() + ";\r\n"));
+		{
+			for(int i = 0; i < jobs.size(); i++)
+			{
+				ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(jobs.get(i).toString()));
 			}
 		}
 		return ret;

@@ -1,10 +1,10 @@
 package ResourceManagers.ItemDatabaseManager;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import bFM.Data;
+import bFM.Utils;
 
 public class Item implements Data
 {
@@ -124,7 +124,7 @@ public class Item implements Data
 		byte[] modelArray = new byte[16];
 		for(int i = 24; i<40; i++)
 			modelArray[i-24] = data[i];
-		ItemModel = bFM.Utils.formatString(new String(bFM.Utils.removeEmptySpace(modelArray), Charset.forName("Shift-JIS")));
+		ItemModel = bFM.Utils.formatString(Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(modelArray)));
 		ModelSize = itemData.getShort(40);
 		num12 = itemData.getShort(42);
 		num13 = itemData.getInt(44);
@@ -409,33 +409,38 @@ public class Item implements Data
 			}
 		}
 	}
-	protected String getSubList() 
+	protected byte[] getSubList() 
 	{
 		// If the Equipment Data is initialized, return it.
-		String ret = "";
+		byte[] ret = null;
 		if(hasSoundEffect())
 		{
-			ret += "HITSE " + itemCode + ",\"" + SoundEffect1 + "\",\"" + SoundEffect2 + "\";\r\n";
+			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(
+					"HITSE " + itemCode + ",\"" + SoundEffect1 + 
+					"\",\"" + SoundEffect2 + "\";\r\n"
+					));
 		}
 		
 		if(hasWeaponData())
 		{
-			ret += "WEP " + itemCode + ",\"" + DigType + "\",\"" 
-		+ BuildType + "\",\"" + BreakType + "\",\"" + AttackType
-		+ "\"," + DigSpeed + "," + BuildSpeed + "," + BreakSpeed
-		+ "," + AttackSpeed + ";\r\n";
+			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(
+					"WEP " + itemCode + ",\"" + DigType + "\",\"" 
+					+ BuildType + "\",\"" + BreakType + "\",\"" + 
+					AttackType+ "\"," + DigSpeed + "," + BuildSpeed + 
+					"," + BreakSpeed + "," + AttackSpeed + ";\r\n"));
 		}
 		
 		return ret;
 	}
-	protected String getList() 
+	protected byte[] getList() 
 	{
 		// return Text Data for Items
-		String ret = "@" + itemCode + "\r\n";
-		ret += ItemName + "\r\n";
-		ret += NewslogName + "\r\n";
-		ret += DisplayName + "\r\n";
-		ret += bFM.Utils.formatStringChars(ItemDescription) + "\r\n";
+		byte[] ret = null;
+		ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes("@" + itemCode + "\r\n"));
+		ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(ItemName + "\r\n"));
+		ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(NewslogName + "\r\n"));
+		ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(DisplayName + "\r\n"));
+		ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(bFM.Utils.formatStringChars(ItemDescription) + "\r\n"));
 		return ret;
 	}
 	protected byte[] getPlaceBytes()
@@ -465,7 +470,7 @@ public class Item implements Data
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num7).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num8).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putInt(EquippableFlags).array());
-		ret = bFM.Utils.mergeArrays(ret, ItemModel.substring(0, Math.min(ItemModel.length(), 16)).getBytes());
+		ret = bFM.Utils.mergeArrays(ret, Utils.encodeStringToBytes(ItemModel.substring(0, Math.min(ItemModel.length(), 16))));
 		ret = bFM.Utils.mergeArrays(ret, new byte[40-ret.length]);
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)ModelSize).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)num12).array());
@@ -1427,5 +1432,14 @@ public class Item implements Data
 		{
 			this.regen = 0;
 		}
+	}
+	public byte[] toLng() 
+	{
+		if(NewslogName.length() == 0 && DisplayName.length() == 0 && ItemDescription.length() == 0) return new byte[0];
+		String ret = "<<Item Code>> " + itemCode + "\n";
+		if(NewslogName.length()!=0) ret += "\t<<Newslog Name>> \"" + NewslogName + "\"\n";
+		if(DisplayName.length()!=0) ret += "\t<<Display Name>> \"" + DisplayName + "\"\n";
+		if(ItemDescription.length()!=0) ret += "\t<<Item Description>> \"" + ItemDescription + "\"\n";
+		return Utils.encodeStringToBytes(ret);
 	}
 }

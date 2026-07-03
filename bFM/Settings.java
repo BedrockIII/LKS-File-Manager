@@ -42,6 +42,15 @@ public class Settings
 	public static String importPath = "D:\\LKS Mod\\";
 	public static String outputPath = "D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\";
 	//Tool Settings
+	public static int LanguageCode = 1;
+	
+	public static void printVersionData()
+	{
+		System.out.println("LKS File Manager");
+		System.out.println("Version 3.6");
+		System.out.println("     Several Bug Fixes regarding Encoding Strings in different languages");
+		System.out.println("     Added: Translation File Support for Item Database");
+	}
 	
 	public static void setSettings() 
 	{
@@ -58,16 +67,17 @@ public class Settings
 		ret += bFM.Utils.getAsSetting("Last Save Path", lastFileSavePath);
 		ret += bFM.Utils.getAsSetting("Last Open Path", lastFileOpenPath);
 		ret += bFM.Utils.getAsSetting("Last Import Path", lastFileImportPath);
+		ret += bFM.Utils.getAsSetting("Default Language Code", LanguageCode);
 		try 
 		{
 			//System.out.println(Paths.get("LKS File Manager Config.cfg").toAbsolutePath());
 			if(savePath==null)
 			{
-				Files.write(Paths.get("LKS File Manager Config.cfg"), ret.getBytes());
+				Files.write(Paths.get("LKS File Manager Config.cfg"), Utils.encodeStringToBytes(ret));
 			}
 			else
 			{
-				Files.write(savePath.resolve("LKS File Manager Config.cfg"), ret.getBytes());
+				Files.write(savePath.resolve("LKS File Manager Config.cfg"), Utils.encodeStringToBytes(ret));
 			}
 		} catch (IOException e) 
 		{
@@ -139,6 +149,10 @@ public class Settings
 				{
 					lastFileImportPath = bFM.Utils.getSettingValueString(line);
 				}
+				else if(line.indexOf("Default Language Code")!=-1)
+				{
+					LanguageCode = bFM.Utils.getSettingValueInt(line);
+				}
 			}
 		}
 		catch (IOException e)
@@ -176,5 +190,10 @@ public class Settings
 		layout.weightx = defaultLayout.weightx;
 		layout.insets = new Insets(0, 3, 0, 0);
 		return layout;
+	}
+	public static String getLanguage()
+	{
+		//Return the name of the language based off number. default to english as i speak that
+		return Utils.getLanguage(LanguageCode);
 	}
 }

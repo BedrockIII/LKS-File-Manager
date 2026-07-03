@@ -1,10 +1,10 @@
 package bFM;
 
-import CameraData.CameraZoneList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
-import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
+import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
+import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import WorldFileManager.fpInterpreter;
 import colReader.ColReader;
 

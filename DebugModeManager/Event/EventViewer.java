@@ -1,10 +1,11 @@
 package DebugModeManager.Event;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import bFM.Utils;
 
 public class EventViewer 
 {
@@ -55,10 +56,10 @@ public class EventViewer
 			ByteBuffer EventData = ByteBuffer.wrap(data);
 			byte[] StringArr = new byte[64];
 			EventData.get(0, StringArr, 0, 64);
-			FileName = new String(bFM.Utils.removeEmptySpace(StringArr), Charset.forName("Shift-JIS"));
+			FileName = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(StringArr));
 			StringArr = new byte[64];
 			EventData.get(64, StringArr, 0, 64);
-			EventName = new String(bFM.Utils.removeEmptySpace(StringArr), Charset.forName("Shift-JIS"));
+			EventName = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(StringArr));
 			EventCode = EventData.getInt(132);
 			Chapter = EventData.getShort(136);
 			Index = EventData.getShort(138);
@@ -77,9 +78,9 @@ public class EventViewer
 		private byte[] toBytes()
 		{
 			ByteBuffer ret = ByteBuffer.allocate(224);
-			byte[] StringArr = FileName.getBytes(Charset.forName("Shift-JIS"));
+			byte[] StringArr = Utils.encodeStringToBytes(FileName);
 			ret.put(0, StringArr);
-			StringArr = EventName.getBytes(Charset.forName("Shift-JIS"));
+			StringArr = Utils.encodeStringToBytes(EventName);
 			ret.put(64, StringArr);
 			ret.putInt(132, EventCode);
 			ret.putShort(136, (short)Chapter);

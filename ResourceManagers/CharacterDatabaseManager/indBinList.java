@@ -1,12 +1,12 @@
 package ResourceManagers.CharacterDatabaseManager;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 import bFM.Data;
 import bFM.GenericFile;
+import bFM.Utils;
 
 public class indBinList extends GenericFile
 {
@@ -155,13 +155,13 @@ public class indBinList extends GenericFile
 			byte[] tempStringData = new byte[32];
 			data.get(12, tempStringData, 0, 16);
 			data.position(12+16);
-			word1 = (new String(tempStringData, Charset.forName("Shift-JIS"))).replace((char)0x00, ' ').stripTrailing(); //16 bytes
+			word1 = (Utils.decodeBytesToString(tempStringData)).replace((char)0x00, ' ').stripTrailing(); //16 bytes
 			data.get(data.position(), tempStringData, 0, 16);
 			data.position(data.position()+16);
-			word2 = (new String(tempStringData, Charset.forName("Shift-JIS"))).replace((char)0x00, ' ').stripTrailing(); //16 bytes
+			word2 = (Utils.decodeBytesToString(tempStringData)).replace((char)0x00, ' ').stripTrailing(); //16 bytes
 			data.get(data.position(), tempStringData, 0, 32);
 			data.position(data.position()+32);
-			name = (new String(tempStringData, Charset.forName("Shift-JIS"))).replace((char)0x00, ' ').stripTrailing(); //32 bytes
+			name = (Utils.decodeBytesToString(tempStringData)).replace((char)0x00, ' ').stripTrailing(); //32 bytes
 			num13a = bFM.Utils.byteToInt(data.get());
 			num13b = bFM.Utils.byteToInt(data.get());
 			num14a = bFM.Utils.byteToInt(data.get());
@@ -221,10 +221,10 @@ public class indBinList extends GenericFile
 			tempStringData = new byte[32];
 			data.get(data.position(), tempStringData, 0, 16);
 			data.position(data.position()+16);
-			word4 = (new String(tempStringData, Charset.forName("Shift-JIS"))).replace((char)0x00, ' ').stripTrailing(); //16 bytes
+			word4 = (Utils.decodeBytesToString(tempStringData)).replace((char)0x00, ' ').stripTrailing(); //16 bytes
 			data.get(data.position(), tempStringData, 0, 32);
 			data.position(data.position()+32);
-			word5 = (new String(tempStringData, Charset.forName("Shift-JIS"))).replace((char)0x00, ' ').stripTrailing(); //32 bytes
+			word5 = (Utils.decodeBytesToString(tempStringData)).replace((char)0x00, ' ').stripTrailing(); //32 bytes
 			//num41 = data.getShort();
 			//num42 = data.getShort();
 		}
@@ -314,21 +314,21 @@ public class indBinList extends GenericFile
 			ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(helmetItemCode, 2));
 			ret = bFM.Utils.mergeArrays(ret, new byte[4]);
 			byte[] string1 = new byte[16];
-			byte[] string2 = word1.getBytes(Charset.forName("Shift-JIS"));
+			byte[] string2 = Utils.encodeStringToBytes(word1);
 			for(int i = 0; i<16&&i<string2.length; i++)
 			{
 				string1[i] = string2[i];
 			}
 			ret = bFM.Utils.mergeArrays(ret, string1);
 			string1 = new byte[16];
-			string2 = word2.getBytes(Charset.forName("Shift-JIS"));
+			string2 = Utils.encodeStringToBytes(word2);
 			for(int i = 0; i<16&&i<string2.length; i++)
 			{
 				string1[i] = string2[i];
 			}
 			ret = bFM.Utils.mergeArrays(ret, string1);
 			string1 = new byte[32];
-			string2 = name.getBytes(Charset.forName("Shift-JIS"));
+			string2 = Utils.encodeStringToBytes(name);
 			for(int i = 0; i<32&&i<string2.length; i++)
 			{
 				string1[i] = string2[i];
@@ -391,14 +391,14 @@ public class indBinList extends GenericFile
 			ret = bFM.Utils.mergeArrays(ret, (byte)num40a);
 			ret = bFM.Utils.mergeArrays(ret, (byte)num40b);
 			string1 = new byte[16];
-			string2 = word4.getBytes(Charset.forName("Shift-JIS"));
+			string2 = Utils.encodeStringToBytes(word4);
 			for(int i = 0; i<16&&i<string2.length; i++)
 			{
 				string1[i] = string2[i];
 			}
 			ret = bFM.Utils.mergeArrays(ret, string1);
 			string1 = new byte[32];
-			string2 = word5.getBytes(Charset.forName("Shift-JIS"));
+			string2 = Utils.encodeStringToBytes(word5);
 			for(int i = 0; i<16&&i<string2.length; i++)
 			{
 				string1[i] = string2[i];

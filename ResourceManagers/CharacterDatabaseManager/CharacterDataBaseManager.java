@@ -83,10 +83,10 @@ public class CharacterDataBaseManager extends GenericFile
 	}
 	public byte[] getFile() 
 	{
-		CharacterDataBase.addFile("JobChangePrice.cfg", JobChangePrice.toString().getBytes());
+		CharacterDataBase.addFile("JobChangePrice.cfg", JobChangePrice.toBytes());
 		CharacterDataBase.addFile("ind3.bin", ind3.toBytes());
 		CharacterDataBase.addFile("join.bin", join.toBytes());
-		CharacterDataBase.addFile("chrDB2.lst", chrDB2.toString().getBytes());
+		CharacterDataBase.addFile("chrDB2.lst", chrDB2.toBytes());
 		CharacterDataBase.addFile("seCrd.bin", seCrd.toBytes());
 		CharacterDataBase.addFile("texanim.bin", texanim.toBytes());
 		return CharacterDataBase.getFile();

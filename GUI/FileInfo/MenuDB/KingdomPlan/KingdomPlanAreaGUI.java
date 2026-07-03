@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.KingdomPlanManager.KingdomPlanArea;
+import SystemDataManagers.MenuDB.KingdomPlanManager.KingdomPlanArea;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

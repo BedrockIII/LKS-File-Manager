@@ -1,9 +1,10 @@
 package ResourceManagers.MSDBManager;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+
+import bFM.Utils;
 
 public class MobAi 
 {
@@ -30,13 +31,7 @@ public class MobAi
 		num7 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(14);
 		num8 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(16);
 		num9 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(18);
-		
-		try {
-			AiType = new String(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 20, 52)), "SHIFT-JIS");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		AiType = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 20, 52)));
 	}
 	public String toString()
 	{

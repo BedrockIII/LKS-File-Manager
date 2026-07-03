@@ -5,9 +5,9 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
 
-import CameraData.CameraZoneList;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
+import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

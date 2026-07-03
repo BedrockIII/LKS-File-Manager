@@ -2,7 +2,6 @@ package PCKGManager;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +10,7 @@ import java.util.Arrays;
 
 import bFM.GenericFile;
 import bFM.OpenedFile;
+import bFM.Utils;
 public class PCKGManager extends GenericFile
 {
 	final static private int HeaderSizeWithoutName = 12;
@@ -94,7 +94,7 @@ public class PCKGManager extends GenericFile
 			fileContents = Arrays.copyOfRange(file, FileStartPosition, FileEndPosition);	
 			
 			fileName = Arrays.copyOfRange(file, nextHeaderPos+12, nextHeaderPos+headerSize);
-			try {theName = new String(fileName);} catch (Exception error) {System.out.println("Failed to Extract due to being an unsupported encoding");break;}
+			theName = Utils.decodeBytesToString(fileName);
 			
 			String letters =  "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890,.;'/`~<>?_: ";
 			String theNewName = "";
@@ -276,7 +276,7 @@ public class PCKGManager extends GenericFile
 		else ret.putInt(0);
 		ret.putInt(file.toBytes().length);
 		ret.putInt(headerSize);
-		ret.put(file.getName().getBytes(Charset.forName("Shift-JIS")));
+		ret.put(Utils.encodeStringToBytes(file.getName()));
 		ret.position(headerSize);
 		ret.put(file.toBytes());
 		if(LZMode)

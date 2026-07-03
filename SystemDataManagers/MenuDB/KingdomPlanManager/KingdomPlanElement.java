@@ -1,4 +1,4 @@
-package SystemDataManagers.KingdomPlanManager;
+package SystemDataManagers.MenuDB.KingdomPlanManager;
 
 public class KingdomPlanElement 
 {

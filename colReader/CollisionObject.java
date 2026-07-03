@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bFM.Data;
+import bFM.Utils;
 
 public class CollisionObject implements Data
 {
@@ -588,6 +589,10 @@ public class CollisionObject implements Data
 		}
 		ret = ret + tree.toString(1);
 		return ret;
+	}
+	public byte[] toOBJBytes() 
+	{
+		return Utils.encodeStringToBytes(toOBJ());
 	}
 	public void addVertexLine(String line) 
 	{

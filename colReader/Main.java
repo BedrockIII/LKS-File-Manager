@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import CameraData.CameraZoneList;
 import DebugModeManager.Event.EventViewer;
 import LZ10Convertor.LZ10Manager;
 import PCKGManager.PCKGManager;
@@ -25,10 +24,12 @@ import ResourceManagers.MapDatabaseManager.mapDataBaseManager;
 import WorldFileManager.fpInterpreter;
 import bFM.Data;
 import bFM.Settings;
-import SystemDataManagers.CockpitLogManager;
-import SystemDataManagers.MailManager;
-import SystemDataManagers.MenuStringManager;
-import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
+import bFM.Utils;
+import SystemDataManagers.MenuDB.CockpitLogManager;
+import SystemDataManagers.MenuDB.MenuStringManager;
+import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
+import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
+import SystemDataManagers.QuestDB.MailManager;
 import VMC.VMCConverter;
 @SuppressWarnings("unused")
 public class Main 
@@ -47,7 +48,7 @@ public class Main
 		colReader.ColReader.optimizeCollision = false;
 		//bFM.Utils.autoEditSubPackFile = false;
 		bFM.Utils.DebugPrint("Debug Data Enabled");
-		//try{tester();} catch (IOException e) {e.printStackTrace();}
+		try{tester();} catch (IOException e) {e.printStackTrace();}
 		//decodeCollision();
 		//encodeCollision();
 		//encodeFixedPoints();
@@ -59,7 +60,7 @@ public class Main
 		//decodeLightZones();
 		//encodeLightZones();
 		//message();				
-		enemyManagers();
+		//enemyManagers();
 		//decodeEnemyData("CoinPurse.bMos", 4010);
 		//itemManager();
 		//decodeItems(1);
@@ -105,7 +106,7 @@ public class Main
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write raw text at: " + Settings.importPath+outputFileName);
-			Files.write(Paths.get(Settings.importPath+outputFileName) , bMos.toString().getBytes());
+			Files.write(Paths.get(Settings.importPath+outputFileName) , Utils.encodeStringToBytes(bMos.toString()));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write bMos file at: " + Settings.importPath+outputFileName);
@@ -133,7 +134,7 @@ public class Main
 			System.out.println("Failed to locate the Normal Quest File in the directory: " + Settings.importPath);
 			try 
 			{
-				Files.write(Paths.get(Settings.importPath+"NormalMail.txt"), mail.normalToString().getBytes());
+				Files.write(Paths.get(Settings.importPath+"NormalMail.txt"), Utils.encodeStringToBytes(mail.normalToString()));
 			} catch (IOException q) 
 			{
 				System.out.println("Failed to write Normal Quest File at: " + Settings.importPath+"NormalMail.txt");
@@ -163,7 +164,7 @@ public class Main
 		byte[] data = mapBootPack.getFile("allfield.lfp");
 		fpInterpreter lightingFixedPoints = new fpInterpreter(data);
 		try {
-			Files.write(Paths.get(Settings.importPath+"AllLightZones.blfp"), lightingFixedPoints.toBFP().getBytes());
+			Files.write(Paths.get(Settings.importPath+"AllLightZones.blfp"), Utils.encodeStringToBytes(lightingFixedPoints.toBFP()));
 		} catch (IOException e) 
 		{
 			System.out.println("Failed to write .lfp output file");
@@ -262,7 +263,7 @@ public class Main
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write Kingdom Plan file at: " + Settings.importPath+"KingdomPlan.txt");
-			Files.write(Paths.get(Settings.importPath+"KingdomPlan.txt"), kingdomPlanData.toString().getBytes());
+			Files.write(Paths.get(Settings.importPath+"KingdomPlan.txt"), Utils.encodeStringToBytes(kingdomPlanData.toString()));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write file");
@@ -289,7 +290,7 @@ public class Main
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write Cockpit Log file at: " + Settings.importPath+"CockpitLog.txt");
-			Files.write(Paths.get(Settings.importPath+"CockpitLog.txt"), CockpitLogData.toString().getBytes());
+			Files.write(Paths.get(Settings.importPath+"CockpitLog.txt"), Utils.encodeStringToBytes(CockpitLogData.toString()));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write file");
@@ -364,7 +365,7 @@ public class Main
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write Camera Zone file at: " + Settings.importPath+"CameraZones.bcz");
-			Files.write(Paths.get(Settings.importPath+"CameraZones.bcz"), cameraZones.toString().getBytes());
+			Files.write(Paths.get(Settings.importPath+"CameraZones.bcz"), Utils.encodeStringToBytes(cameraZones.toString()));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write file");
@@ -458,7 +459,7 @@ public class Main
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write Item Database File.");
-			Files.write(Paths.get(importPath+"Item Database.txt") , items.toString().getBytes(Charset.forName("Shift_JIS")));
+			Files.write(Paths.get(importPath+"Item Database.txt") , Utils.encodeStringToBytes(items.toString()));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write decoded file");
@@ -604,23 +605,12 @@ public class Main
 		//bFM.Utils.testDifferences(Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Resources\\chrDB0.pac")), Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Resources\\chrDB0 - Copy.pac")));
 		
 		
-		List<String> Lines = Files.readAllLines(Paths.get(Settings.importPath + "Resources\\Item Database.txt"), Charset.forName("Shift_JIS"));
-		itemDatabaseManager itemDB = new itemDatabaseManager(Lines);
-		bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(Settings.outputPath + "Resources\\" +  "itemDB3_"+1+".pac")) , itemDB.toBytes());
-	}
-	private static String getLanguage(int languageCode)
-	{
-		//Return the name of the anguage based off number. default to english as i speak that
-		switch(languageCode)
-		{
-		case 0: return "Japanese\\";
-		case 1: return "English\\";
-		case 2: return "French\\";
-		case 3: return "Italian\\";
-		case 4: return "German\\";
-		case 5: return "Spanish\\";
-		}
-		return "English\\";
+		//List<String> Lines = Files.readAllLines(Paths.get(Settings.importPath + "Resources\\Item Database.txt"), Charset.forName("Shift_JIS"));
+		//itemDatabaseManager itemDB = new itemDatabaseManager(Lines);
+		//bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(Settings.outputPath + "Resources\\" +  "itemDB3_"+1+".pac")) , itemDB.toBytes());
+		
+		MailManager mail = new MailManager(Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Release Game\\DATA\\files\\sys\\menuDB\\questdata4_1.bin")));
+		System.out.println(mail.normalToCSV());
 	}
 	private static void compressEventText()
 	{
@@ -631,8 +621,8 @@ public class Main
 	}
 	private static void compressEventText(int languageCode)
 	{
-		String importPath = Settings.importPath + "Events\\Text\\" + getLanguage(languageCode);
-		String outputPath = Settings.outputPath + "Message\\" + getLanguage(languageCode);
+		String importPath = Settings.importPath + "Events\\Text\\" + Utils.getLanguage(languageCode) + '\\';
+		String outputPath = Settings.outputPath + "Message\\" + Utils.getLanguage(languageCode) + '\\';
 		
 		//read the compressed pack file
 		PCKGManager eventTextPac = new PCKGManager(LZ10Manager.decompress(outputPath + "mes_LZ.bin"));
@@ -680,8 +670,8 @@ public class Main
 	{
 		//deCompress and extract and decompress the event text files
 		
-		String importPath = Settings.importPath + "Events\\Text\\" + getLanguage(languageCode);
-		String outputPath = Settings.outputPath + "Message\\" + getLanguage(languageCode);
+		String importPath = Settings.importPath + "Events\\Text\\" + Utils.getLanguage(languageCode) + '\\';
+		String outputPath = Settings.outputPath + "Message\\" + Utils.getLanguage(languageCode) + '\\';
 		
 		
 		PCKGManager eventTextPac = new PCKGManager(LZ10Manager.decompress(outputPath + "mes_LZ.bin"));
@@ -738,7 +728,7 @@ public class Main
 			bFM.Utils.DebugPrint("Failed to read Collision file at: " + importPath+name+".col");
 		}
 		try {
-			Files.write(Paths.get((importPath+ name+".obj")), colFile.toString().getBytes());
+			Files.write(Paths.get((importPath+ name+".obj")), Utils.encodeStringToBytes(colFile.toString()));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write extracted Collision file at: " + importPath+ name+".obj");
@@ -1039,7 +1029,7 @@ public class Main
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write Fixed Point file at: " + Settings.importPath+name+'\\'+name+".bfp");
-			Files.write(Paths.get(Settings.importPath+name+'\\'+name+".bfp"), fixedPoints.toBFP().getBytes());
+			Files.write(Paths.get(Settings.importPath+name+'\\'+name+".bfp"), Utils.encodeStringToBytes(fixedPoints.toBFP()));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write Fixed Point File.");
@@ -1122,7 +1112,7 @@ public class Main
 		try 
 		{
 			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "Event Code", importPath);
-			Files.write(Paths.get(importPath), eventData.toString().getBytes());
+			Files.write(Paths.get(importPath), Utils.encodeStringToBytes(eventData.toString()));
 			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "Event Code");
 		} catch (IOException e) 
 		{
@@ -1342,7 +1332,7 @@ public class Main
 		try 
 		{
 			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileAttempt, "Riivolution XML File", xmlPath.toString());
-			Files.write(xmlPath, xml.getBytes());
+			Files.write(xmlPath, Utils.encodeStringToBytes(xml));
 			bFM.Utils.DebugPrintF(bFM.DebugStrings.WriteFileSuccess, "Riivolution XML File");
 		} catch (IOException e) 
 		{

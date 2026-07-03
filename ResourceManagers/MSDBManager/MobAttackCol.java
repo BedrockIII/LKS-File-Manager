@@ -1,9 +1,10 @@
 package ResourceManagers.MSDBManager;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
+
+import bFM.Utils;
 
 public class MobAttackCol 
 {
@@ -18,9 +19,7 @@ public class MobAttackCol
 	{
 		num0 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(0);
 		num1 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(2);
-		try {
-			name = new String(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 4, 20)), "SHIFT-JIS");
-		} catch (UnsupportedEncodingException e) {e.printStackTrace();}
+		name = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 4, 20)));
 		num2 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(20);
 		num3 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(24);
 		num4 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(28);

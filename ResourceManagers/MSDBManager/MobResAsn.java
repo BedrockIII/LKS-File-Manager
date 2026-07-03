@@ -1,6 +1,5 @@
 package ResourceManagers.MSDBManager;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -18,9 +17,7 @@ public class MobResAsn
 		startNum2 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(2);
 		for(int i = 4; i<data.length-99; i+=104)
 		{
-			try {
-				Res.add(new MobRes(Arrays.copyOfRange(data, i, i+104)));
-			} catch (UnsupportedEncodingException e) {}
+			Res.add(new MobRes(Arrays.copyOfRange(data, i, i+104)));
 		}
 	}
 	public String toString()

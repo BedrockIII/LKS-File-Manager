@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bFM.GenericFile;
+import bFM.Utils;
 
 public class ColReader extends GenericFile
 {
@@ -191,31 +192,31 @@ public class ColReader extends GenericFile
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getOtherObjects());
 		}
 		//bFM.Utils.DebugPrint("Head Pos: " + ret.length);
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(new String("HEAD").getBytes(), new byte[28]));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Utils.encodeStringToBytes("HEAD"), new byte[28]));
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getHeader());
 		}
 		//bFM.Utils.DebugPrint("List Pos: " + ret.length);
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(new String("LIST").getBytes(), new byte[28]));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Utils.encodeStringToBytes("LIST"), new byte[28]));
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getList());
 		}
 		//bFM.Utils.DebugPrint("Tree Pos: " + ret.length);
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(new String("TREE").getBytes(), new byte[28]));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Utils.encodeStringToBytes("TREE"), new byte[28]));
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getTree());
 		}
 		//bFM.Utils.DebugPrint("Index Pos: " + ret.length);
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(new String("INDEX").getBytes(), new byte[27]));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Utils.encodeStringToBytes("INDEX"), new byte[27]));
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getIndex());
 		}
 		//bFM.Utils.DebugPrint("Vertex Pos: " + ret.length);
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(new String("VERTEX").getBytes(), new byte[26]));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Utils.encodeStringToBytes("VERTEX"), new byte[26]));
 		for(int i = 0; i<COLOBJECTS.size(); i++)
 		{
 			ret = bFM.Utils.mergeArrays(ret, COLOBJECTS.get(i).getVertex());
@@ -361,6 +362,6 @@ public class ColReader extends GenericFile
 	}
 	public byte[] toOBJ()
 	{
-		return toString().getBytes();
+		return Utils.encodeStringToBytes(toString());
 	}
 }

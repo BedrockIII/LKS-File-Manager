@@ -80,12 +80,22 @@ public class ItemDatabaseList extends CollapseableFileList
 	{
 		actions.add(Utils.createImportAction("Replace From Text", "Bedrock's Intermediate ItemDB Format", "txt", ((itemDatabaseManager)file)::replaceFromText, this));
 	}
+	private void addExportLngAction()
+	{
+		actions.add(Utils.createExportAction("Export Translation Data", "Item Database " + Settings.getLanguage() + ".lng", "Bedrock's LKS Translation Format", ((itemDatabaseManager)file)::toLng));
+	}
+	private void addImportLngAction()
+	{
+		actions.add(Utils.createImportLngAction("Translate From Language File", "Bedrock's LKS Translation Format", ((itemDatabaseManager)file)::importLng, this));
+	}
 	protected void addActions() 
 	{
 		addNewItemAction();
 		addExportAction();
 		addExportAsTextAction();
 		addImportFromTextAction();
+		addExportLngAction();
+		addImportLngAction();
 		addMouseListener();
 		add(actions);
 		update();

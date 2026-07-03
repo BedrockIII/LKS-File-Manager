@@ -1,11 +1,11 @@
 package ResourceManagers.CharacterDatabaseManager;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import PCKGManager.PCKGManager;
 import bFM.Data;
 import bFM.OpenedFile;
+import bFM.Utils;
 
 public class TextAnimationList implements OpenedFile
 {
@@ -28,8 +28,8 @@ public class TextAnimationList implements OpenedFile
 	public byte[] toBytes() 
 	{
 		PCKGManager pack = new PCKGManager("texanim.bin");
-		pack.addFile("t00_anm.txt ", animations.toString().getBytes(Charset.forName("Shift-JIS")));
-		pack.addFile("t00_ptn.txt ", patterns.toString().getBytes(Charset.forName("Shift-JIS")));
+		pack.addFile("t00_anm.txt ", Utils.encodeStringToBytes(animations.toString()));
+		pack.addFile("t00_ptn.txt ", Utils.encodeStringToBytes(patterns.toString()));
 		return pack.toBytes();
 	}
 	public void setName(String name) 

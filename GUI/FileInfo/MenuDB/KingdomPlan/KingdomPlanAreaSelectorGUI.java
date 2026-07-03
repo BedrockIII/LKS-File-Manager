@@ -8,9 +8,9 @@ import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.KingdomPlanManager.kingdomPlanManager;
+import SystemDataManagers.MenuDB.KingdomPlanManager.KingdomPlanArea;
+import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import bFM.Settings;
-import SystemDataManagers.KingdomPlanManager.KingdomPlanArea;
 
 @SuppressWarnings("serial")
 public class KingdomPlanAreaSelectorGUI extends GenericFileInfoGUI

@@ -1,9 +1,10 @@
 package VMC;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+
+import bFM.Utils;
 
 public class VMCConverter 
 {
@@ -301,8 +302,8 @@ public class VMCConverter
 	public byte[] toBytes()
 	{
 		byte[] ret = null;
-		ret = bFM.Utils.mergeArrays(ret, "VMC ".getBytes());
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(size, 4));
+		ret = bFM.Utils.mergeArrays(ret, Utils.encodeStringToBytes("VMC "));
+		ret = bFM.Utils.mergeArrays(ret, Utils.toByteArr(size, 4));
 		ret = bFM.Utils.mergeArrays(ret, new byte[4]);
 		for(vmInstruction i : code)
 		{
@@ -313,7 +314,7 @@ public class VMCConverter
 			i = i.replace("\\r", "\r");
 			i = i.replace("\\n", "\n");
 			i = i.replace("\\t", "\t");
-			ret = bFM.Utils.mergeArrays(ret, i.getBytes(Charset.forName("SHIFT-JIS")));
+			ret = bFM.Utils.mergeArrays(ret, Utils.encodeStringToBytes(i));
 			ret = bFM.Utils.mergeArrays(ret, (byte)0);
 			if(ret.length%4!=0)
 			{
@@ -344,7 +345,7 @@ public class VMCConverter
 				endIndex = i-1;
 				byte[] stringData = new byte[endIndex-startIndex+1];
 				data.get(startIndex, stringData, 0, endIndex-startIndex+1);
-				temp = new String(stringData, Charset.forName("SHIFT-JIS"));
+				temp = Utils.decodeBytesToString(stringData);
 				temp = temp.replace("\r", "\\r");
 				temp = temp.replace("\n", "\\n");
 				temp = temp.replace("\t", "\\t");

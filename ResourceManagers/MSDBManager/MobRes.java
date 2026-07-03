@@ -1,8 +1,9 @@
 package ResourceManagers.MSDBManager;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+
+import bFM.Utils;
 
 public class MobRes 
 {
@@ -17,10 +18,10 @@ public class MobRes
 	float soundSizeOrVolume1; //Next 4 Bytes
 	float soundSizeOrVolume2; //Next 4 Bytes
 	String soundType; //Next 16 Bytes
-	public MobRes(byte[] data) throws UnsupportedEncodingException 
+	public MobRes(byte[] data) 
 	{
-		location = new String(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 0, 32)));
-		name = new String(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 32, 64)), "SHIFT-JIS");
+		location = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 0, 32)));
+		name = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 32, 64)));
 		code = ByteBuffer.wrap(data).getShort(64);
 		aiCode = ByteBuffer.wrap(data).getShort(66);
 		num3 = ByteBuffer.wrap(data).getShort(68);
@@ -29,7 +30,7 @@ public class MobRes
 		num6 = ByteBuffer.wrap(data).getShort(74);
 		soundSizeOrVolume1 = ByteBuffer.wrap(data).getFloat(76);
 		soundSizeOrVolume2 = ByteBuffer.wrap(data).getFloat(80);
-		soundType = new String(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 84, 100)), "SHIFT-JIS");
+		soundType = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 84, 100)));
 	}
 	public String toString()
 	{

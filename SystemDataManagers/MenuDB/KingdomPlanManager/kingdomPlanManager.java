@@ -1,4 +1,4 @@
-package SystemDataManagers.KingdomPlanManager;
+package SystemDataManagers.MenuDB.KingdomPlanManager;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.List;
 
 import PCKGManager.PCKGManager;
 import bFM.GenericFile;
+import bFM.Utils;
 
 public class kingdomPlanManager extends GenericFile
 {
@@ -157,7 +158,7 @@ public class kingdomPlanManager extends GenericFile
 		byte[] ret = new byte[0];
 		for(int i = 0; i < Areas.size(); i++)
 		{
-			ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Areas.get(i).getImage().getBytes(), new byte[1]));
+			ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Utils.encodeStringToBytes(Areas.get(i).getImage()), new byte[1]));
 		}
 		return ret;
 	}
@@ -166,7 +167,7 @@ public class kingdomPlanManager extends GenericFile
 		byte[] ret = new byte[0];
 		for(int i = 0; i < Areas.size(); i++)
 		{
-			ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Areas.get(i).getDescription().getBytes(), new byte[1]));
+			ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Utils.encodeStringToBytes(Areas.get(i).getDescription()), new byte[1]));
 		}
 		return ret;
 	}
@@ -175,7 +176,7 @@ public class kingdomPlanManager extends GenericFile
 		byte[] ret = new byte[0];
 		for(int i = 0; i < Areas.size(); i++)
 		{
-			ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Areas.get(i).getName().getBytes(), new byte[1]));
+			ret = bFM.Utils.mergeArrays(ret, bFM.Utils.mergeArrays(Utils.encodeStringToBytes(Areas.get(i).getName()), new byte[1]));
 		}
 		return ret;
 	}

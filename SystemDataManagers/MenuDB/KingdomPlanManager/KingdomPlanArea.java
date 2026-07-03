@@ -1,6 +1,8 @@
-package SystemDataManagers.KingdomPlanManager;
+package SystemDataManagers.MenuDB.KingdomPlanManager;
 
 import java.util.ArrayList;
+
+import bFM.Utils;
 
 public class KingdomPlanArea 
 {
@@ -63,16 +65,16 @@ public class KingdomPlanArea
 		byte[] Names = null;
 		for(int i = 0; i<Elements.size(); i++)
 		{
-			Names = bFM.Utils.mergeArrays(Names, bFM.Utils.mergeArrays(Elements.get(i).getName().getBytes(), new byte[1]));
+			Names = bFM.Utils.mergeArrays(Names, bFM.Utils.mergeArrays(Utils.encodeStringToBytes(Elements.get(i).getName()), new byte[1]));
 		}
 		return Names;
-	}//bFM.Utils.mergeArrays(, )
+	}
 	public byte[] getElementDescriptions()
 	{
 		byte[] Descriptions = null;
 		for(int i = 0; i<Elements.size(); i++)
 		{
-			Descriptions = bFM.Utils.mergeArrays(Descriptions, bFM.Utils.mergeArrays(Elements.get(i).getDescription().getBytes(), new byte[1]));
+			Descriptions = bFM.Utils.mergeArrays(Descriptions, bFM.Utils.mergeArrays(Utils.encodeStringToBytes(Elements.get(i).getDescription()), new byte[1]));
 		}
 		return Descriptions;
 	}
@@ -81,7 +83,7 @@ public class KingdomPlanArea
 		byte[] Images = null;
 		for(int i = 0; i<Elements.size(); i++)
 		{
-			Images = bFM.Utils.mergeArrays(Images, bFM.Utils.mergeArrays(Elements.get(i).getImage().getBytes(), new byte[1]));
+			Images = bFM.Utils.mergeArrays(Images, bFM.Utils.mergeArrays(Utils.encodeStringToBytes(Elements.get(i).getImage()), new byte[1]));
 		}
 		return Images;
 	}

@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -100,25 +99,7 @@ public class Collision extends CollapseableFileList
 		}
 		private void addExportOBJAction() 
 	 	{
-	 		JMenuItem export = new JMenuItem("Export As OBJ");
-			export.addActionListener(e -> {
-				JFileChooser chooseFile = new JFileChooser();
-				chooseFile.setSelectedFile(new File(object.getName() + ".obj"));
-				if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
-				{
-					try 
-					{
-						Files.write(chooseFile.getSelectedFile().toPath(),((CollisionObject)object).toOBJ().getBytes());
-					}
-					catch(IOException i)
-					{
-						System.out.println("Failed to Export Collison File as OBJ");
-						i.printStackTrace();
-					}
-					System.out.println("Exported Collision OBJ File");
-				}
-			});
-			actions.add(export);
+			actions.add(Utils.createExportAction("Export as OBJ", file.getName().substring(0, file.getName().lastIndexOf('.')) + ".obj", "Collison File as OBJ", ((CollisionObject)object)::toOBJBytes));
 		}
 		protected void addActions()
 		{

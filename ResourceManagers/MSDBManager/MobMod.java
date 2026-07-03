@@ -1,8 +1,9 @@
 package ResourceManagers.MSDBManager;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+
+import bFM.Utils;
 
 public class MobMod 
 {
@@ -65,12 +66,7 @@ public class MobMod
 		num25 = bFM.Utils.getShort(data, 50);
 		num26 = bFM.Utils.getShort(data, 52);
 		num27 = bFM.Utils.getShort(data, 54);
-		try {
-			name = new String(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 56, 88)), "SHIFT-JIS");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		name = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 56, 88)));
 	}
 	String modLine = null;
 	public MobMod(String modLine)
@@ -174,7 +170,7 @@ public class MobMod
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num25).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num26).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short) num27).array());
-		ret = bFM.Utils.mergeArrays(ret, name.getBytes());
+		ret = bFM.Utils.mergeArrays(ret, Utils.encodeStringToBytes(name));
 		byte[] ret1 = new byte[88]; 
 		for(int i = 0; i<ret.length&&i<88;i++)
 		{

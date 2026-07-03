@@ -12,6 +12,7 @@ import PCKGManager.PCKGManager;
 import ResourceManagers.MSDBManager.BetaManager.BetaConstPlace;
 import ResourceManagers.MSDBManager.BetaManager.BetaGroup;
 import ResourceManagers.MSDBManager.BetaManager.BetaObject;
+import bFM.Utils;
 
 /**
  * 
@@ -78,7 +79,7 @@ public class ExtractionTester
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write raw text at: " + extractedPath+outputFileName);
-			Files.write(Paths.get(extractedPath+outputFileName) , bMos.toString().getBytes());
+			Files.write(Paths.get(extractedPath+outputFileName) , Utils.encodeStringToBytes(bMos.toString()));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write bMos file at: " + extractedPath+outputFileName);
@@ -114,7 +115,7 @@ public class ExtractionTester
 			Objects.add(new BetaObject(objectData, version));
 		}
 		MissionObjectPlacementManager aaa = new MissionObjectPlacementManager(Places, Groups, Objects);
-		Files.write(Paths.get(inputPath), aaa.toString().getBytes());
+		Files.write(Paths.get(inputPath), Utils.encodeStringToBytes(aaa.toString()));
 	}
 	@SuppressWarnings("unused")
 	private static void testMod() throws IOException

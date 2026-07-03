@@ -1,11 +1,11 @@
 package ResourceManagers.CharacterDatabaseManager;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
 import bFM.Data;
 import bFM.GenericFile;
+import bFM.Utils;
 
 public class CharacterResourceList extends GenericFile
 {
@@ -19,7 +19,7 @@ public class CharacterResourceList extends GenericFile
 	protected CharacterResourceList(byte[] file) 
 	{
 		name = "Character Resource List";
-		String data = new String(file, Charset.forName("Shift-JIS"));
+		String data = Utils.decodeBytesToString(file);
 		String[] lines = data.split(";");
 		initialize(lines);
 	}
@@ -74,6 +74,21 @@ public class CharacterResourceList extends GenericFile
 		for(CharacterFace face : faces)
 		{
 			ret += face.toString();
+		}
+		return ret;
+	}
+	public byte[] toBytes()
+	{
+		byte[] ret = null;
+		ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes("BD_NUM " + bodies.size() + ";\r\n"));
+		for(CharacterBody body : bodies)
+		{
+			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(body.toString()));
+		}
+		ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes("FC_NUM " + faces.size() + ";\r\n"));
+		for(CharacterFace face : faces)
+		{
+			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(face.toString()));
 		}
 		return ret;
 	}
