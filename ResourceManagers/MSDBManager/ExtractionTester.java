@@ -12,6 +12,19 @@ import PCKGManager.PCKGManager;
 import ResourceManagers.MSDBManager.BetaManager.BetaConstPlace;
 import ResourceManagers.MSDBManager.BetaManager.BetaGroup;
 import ResourceManagers.MSDBManager.BetaManager.BetaObject;
+import ResourceManagers.MSDBManager.Definition.MobAiList;
+import ResourceManagers.MSDBManager.Definition.MobAttackColList;
+import ResourceManagers.MSDBManager.Definition.MobModList;
+import ResourceManagers.MSDBManager.Definition.MobResAsn;
+import ResourceManagers.MSDBManager.Placement.MissionObjectPlacementManager;
+import ResourceManagers.MSDBManager.Placement.MobAreaDataList;
+import ResourceManagers.MSDBManager.Placement.MobConstantPlace;
+import ResourceManagers.MSDBManager.Placement.MobGroup;
+import ResourceManagers.MSDBManager.Placement.MobGroupList;
+import ResourceManagers.MSDBManager.Placement.MobObject;
+import ResourceManagers.MSDBManager.Placement.MobObjectList;
+import ResourceManagers.MSDBManager.Placement.MobRandomAreaList;
+import ResourceManagers.MSDBManager.Placement.MobRandomPointList;
 import bFM.Utils;
 
 /**

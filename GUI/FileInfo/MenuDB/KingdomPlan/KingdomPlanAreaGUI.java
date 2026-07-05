@@ -28,7 +28,7 @@ public class KingdomPlanAreaGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI() 
 	{
-		Name = bFM.Utils.createFormattedTextField(area.getName(), area::setName);
+		Name = bFM.Utils.createNameTextField(area.getName(), area::setName);
 		Description = bFM.Utils.createFormattedTextField(area.getDescription(), area::setDescription);
 		Image = bFM.Utils.createFormattedTextField(area.getImage(), area::setImage);
 		ElementCount = new JLabel("" + area.getElements().size());

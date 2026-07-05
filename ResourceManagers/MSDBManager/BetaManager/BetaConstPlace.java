@@ -1,9 +1,7 @@
 package ResourceManagers.MSDBManager.BetaManager;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
-import ResourceManagers.MSDBManager.MobConstantPlace;
+import ResourceManagers.MSDBManager.Placement.MobConstantPlace;
 
 public class BetaConstPlace extends MobConstantPlace
 {
@@ -64,6 +62,7 @@ public class BetaConstPlace extends MobConstantPlace
 		
 	}
 
+	@SuppressWarnings("unused")
 	private void initializeVersion1(ByteBuffer data) 
 	{
 		// DNE

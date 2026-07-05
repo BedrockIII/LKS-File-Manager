@@ -71,7 +71,7 @@ public abstract class CollapseableFileList extends FileList
 			isExtended.setDisabledIcon(new ImageIcon("Empty.png"));
 			isExtended.setIcon(new ImageIcon("Shrunk.png"));
 		}
-		
+		if(padding == 0) isExtended.setSelected(true);
 		isExtended.addItemListener(new ItemListener() {
 		    @Override
 		    public void itemStateChanged(ItemEvent e) 

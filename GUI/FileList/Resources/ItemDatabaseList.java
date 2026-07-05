@@ -1,4 +1,4 @@
-package GUI.FileList;
+package GUI.FileList.Resources;
 
 import java.util.ArrayList;
 
@@ -11,6 +11,8 @@ import GUI.FileInfo.ItemDataBase.ItemInfoGUI;
 import GUI.FileInfo.ItemDataBase.ItemPlacementInfoGUI;
 import GUI.FileInfo.ItemDataBase.ItemSoundEffectInfoGUI;
 import GUI.FileInfo.ItemDataBase.ItemWeaponInfoGUI;
+import GUI.FileList.CollapseableFileList;
+import GUI.FileList.FileList;
 import GUI.PopupWindows.NewItemPopup;
 import ResourceManagers.ItemDatabaseManager.Item;
 import ResourceManagers.ItemDatabaseManager.Placement;

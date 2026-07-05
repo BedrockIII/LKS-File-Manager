@@ -1,4 +1,4 @@
-package GUI.FileList;
+package GUI.FileList.Resources;
 
 import java.util.ArrayList;
 
@@ -28,6 +28,9 @@ import GUI.FileInfo.CharacterDataBase.CharacterSoundEffectInfoGUI;
 import GUI.FileInfo.CharacterDataBase.JobChangePriceListInfoGUI;
 import GUI.FileInfo.CharacterDataBase.JopChangePriceInfoGUI;
 import GUI.FileInfo.CharacterDataBase.SoundEffectListInfoGUI;
+import GUI.FileList.CollapseableFileList;
+import GUI.FileList.FileList;
+import GUI.FileList.Generic;
 import GUI.PopupWindows.NewBodyGUI;
 import GUI.PopupWindows.NewFaceGUI;
 import GUI.PopupWindows.NewIndexWindow;

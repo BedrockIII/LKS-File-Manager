@@ -1,12 +1,7 @@
 package GUI.FileList;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -18,6 +13,7 @@ import SystemDataManagers.MenuDB.KingdomPlanManager.KingdomPlanArea;
 import SystemDataManagers.MenuDB.KingdomPlanManager.KingdomPlanElement;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import bFM.Settings;
+import bFM.Utils;
 
 @SuppressWarnings("serial")
 public class KingdomPlanFileList extends CollapseableFileList
@@ -45,7 +41,7 @@ public class KingdomPlanFileList extends CollapseableFileList
 		addActions();
 		System.out.print("█");
 		reAddComponents();
-		System.out.println("█\nComplete!");
+		System.out.println("█ Complete!\n");
 	}
 	public void initializeSubGUI() 
 	{
@@ -62,70 +58,54 @@ public class KingdomPlanFileList extends CollapseableFileList
 	}
 	public void addActions()
 	{
+		super.addExportAction();
 		addExportAction();
+		addReplaceRawAction();
 		addReplaceAction();
 		addMouseListener();
+		addNewAreaAction();
 		add(actions);
 	}
 	protected void addExportAction()
 	{
-		JMenuItem export = new JMenuItem("Export As .txt File");
-		export.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			if(Settings.lastFileSavePath != null) 
-			{
-				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
-			}
-			chooseFile.setSelectedFile(new File("Kingdom Plan Config.txt"));
-			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					Files.write(chooseFile.getSelectedFile().toPath(),(planManager.toBytes()));
-					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
-				}
-				catch(IOException i)
-				{
-					System.out.println("Failed to Export Kingdom Plan Config File");
-					i.printStackTrace();
-				}
-				System.out.println("Exported Kingdom Plan Config File");
-			}
-		});
-		actions.add(export);
+		actions.add(Utils.createExportAction("Export as .txt", "Kingdom Plan Config.txt", 
+				"Bedrock's Intermediate Kingdom Plan DB Format", planManager::toStringBytes));
+	}
+	private void addReplaceRawAction()
+	{
+		actions.add(Utils.createImportAction("Replace from Binary", "Kingdom Plan Binary Format", 
+				"bin", planManager::replaceFromBytes, this));
 	}
 	private void addReplaceAction()
 	{
-		JMenuItem replace = new JMenuItem("Replace File");
-		replace.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			//chooseFile.setFileFilter(new FileNameExtensionFilter("Collision File", "col"));
-			
-			int num = chooseFile.showOpenDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					planManager.replaceFromLines(Files.readAllLines(chooseFile.getSelectedFile().toPath()));
-					initializeInfoGUI();
-					initializeSubGUI();
-					reAddComponents();
-				} catch (IOException i) 
-				{
-					i.printStackTrace();
-					System.out.println("Failed to Import Kingdom Plan Config File");
-				}
-				System.out.println("Imported Kingdom Plan Config File");
-			}
+		actions.add(Utils.createImportAction("Replace from text", "Bedrock's Intermediate Kingdom Plan DB Format", 
+				"txt", planManager::importFromText, this));
+	}
+	private void addNewAreaAction()
+	{
+		JMenuItem newElem = new JMenuItem("Add New Area");
+		newElem.addActionListener(e -> {
+			KingdomPlanArea Area = new KingdomPlanArea();
+			areas.add(Area);
+			AreaList AreaGUI = new AreaList(Area, padding + Settings.indentSize, this);
+			subEntries.add(AreaGUI);
+			reAddComponents();
 		});
-		actions.add(replace);
+		actions.add(newElem);
+	}
+	public void removeArea(AreaList area) 
+	{
+		areas.remove(area.area);
+		subEntries.remove(area);
+		reAddComponents();
 	}
 	public class AreaList extends CollapseableFileList
 	{
 		KingdomPlanFileList parent;
 		KingdomPlanArea area;
 		ArrayList<KingdomPlanElement> elements;
+		JMenuItem moveUp = null;
+		JMenuItem moveDown = null;
 		int padding;
 		public AreaList(KingdomPlanArea area, int padding, KingdomPlanFileList parent) 
 		{
@@ -157,10 +137,48 @@ public class KingdomPlanFileList extends CollapseableFileList
 		}
 		protected void addActions() 
 		{
+			addMoveDownAction();
+			addMoveUpAction();
 			addDeleteAction();
 			addNewElementAction();
 			add(actions);
 			addMouseListener();
+		}
+		private void addMoveUpAction()
+		{
+			if(moveUp == null)
+			{
+				moveUp = new JMenuItem("Move Up");
+				moveUp.addActionListener(e -> {
+					parent.moveUp(this);
+					addMoveDownAction();
+					addMoveUpAction();
+					GUI.update();
+				});
+			}
+			if(!parent.isFirst(this))
+			{
+				actions.add(moveUp, 0);
+			}
+			else actions.remove(moveUp);
+		}
+		private void addMoveDownAction()
+		{
+			if(moveDown == null)
+			{
+				moveDown = new JMenuItem("Move Down");
+				moveDown.addActionListener(e -> {
+					parent.moveDown(this);
+					addMoveDownAction();
+					addMoveUpAction();
+					GUI.update();
+				});
+			}
+			if(!parent.isLast(this))
+			{
+				actions.add(moveDown, 0);
+			}
+			else actions.remove(moveDown);
 		}
 		private void addNewElementAction()
 		{
@@ -174,10 +192,28 @@ public class KingdomPlanFileList extends CollapseableFileList
 			});
 			actions.add(newElem);
 		}
+		protected void addDeleteAction()
+		{
+			JMenuItem removeArea = new JMenuItem("Delete Area");
+			removeArea.addActionListener(e -> {
+				parent.removeArea(this);
+				GUI.update();
+			});
+			actions.add(removeArea);
+		}
+		public void update()
+		{
+			fileName.setText("Area: \"" + area.getName() + "\"");
+			addMoveDownAction();
+			addMoveUpAction();
+			super.update();
+		}
 		public class ElementList extends FileList
 		{
 			AreaList parent;
 			KingdomPlanElement element;
+			JMenuItem moveUp = null;
+			JMenuItem moveDown = null;
 			int padding;
 			public ElementList(KingdomPlanElement element, int padding, AreaList parent) 
 			{
@@ -199,6 +235,8 @@ public class KingdomPlanFileList extends CollapseableFileList
 			}
 			protected void addActions() 
 			{
+				addMoveDownAction();
+				addMoveUpAction();
 				addDeleteAction();
 				add(actions);
 				addMouseListener();
@@ -212,6 +250,47 @@ public class KingdomPlanFileList extends CollapseableFileList
 				});
 				actions.add(removeElem);
 			}
+			private void addMoveUpAction()
+			{
+				if(moveUp == null)
+				{
+					moveUp = new JMenuItem("Move Up");
+					moveUp.addActionListener(e -> {
+						parent.moveUp(this);
+						addMoveDownAction();
+						addMoveUpAction();
+						GUI.update();
+					});
+				}
+				if(!parent.isFirst(this))
+				{
+					actions.add(moveUp, 0);
+				}
+				else actions.remove(moveUp);
+			}
+			private void addMoveDownAction()
+			{
+				if(moveDown == null)
+				{
+					moveDown = new JMenuItem("Move Down");
+					moveDown.addActionListener(e -> {
+						parent.moveDown(this);
+						addMoveDownAction();
+						addMoveUpAction();
+						GUI.update();
+					});
+				}
+				if(!parent.isLast(this))
+				{
+					actions.add(moveDown, 0);
+				}
+				else actions.remove(moveDown);
+			}
+			public void update()
+			{
+				fileName.setText("Element: \"" + element.getName() + "\"");
+				super.update();
+			}
 		}
 		public void removeElement(ElementList element) 
 		{
@@ -219,5 +298,73 @@ public class KingdomPlanFileList extends CollapseableFileList
 			subEntries.remove(element);
 			reAddComponents();
 		}
+		public boolean isLast(ElementList elementList) 
+		{
+			return subEntries.indexOf(elementList) == subEntries.size()-1;
+		}
+		public void moveDown(ElementList elementList) 
+		{
+			if(isLast(elementList)) return;
+			int index = subEntries.indexOf(elementList);
+			if(index == -1) this.removeElement(elementList);
+			subEntries.remove(elementList);
+			subEntries.add(index + 1, elementList);
+			index = elements.indexOf(elementList.element);
+			if(index == -1) this.removeElement(elementList);
+			elements.remove(elementList.element);
+			elements.add(index + 1, elementList.element);
+			reAddComponents();
+		}
+		public boolean isFirst(ElementList elementList) 
+		{
+			return subEntries.indexOf(elementList) == 0;
+		}
+		public void moveUp(ElementList elementList)
+		{
+			if(isFirst(elementList)) return;
+			int index = subEntries.indexOf(elementList);
+			if(index == -1) this.removeElement(elementList);
+			subEntries.remove(elementList);
+			subEntries.add(index - 1, elementList);
+			index = elements.indexOf(elementList.element);
+			if(index == -1) this.removeElement(elementList);
+			elements.remove(elementList.element);
+			elements.add(index - 1, elementList.element);
+			reAddComponents();
+		}
+	}
+	public boolean isFirst(AreaList areaList) 
+	{
+		return subEntries.indexOf(areaList) == 0;
+	}
+	public void moveDown(AreaList areaList) 
+	{
+		if(isLast(areaList)) return;
+		int index = subEntries.indexOf(areaList);
+		if(index == -1) this.removeArea(areaList);
+		subEntries.remove(areaList);
+		subEntries.add(index + 1, areaList);
+		index = areas.indexOf(areaList.area);
+		if(index == -1) this.removeArea(areaList);
+		areas.remove(areaList.area);
+		areas.add(index + 1, areaList.area);
+		reAddComponents();
+	}
+	public void moveUp(AreaList areaList) 
+	{
+		if(isFirst(areaList)) return;
+		int index = subEntries.indexOf(areaList);
+		if(index == -1) this.removeArea(areaList);
+		subEntries.remove(areaList);
+		subEntries.add(index - 1, areaList);
+		index = areas.indexOf(areaList.area);
+		if(index == -1) this.removeArea(areaList);
+		areas.remove(areaList.area);
+		areas.add(index - 1, areaList.area);
+		reAddComponents();
+	}
+	public boolean isLast(AreaList areaList) 
+	{
+		return subEntries.indexOf(areaList) == subEntries.size()-1;
 	}
 }

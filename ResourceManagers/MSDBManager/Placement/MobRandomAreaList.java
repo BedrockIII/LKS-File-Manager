@@ -1,31 +1,30 @@
-package ResourceManagers.MSDBManager;
+package ResourceManagers.MSDBManager.Placement;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MobResAsn 
+public class MobRandomAreaList 
 {
 	short startNum1 = 0;//first 2 bytes,always 0001
 	short startNum2 = 0;//next 2 bytes amount of things in list
-	ArrayList<MobRes> Res = new ArrayList<MobRes>();
-	public MobResAsn(byte[] data)
+	ArrayList<MobRandomArea> ra = new ArrayList<MobRandomArea>();
+	public MobRandomAreaList(byte[] data)
 	{
-		if(data.length<4) return;
 		startNum1 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort();
 		startNum2 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(2);
-		for(int i = 4; i<data.length-99; i+=104)
+		for(int i = 4; i<data.length; i+=8)
 		{
-			Res.add(new MobRes(Arrays.copyOfRange(data, i, i+104)));
+			ra.add(new MobRandomArea(Arrays.copyOfRange(data, i, i+8)));
 		}
 	}
 	public String toString()
 	{
 		String ret = "Num " + startNum2 + "\n";
-		for(int i = 0; i<Res.size(); i++)
+		for(int i = 0; i<ra.size(); i++)
 		{
-			ret = ret + Res.get(i).toString();
+			ret = ret + ra.get(i).toString();
 		}
 		return ret;
 	}

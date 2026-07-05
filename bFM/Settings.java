@@ -47,9 +47,9 @@ public class Settings
 	public static void printVersionData()
 	{
 		System.out.println("LKS File Manager");
-		System.out.println("Version 3.6");
-		System.out.println("     Several Bug Fixes regarding Encoding Strings in different languages");
-		System.out.println("     Added: Translation File Support for Item Database");
+		System.out.println("Version 3.6.1");
+		System.out.println("     Several Bug Fixes with Kingdom Plan manager and other GUI");
+		System.out.println("     Added: Newly Discovered info about Kingdom Plan Elements");
 	}
 	
 	public static void setSettings() 

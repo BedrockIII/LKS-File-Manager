@@ -1,9 +1,7 @@
 package ResourceManagers.MSDBManager.BetaManager;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
-import ResourceManagers.MSDBManager.MobObject;
+import ResourceManagers.MSDBManager.Placement.MobObject;
 
 public class BetaObject extends MobObject
 {

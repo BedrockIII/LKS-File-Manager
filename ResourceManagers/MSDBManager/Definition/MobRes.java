@@ -1,4 +1,4 @@
-package ResourceManagers.MSDBManager;
+package ResourceManagers.MSDBManager.Definition;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;

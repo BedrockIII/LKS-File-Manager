@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import GUI.FileList.CharacterDataBaseList.CharacterResourceAssignmentList;
+import GUI.FileList.Resources.CharacterDataBaseList.CharacterResourceAssignmentList;
 
 @SuppressWarnings("serial")
 public class NewFaceGUI extends JDialog

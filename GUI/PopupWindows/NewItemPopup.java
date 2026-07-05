@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import GUI.FileList.ItemDatabaseList;
+import GUI.FileList.Resources.ItemDatabaseList;
 import ResourceManagers.ItemDatabaseManager.Item;
 import bFM.Settings;
 

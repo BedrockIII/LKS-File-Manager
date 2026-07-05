@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import GUI.FileList.CharacterDataBaseList.CharacterJobPriceChangeList.JobChangePriceListGUI;
+import GUI.FileList.Resources.CharacterDataBaseList.CharacterJobPriceChangeList.JobChangePriceListGUI;
 
 @SuppressWarnings("serial")
 public class RetypeJobWindow extends JDialog

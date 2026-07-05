@@ -5,28 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
-import bFM.GenericFile;
+import bFM.OpenedFile;
 import bFM.Utils;
 
-public class kingdomPlanManager extends GenericFile
+public class kingdomPlanManager implements OpenedFile
 {
 	ArrayList<KingdomPlanArea> Areas = new ArrayList<KingdomPlanArea>();
-	PCKGManager KingdomPlan = new PCKGManager("");
+	//PCKGManager KingdomPlan = new PCKGManager("");
 	public kingdomPlanManager(byte[] data)
 	{
-		name = "KingdomPlan.bin";
-		KingdomPlan = new PCKGManager(data);
-		decodeData();
+		decodeData(data);
 	}
 	public void replaceFromBytes(byte[] data)
 	{
-		name = "KingdomPlan.bin";
-		KingdomPlan = new PCKGManager(data);
-		decodeData();
+		Areas.removeAll(Areas);
+		decodeData(data);
 	}
 	public kingdomPlanManager(List<String> lines)
 	{
-		name = "KingdomPlan.bin";
 		initializeFromLines(lines);
 	}
 	private void initializeFromLines(List<String> lines) 
@@ -60,8 +56,9 @@ public class kingdomPlanManager extends GenericFile
 		Areas.removeAll(Areas);
 		initializeFromLines(lines);
 	}
-	private void decodeData()
+	private void decodeData(byte[] data)
 	{
+		PCKGManager KingdomPlan = new PCKGManager(data);
 		ArrayList<String> AreaNames = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ListName"));
 		ArrayList<String> AreaDescriptions = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ListText"));
 		ArrayList<String> AreaImages = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ListImage"));
@@ -69,6 +66,8 @@ public class kingdomPlanManager extends GenericFile
 		ArrayList<String> ElemDescriptions = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ElemText"));
 		ArrayList<String> ElemImages = bFM.Utils.extractStringsNoFormatting(KingdomPlan.getFile("ElemImage"));
 		ArrayList<int[]> ElemFlags = extractFlags(KingdomPlan.getFile("Val"));
+		
+		
 		int AreaSize = Math.min(AreaNames.size(), AreaDescriptions.size());
 		AreaSize = Math.min(AreaSize, AreaImages.size());
 		if(AreaNames.size()!=AreaDescriptions.size()||AreaNames.size()!=AreaImages.size())
@@ -122,7 +121,7 @@ public class kingdomPlanManager extends GenericFile
 		byte[] ret = new byte[0];
 		for(int i = 0; i < Areas.size(); i++)
 		{
-			ret = bFM.Utils.mergeArrays(ret, Areas.get(i).getElementFlags());
+			ret = bFM.Utils.mergeArrays(ret, Areas.get(i).getElementFlags(i));
 		}
 		return ret;
 	}
@@ -182,7 +181,7 @@ public class kingdomPlanManager extends GenericFile
 	}
 	public byte[] toBytes() 
 	{
-		KingdomPlan = new PCKGManager("KingdomPlan.bin");
+		PCKGManager KingdomPlan = new PCKGManager("KingdomPlan.bin");
 		KingdomPlan.addFile("ElemName", elemNameBytes());
 		KingdomPlan.addFile("ElemText", elemDescriptionBytes());
 		KingdomPlan.addFile("ElemImage", elemImageBytes());
@@ -205,16 +204,32 @@ public class kingdomPlanManager extends GenericFile
 	{
 		return Areas;
 	}
-	public void setData(byte[] data)
+	public boolean equals(String name) 
 	{
-		KingdomPlan = new PCKGManager(data);
+		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
 	}
-	public String getName()
+	public void setData(byte[] data) 
 	{
-		return "KingdomPlan.bin";
+		replaceFromBytes(data);
 	}
 	public void setName(String name) 
 	{
-		this.name = name;
+		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+	}
+	public String getName() 
+	{
+		return "KingdomPlan.bin";
+	}
+	public int getSize() 
+	{
+		return toBytes().length;
+	}
+	public byte[] toStringBytes()
+	{
+		return Utils.encodeStringToBytes(toString());
+	}
+	public void importFromText(byte[] data)
+	{
+		replaceFromLines(Utils.bytesToStrs(data));
 	}
 }

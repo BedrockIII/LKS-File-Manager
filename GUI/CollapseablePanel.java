@@ -110,7 +110,7 @@ public class CollapseablePanel extends JPanel
 		GridBagConstraints layout = Settings.getDefaultConstraints();
 		for(Component c : components)
 		{
-			remove(c);
+			super.remove(c);
 		}
 		if(isExtended.isSelected())
 		{
@@ -130,5 +130,15 @@ public class CollapseablePanel extends JPanel
 	{
 		components.add(c);
 		return this;
+	}
+	public void remove(Component c)
+	{
+		components.remove(c);
+		super.remove(c);
+	}
+	public void isExtended(boolean value) 
+	{
+		isExtended.setSelected(value);
+		update();
 	}
 }

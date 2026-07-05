@@ -1,31 +1,31 @@
-package ResourceManagers.MSDBManager;
+package ResourceManagers.MSDBManager.Definition;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MobAiList 
+public class MobResAsn 
 {
 	short startNum1 = 0;//first 2 bytes,always 0001
 	short startNum2 = 0;//next 2 bytes amount of things in list
-	ArrayList<MobAi> Ai = new ArrayList<MobAi>();
-	public MobAiList(byte[] data)
+	ArrayList<MobRes> Res = new ArrayList<MobRes>();
+	public MobResAsn(byte[] data)
 	{
 		if(data.length<4) return;
 		startNum1 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort();
 		startNum2 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(2);
-		for(int i = 4; i<data.length-51; i+=52)
+		for(int i = 4; i<data.length-99; i+=104)
 		{
-			Ai.add(new MobAi(Arrays.copyOfRange(data, i, i+52)));
+			Res.add(new MobRes(Arrays.copyOfRange(data, i, i+104)));
 		}
 	}
 	public String toString()
 	{
 		String ret = "Num " + startNum2 + "\n";
-		for(int i = 0; i<Ai.size(); i++)
+		for(int i = 0; i<Res.size(); i++)
 		{
-			ret = ret + Ai.get(i).toString();
+			ret = ret + Res.get(i).toString();
 		}
 		return ret;
 	}

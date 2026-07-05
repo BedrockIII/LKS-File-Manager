@@ -1,4 +1,4 @@
-package ResourceManagers.MSDBManager;
+package ResourceManagers.MSDBManager.Placement;
 
 import java.util.ArrayList;
 import java.util.Arrays;

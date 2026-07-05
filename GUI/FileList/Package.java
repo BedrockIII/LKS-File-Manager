@@ -39,7 +39,6 @@ public class Package extends CollapseableFileList
 		addMouseListener();
 		addActions();
 		initializeSubGUI();
-		isExtended.setSelected(true);
 		reAddComponents();
 	}
 	public Package() 

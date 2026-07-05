@@ -2,9 +2,10 @@ package SystemDataManagers.MenuDB.KingdomPlanManager;
 
 import java.util.ArrayList;
 
+import bFM.Data;
 import bFM.Utils;
 
-public class KingdomPlanArea 
+public class KingdomPlanArea implements Data
 {
 	String Name = "";
 	String Description = "";
@@ -19,6 +20,11 @@ public class KingdomPlanArea
 	public KingdomPlanArea(String NameLine)
 	{
 		Name = bFM.Utils.formatString(NameLine);
+	}
+	public KingdomPlanArea() 
+	{
+		Name = "New Area";
+		Image = "SP_00";
 	}
 	public void addLine(String line)
 	{
@@ -92,7 +98,16 @@ public class KingdomPlanArea
 		byte[] Flags = null;
 		for(int i = 0; i<Elements.size(); i++)
 		{
-			Flags = bFM.Utils.mergeArrays(Flags, Elements.get(i).getFlags());
+			Flags = bFM.Utils.mergeArrays(Flags, Elements.get(i).getFlags(i));
+		}
+		return Flags;
+	}
+	public byte[] getElementFlags(int areaIndex)
+	{
+		byte[] Flags = null;
+		for(int i = 0; i<Elements.size(); i++)
+		{
+			Flags = bFM.Utils.mergeArrays(Flags, Elements.get(i).getFlags(areaIndex));
 		}
 		return Flags;
 	}
@@ -127,5 +142,21 @@ public class KingdomPlanArea
 	public void removeElement(KingdomPlanElement element) 
 	{
 		Elements.remove(element);
+	}
+	public boolean equals(String name) 
+	{
+		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public byte[] toBytes() 
+	{
+		throw new UnsupportedOperationException("toBytes() should not be called on type " + this.getClass());
+	}
+	public int getSize() 
+	{
+		throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
 	}
 }

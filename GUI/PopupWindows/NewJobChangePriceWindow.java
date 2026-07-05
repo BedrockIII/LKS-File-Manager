@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import GUI.FileList.CharacterDataBaseList.CharacterJobPriceChangeList;
+import GUI.FileList.Resources.CharacterDataBaseList.CharacterJobPriceChangeList;
 
 @SuppressWarnings("serial")
 public class NewJobChangePriceWindow extends JDialog

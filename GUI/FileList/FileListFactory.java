@@ -1,5 +1,7 @@
 package GUI.FileList;
 
+import GUI.FileList.Resources.CharacterDataBaseList;
+import GUI.FileList.Resources.ItemDatabaseList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;

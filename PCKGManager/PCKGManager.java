@@ -329,4 +329,15 @@ public class PCKGManager extends GenericFile
 		files = new ArrayList<OpenedFile>();
 		extractPAC(data);
 	}
+	public OpenedFile getPackedFile(String name) 
+	{
+		for(OpenedFile file : files)
+		{
+			if(file.equals(name))
+			{
+				return file;
+			}
+		}
+		return null;
+	}
 }

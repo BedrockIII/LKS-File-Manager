@@ -1,4 +1,4 @@
-package ResourceManagers.MSDBManager;
+package ResourceManagers.MSDBManager.Placement;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

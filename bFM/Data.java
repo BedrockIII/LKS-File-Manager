@@ -22,7 +22,7 @@ public interface Data
 	}
 	public byte[] toBytes() 
 	{
-		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+		throw new UnsupportedOperationException("toBytes() should not be called on type " + this.getClass());
 	}
 	public void setName(String name) 
 	{

@@ -1,7 +1,8 @@
 package ResourceManagers.MSDBManager.BetaManager;
 
 import java.nio.ByteBuffer;
-import ResourceManagers.MSDBManager.MobGroup;
+
+import ResourceManagers.MSDBManager.Placement.MobGroup;
 
 public class BetaGroup extends MobGroup
 {

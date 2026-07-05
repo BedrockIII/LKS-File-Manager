@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import GUI.FileList.CharacterDataBaseList.CharacterIndexList;
+import GUI.FileList.Resources.CharacterDataBaseList.CharacterIndexList;
 
 @SuppressWarnings("serial")
 public class NewIndexWindow extends JDialog

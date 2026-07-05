@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import GUI.FileList.CharacterDataBaseList.CharacterJoinList;
+import GUI.FileList.Resources.CharacterDataBaseList.CharacterJoinList;
 
 @SuppressWarnings("serial")
 public class NewJoinWindow extends JDialog
