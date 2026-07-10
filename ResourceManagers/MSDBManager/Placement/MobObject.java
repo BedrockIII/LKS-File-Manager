@@ -3,6 +3,10 @@ package ResourceManagers.MSDBManager.Placement;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import ResourceManagers.ItemDatabaseManager.Item;
+import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
+import ResourceManagers.MSDBManager.ExtractionTester;
+
 public class MobObject 
 {
 	protected float xOffset; //First 2 Bytes //these first 3 MAY be the offsets for the target points, like where onii men throw pots
@@ -207,5 +211,25 @@ public class MobObject
 	public int getModCode() 
 	{
 		return mobModNumber;
+	}
+	public String toItem() 
+	{
+		if(itemDrop == -1 || itemDrop == 0) return "";
+		String ret = ", Item Code: " + itemDrop;
+		if(ExtractionTester.items != null)
+		{
+			itemDatabaseManager items = ExtractionTester.items;
+			Item item = items.getItemByCode(itemDrop);
+			ret += ", " + item.getNewslogName();
+			if((itemDrop >= 2340 && itemDrop <= 2506) || (itemDrop >= 2574 && itemDrop <= 2576))//if special item unsubmitted
+			{
+				ret += ", 0";
+			}
+			else
+			{
+				ret += ", " + item.getPrice();
+			}
+		}
+		return ret;
 	}
 }

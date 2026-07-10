@@ -663,5 +663,83 @@ public class MissionObjectPlacementManager
 	{
 		this.modCode = modCode;
 	}
-
+	public String toStringItems() 
+	{
+		String ret = "Constant Monsters: \n";
+		for(int i = 0; i<Places.size(); i++)
+		{
+			int groupIndex1 = -1;
+			int groupIndex2 = -1;
+			for(int j = 0; j<Groups.size(); j++)
+			{
+				if(Groups.get(j).getCode()==Places.get(i).getGroup1()) groupIndex1 = j;
+				if(Groups.get(j).getCode()==Places.get(i).getGroup2()) groupIndex2 = j;
+			}
+			//System.out.println(Areas.get(i).toBrm() + Points.get(Areas.get(i).getPointIndex()).toBrm());
+			if(!filter)
+			{
+				ret+=Places.get(i).toItem();
+				if(groupIndex1!=-1)
+				{
+					String line = "Group Index: " + Places.get(i).getGroup1();
+					for(int j = 0; j<Groups.get(groupIndex1).getObjectCount(); j++)
+					{
+						line+= Objects.get(Groups.get(groupIndex1).getObjectIndex()+j).toItem() ;
+					}
+					if(line.equals("Group Index: " + Places.get(i).getGroup1()) == false)
+					{
+						ret += line + "\n";
+					}
+				}
+				if(Places.get(i).getGroup1()!=Places.get(i).getGroup2())
+				{
+					String line = "Group Index: " + Places.get(i).getGroup2();
+					for(int j = 0; j<Groups.get(groupIndex2).getObjectCount(); j++)
+					{
+						line+= Objects.get(Groups.get(groupIndex2).getObjectIndex()+j).toItem() ;
+					}
+					if(line.equals("Group Index: " + Places.get(i).getGroup2()) == false)
+					{
+						ret += line + "\n";
+					}
+				}
+				//if(Places.get(i).getGroup1()>=50000) System.out.println("hit");
+				if(groupIndex1!=-1)UsedGroups.add(Groups.get(groupIndex1));
+				if(groupIndex2!=-1)UsedGroups.add(Groups.get(groupIndex2));
+				
+			}
+			else if(Places.get(i).fitsFilter( xMin,  xMax,  zMin,  zMax,  filterOut,  hideFillerSpots))
+			{
+				ret+=Places.get(i).toItem();
+				if(groupIndex1!=-1)
+				{
+					String line = "Group Index: " + Places.get(i).getGroup1();
+					for(int j = 0; j<Groups.get(groupIndex1).getObjectCount(); j++)
+					{
+						line+= Objects.get(Groups.get(groupIndex1).getObjectIndex()+j).toItem() ;
+					}
+					if(line.equals("Group Index: " + Places.get(i).getGroup1()) == false)
+					{
+						ret += line + "\n";
+					}
+				}
+				if(Places.get(i).getGroup1()!=Places.get(i).getGroup2())
+				{
+					String line = "Group Index: " + Places.get(i).getGroup2();
+					for(int j = 0; j<Groups.get(groupIndex2).getObjectCount(); j++)
+					{
+						line+= Objects.get(Groups.get(groupIndex2).getObjectIndex()+j).toItem() ;
+					}
+					if(line.equals("Group Index: " + Places.get(i).getGroup2()) == false)
+					{
+						ret += line + "\n";
+					}
+				}
+				//if(Places.get(i).getGroup1()>=50000) System.out.println("hit");
+				if(groupIndex1!=-1)UsedGroups.add(Groups.get(groupIndex1));
+				if(groupIndex2!=-1)UsedGroups.add(Groups.get(groupIndex2));
+			}
+		}
+		return ret;
+	}
 }

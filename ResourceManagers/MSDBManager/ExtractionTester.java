@@ -9,12 +9,17 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import PCKGManager.PCKGManager;
+import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import ResourceManagers.MSDBManager.BetaManager.BetaConstPlace;
 import ResourceManagers.MSDBManager.BetaManager.BetaGroup;
 import ResourceManagers.MSDBManager.BetaManager.BetaObject;
 import ResourceManagers.MSDBManager.Definition.MobAiList;
 import ResourceManagers.MSDBManager.Definition.MobAttackColList;
+import ResourceManagers.MSDBManager.Definition.MobAttackElemList;
+import ResourceManagers.MSDBManager.Definition.MobAttackInfoList;
+import ResourceManagers.MSDBManager.Definition.MobDamageColList;
 import ResourceManagers.MSDBManager.Definition.MobModList;
+import ResourceManagers.MSDBManager.Definition.MobPresetTableList;
 import ResourceManagers.MSDBManager.Definition.MobResAsn;
 import ResourceManagers.MSDBManager.Placement.MissionObjectPlacementManager;
 import ResourceManagers.MSDBManager.Placement.MobAreaDataList;
@@ -25,6 +30,7 @@ import ResourceManagers.MSDBManager.Placement.MobObject;
 import ResourceManagers.MSDBManager.Placement.MobObjectList;
 import ResourceManagers.MSDBManager.Placement.MobRandomAreaList;
 import ResourceManagers.MSDBManager.Placement.MobRandomPointList;
+import bFM.Settings;
 import bFM.Utils;
 
 /**
@@ -33,6 +39,7 @@ import bFM.Utils;
 @SuppressWarnings("unused")
 public class ExtractionTester 
 {
+	public static itemDatabaseManager items = null;;
 	static String outputPath = "D:\\ModTest\\";
 	static String inputPath = "D:\\ModTest\\"; 
 	//static String outputPath = "D:\\ws - Copy\\pack\\mount\\msbdnlks\\Output\\";
@@ -42,11 +49,15 @@ public class ExtractionTester
 	{
 		
 		try {
+			Utils.setDebugOutput(true);
 			//testAll();
 			//testMod();
 			//RandomMonster();
 			//testBeta1()
-			testPlacement();
+			//testPlacement();
+			//testItems(); 
+			testDefinition();
+			testRepacDefinition();
 			throw new IOException("all okay");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -57,7 +68,7 @@ public class ExtractionTester
 	{
 		int modCode = -1; 
 		Rectangle filterZone = null;
-		filterZone = new Rectangle(600, 700, 730, 750); // WIDTH AND HEIGHT ARE ACTUALLY JUST SECOND OFFSETS
+		filterZone = new Rectangle(300, 514, 710, 850); // WIDTH AND HEIGHT ARE ACTUALLY JUST SECOND OFFSETS
 		boolean keepOnlyOutside = false; // if false keep inside
 		String outputFileName = "PlacementTest.bmos";
 		String extractedPath = "D:\\";
@@ -100,6 +111,98 @@ public class ExtractionTester
 		}
 		System.exit(0);
 	}
+	private static void testItems() 
+	{
+		try {
+			items = new itemDatabaseManager(Files.readAllBytes(Paths.get("D:\\Dolphin_Emulator\\Load\\Riivolution\\LKSMapTesting\\Resources\\itemDB3_1.pac")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int modCode = -1; 
+		Rectangle filterZone = null;
+		filterZone = new Rectangle(0, 704, 704, 1000); // WIDTH AND HEIGHT ARE ACTUALLY JUST SECOND OFFSETS
+		boolean keepOnlyOutside = false; // if false keep inside
+		String outputFileName = "PlacementTest.bmos";
+		String extractedPath = "D:\\";
+		String resPath = "D:\\LKS Debug!!!!1\\ROMs\\Release Game\\DATA\\files\\res\\";
+		bFM.Utils.DebugPrint("Decoding Enemy Data into raw text");
+		PCKGManager MonsterDataPack = new PCKGManager("MSDB");
+		try
+		{
+			bFM.Utils.DebugPrint("Attempting to read msDB27.pac");
+			MonsterDataPack = new PCKGManager(Files.readAllBytes(Paths.get(resPath+"msDB27.pac")));
+		}
+		catch (IOException e)
+		{
+			bFM.Utils.DebugPrint("Failed to Locate Monster Database Pack at: " + resPath+"msDB27.pac");
+			bFM.Utils.DebugPrint("Program will return as it cannot continue.");
+			return;
+		}
+		MissionObjectPlacementManager bMos = new MissionObjectPlacementManager(MonsterDataPack.getFile("MOP_14_CONST_PLACE.lst"), 
+				MonsterDataPack.getFile("MOP_14_GROUP.lst"), MonsterDataPack.getFile("MOP_14_OBJECT.lst"), 
+				MonsterDataPack.getFile("MOP_14_RANDOM_AREA.lst"), MonsterDataPack.getFile("MOP_14_RANDOM_POINT.lst"), 
+				MonsterDataPack.getFile("MOP_14_AREA_DATA.lst"));
+		
+		if(filterZone!=null)
+		{
+			bMos.setConstraints(filterZone.x, filterZone.width, filterZone.y, filterZone.height, keepOnlyOutside, false);
+		}
+		if(modCode!=-1)
+		{
+			bMos.setFilterCode(modCode);
+		}
+
+		try 
+		{
+			bFM.Utils.DebugPrint("Attempting to write raw text at: " + extractedPath+outputFileName);
+			Files.write(Paths.get(extractedPath+outputFileName) , Utils.encodeStringToBytes(bMos.toStringItems()));
+		} catch (IOException e) 
+		{
+			bFM.Utils.DebugPrint("Failed to write bMos file at: " + extractedPath+outputFileName);
+			return;
+		}
+		System.exit(0);
+	}
+	private static void testDefinition() throws IOException
+	{
+		MobAiList ai = new MobAiList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_AI.lst")));
+		Files.write(Paths.get(outputPath+"MobAiList.lst"), ai.toString().getBytes("Shift-JIS"));
+		MobResAsn res = new MobResAsn(Files.readAllBytes(Paths.get(inputPath+"MOB_24_RES_ASN.lst")));
+		Files.write(Paths.get(outputPath+"MobResList.lst"), res.toString().getBytes("Shift-JIS"));
+		MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
+		Files.write(Paths.get(outputPath+"MobModList.bMos"), mod.toBMos().getBytes("Shift-JIS"));
+		MobAttackColList AttackCol = new MobAttackColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst")));
+		Files.write(Paths.get(outputPath+"MobAttackCollisionList.lst"), AttackCol.toString().getBytes("Shift-JIS"));
+		MobAttackElemList AttackElem = new MobAttackElemList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst")));
+		Files.write(Paths.get(outputPath+"MobAttackElementList.lst"), AttackElem.toString().getBytes("Shift-JIS"));
+		MobAttackInfoList AttackInfo = new MobAttackInfoList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst")));
+		Files.write(Paths.get(outputPath+"MobAttackInfoList.lst"), AttackInfo.toString().getBytes("Shift-JIS"));
+		MobDamageColList DamageCol = new MobDamageColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_DMG_COL.lst")));
+		Files.write(Paths.get(outputPath+"MobDamageCollisionList.lst"), DamageCol.toString().getBytes("Shift-JIS"));
+		MobPresetTableList PresetTable = new MobPresetTableList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_PRESET_TABLE.lst")));
+		Files.write(Paths.get(outputPath+"MobPresetTableList.lst"), PresetTable.toString().getBytes("Shift-JIS"));
+		Utils.testDifferences(mod.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
+	}
+	public static void testRepacDefinition() throws IOException
+	{
+		MobModList mod = new MobModList(Utils.bytesToStrs(Files.readAllBytes(Paths.get("D:\\ModTest\\MobModList.bMos"))), true);
+		PCKGManager MonsterDataBase = new PCKGManager("MSDB");
+		try
+		{
+			MonsterDataBase = new PCKGManager(Files.readAllBytes(Paths.get(Settings.outputPath+"Resources\\msDB27.pac")));
+		}
+		catch (IOException e)
+		{
+			bFM.Utils.DebugPrint("Failed to locate package file at: "+Settings.outputPath+"Resources\\msDB27.pac");
+			bFM.Utils.DebugPrint("Program will now return.");
+			return;
+		}
+		Utils.testDifferences(mod.toBytes(), MonsterDataBase.getFile("MOB_24_MOD.lst"));
+		//Utils.testDifferences(mod.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
+		MonsterDataBase.addFile("MOB_24_MOD.lst", mod.toBytes());
+		Files.write(Paths.get(Settings.outputPath+"Resources\\msDB27.pac"), MonsterDataBase.toBytes());
+	}
 	private static void testBeta1() throws IOException
 	{
 		int dbNum = 18;
@@ -133,9 +236,9 @@ public class ExtractionTester
 	@SuppressWarnings("unused")
 	private static void testMod() throws IOException
 	{
-		//MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB24MOD.lst")));
+		//MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
 		//Files.write(Paths.get(outputPath+"MobModList.lst"), mod.toString().getBytes("Shift-JIS"));
-		MobModList mod2 = new MobModList(Files.readAllLines(Paths.get(inputPath+"MobModList.lst"), Charset.forName("Shift-JIS")));
+		MobModList mod2 = new MobModList(Files.readAllLines(Paths.get(inputPath+"MobModList.lst"), Charset.forName("Shift-JIS")), false);
 		Files.write(Paths.get(outputPath+"MOB25MOD.lst"), mod2.toBytes());
 		//bFM.Utils.testDifferences(mod.toBytes(), mod2.toBytes());
 	}
@@ -188,11 +291,11 @@ public class ExtractionTester
 	}
 	public static void testAll() throws IOException
 	{
-			MobAiList ai = new MobAiList(Files.readAllBytes(Paths.get(inputPath+"MOB24AI.lst")));
+			MobAiList ai = new MobAiList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_AI.lst")));
 			Files.write(Paths.get(outputPath+"MobAiList.lst"), ai.toString().getBytes("Shift-JIS"));
-			MobResAsn res = new MobResAsn(Files.readAllBytes(Paths.get(inputPath+"MOB24RESASN.lst")));
+			MobResAsn res = new MobResAsn(Files.readAllBytes(Paths.get(inputPath+"MOB_24_RESASN.lst")));
 			Files.write(Paths.get(outputPath+"MobResList.lst"), res.toString().getBytes("Shift-JIS"));
-			MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB24MOD.lst")));
+			MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
 			Files.write(Paths.get(outputPath+"MobModList.lst"), mod.toString().getBytes("Shift-JIS"));
 			MobGroupList group = new MobGroupList(Files.readAllBytes(Paths.get(inputPath+"MOP14GROUP.lst")));
 			Files.write(Paths.get(outputPath+"MobGroupList.lst"), group.toString().getBytes("Shift-JIS"));
@@ -208,7 +311,7 @@ public class ExtractionTester
 			Files.write(Paths.get(outputPath+"MobAreaDataList.lst"), ad.toString().getBytes("Shift-JIS"));
 			MobRectangleList rect = new MobRectangleList(Files.readAllBytes(Paths.get(inputPath+"MOCR0RECTLIST.lst")));
 			Files.write(Paths.get(outputPath+"MobRectangleList.lst"), rect.toString().getBytes("Shift-JIS"));
-			MobAttackColList AttackCol = new MobAttackColList(Files.readAllBytes(Paths.get(inputPath+"MOB24ATKCOL.lst")));
+			MobAttackColList AttackCol = new MobAttackColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATKCOL.lst")));
 			Files.write(Paths.get(outputPath+"MobAttackCollisionList.lst"), AttackCol.toString().getBytes("Shift-JIS"));
 			
 			Files.write(Paths.get(outputPath+"MonsterHP.lst"), mod.toHP().getBytes("Shift-JIS"));
@@ -221,11 +324,11 @@ public class ExtractionTester
 	}
 	public static void testAll3(PCKGManager src) throws IOException
 	{
-			MobAiList ai = new MobAiList(src.getFile("MOB_24_AI.lst"));
+			MobAiList ai = new MobAiList(src.getFile("MOB__24__AI.lst"));
 			Files.write(Paths.get(outputPath+"MobAiList.lst"), ai.toString().getBytes("Shift-JIS"));
-			MobResAsn res = new MobResAsn(src.getFile("MOB_24_RES_ASN.lst"));
+			MobResAsn res = new MobResAsn(src.getFile("MOB__24__RES_ASN.lst"));
 			Files.write(Paths.get(outputPath+"MobResList.lst"), res.toString().getBytes("Shift-JIS"));
-			MobModList mod = new MobModList(src.getFile("MOB_24_MOD.lst"));
+			MobModList mod = new MobModList(src.getFile("MOB__24__MOD.lst"));
 			Files.write(Paths.get(outputPath+"MobModList.lst"), mod.toString().getBytes("Shift-JIS"));
 			MobGroupList group = new MobGroupList(src.getFile("MOP_14_GROUP.lst"));
 			Files.write(Paths.get(outputPath+"MobGroupList.lst"), group.toString().getBytes("Shift-JIS"));
@@ -241,7 +344,7 @@ public class ExtractionTester
 			Files.write(Paths.get(outputPath+"MobAreaDataList.lst"), ad.toString().getBytes("Shift-JIS"));
 			MobRectangleList rect = new MobRectangleList(src.getFile("MOCR0RECTLIST.lst"));
 			Files.write(Paths.get(outputPath+"MobRectangleList.lst"), rect.toString().getBytes("Shift-JIS"));
-			MobAttackColList AttackCol = new MobAttackColList(src.getFile("MOB24ATKCOL.lst"));
+			MobAttackColList AttackCol = new MobAttackColList(src.getFile("MOB_24_ATKCOL.lst"));
 			Files.write(Paths.get(outputPath+"MobAttackCollisionList.lst"), AttackCol.toString().getBytes("Shift-JIS"));
 			
 			Files.write(Paths.get(outputPath+"MonsterHP.lst"), mod.toHP().getBytes("Shift-JIS"));

@@ -8,7 +8,7 @@ import bFM.Utils;
 
 public class MobAttackCol 
 {
-	short num0;
+	short index;
 	short num1;
 	String name;//16 bytes
 	float num2;
@@ -17,7 +17,7 @@ public class MobAttackCol
 	float num5;
 	public MobAttackCol(byte[] data)
 	{
-		num0 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(0);
+		index = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(0);
 		num1 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(2);
 		name = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 4, 20)));
 		num2 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(20);
@@ -27,6 +27,6 @@ public class MobAttackCol
 	}
 	public String toString()
 	{
-		return ""+num0 +" ,"+num1 +" ,\""+name+"\","+num2 + " ,"+num3 + " ,"+num4 + " ,"+num5 + "\n";
+		return "Attack Collision "+index +": "+num1 +", \""+name+"\", "+num2 + ", "+num3 + ", "+num4 + ", "+num5 + "\n";
 	}
 }

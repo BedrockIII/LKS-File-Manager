@@ -19,7 +19,7 @@ public class MobConstantPlace
 	protected int activationFlag1; //Next 2 Bytes
 	protected int clearFlag; //Next 2 Bytes
 	protected int deactivationFlag; //Next 2 Bytes
-	protected int num11; //Next 2 Bytes
+	protected int itemCode;//Next 2 Bytes
 	protected MobConstantPlace()
 	{
 		
@@ -39,7 +39,7 @@ public class MobConstantPlace
 		activationFlag2 = bFM.Utils.getShort(data, 30);
 		clearFlag = bFM.Utils.getShort(data, 32);
 		deactivationFlag = bFM.Utils.getShort(data, 34);
-		num11 = bFM.Utils.getShort(data, 36);
+		itemCode = bFM.Utils.getShort(data, 36);
 		num12 = bFM.Utils.getShort(data, 38);
 	}
 	public MobConstantPlace(String line)
@@ -88,7 +88,7 @@ public class MobConstantPlace
 		deactivationFlag = Integer.valueOf(line.substring(0, index)).shortValue();
 		line = line.substring(index,line.length()-1);
 		index = line.indexOf(',');
-		num11 = Integer.valueOf(line.substring(0, index)).shortValue();
+		itemCode = Integer.valueOf(line.substring(0, index)).shortValue();
 		line = line.substring(index,line.length()-1);
 		index = line.indexOf(',');
 		if(index!=-1)num12 = Integer.valueOf(line.substring(0, index)).shortValue();
@@ -111,7 +111,7 @@ public class MobConstantPlace
 		this.activationFlag2 = activationFlag2;
 		this.clearFlag = clearFlag;
 		this.deactivationFlag = deactivationFlag;
-		num11 = num42;
+		itemCode = num42;
 		num12 = num52;
 		
 	}
@@ -132,7 +132,7 @@ public class MobConstantPlace
 		this.activationFlag2 = activationFlag2;
 		this.clearFlag = clearFlag;
 		this.deactivationFlag = deactivationFlag;
-		num11 = num42;
+		itemCode = num42;
 		num12 = num52;
 		
 	}
@@ -143,17 +143,17 @@ public class MobConstantPlace
 	public String toString()
 	{
 		return ""+xPos +", "+yPos +", "+zPos +", "+rotation +", "+spawnRadius +", "+num5 +", "+MobGroupCode1 +", "+activationFlag1 +", "+MobGrouptCode2 +", "+activationFlag2 +", "+clearFlag + ", "+
-				deactivationFlag +", "+num11 +", "+num12 +"\n";
+				deactivationFlag +", "+itemCode +", "+num12 +"\n";
 	}
 	public String toBMos()
 	{
 		if(index == -1)
 		{
 			return "Constant Monster: "+xPos +", "+yPos +", "+zPos +", "+rotation +", "+spawnRadius +", "+num5 +", "+activationFlag1+", "+activationFlag2  +", "+clearFlag + ", "+
-					deactivationFlag +", "+num11 +", "+num12 +"\n";
+					deactivationFlag +", "+itemCode +", "+num12 +"\n";
 		}
 		return "Constant Monster: "+index+", "+xPos +", "+yPos +", "+zPos +", "+rotation +", "+spawnRadius +", "+num5 +", "+activationFlag1+", "+activationFlag2  +", "+clearFlag + ", "+
-		deactivationFlag +", "+num11 +", "+num12 +"\n";
+		deactivationFlag +", "+itemCode +", "+num12 +"\n";
 	}
 	public int getGroup1()
 	{
@@ -178,7 +178,7 @@ public class MobConstantPlace
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(activationFlag2, 2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(clearFlag, 2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(deactivationFlag, 2));
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(num11, 2));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(itemCode, 2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(num12, 2));
 		//if(ret.length!=40)System.out.println("constplc wrong length! " + Arrays.toString(ret));
 		if(ret.length!=40)System.out.println(this.toString());
@@ -204,5 +204,14 @@ public class MobConstantPlace
 			return false;
 		}
 		return true;
+	}
+	public String toItem() 
+	{
+		if(itemCode==-1 || itemCode==0)
+		{
+			System.out.println("Const: " + index + " No Item\n"); 
+			return "";
+		}
+		return "Constant Place Index: " + index + ", Item Code: " + itemCode + "\n";
 	}
 }

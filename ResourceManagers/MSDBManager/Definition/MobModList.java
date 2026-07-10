@@ -8,6 +8,7 @@ import java.util.List;
 
 public class MobModList 
 {
+	final static String BmosVersion = "Bedrock's Mission Object Definition File Version: 1.0";
 	short startNum1 = 0;//first 2 bytes,always 0001
 	short startNum2 = 0;//next 2 bytes amount of things in list
 	ArrayList<MobMod> Mod = new ArrayList<MobMod>();
@@ -20,8 +21,13 @@ public class MobModList
 			Mod.add(new MobMod(Arrays.copyOfRange(data, i, i+88)));
 		}
 	}
-	public MobModList(List<String> data) 
+	public MobModList(List<String> data, boolean isBMos) 
 	{
+		if(isBMos)
+		{
+			initializeFromLines(data);
+			return;
+		}
 		for(int i = 0; i<data.size(); i++)
 		{
 			Mod.add(new MobMod(data.get(i)));
@@ -69,5 +75,35 @@ public class MobModList
 			ret[i+main.length] = add[i];
 		}
 		return ret;
+	}
+	public String toBMos()
+	{
+		String ret = BmosVersion  + '\n';
+		for(MobMod mod : Mod)
+		{
+			ret += mod.toBMos();
+		}
+		return ret;
+	}
+	private void initializeFromLines(List<String> lines)
+	{
+		MobMod lastMod = null;
+		for(String line : lines)
+		{
+			if(line.indexOf("Bedrock's Mission Object Definition File Version:") != -1 && line.indexOf(BmosVersion)==-1)
+			{
+				System.err.println("Warning: Wrong File Version");
+			}
+			else if(line.indexOf("<<Mission Object ID>>") != -1)
+			{
+				lastMod = new MobMod();
+				lastMod.addLine(line);
+				Mod.add(lastMod);
+			}
+			else if(lastMod != null)
+			{
+				lastMod.addLine(line);
+			}
+		}
 	}
 }
