@@ -478,7 +478,7 @@ public class Utils
 			{
 				return "KingdomPlanDB";
 			}
-			else if(name.equals("chrDB0.pac")||name.equals("Character Data Base"))
+			else if(name.indexOf("chrDB") != -1||name.equals("Character Data Base"))
 			{
 				return "CharacterDB";
 			}
@@ -514,10 +514,11 @@ public class Utils
 		// wrapper for the other format Coords
 		return formatCoords(line, false);
 	}
-	public static void testDifferences(byte[] file1, byte[] file2) 
+	public static boolean testDifferences(byte[] file1, byte[] file2) 
 	{
 		int count = 0;
 		int firstDifference = -1;
+		boolean ret = true;
 		for(int i = 0; i<Math.min(file1.length, file2.length); i++)
 		{
 			if(file1[i]!=file2[i])
@@ -532,16 +533,19 @@ public class Utils
 		}
 		System.out.println("File 1 size: " + file1.length);
 		System.out.println("File 2 size: " + file2.length);
+		if(file1.length!=file2.length) ret = false;
 		System.out.println("Total Differences: " + count);
 		System.out.println("Percent Difference: " + ((double)count/((file1.length+file2.length+0.0)/2.0))*100);
 		if(firstDifference!=-1)
 		{
 			System.out.println("First Difference at: " + firstDifference + ". File 1 is: " + file1[firstDifference] + ". File 2 is: " + file2[firstDifference] + ".");
+			ret = false;
 		}
 		else
 		{
 			System.out.println("No Differences!!!");
 		}
+		return ret;
 	}
 	public static byte[] readFile(String name, String path)
 	{

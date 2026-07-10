@@ -48,7 +48,7 @@ public class Main
 		colReader.ColReader.optimizeCollision = false;
 		//bFM.Utils.autoEditSubPackFile = false;
 		bFM.Utils.DebugPrint("Debug Data Enabled");
-		try{tester();} catch (IOException e) {e.printStackTrace();}
+		//try{tester();} catch (IOException e) {e.printStackTrace();}
 		//decodeCollision();
 		//encodeCollision();
 		//encodeFixedPoints();
@@ -65,7 +65,7 @@ public class Main
 		//itemManager();
 		//decodeItems(1);
 		//encodeItems(1);
-		//MailManager();
+		MailManager();
 		//decodeCollision("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\zpack\\mapBoot2.pac\\");
 		//deCompressEventText();
 		//compressEventText(1);
@@ -125,7 +125,7 @@ public class Main
 	private static void MailManager(int languageCode) 
 	{
 		MailManager mail = new MailManager(languageCode);
-		//System.out.println(mail.normalToString());
+		System.out.println(mail.normalToString());
 		try 
 		{
 			mail = new MailManager(Files.readAllLines(Paths.get(Settings.importPath+"NormalMail.txt")), Settings.importPath);
@@ -143,7 +143,7 @@ public class Main
 			
 			return;
 		}
-		mail.toPac(1);
+		//mail.toPac(1);
 
 		
 	}
@@ -484,7 +484,7 @@ public class Main
 		}
 		try
 		{
-			enemyModifications = new MobModList(Files.readAllLines(Paths.get(importPath+"MobModList"+difficulty+".lst"), Charset.forName("Shift-JIS")));
+			enemyModifications = new MobModList(Files.readAllLines(Paths.get(importPath+"MobModList"+difficulty+".lst"), Charset.forName("Shift-JIS")), false);
 		}
 		catch (IOException e)
 		{

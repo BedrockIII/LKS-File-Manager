@@ -68,7 +68,7 @@ public class CharacterResourceList extends GenericFile
 		ret += "BD_NUM " + bodies.size() + ";\r\n";
 		for(CharacterBody body : bodies)
 		{
-			ret += body.toString() + "\r\n";
+			ret += body.toString();
 		}
 		ret += "FC_NUM " + faces.size() + ";\r\n";
 		for(CharacterFace face : faces)
@@ -169,7 +169,7 @@ public class CharacterResourceList extends GenericFile
 			String ret = "";
 			ret += "BD_DAT " + characterCode + "," + jobCode + "," + num1 + "," + genderCode + "," + num2 + "," + num3 + ",\"" + model + "\"," + 
 			num4 + "," + num5 + "," + num6 + "," + String.format("%.2f", num7) + " ;\r\n";
-			ret += "BD_DATV " + characterCode + ",\"" + name + "\";";
+			ret += "BD_DATV " + characterCode + ",\"" + name + "\";\r\n";
 			return ret;
 		}
 		private String toCSV()

@@ -18,7 +18,7 @@ public class MailManager
 		PCKGManager questData = new PCKGManager("Error");
 		try
 		{
-			questData = new PCKGManager(Files.readAllBytes(Paths.get(questPath + "questdata4_" + languageCode + ".bin")));
+			questData = new PCKGManager(Files.readAllBytes(Paths.get(questPath + "questdata3_" + languageCode + ".bin")));
 		}
 		catch(IOException e)
 		{

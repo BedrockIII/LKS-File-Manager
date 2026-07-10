@@ -70,7 +70,7 @@ public class Collision extends CollapseableFileList
 		objects = ((ColReader)file).getObjects();
 		for(CollisionObject object : objects)
 		{
-			subEntries.add(new ColObjectListGUI(object, padding + Settings.indentSize));
+			if(object != null) subEntries.add(new ColObjectListGUI(object, padding + Settings.indentSize));
 		}
 	}
 	protected void replaceAsOBJAction()
@@ -88,6 +88,7 @@ public class Collision extends CollapseableFileList
 		CollisionObject object = null;
 		public ColObjectListGUI(CollisionObject object, int padding) 
 		{
+			file = object;
 			this.object = object;
 			this.initializeAll(padding);
 		}
@@ -99,7 +100,7 @@ public class Collision extends CollapseableFileList
 		}
 		private void addExportOBJAction() 
 	 	{
-			actions.add(Utils.createExportAction("Export as OBJ", file.getName().substring(0, file.getName().lastIndexOf('.')) + ".obj", "Collison File as OBJ", ((CollisionObject)object)::toOBJBytes));
+			actions.add(Utils.createExportAction("Export as OBJ", object.getName() + ".obj", "Collison File as OBJ", ((CollisionObject)object)::toOBJBytes));
 		}
 		protected void addActions()
 		{

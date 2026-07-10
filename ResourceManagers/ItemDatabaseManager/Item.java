@@ -1,6 +1,7 @@
 package ResourceManagers.ItemDatabaseManager;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import bFM.Data;
@@ -48,21 +49,14 @@ public class Item implements Data
 	final static int craftianMask = 0x80000;
 	//Immunity Flags
 	final static int poisonImmunityMask = 0x0001;
-	final static int immunity2Mask = 0x0002;
-	final static int immunity4Mask = 0x0004;
-	final static int immunity8Mask = 0x0008;
-	final static int immunity10Mask = 0x0010;
-	final static int immunity20Mask = 0x0020;
-	final static int coldImmunityMask = 0x0040;
-	final static int fireImmunityMask = 0x0080;
+	final static int paralysisImmunityMask = 0x0002;
+	final static int slownessImmunityMask = 0x0004;
+	final static int drowsinessImmunityMask = 0x0008;
+	final static int confusionImmunityMask = 0x0010;
+	final static int despairImmunityMask = 0x0020;
+	final static int fireImmunityMask = 0x0040;
+	final static int coolImmunityMask = 0x0080;
 	final static int windImmunityMask = 0x0100;
-	final static int immunity200Mask = 0x0200;
-	final static int immunity400Mask = 0x0400;
-	final static int immunity800Mask = 0x0800;
-	final static int immunity1000Mask = 0x1000;
-	final static int immunity2000Mask = 0x2000;
-	final static int immunity4000Mask = 0x4000;
-	final static int immunity8000Mask = 0x8000;
 	String ItemName = "";
 	int itemCode = -1;
 	int ItemFlags = 0;
@@ -212,21 +206,14 @@ public class Item implements Data
 		if(GourmetBookIndex!=-1) ret += "\t<<Gourmet Book Index>> " + GourmetBookIndex + "\n";
 		if(SpecialAttackChance!=0) ret += "\t<<Special Attack Chance>> " + SpecialAttackChance + "\n";
 		if(getDamageImmunityPoison()) ret += "\t<<Is Immune to Poison>>\n";
-		if(getDamageImmunity2()) ret += "\t<<Is Immune to Type 2>>\n";
-		if(getDamageImmunity4()) ret += "\t<<Is Immune to Type 4>>\n";
-		if(getDamageImmunity8()) ret += "\t<<Is Immune to Type 8>>\n";
-		if(getDamageImmunity10()) ret += "\t<<Is Immune to Type 10>>\n";
-		if(getDamageImmunity20()) ret += "\t<<Is Immune to Type 20>>\n";
-		if(getDamageImmunityCold()) ret += "\t<<Is Immune to Cold>>\n";
-		if(getDamageImmunityFire()) ret += "\t<<Is Immune to Fire>>\n";
+		if(getDamageImmunity2()) ret += "\t<<Is Immune to Paralysis>>\n";
+		if(getDamageImmunity4()) ret += "\t<<Is Immune to Slowness>>\n";
+		if(getDamageImmunity8()) ret += "\t<<Is Immune to Sleepiness>>\n";
+		if(getDamageImmunity10()) ret += "\t<<Is Immune to Confusion>>\n";
+		if(getDamageImmunity20()) ret += "\t<<Is Immune to Despair>>\n";
+		if(getDamageImmunityCold()) ret += "\t<<Is Immune to Fire>>\n";
+		if(getDamageImmunityFire()) ret += "\t<<Is Immune to Cold>>\n";
 		if(getDamageImmunityWind()) ret += "\t<<Is Immune to Wind>>\n";
-		if(getDamageImmunity200()) ret += "\t<<Is Immune to Type 200>>\n";
-		if(getDamageImmunity400()) ret += "\t<<Is Immune to Type 400>>\n";
-		if(getDamageImmunity800()) ret += "\t<<Is Immune to Type 800>>\n";
-		if(getDamageImmunity1000()) ret += "\t<<Is Immune to Type 1000>>\n";
-		if(getDamageImmunity2000()) ret += "\t<<Is Immune to Type 2000>>\n";
-		if(getDamageImmunity4000()) ret += "\t<<Is Immune to Type 4000>>\n";
-		if(getDamageImmunity8000()) ret += "\t<<Is Immune to Type 8000>>\n";
 		if(regen!=0) ret += "\t<<Regenerates Health>>\n";
 		if(WeaponAttackSpeed!=0) ret += "\t<<Weapon Attack Speed>> " + WeaponAttackSpeed + "\n";
 		if(num7!=0) ret += "\t<<num7>> " + num7 + "\n";
@@ -303,21 +290,14 @@ public class Item implements Data
 		else if(line.indexOf("<<Gourmet Book Index>>")!=-1) GourmetBookIndex = bFM.Utils.formatFlag(line);
 		else if(line.indexOf("<<Special Attack Chance>>")!=-1) SpecialAttackChance = bFM.Utils.formatFlag(line);
 		else if(line.indexOf("<<Is Immune to Poison>>")!=-1) setDamageImmunityPoison(true);
-		else if(line.indexOf("<<Is Immune to Type 2>>") != -1) setDamageImmunity2(true);
-		else if(line.indexOf("<<Is Immune to Type 4>>") != -1) setDamageImmunity4(true);
-		else if(line.indexOf("<<Is Immune to Type 8>>") != -1) setDamageImmunity8(true);
-		else if(line.indexOf("<<Is Immune to Type 10>>") != -1) setDamageImmunity10(true);
-		else if(line.indexOf("<<Is Immune to Type 20>>") != -1) setDamageImmunity20(true);
-		else if(line.indexOf("<<Is Immune to Cold>>") != -1) setDamageImmunityCold(true);
-		else if(line.indexOf("<<Is Immune to Fire>>") != -1) setDamageImmunityFire(true);
+		else if(line.indexOf("<<Is Immune to Paralysis>>") != -1) setDamageImmunity2(true);
+		else if(line.indexOf("<<Is Immune to Slowness>>") != -1) setDamageImmunity4(true);
+		else if(line.indexOf("<<Is Immune to Sleepiness>>") != -1) setDamageImmunity8(true);
+		else if(line.indexOf("<<Is Immune to Confusion>>") != -1) setDamageImmunity10(true);
+		else if(line.indexOf("<<Is Immune to Despair>>") != -1) setDamageImmunity20(true);
+		else if(line.indexOf("<<Is Immune to Fire>>") != -1) setDamageImmunityCold(true);
+		else if(line.indexOf("<<Is Immune to Cold>>") != -1) setDamageImmunityFire(true);
 		else if(line.indexOf("<<Is Immune to Wind>>") != -1) setDamageImmunityWind(true);
-		else if(line.indexOf("<<Is Immune to Type 200>>") != -1) setDamageImmunity200(true);
-		else if(line.indexOf("<<Is Immune to Type 400>>") != -1) setDamageImmunity400(true);
-		else if(line.indexOf("<<Is Immune to Type 800>>") != -1) setDamageImmunity800(true);
-		else if(line.indexOf("<<Is Immune to Type 1000>>") != -1) setDamageImmunity1000(true);
-		else if(line.indexOf("<<Is Immune to Type 2000>>") != -1) setDamageImmunity2000(true);
-		else if(line.indexOf("<<Is Immune to Type 4000>>") != -1) setDamageImmunity4000(true);
-		else if(line.indexOf("<<Is Immune to Type 8000>>") != -1) setDamageImmunity8000(true);
 		else if(line.indexOf("<<num6>>")!=-1) WeaponAttackSpeed = bFM.Utils.formatFlag(line);
 		else if(line.indexOf("<<Regenerates Health>>")!=-1) regen = 1;
 		else if(line.indexOf("<<Weapon Attack Speed>>")!=-1) WeaponAttackSpeed = bFM.Utils.formatFlag(line);
@@ -415,19 +395,28 @@ public class Item implements Data
 		byte[] ret = null;
 		if(hasSoundEffect())
 		{
-			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(
-					"HITSE " + itemCode + ",\"" + SoundEffect1 + 
-					"\",\"" + SoundEffect2 + "\";\r\n"
-					));
+			try 
+			{
+				ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(
+						"HITSE " + itemCode + ",\"" + SoundEffect1 + 
+						"\",\"" + SoundEffect2 + "\";\r\n", Charset.forName("SHIFT-JIS")
+						));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		if(hasWeaponData())
 		{
-			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(
-					"WEP " + itemCode + ",\"" + DigType + "\",\"" 
-					+ BuildType + "\",\"" + BreakType + "\",\"" + 
-					AttackType+ "\"," + DigSpeed + "," + BuildSpeed + 
-					"," + BreakSpeed + "," + AttackSpeed + ";\r\n"));
+			try {
+				ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(
+						"WEP " + itemCode + ",\"" + DigType + "\",\"" 
+						+ BuildType + "\",\"" + BreakType + "\",\"" + 
+						AttackType+ "\"," + DigSpeed + "," + BuildSpeed + 
+						"," + BreakSpeed + "," + AttackSpeed + ";\r\n", Charset.forName("SHIFT-JIS")));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return ret;
@@ -753,80 +742,80 @@ public class Item implements Data
 	}
 	public boolean getDamageImmunity2()
 	{
-	    return (DamageImmunityFlags & immunity2Mask) != 0;
+	    return (DamageImmunityFlags & paralysisImmunityMask) != 0;
 	}
 	public void setDamageImmunity2(boolean isImmune)
 	{
 	    if (isImmune)
-	        DamageImmunityFlags |= immunity2Mask;
+	        DamageImmunityFlags |= paralysisImmunityMask;
 	    else
-	        DamageImmunityFlags &= ~immunity2Mask;
+	        DamageImmunityFlags &= ~paralysisImmunityMask;
 	}
 	public boolean getDamageImmunity4()
 	{
-	    return (DamageImmunityFlags & immunity4Mask) != 0;
+	    return (DamageImmunityFlags & slownessImmunityMask) != 0;
 	}
 	public void setDamageImmunity4(boolean isImmune)
 	{
 	    if (isImmune)
-	        DamageImmunityFlags |= immunity4Mask;
+	        DamageImmunityFlags |= slownessImmunityMask;
 	    else
-	        DamageImmunityFlags &= ~immunity4Mask;
+	        DamageImmunityFlags &= ~slownessImmunityMask;
 	}
 	public boolean getDamageImmunity8()
 	{
-	    return (DamageImmunityFlags & immunity8Mask) != 0;
+	    return (DamageImmunityFlags & drowsinessImmunityMask) != 0;
 	}
 	public void setDamageImmunity8(boolean isImmune)
 	{
 	    if (isImmune)
-	        DamageImmunityFlags |= immunity8Mask;
+	        DamageImmunityFlags |= drowsinessImmunityMask;
 	    else
-	        DamageImmunityFlags &= ~immunity8Mask;
+	        DamageImmunityFlags &= ~drowsinessImmunityMask;
 	}
 	public boolean getDamageImmunity10()
 	{
-	    return (DamageImmunityFlags & immunity10Mask) != 0;
+	    return (DamageImmunityFlags & confusionImmunityMask) != 0;
 	}
 	public void setDamageImmunity10(boolean isImmune)
 	{
 	    if (isImmune)
-	        DamageImmunityFlags |= immunity10Mask;
+	        DamageImmunityFlags |= confusionImmunityMask;
 	    else
-	        DamageImmunityFlags &= ~immunity10Mask;
+	        DamageImmunityFlags &= ~confusionImmunityMask;
 	}
 	public boolean getDamageImmunity20()
 	{
-	    return (DamageImmunityFlags & immunity20Mask) != 0;
+	    return (DamageImmunityFlags & despairImmunityMask) != 0;
 	}
 	public void setDamageImmunity20(boolean isImmune)
 	{
 	    if (isImmune)
-	        DamageImmunityFlags |= immunity20Mask;
+	        DamageImmunityFlags |= despairImmunityMask;
 	    else
-	        DamageImmunityFlags &= ~immunity20Mask;
+	        DamageImmunityFlags &= ~despairImmunityMask;
 	}
 	public boolean getDamageImmunityCold()
 	{
-	    return (DamageImmunityFlags & coldImmunityMask) != 0;
-	}
-	public void setDamageImmunityCold(boolean isImmune)
-	{
-	    if (isImmune)
-	        DamageImmunityFlags |= coldImmunityMask;
-	    else
-	        DamageImmunityFlags &= ~coldImmunityMask;
-	}
-	public boolean getDamageImmunityFire()
-	{
 	    return (DamageImmunityFlags & fireImmunityMask) != 0;
 	}
-	public void setDamageImmunityFire(boolean isImmune)
+	public void setDamageImmunityCold(boolean isImmune)
 	{
 	    if (isImmune)
 	        DamageImmunityFlags |= fireImmunityMask;
 	    else
 	        DamageImmunityFlags &= ~fireImmunityMask;
+	}
+	public boolean getDamageImmunityFire()
+	{
+	    return (DamageImmunityFlags & coolImmunityMask) != 0;
+	}
+	public void setDamageImmunityFire(boolean isImmune)
+	{
+	    if (isImmune)
+	        DamageImmunityFlags |= coolImmunityMask;
+	    else
+	        DamageImmunityFlags &= ~coolImmunityMask;
 	}
 	public boolean getDamageImmunityWind()
 	{
@@ -838,83 +827,6 @@ public class Item implements Data
 	        DamageImmunityFlags |= windImmunityMask;
 	    else
 	        DamageImmunityFlags &= ~windImmunityMask;
-	}
-	public boolean getDamageImmunity200()
-	{
-	    return (DamageImmunityFlags & immunity200Mask) != 0;
-	}
-	public void setDamageImmunity200(boolean isImmune)
-	{
-	    if (isImmune)
-	        DamageImmunityFlags |= immunity200Mask;
-	    else
-	        DamageImmunityFlags &= ~immunity200Mask;
-	}
-	public boolean getDamageImmunity400()
-	{
-	    return (DamageImmunityFlags & immunity400Mask) != 0;
-	}
-	public void setDamageImmunity400(boolean isImmune)
-	{
-	    if (isImmune)
-	        DamageImmunityFlags |= immunity400Mask;
-	    else
-	        DamageImmunityFlags &= ~immunity400Mask;
-	}
-	public boolean getDamageImmunity800()
-	{
-	    return (DamageImmunityFlags & immunity800Mask) != 0;
-	}
-	public void setDamageImmunity800(boolean isImmune)
-	{
-	    if (isImmune)
-	        DamageImmunityFlags |= immunity800Mask;
-	    else
-	        DamageImmunityFlags &= ~immunity800Mask;
-	}
-	public boolean getDamageImmunity1000()
-	{
-	    return (DamageImmunityFlags & immunity1000Mask) != 0;
-	}
-	public void setDamageImmunity1000(boolean isImmune)
-	{
-	    if (isImmune)
-	        DamageImmunityFlags |= immunity1000Mask;
-	    else
-	        DamageImmunityFlags &= ~immunity1000Mask;
-	}
-	public boolean getDamageImmunity2000()
-	{
-	    return (DamageImmunityFlags & immunity2000Mask) != 0;
-	}
-	public void setDamageImmunity2000(boolean isImmune)
-	{
-	    if (isImmune)
-	        DamageImmunityFlags |= immunity2000Mask;
-	    else
-	        DamageImmunityFlags &= ~immunity2000Mask;
-	}
-	public boolean getDamageImmunity4000()
-	{
-	    return (DamageImmunityFlags & immunity4000Mask) != 0;
-	}
-	public void setDamageImmunity4000(boolean isImmune)
-	{
-	    if (isImmune)
-	        DamageImmunityFlags |= immunity4000Mask;
-	    else
-	        DamageImmunityFlags &= ~immunity4000Mask;
-	}
-	public boolean getDamageImmunity8000()
-	{
-	    return (DamageImmunityFlags & immunity8000Mask) != 0;
-	}
-	public void setDamageImmunity8000(boolean isImmune)
-	{
-	    if (isImmune)
-	        DamageImmunityFlags |= immunity8000Mask;
-	    else
-	        DamageImmunityFlags &= ~immunity8000Mask;
 	}
 	public int getWeaponAttackSpeed()
 	{

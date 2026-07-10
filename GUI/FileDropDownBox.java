@@ -10,6 +10,7 @@ import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import bFM.Settings;
+import bFM.Utils;
 
 @SuppressWarnings("serial")
 public class FileDropDownBox extends JMenu
@@ -53,6 +54,25 @@ public class FileDropDownBox extends JMenu
 			System.out.println("Saved Raw File");
 		});
 		add(saveButton);
+		
+		JMenuItem debugChangesButton = new JMenuItem("(DEBUG) Print Changes");
+		
+		debugChangesButton.addActionListener(e -> {
+			boolean noDiffs = false;
+			try 
+			{
+				byte[] file = GUI.getFile();
+				noDiffs = Utils.testDifferences(file, Files.readAllBytes(Paths.get(Settings.lastFileOpenPath)));
+				Files.write(Paths.get(Settings.lastFileOpenPath+'0'),file);
+			}
+			catch(IOException i)
+			{
+				System.err.println("Failed to read starting file for test");
+				i.printStackTrace();
+			}
+			System.out.println("Test Passed: " + noDiffs);
+		});
+		add(debugChangesButton);
 	}
 		
 }
