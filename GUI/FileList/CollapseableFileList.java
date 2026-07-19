@@ -90,7 +90,7 @@ public abstract class CollapseableFileList extends FileList
 	public int getHeight()
 	{
 		int increment = Settings.assetHeight;
-		if(isExtended!=null && isExtended.isSelected() == false) return increment;
+		if(isExtended!=null && (!isExtended.isEnabled() || isExtended.isSelected() == false)) return increment;
 		int ret = increment;
 		if(subEntries == null) return ret;
 		for(FileList entry : subEntries)
@@ -137,7 +137,12 @@ public abstract class CollapseableFileList extends FileList
 		layout.weighty = 0.0;
 		layout.weightx = 1.0;
 		layout.anchor = GridBagConstraints.NORTHWEST;
-		if(isExtended!=null && !isExtended.isSelected()) 
+		if(isExtended!=null)
+		{
+			if(subEntries.size() == 0) isExtended.setEnabled(false);
+			else isExtended.setEnabled(true);
+		}
+		if(!isExtended.isEnabled() || isExtended!=null && !isExtended.isSelected()) 
 		{
 			//Update only header
 			layout.weighty = 1.0;
@@ -205,6 +210,7 @@ public abstract class CollapseableFileList extends FileList
 	{
 		remove(fileList);
 		subEntries.remove(fileList);
+		reAddComponents();
 	}
 	public void setExpanded(boolean val) 
 	{

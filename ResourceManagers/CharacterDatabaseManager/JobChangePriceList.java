@@ -33,6 +33,11 @@ public class JobChangePriceList extends GenericFile
 			if(line.indexOf("PRICE")!=-1) jobs.add(new JobPrices(line, this));
 		}
 	}
+	protected JobChangePriceList(CharacterDataBaseManager parent) 
+	{
+		name = "Job Change Price List";
+		this.parent = parent;
+	}
 	public String toString()
 	{
 		setSelfPrices();

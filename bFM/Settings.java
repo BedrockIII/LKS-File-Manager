@@ -47,9 +47,9 @@ public class Settings
 	public static void printVersionData()
 	{
 		System.out.println("LKS File Manager");
-		System.out.println("Version 3.6.2");
-		System.out.println("     Bug fixes relating to exporting introduced by the Language Update");
-		System.out.println("     Added: Debug option to test differences. Warns you if I somehow break an editor and will let you help me solve the issue better");
+		System.out.println("Version 3.6.3");
+		System.out.println("     Various QOL improvements to file Editor GUI");
+		System.out.println("     Fixed: Text-Based _LZ.bin pack editor");
 	}
 	
 	public static void setSettings() 

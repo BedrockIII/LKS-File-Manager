@@ -22,7 +22,7 @@ public class JoinBinList extends GenericFile
 			//list.get(list.size()-1).printUniques();
 		}
 	}
-	public JoinBinList(List<String> lines) 
+	protected JoinBinList(List<String> lines) 
 	{
 		name = "Character Join List";
 		for(String line : lines)
@@ -32,6 +32,10 @@ public class JoinBinList extends GenericFile
 				list.add(new join(line));
 			}
 		}
+	}
+	protected JoinBinList() 
+	{
+		name = "Character Join List";
 	}
 	public String toString()
 	{

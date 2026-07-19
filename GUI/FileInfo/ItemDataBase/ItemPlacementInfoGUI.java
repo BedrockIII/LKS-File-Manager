@@ -8,8 +8,8 @@ import javax.swing.JTextField;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
 import ResourceManagers.ItemDatabaseManager.Placement;
+import bFM.GUIUtils;
 import bFM.Settings;
-import bFM.Utils;
 
 @SuppressWarnings("serial")
 public class ItemPlacementInfoGUI extends GenericFileInfoGUI
@@ -30,14 +30,14 @@ public class ItemPlacementInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		xPos = Utils.createFloatTextField(placement.getX(), placement::setX);
-		yPos = Utils.createFloatTextField(placement.getY(), placement::setY);
-		zPos = Utils.createFloatTextField(placement.getZ(), placement::setZ);
+		xPos = GUIUtils.createFloatTextField(placement.getX(), placement::setX);
+		yPos = GUIUtils.createFloatTextField(placement.getY(), placement::setY);
+		zPos = GUIUtils.createFloatTextField(placement.getZ(), placement::setZ);
 		
-		activationFlag = Utils.createIntTextField(placement.getActivationFlag(), placement::setActivationFlag);
-		deactivationFlag = Utils.createIntTextField(placement.getDeactivationFlag(), placement::setDeactivationFlag);
-		indoors = Utils.createCheckBox(placement.getIsIndoors(), placement::setIsIndoors);
-		buildingCode = Utils.createIntTextField(placement.getBuildingCode(), placement::setBuildingCode);
+		activationFlag = GUIUtils.createIntTextField(placement.getActivationFlag(), placement::setActivationFlag);
+		deactivationFlag = GUIUtils.createIntTextField(placement.getDeactivationFlag(), placement::setDeactivationFlag);
+		indoors = GUIUtils.createCheckBox(placement.getIsIndoors(), placement::setIsIndoors);
+		buildingCode = GUIUtils.createIntTextField(placement.getBuildingCode(), placement::setBuildingCode);
 	}
 	private void addGUI()
 	{

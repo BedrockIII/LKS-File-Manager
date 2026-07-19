@@ -17,6 +17,11 @@ public class TextAnimationList implements OpenedFile
 		animations = new AnimationList(pack.getFile("t00_anm.txt "));
 		patterns = new PatternList(pack.getFile("t00_ptn.txt "));
 	}
+	public TextAnimationList() 
+	{
+		animations = new AnimationList();
+		patterns = new PatternList();
+	}
 	public boolean equals(String name) 
 	{
 		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
@@ -67,6 +72,10 @@ public class TextAnimationList implements OpenedFile
 					animation.addLine(line);
 				}
 			}
+		}
+		public AnimationList() 
+		{
+			animations = new ArrayList<Animation>();
 		}
 		public String toString()
 		{
@@ -295,6 +304,10 @@ public class TextAnimationList implements OpenedFile
 					Pattern.addLine(line);
 				}
 			}
+		}
+		public PatternList() 
+		{
+			Patterns = new ArrayList<PatternPart>();
 		}
 		public boolean equals(String name) 
 		{

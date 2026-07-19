@@ -22,7 +22,7 @@ public class indBinList extends GenericFile
 			//list.get(list.size()-1).printUniques();
 		}
 	}
-	public indBinList(List<String> lines) 
+	protected indBinList(List<String> lines) 
 	{
 		name = "Index List";
 		for(String line : lines)
@@ -32,6 +32,10 @@ public class indBinList extends GenericFile
 				list.add(new ind(line));
 			}
 		}
+	}
+	protected indBinList() 
+	{
+		name = "Index List";
 	}
 	public String toString()
 	{

@@ -7,10 +7,12 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class MenuBar extends JMenuBar
 {
-	public MenuBar()
+	GUI parent;
+	public MenuBar(GUI parent)
 	{
+		this.parent = parent;
 		setBorderPainted(true);
-		FileDropDownBox fileMenu = new FileDropDownBox();
+		FileDropDownBox fileMenu = new FileDropDownBox(parent);
 		fileMenu.setMinimumSize(Settings.buttonSize);
 		add(fileMenu);
 		ToolDropDownBox toolMenu = new ToolDropDownBox();

@@ -4,16 +4,19 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
 import PCKGManager.PCKGManager;
+import bFM.GUIUtils;
 
 @SuppressWarnings("serial")
 public class PackageInfoGUI extends GenericFileInfoGUI
 {
 	PCKGManager packageFile = null;
-	LabeledInputBox fileCount = null;
-	LabeledInputBox pacSize = null;
+	JTextField name = null;
+	JLabel fileCount = null;
+	JLabel pacSize = null;
 	public PackageInfoGUI(PCKGManager packageFile) 
 	{
 		this.packageFile = packageFile;
@@ -23,8 +26,9 @@ public class PackageInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		pacSize = new LabeledInputBox("File Size: ",  new JLabel("" + packageFile.getSize()));
-		fileCount = new LabeledInputBox("Packed File Count: ",  new JLabel("" + packageFile.getFileAmount()));
+		name = GUIUtils.createNameTextField(packageFile.getName(), packageFile::setName);
+		pacSize = new JLabel("" + packageFile.getSize());
+		fileCount = new JLabel("" + packageFile.getFileAmount());
 	}
 	private void addGUI()
 	{
@@ -35,15 +39,16 @@ public class PackageInfoGUI extends GenericFileInfoGUI
 		layout.gridwidth = GridBagConstraints.REMAINDER;
 		layout.fill = GridBagConstraints.HORIZONTAL;
 		layout.weightx = 1.0;
-		add(pacSize, layout);
+		add(new LabeledInputBox("File Name: ",  name), layout);
+		add(new LabeledInputBox("File Size: ",  pacSize), layout);
 		layout.weighty = 1.0;
-		add(fileCount, layout);
+		add(new LabeledInputBox("Packed File Count: ",  fileCount), layout);
 		layout.weighty = 0.0;
 	}
 	public void update()
 	{
-		pacSize.replaceComponent(new JLabel("" + packageFile.getSize()));
-		fileCount.replaceComponent(new JLabel("" + packageFile.getFileAmount()));
-		repaint();
+		pacSize.setText("" + packageFile.getSize());
+		fileCount.setText("" + packageFile.getFileAmount());
+		super.update();
 	}
 }

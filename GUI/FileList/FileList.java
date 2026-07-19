@@ -22,8 +22,8 @@ import GUI.GUI;
 import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.PopupWindows.RenameWindow;
 import bFM.Data;
+import bFM.GUIUtils;
 import bFM.Settings;
-import bFM.Utils;
 
 @SuppressWarnings("serial")
 public abstract class FileList extends JPanel
@@ -135,46 +135,6 @@ public abstract class FileList extends JPanel
 	}
 	protected void addExportAction()
 	{
-		actions.add(actions.add(Utils.createExportAction("Export Raw Data", file.getName(), "Raw File", file::toBytes)));
-	}
-	protected void addReplaceButton()
-	{
-		JMenuItem replace = new JMenuItem("Replace File");
-		replace.addActionListener(e -> {
-			JFileChooser chooseFile = new JFileChooser();
-			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			if(getFileExtensions()!=null) chooseFile.setFileFilter(getFileExtensions());
-			
-			int num =chooseFile.showOpenDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					file.setData(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
-					//System.out.println(data.length);
-					infoGUI.updateGUI(file.toBytes());
-					file.setName(chooseFile.getSelectedFile().toPath().getFileName().toString());
-					fileName.setText(file.getName());
-					GUI.update();
-				} catch (IOException i) 
-				{
-					i.printStackTrace();
-					System.out.println("Failed to Import Generic File");
-				}
-				System.out.println("Imported Generic File");
-			}
-		});
-		actions.add(replace);
-	}
-	protected void addDeleteAction()
-	{
-		if(getParent()==null) return;
-		JMenuItem replace = new JMenuItem("Delete File");
-		replace.addActionListener(e -> 
-		{
-			((CollapseableFileList)getParent()).removeFile(this);
-			GUI.update();
-		});
-		actions.add(replace);
+		actions.add(GUIUtils.createExportAction("Export Raw Data", file.getName(), "Raw File", file::toBytes));
 	}
 }

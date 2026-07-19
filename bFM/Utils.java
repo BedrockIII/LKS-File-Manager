@@ -1,8 +1,5 @@
 package bFM;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -15,19 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JMenuItem;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import GUI.GUI;
-import GUI.FileList.CollapseableFileList;
 
 public class Utils 
 {
@@ -368,7 +352,11 @@ public class Utils
 		String finalLine = "";
 		for(int i = 0; i<ret.length(); i++)
 		{
-			if(ret.charAt(i)=='\\'&&ret.charAt(i+1)=='n')
+			if(ret.charAt(i)=='\\'&&i+1==ret.length())
+			{
+				finalLine += "\\";
+			}
+			else if(ret.charAt(i)=='\\'&&ret.charAt(i+1)=='n')
 			{
 				finalLine += "\n";
 				i++;
@@ -445,11 +433,11 @@ public class Utils
 	public static List<String> bytesToStrs(byte[] data)
 	{
 		List<String> Strings = new ArrayList<String>();
-		byte[] temp = new byte[256];
+		byte[] temp = new byte[512];
 		int k = 0;
 		for(int i = 0; i<data.length; i++)
 		{
-			if(data[i]==0x0a||data[i]==0x0d)
+			if(data[i]==0x0a||data[i]==0x0d||data[i]==0x00)
 			{
 				String line = decodeBytesToString(temp);
 				int ending = line.indexOf(0x00);
@@ -491,9 +479,13 @@ public class Utils
 				}
 				return "ItemDB";
 			}
-			if(name.equals("CameraData.bin")||name.equals("Camera Zone Config"))
+			else if(name.equals("CameraData.bin")||name.equals("Camera Zone Config"))
 			{
 				return "CameraZoneDB";
+			}
+			else if(name.equals("Album.bin"))
+			{
+				return "WonderSpotDB";
 			}
 			//Check if special TODO
 			//else return "Package"
@@ -670,227 +662,6 @@ public class Utils
 		for(int i = 0; i<arr.length; i++)
 		if(arr[i]==is) return i;
 		return -1;
-	}
-	public static int arrIndex(byte[] a, char c)
-	{
-		for(int i = 0; i<a.length; i++)
-		{
-			if(a[i]==(byte)i) return i;
-		}
-		return -1;
-	}
-	public static JTextField createFloatTextField(float value, Consumer<Float> setterFunction)
-	{
-		JTextField field = new JTextField("" + value);
-		
-		field.getDocument().addDocumentListener(new DocumentListener()
-		{
-			public void insertUpdate(DocumentEvent e)
-			{
-				setterFunction.accept(strToFloat(field.getText()));
-			}
-			public void removeUpdate(DocumentEvent e)
-			{
-				setterFunction.accept(strToFloat(field.getText()));
-			}
-			public void changedUpdate(DocumentEvent e) {}
-		});
-		
-		return field;
-	}
-	public static JTextField createIntTextField(int value, Consumer<Integer> setterFunction)
-	{
-		JTextField field = new JTextField("" + value);
-		
-		field.getDocument().addDocumentListener(new DocumentListener()
-		{
-			public void insertUpdate(DocumentEvent e)
-			{
-				setterFunction.accept(strToInt(field.getText()));
-			}
-			public void removeUpdate(DocumentEvent e)
-			{
-				setterFunction.accept(strToInt(field.getText()));
-			}
-			public void changedUpdate(DocumentEvent e) {}
-		});
-		
-		return field;
-	}
-	public static JTextField createNameTextField(String value, Consumer<String> setterFunction)
-	{
-		JTextField field = new JTextField("" + value);
-		
-		field.getDocument().addDocumentListener(new DocumentListener()
-		{
-			public void insertUpdate(DocumentEvent e)
-			{
-				setterFunction.accept(field.getText());
-				GUI.update();
-			}
-			public void removeUpdate(DocumentEvent e)
-			{
-				setterFunction.accept(field.getText());
-				GUI.update();
-			}
-			public void changedUpdate(DocumentEvent e) {}
-		});
-		
-		return field;
-	}
-	public static JCheckBox createCheckBox(boolean value, Consumer<Boolean> setterFunction) 
-	{
-		JCheckBox checkBox = new JCheckBox();
-		checkBox.setSelected(value);
-		
-		checkBox.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-				setterFunction.accept(checkBox.isSelected());
-			}
-			
-		});
-		
-		return checkBox;
-	}
-	public static JTextField createFormattedTextField(String value, Consumer<String> setterFunction) 
-	{
-		JTextField field = new JTextField(toFormatedString(value));
-		
-		field.getDocument().addDocumentListener(new DocumentListener()
-		{
-			public void insertUpdate(DocumentEvent e)
-			{
-				setterFunction.accept(formatStringChars(field.getText()));
-			}
-			public void removeUpdate(DocumentEvent e)
-			{
-				setterFunction.accept(formatStringChars(field.getText()));
-			}
-			public void changedUpdate(DocumentEvent e) {}
-		});
-		
-		return field;
-	}
-	public static JTextField createStringTextField(String value, Consumer<String> setterFunction)
-	{
-		JTextField field = new JTextField("" + value);
-		
-		field.getDocument().addDocumentListener(new DocumentListener()
-		{
-			public void insertUpdate(DocumentEvent e)
-			{
-				setterFunction.accept(field.getText());
-				GUI.update();
-			}
-			public void removeUpdate(DocumentEvent e)
-			{
-				setterFunction.accept(field.getText());
-				GUI.update();
-			}
-			public void changedUpdate(DocumentEvent e) {}
-		});
-		
-		return field;
-	}
-	public static JMenuItem createExportAction(String name, String fileName, String fileType, Supplier<byte[]> dataSource)
-	{
-		JMenuItem export = new JMenuItem(name);
-		export.addActionListener(e -> 
-		{
-			JFileChooser chooseFile = new JFileChooser();
-			if(Settings.lastFileSavePath != null) 
-			{
-				chooseFile.setCurrentDirectory(Paths.get(Settings.lastFileSavePath).toFile().getParentFile());
-			}
-			chooseFile.setSelectedFile(new File(fileName));
-			if(chooseFile.showDialog(null, "Save File")==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					Files.write(chooseFile.getSelectedFile().toPath(),dataSource.get());
-					Settings.lastFileSavePath = chooseFile.getSelectedFile().toString();
-				}
-				catch(IOException i)
-				{
-					DebugPrint("Failed to Export " + fileType);
-					i.printStackTrace();
-				}
-				DebugPrint("Exported " + fileType);
-			}
-		});
-		return export;
-	}
-	public static JMenuItem createImportAction(String name, String fileName, String fileExtension, Consumer<byte[]> dataSource, CollapseableFileList gui)
-	{
-		JMenuItem importFile = new JMenuItem(name);
-		importFile.addActionListener(e -> 
-		{
-			JFileChooser chooseFile = new JFileChooser();
-			if(Settings.lastFileImportPath != null) 
-			{
-				chooseFile.setSelectedFile(Paths.get(Settings.lastFileImportPath).toFile());
-				chooseFile.setSelectedFile(Paths.get("").toFile());
-			}
-			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			if(gui.getFileExtensions()!=null)chooseFile.setFileFilter(new FileNameExtensionFilter(fileName, fileExtension));
-			
-			int num =chooseFile.showOpenDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					dataSource.accept(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
-					Settings.lastFileImportPath = chooseFile.getSelectedFile().toString();
-					gui.initializeSubGUI();
-					gui.reAddComponents();
-					GUI.update();
-				} catch (IOException i) 
-				{
-					i.printStackTrace();
-					System.out.println("Failed to " + fileExtension);
-				}
-				System.out.println("Imported " + fileExtension);
-			}
-		});
-		return importFile;
-	}
-	public static JMenuItem createImportLngAction(String name, String fileName, Consumer<byte[]> dataSource, CollapseableFileList gui)
-	{
-		JMenuItem importFile = new JMenuItem(name);
-		importFile.addActionListener(e -> 
-		{
-			JFileChooser chooseFile = new JFileChooser();
-			if(Settings.lastFileImportPath != null) 
-			{
-				chooseFile.setSelectedFile(Paths.get(Settings.lastFileImportPath).toFile());
-				chooseFile.setSelectedFile(Paths.get("").toFile());
-			}
-			chooseFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			if(gui.getFileExtensions()!=null)chooseFile.setFileFilter(new FileNameExtensionFilter(fileName, "lng"));
-			
-			int num =chooseFile.showOpenDialog(null);
-			if(num==JFileChooser.APPROVE_OPTION)
-			{
-				try 
-				{
-					dataSource.accept(Files.readAllBytes(chooseFile.getSelectedFile().toPath()));
-					Settings.lastFileImportPath = chooseFile.getSelectedFile().toString();
-					String Name = chooseFile.getSelectedFile().getName();
-					Settings.LanguageCode = getLanguageCodeByName(Name);
-					gui.initializeSubGUI();
-					gui.reAddComponents();
-					GUI.update();
-				} catch (IOException i) 
-				{
-					i.printStackTrace();
-					System.out.println("Failed to import Language Tranlation File");
-				}
-				System.out.println("Imported Language Tranlation File");
-			}
-		});
-		return importFile;
 	}
 	public static byte[] encodeStringToBytes(String text)
 	{

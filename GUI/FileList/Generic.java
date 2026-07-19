@@ -1,21 +1,27 @@
 package GUI.FileList;
 
+import javax.swing.JMenuItem;
+
 import GUI.GUI;
 import GUI.FileInfo.FileInfoFactory;
 import PCKGManager.PCKGManager;
 import bFM.Data;
+import bFM.GUIUtils;
 import bFM.OpenedFile;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class Generic extends FileList
 {
+	CollapseableFileList parent = null;
+	int padding = 0;
 	protected Generic()
 	{
 	}
 	public Generic(PCKGManager pac, int padding, int index)
 	{
 		file = pac.getPackedFile(index);
+		this.padding = padding;
 		initializeAll(padding);
 	}
 	public Generic(String name, byte[] data, int padding)
@@ -23,14 +29,18 @@ public class Generic extends FileList
 		file = OpenedFile.makeFile(name, data);
 		initializeAll(padding);
 	}
-	public Generic(OpenedFile file, int padding)
+	public Generic(OpenedFile file, int padding, CollapseableFileList parent)
 	{
 		this.file = file;
+		this.parent = parent;
+		this.padding = padding;
 		initializeAll(padding);
 	}
-	public Generic(String name, int padding) 
+	public Generic(String name, int padding, CollapseableFileList parent) 
 	{
 		file = OpenedFile.makeFile(name, new byte[0]);
+		this.padding = padding;
+		this.parent = parent;
 		initializeAll(padding);
 	}
 	protected void initializeAll()
@@ -39,16 +49,13 @@ public class Generic extends FileList
 	}
 	protected void initializeAll(int padding)
 	{
-		initializeListGUI(padding);
+		this.padding = padding;
+		initializeListGUI();
 		initializeInfoGUI();
-		addExportAction();
-		addRenameAction();
-		addReplaceButton();
-		addDeleteAction();
 		addActions();
 		add(actions);
 	}
-	protected void initializeListGUI(int padding)
+	protected void initializeListGUI()
 	{
 		initializeListGUI(padding, file.getName());
 	}
@@ -58,11 +65,28 @@ public class Generic extends FileList
 	}
 	protected void addActions()
 	{
+		addExportAction();
 		addRenameAction();
+		addReplaceButton();
 		addDeleteAction();
 		addMouseListener();
 		add(actions);
 		update();
+	}
+	protected void addDeleteAction()
+	{
+		if(parent==null || padding == 0) return;
+		JMenuItem replace = new JMenuItem("Delete File");
+		replace.addActionListener(e -> 
+		{
+			parent.removeFile(this);
+			GUI.update();
+		});
+		actions.add(replace);
+	}
+	protected void addReplaceButton()
+	{
+		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", "Generic File", null, file::setData, file::setName, parent));
 	}
 	protected void select()
 	{
@@ -86,8 +110,8 @@ public class Generic extends FileList
 	}
 	public void update() 
 	{
-		repaint();
-		infoGUI.update();
+		fileName.setText(file.getName());
+		super.update();
 	}
 	public void deselectAll() 
 	{

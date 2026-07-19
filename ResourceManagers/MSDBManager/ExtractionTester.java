@@ -56,13 +56,20 @@ public class ExtractionTester
 			//testBeta1()
 			//testPlacement();
 			//testItems(); 
-			testDefinition();
+			//testDefinition();
 			testRepacDefinition();
+			//testItemDropTableExtract();
 			throw new IOException("all okay");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	private static void testItemDropTableExtract() throws IOException
+	{
+		MobDropTableList items = new MobDropTableList(Files.readAllBytes(Paths.get(inputPath+"MDITM00.bin")));
+		Files.write(Paths.get(outputPath+"MobDropTables.bMos"), items.toBMos().getBytes("Shift-JIS"));
+		Utils.testDifferences(new MobDropTableList(Files.readAllLines(Paths.get(outputPath+"MobDropTables.bMos"))).toBytes(), Files.readAllBytes(Paths.get(inputPath+"MDITM00.bin")));
 	}
 	private static void testPlacement() 
 	{
@@ -169,7 +176,7 @@ public class ExtractionTester
 		MobAiList ai = new MobAiList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_AI.lst")));
 		Files.write(Paths.get(outputPath+"MobAiList.lst"), ai.toString().getBytes("Shift-JIS"));
 		MobResAsn res = new MobResAsn(Files.readAllBytes(Paths.get(inputPath+"MOB_24_RES_ASN.lst")));
-		Files.write(Paths.get(outputPath+"MobResList.lst"), res.toString().getBytes("Shift-JIS"));
+		Files.write(Paths.get(outputPath+"MobResList.bMos"), res.toBMos().getBytes("Shift-JIS"));
 		MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
 		Files.write(Paths.get(outputPath+"MobModList.bMos"), mod.toBMos().getBytes("Shift-JIS"));
 		MobAttackColList AttackCol = new MobAttackColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst")));
@@ -187,6 +194,7 @@ public class ExtractionTester
 	public static void testRepacDefinition() throws IOException
 	{
 		MobModList mod = new MobModList(Utils.bytesToStrs(Files.readAllBytes(Paths.get("D:\\ModTest\\MobModList.bMos"))), true);
+		MobResAsn res = new MobResAsn(Utils.bytesToStrs(Files.readAllBytes(Paths.get("D:\\ModTest\\MobResList.bMos"))));
 		PCKGManager MonsterDataBase = new PCKGManager("MSDB");
 		try
 		{
@@ -198,9 +206,12 @@ public class ExtractionTester
 			bFM.Utils.DebugPrint("Program will now return.");
 			return;
 		}
-		Utils.testDifferences(mod.toBytes(), MonsterDataBase.getFile("MOB_24_MOD.lst"));
+		//Utils.testDifferences(mod.toBytes(), MonsterDataBase.getFile("MOB_24_MOD.lst"));
+		//Utils.testDifferences(res.toBytes(), MonsterDataBase.getFile("MOB_24_RES_ASN.lst"));
+		//Files.write(Paths.get("D:\\ModTest\\MobResfile.bin"),res.toBytes());
 		//Utils.testDifferences(mod.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
 		MonsterDataBase.addFile("MOB_24_MOD.lst", mod.toBytes());
+		MonsterDataBase.addFile("MOB_24_RES_ASN.lst", res.toBytes());
 		Files.write(Paths.get(Settings.outputPath+"Resources\\msDB27.pac"), MonsterDataBase.toBytes());
 	}
 	private static void testBeta1() throws IOException
@@ -294,7 +305,7 @@ public class ExtractionTester
 			MobAiList ai = new MobAiList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_AI.lst")));
 			Files.write(Paths.get(outputPath+"MobAiList.lst"), ai.toString().getBytes("Shift-JIS"));
 			MobResAsn res = new MobResAsn(Files.readAllBytes(Paths.get(inputPath+"MOB_24_RESASN.lst")));
-			Files.write(Paths.get(outputPath+"MobResList.lst"), res.toString().getBytes("Shift-JIS"));
+			Files.write(Paths.get(outputPath+"MobResList.lst"), res.toCSV().getBytes("Shift-JIS"));
 			MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
 			Files.write(Paths.get(outputPath+"MobModList.lst"), mod.toString().getBytes("Shift-JIS"));
 			MobGroupList group = new MobGroupList(Files.readAllBytes(Paths.get(inputPath+"MOP14GROUP.lst")));

@@ -20,9 +20,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import GUI.GUI;
 import GUI.FileInfo.CollisionObjectInfoGUI;
 import GUI.FileInfo.FileInfoFactory;
+import bFM.GUIUtils;
 import bFM.OpenedFile;
 import bFM.Settings;
-import bFM.Utils;
 import colReader.ColReader;
 import colReader.CollisionObject;
 
@@ -30,9 +30,11 @@ import colReader.CollisionObject;
 public class Collision extends CollapseableFileList
 {
 	private int padding = 0;
+	CollapseableFileList parent = null;
 	ArrayList<CollisionObject> objects = new ArrayList<CollisionObject>();
-	public Collision(OpenedFile file, int padding) 
+	public Collision(OpenedFile file, int padding, CollapseableFileList parent) 
 	{
+		this.parent = parent;
 		this.file = file;
 		initializeAll(padding);
 	}
@@ -53,7 +55,7 @@ public class Collision extends CollapseableFileList
 	}
 	private void addExportOBJAction() 
  	{
-		actions.add(Utils.createExportAction("Export as OBJ", file.getName().substring(0, file.getName().lastIndexOf('.')) + ".obj", "Collison File as OBJ", ((ColReader)file)::toOBJ));
+		actions.add(GUIUtils.createExportAction("Export as OBJ", file.getName().substring(0, file.getName().lastIndexOf('.')) + ".obj", "Collison File as OBJ", ((ColReader)file)::toOBJ));
 	}
 	protected void addActions()
 	{
@@ -61,9 +63,24 @@ public class Collision extends CollapseableFileList
 		replaceAsOBJAction();
 		addExportAction();
 		addExportOBJAction();
-		
+		addDeleteAction();
 		addMouseListener();
 		add(actions);
+	}
+	protected void addDeleteAction()
+	{
+		if(parent==null || padding == 0) return;
+		JMenuItem replace = new JMenuItem("Delete File");
+		replace.addActionListener(e -> 
+		{
+			parent.removeFile(this);
+			GUI.update();
+		});
+		actions.add(replace);
+	}
+	protected void addReplaceButton()
+	{
+		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", file.getName(), "col",file::setData, file::setName, parent));
 	}
 	public void initializeSubGUI() 
 	{
@@ -75,13 +92,25 @@ public class Collision extends CollapseableFileList
 	}
 	protected void replaceAsOBJAction()
 	{
-		actions.add(Utils.createImportAction("Replace File (From .obj)", "Wavefront OBJ File", "obj", ((ColReader)file)::replaceFromOBJ, this));
+		actions.add(GUIUtils.createImportAction("Replace File (From .obj)", "Wavefront OBJ File", "obj", ((ColReader)file)::replaceFromOBJ, this));
 	}
 	public void removeFile(FileList file) 
 	{
 		remove(file);
 		objects.remove(((ColObjectListGUI)file).getObject());
 		subEntries.remove(file);
+	}
+	public void reAddComponents()
+	{
+		for(int i = 0; i < subEntries.size(); i++)
+		{
+			if(objects.indexOf(subEntries.get(i).file) == -1)
+			{
+				subEntries.remove(i);
+				i--;
+			}
+		}
+		super.reAddComponents();
 	}
 	public class ColObjectListGUI extends FileList
 	{
@@ -100,7 +129,7 @@ public class Collision extends CollapseableFileList
 		}
 		private void addExportOBJAction() 
 	 	{
-			actions.add(Utils.createExportAction("Export as OBJ", object.getName() + ".obj", "Collison File as OBJ", ((CollisionObject)object)::toOBJBytes));
+			actions.add(GUIUtils.createExportAction("Export as OBJ", object.getName() + ".obj", "Collison File as OBJ", ((CollisionObject)object)::toOBJBytes));
 		}
 		protected void addActions()
 		{
@@ -216,9 +245,25 @@ public class Collision extends CollapseableFileList
 			});
 			actions.add(replace);
 		}
+		protected void addDeleteAction()
+		{
+			if(getParent()==null) return;
+			JMenuItem replace = new JMenuItem("Delete File");
+			replace.addActionListener(e -> 
+			{
+				((CollapseableFileList)getParent()).removeFile(this);
+				GUI.update();
+			});
+			actions.add(replace);
+		}
 	}
 	protected void initializeInfoGUI() 
 	{
 		infoGUI = FileInfoFactory.makeInfoGUI(file);
+	}
+	public void update()
+	{
+		fileName.setText(file.getName());
+		super.update();
 	}
 }

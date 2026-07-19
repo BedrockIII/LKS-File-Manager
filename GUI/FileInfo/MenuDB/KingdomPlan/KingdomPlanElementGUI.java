@@ -93,19 +93,19 @@ public class KingdomPlanElementGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		Name = bFM.Utils.createNameTextField(Element.getName(), Element::setName);
-		Description = bFM.Utils.createFormattedTextField(Element.getDescription(), Element::setDescription);
-		Image = bFM.Utils.createFormattedTextField(Element.getImage(), Element::setImage);
-		Price = bFM.Utils.createIntTextField(Element.getPrice(), Element::setPrice);
-		ActivationFlag = bFM.Utils.createIntTextField(Element.getActivationFlag(), Element::setActivationFlag);
-		AltActivationFlag = bFM.Utils.createIntTextField(Element.getAltActivationFlag(), Element::setAltActivationFlag);
-		flag5 = bFM.Utils.createIntTextField(Element.getFlag5(), Element::setFlag5);
-		flag6 = bFM.Utils.createIntTextField(Element.getFlag6(), Element::setFlag6);
-		flag7 = bFM.Utils.createIntTextField(Element.getFlag7(), Element::setFlag7);
-		flag8 = bFM.Utils.createIntTextField(Element.getFlag8(), Element::setFlag8);
-		PopulationMinimum = bFM.Utils.createIntTextField(Element.getPopulationMinimum(), Element::setPopulationMinimum);
-		PrereqPurchaseFlag = bFM.Utils.createIntTextField(Element.getPrereqPurchaseFlag(), Element::setPrereqPurchaseFlag);
-		PurchaseFlag = bFM.Utils.createIntTextField(Element.getPurchaseFlag(), Element::setPurchaseFlag);
+		Name = bFM.GUIUtils.createNameTextField(Element.getName(), Element::setName);
+		Description = bFM.GUIUtils.createFormattedTextField(Element.getDescription(), Element::setDescription);
+		Image = bFM.GUIUtils.createFormattedTextField(Element.getImage(), Element::setImage);
+		Price = bFM.GUIUtils.createIntTextField(Element.getPrice(), Element::setPrice);
+		ActivationFlag = bFM.GUIUtils.createIntTextField(Element.getActivationFlag(), Element::setActivationFlag);
+		AltActivationFlag = bFM.GUIUtils.createIntTextField(Element.getAltActivationFlag(), Element::setAltActivationFlag);
+		flag5 = bFM.GUIUtils.createIntTextField(Element.getFlag5(), Element::setFlag5);
+		flag6 = bFM.GUIUtils.createIntTextField(Element.getFlag6(), Element::setFlag6);
+		flag7 = bFM.GUIUtils.createIntTextField(Element.getFlag7(), Element::setFlag7);
+		flag8 = bFM.GUIUtils.createIntTextField(Element.getFlag8(), Element::setFlag8);
+		PopulationMinimum = bFM.GUIUtils.createIntTextField(Element.getPopulationMinimum(), Element::setPopulationMinimum);
+		PrereqPurchaseFlag = bFM.GUIUtils.createIntTextField(Element.getPrereqPurchaseFlag(), Element::setPrereqPurchaseFlag);
+		PurchaseFlag = bFM.GUIUtils.createIntTextField(Element.getPurchaseFlag(), Element::setPurchaseFlag);
 		flag12 = new JComboBox<String>(ProgramTypes);
 		flag12.setSelectedIndex(Element.getSpecialVariableType());
 		flag12.addActionListener(new ActionListener()
@@ -116,10 +116,10 @@ public class KingdomPlanElementGUI extends GenericFileInfoGUI
 			}
 			
 		});
-		flag13 = bFM.Utils.createIntTextField(Element.getSpecialVar1(), Element::setSpecialVar1);
-		flag14 = bFM.Utils.createIntTextField(Element.getSpecialVar2(), Element::setSpecialVar2);
-		cockpitLogCode = bFM.Utils.createIntTextField(Element.getCockpitLogCode(), Element::setCockpitLogCode);
-		flag16 = bFM.Utils.createIntTextField(Element.getFlag16(), Element::setFlag16);
+		flag13 = bFM.GUIUtils.createIntTextField(Element.getSpecialVar1(), Element::setSpecialVar1);
+		flag14 = bFM.GUIUtils.createIntTextField(Element.getSpecialVar2(), Element::setSpecialVar2);
+		cockpitLogCode = bFM.GUIUtils.createIntTextField(Element.getCockpitLogCode(), Element::setCockpitLogCode);
+		flag16 = bFM.GUIUtils.createIntTextField(Element.getFlag16(), Element::setFlag16);
 	}
 	private void updateProgramInfo()
 	{

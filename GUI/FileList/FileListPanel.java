@@ -24,15 +24,15 @@ public class FileListPanel extends JScrollPane
 		file = panel;
 		setViewportView(panel);
 		GUI.update();
+		update();
 	}
 	public int getHeight()
 	{
 		if(getViewport()==null||getViewport().getView()==null)
 		{
-			return Settings.assetHeight*5;
+			return Settings.assetHeight;
 		}
-		//System.out.println(getViewport(). instanceof Package);
-		return Math.max(getViewport().getView().getHeight(),Settings.assetHeight*5)+Settings.assetHeight;
+		return Math.max(getViewport().getView().getHeight(),Settings.assetHeight);
 	}
 	//bar.
 	//frame.add(bar);
@@ -41,7 +41,6 @@ public class FileListPanel extends JScrollPane
 	{
 		if(getViewport()==null||getViewport().getView()==null) return;
 		int scroll = getVerticalScrollBar().getValue();
-		//setMaximumSize(new Dimension(GUI.rowWidth,((Package)getViewport().getView()).getHeight()));
 		getViewport().setSize(getWidth(), getHeight());
 		if(getViewport().getView() instanceof Generic)
 		{
@@ -71,7 +70,6 @@ public class FileListPanel extends JScrollPane
 	}
 	public byte[] getFile() 
 	{
-		// TODO Auto-generated method stub
 		return file.getBytes();
 	}
 }

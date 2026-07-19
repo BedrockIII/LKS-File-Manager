@@ -23,9 +23,14 @@ public class CharacterResourceList extends GenericFile
 		String[] lines = data.split(";");
 		initialize(lines);
 	}
+	protected CharacterResourceList()
+	{
+		name = "Character Resource List";
+		bodies = new ArrayList<CharacterBody>();
+		faces = new ArrayList<CharacterFace>();
+	}
 	private void initialize(String[] lines)
 	{
-		//TODO
 		bodies = new ArrayList<CharacterBody>();
 		faces = new ArrayList<CharacterFace>();
 		CharacterBody lastBody = null;

@@ -60,6 +60,11 @@ public class fpInterpreter extends GenericFile
 		fpType = type;
 		importFromBFP(lines);
 	}
+	public fpInterpreter(String fpType) 
+	{
+		this.fpType = fpType;
+		name = "New Fixed Point." + fpType;
+	}
 	public int getAmountOf(String object)
 	{
 		int ret = 0;
@@ -210,5 +215,10 @@ public class fpInterpreter extends GenericFile
 	public byte[] toBFPBytes()
 	{
 		return Utils.encodeStringToBytes(toBFP());
+	}
+	public String getExtenstion() 
+	{
+		if(fpType == null) return "*fp";
+		return fpType.toLowerCase();
 	}
 }

@@ -17,8 +17,8 @@ import GUI.PopupWindows.NewItemPopup;
 import ResourceManagers.ItemDatabaseManager.Item;
 import ResourceManagers.ItemDatabaseManager.Placement;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
+import bFM.GUIUtils;
 import bFM.Settings;
-import bFM.Utils;
 
 @SuppressWarnings("serial")
 public class ItemDatabaseList extends CollapseableFileList
@@ -76,19 +76,19 @@ public class ItemDatabaseList extends CollapseableFileList
 	}
 	private void addExportAsTextAction()
 	{
-		actions.add(Utils.createExportAction("Export as .txt", "Item Database.txt", "Bedrock's Intermediate ItemDB Format", ((itemDatabaseManager)file)::toItemBytes));
+		actions.add(GUIUtils.createExportAction("Export as .txt", "Item Database.txt", "Bedrock's Intermediate ItemDB Format", ((itemDatabaseManager)file)::toItemBytes));
 	}
 	private void addImportFromTextAction()
 	{
-		actions.add(Utils.createImportAction("Replace From Text", "Bedrock's Intermediate ItemDB Format", "txt", ((itemDatabaseManager)file)::replaceFromText, this));
+		actions.add(GUIUtils.createImportAction("Replace From Text", "Bedrock's Intermediate ItemDB Format", "txt", ((itemDatabaseManager)file)::replaceFromText, this));
 	}
 	private void addExportLngAction()
 	{
-		actions.add(Utils.createExportAction("Export Translation Data", "Item Database " + Settings.getLanguage() + ".lng", "Bedrock's LKS Translation Format", ((itemDatabaseManager)file)::toLng));
+		actions.add(GUIUtils.createExportAction("Export Translation Data", "Item Database " + Settings.getLanguage() + ".lng", "Bedrock's LKS Translation Format", ((itemDatabaseManager)file)::toLng));
 	}
 	private void addImportLngAction()
 	{
-		actions.add(Utils.createImportLngAction("Translate From Language File", "Bedrock's LKS Translation Format", ((itemDatabaseManager)file)::importLng, this));
+		actions.add(GUIUtils.createImportLngAction("Translate From Language File", "Bedrock's LKS Translation Format", ((itemDatabaseManager)file)::importLng, this));
 	}
 	protected void addActions() 
 	{

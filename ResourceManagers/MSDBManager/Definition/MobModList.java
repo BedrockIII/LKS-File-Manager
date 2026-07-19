@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import bFM.Utils;
+
 public class MobModList 
 {
 	final static String BmosVersion = "Bedrock's Mission Object Definition File Version: 1.0";
@@ -55,24 +57,10 @@ public class MobModList
 	public byte[] toBytes()
 	{
 		byte[] ret = ByteBuffer.allocate(2).putShort((short)1).array();
-		ret = mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)Mod.size()).array());
+		ret = Utils.mergeArrays(ret, ByteBuffer.allocate(2).putShort((short)Mod.size()).array());
 		for(int i = 0; i< Mod.size();i++)
 		{
-			ret = mergeArrays(ret, Mod.get(i).toBytes());
-		}
-		return ret;
-	}
-	public static byte[] mergeArrays(byte[] main, byte[] add)
-	{
-		if(add==null) return main;
-		byte[] ret = new byte[main.length+add.length];
-		for(int i = 0; i < main.length; i++)
-		{
-			ret[i] = main[i];
-		}
-		for(int i = 0; i < add.length; i++)
-		{
-			ret[i+main.length] = add[i];
+			ret = Utils.mergeArrays(ret, Mod.get(i).toBytes());
 		}
 		return ret;
 	}

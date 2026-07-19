@@ -8,8 +8,8 @@ import javax.swing.JTextField;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
 import ResourceManagers.ItemDatabaseManager.Item;
+import bFM.GUIUtils;
 import bFM.Settings;
-import bFM.Utils;
 
 @SuppressWarnings("serial")
 public class ItemWeaponInfoGUI extends GenericFileInfoGUI
@@ -31,14 +31,14 @@ public class ItemWeaponInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		DigType = Utils.createNameTextField(item.getDigType(), item::setDigType);
-		DigSpeed = Utils.createIntTextField(item.getDigSpeed(), item::setDigSpeed);
-		BuildType = Utils.createNameTextField(item.getBuildType(), item::setBuildType);
-		BuildSpeed = Utils.createIntTextField(item.getBuildSpeed(), item::setBuildSpeed);
-		BreakType = Utils.createNameTextField(item.getBreakType(), item::setBreakType);
-		BreakSpeed = Utils.createIntTextField(item.getBreakSpeed(), item::setBreakSpeed);
-		AttackType = Utils.createNameTextField(item.getAttackType(), item::setAttackType);
-		AttackSpeed = Utils.createIntTextField(item.getAttackSpeed(), item::setAttackSpeed);
+		DigType = GUIUtils.createNameTextField(item.getDigType(), item::setDigType);
+		DigSpeed = GUIUtils.createIntTextField(item.getDigSpeed(), item::setDigSpeed);
+		BuildType = GUIUtils.createNameTextField(item.getBuildType(), item::setBuildType);
+		BuildSpeed = GUIUtils.createIntTextField(item.getBuildSpeed(), item::setBuildSpeed);
+		BreakType = GUIUtils.createNameTextField(item.getBreakType(), item::setBreakType);
+		BreakSpeed = GUIUtils.createIntTextField(item.getBreakSpeed(), item::setBreakSpeed);
+		AttackType = GUIUtils.createNameTextField(item.getAttackType(), item::setAttackType);
+		AttackSpeed = GUIUtils.createIntTextField(item.getAttackSpeed(), item::setAttackSpeed);
 	}
 	private void addGUI()
 	{

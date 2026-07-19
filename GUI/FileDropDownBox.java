@@ -9,16 +9,18 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import bFM.GUIUtils;
 import bFM.Settings;
 import bFM.Utils;
 
 @SuppressWarnings("serial")
 public class FileDropDownBox extends JMenu
 {
-	//JPanel openedFileList = null;
-	public FileDropDownBox()
+	GUI parent;
+	public FileDropDownBox(GUI parent)
 	{
 		super("File");
+		this.parent = parent;
 		setPreferredSize(Settings.buttonSize);
 		setMinimumSize(Settings.buttonSize);
 		JMenuItem openButton = new JMenuItem("Open File");
@@ -33,13 +35,13 @@ public class FileDropDownBox extends JMenu
 			}
 			if(chooseFile.showOpenDialog(null)==JFileChooser.APPROVE_OPTION)
 			{
-				Main.MainGUI.fileManager.setOpenFile(chooseFile.getSelectedFile().toString());
+				parent.setOpenFile(chooseFile.getSelectedFile().toString());
 			}
 		});
 		add(openButton);
 		
-		
-		
+		add(GUIUtils.createNewFileAction(parent::setOpenFile, 2));
+
 		JMenuItem saveButton = new JMenuItem("Save File");
 		saveButton.addActionListener(e -> {
 			try 

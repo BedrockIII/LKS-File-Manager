@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import DebugModeManager.Event.EventViewer;
-import LZ10Convertor.LZ10Manager;
+import LZ10Convertor.LZ_PCKGManager;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
@@ -65,10 +65,10 @@ public class Main
 		//itemManager();
 		//decodeItems(1);
 		//encodeItems(1);
-		MailManager();
+		//MailManager();
 		//decodeCollision("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\zpack\\mapBoot2.pac\\");
 		//deCompressEventText();
-		//compressEventText(1);
+		compressEventText(1);
 		//characterDataBaseManager();
 		//encodeVMC("CH01_EVT_000");
 		//encodeDebugEventViewer();
@@ -482,6 +482,7 @@ public class Main
 			bFM.Utils.DebugPrint("Program will now return.");
 			return;
 		}
+		/*
 		try
 		{
 			enemyModifications = new MobModList(Files.readAllLines(Paths.get(importPath+"MobModList"+difficulty+".lst"), Charset.forName("Shift-JIS")), false);
@@ -491,7 +492,7 @@ public class Main
 			bFM.Utils.DebugPrint("Failed to locate file at: "+importPath+"MobModList"+difficulty+".lst");
 		}
 		//bMos.setConstraints(704,896,704,896,false, true);
-		
+		*/
 		PCKGManager MonsterDataBase = new PCKGManager("MSDB");
 		try
 		{
@@ -609,8 +610,10 @@ public class Main
 		//itemDatabaseManager itemDB = new itemDatabaseManager(Lines);
 		//bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(Settings.outputPath + "Resources\\" +  "itemDB3_"+1+".pac")) , itemDB.toBytes());
 		
-		MailManager mail = new MailManager(Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Release Game\\DATA\\files\\sys\\menuDB\\questdata4_1.bin")));
-		System.out.println(mail.normalToCSV());
+		//MailManager mail = new MailManager(Files.readAllBytes(Paths.get("D:\\LKS Debug!!!!1\\ROMs\\Release Game\\DATA\\files\\sys\\menuDB\\questdata4_1.bin")));
+		//System.out.println(mail.normalToCSV());
+		
+		bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(Settings.importPath + "save2pre")) , Files.readAllBytes(Paths.get(Settings.importPath + "save2post")) );
 	}
 	private static void compressEventText()
 	{
@@ -625,7 +628,14 @@ public class Main
 		String outputPath = Settings.outputPath + "Message\\" + Utils.getLanguage(languageCode) + '\\';
 		
 		//read the compressed pack file
-		PCKGManager eventTextPac = new PCKGManager(LZ10Manager.decompress(outputPath + "mes_LZ.bin"));
+		LZ_PCKGManager eventTextPac = null;
+		try 
+		{
+			eventTextPac = new LZ_PCKGManager(Files.readAllBytes(Paths.get(outputPath + "mes_LZ.bin")));
+		} catch (IOException e) 
+		{
+			eventTextPac = new LZ_PCKGManager("mes_LZ.bin");
+		}
 		
 		
 		File[] fileList = new File(importPath).listFiles();
@@ -637,7 +647,7 @@ public class Main
 			
 			try 
 			{
-				eventTextPac.addFile(fileName, LZ10Manager.compress(Files.readAllBytes(fileList[i].toPath())));
+				eventTextPac.addFile(fileName, Files.readAllBytes(fileList[i].toPath()));
 			} catch (IOException e) 
 			{
 				bFM.Utils.DebugPrint("Failed to Read Event Text File");
@@ -645,12 +655,12 @@ public class Main
 		}
 		
 		try {
-			bFM.Utils.testDifferences(LZ10Manager.decompress(Files.readAllBytes(Paths.get(outputPath + "mes_LZ.bin")))
+			bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(outputPath + "mes_LZ.bin"))
 					, eventTextPac.getFile());
 			//bFM.Utils.testDifferences(Files.readAllBytes(Paths.get(outputPath + "mes_LZ.bin")), LZ10Manager.compress(eventTextPac.getFile()));
 			//Files.write(Paths.get(outputPath + "mes_LZ.bin1"), LZ10Manager.decompress(Files.readAllBytes(Paths.get(outputPath + "mes_LZ.bin"))));
-			//Files.write(Paths.get(outputPath + "mes_LZ.bin2"), eventTextPac.getFile());
-			Files.write(Paths.get(outputPath + "mes_LZ.bin"), LZ10Manager.compress(eventTextPac.getFile()));
+			Files.write(Paths.get(outputPath + "mes_LZ.bin2"), eventTextPac.getFile());
+			//Files.write(Paths.get(outputPath + "mes_LZ.bin"), LZ10Manager.compress(eventTextPac.getFile()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -674,15 +684,24 @@ public class Main
 		String outputPath = Settings.outputPath + "Message\\" + Utils.getLanguage(languageCode) + '\\';
 		
 		
-		PCKGManager eventTextPac = new PCKGManager(LZ10Manager.decompress(outputPath + "mes_LZ.bin"));
+		LZ_PCKGManager eventTextPac;
+		try 
+		{
+			eventTextPac = new LZ_PCKGManager(Files.readAllBytes(Paths.get(outputPath + "mes_LZ.bin")));
+		} catch (IOException e) 
+		{
+			System.out.println("Failed to Read Event Text File");
+			e.printStackTrace();
+			return;
+		}
 		
 		
 		for(int i = 0; i < eventTextPac.getFileAmount(); i++)
 		{
 			try
 			{
-				String fileName = eventTextPac.getName(i).substring(0, eventTextPac.getName(i).indexOf("_LZ"));
-				Files.write(Paths.get(importPath+fileName+".txt"), LZ10Manager.decompress(eventTextPac.getFile(i)));
+				String fileName = eventTextPac.getName(i);
+				Files.write(Paths.get(importPath+fileName), eventTextPac.getFile(i));
 			}
 			catch (IOException  e)
 			{

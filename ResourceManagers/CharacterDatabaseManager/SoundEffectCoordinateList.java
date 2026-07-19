@@ -32,6 +32,10 @@ public class SoundEffectCoordinateList extends GenericFile
 			}
 		}
 	}
+	protected SoundEffectCoordinateList() 
+	{
+		name = "Sound Effect Coordinate List";
+	}
 	public String toString()
 	{
 		String ret = "";

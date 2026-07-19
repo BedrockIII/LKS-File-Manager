@@ -29,9 +29,9 @@ public class CollisionObjectInfoGUI extends GenericFileInfoGUI
 	{
 		faceCount = new JLabel("" + object.getFaceAmount());
 		vertexCount = new JLabel("" + object.getVertexAmount());
-		xOffsetText = bFM.Utils.createFloatTextField(object.getXOffset(), object::setXOffset);
-		yOffsetText = bFM.Utils.createFloatTextField(object.getYOffset(), object::setYOffset);
-		zOffsetText = bFM.Utils.createFloatTextField(object.getZOffset(), object::setZOffset);
+		xOffsetText = bFM.GUIUtils.createFloatTextField(object.getXOffset(), object::setXOffset);
+		yOffsetText = bFM.GUIUtils.createFloatTextField(object.getYOffset(), object::setYOffset);
+		zOffsetText = bFM.GUIUtils.createFloatTextField(object.getZOffset(), object::setZOffset);
 	}
 	private void addGUI()
 	{

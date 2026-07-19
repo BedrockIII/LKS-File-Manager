@@ -13,12 +13,15 @@ import bFM.OpenedFile;
 import bFM.Utils;
 public class PCKGManager extends GenericFile
 {
-	final static private int HeaderSizeWithoutName = 12;
-	private static boolean AlignedFiles = true; // Whether or not files have extra bytes appended onto them so they are exactly a multiple of 32
-	private static boolean LZMode = false;
-	private static boolean nlksMode = false;
+	protected final static int HeaderSizeWithoutName = 12;
+	protected static boolean AlignedFiles = true; // Whether or not files have extra bytes appended onto them so they are exactly a multiple of 32
+	protected static boolean nlksMode = false;
 	//String name = "Unknown Name";
-	ArrayList<OpenedFile> files = new ArrayList<OpenedFile>();
+	protected ArrayList<OpenedFile> files = new ArrayList<OpenedFile>();
+	public PCKGManager()
+	{
+		name = "";
+	}
 	public PCKGManager(String name)
 	{
 		this.name = name;
@@ -31,10 +34,6 @@ public class PCKGManager extends GenericFile
 	public static void setNLKSMode(boolean bool)
 	{
 		nlksMode = bool;
-	}
-	public static void setLzCompressionMode(boolean bool)
-	{
-		LZMode = bool;
 	}
 	public static void setAlignmentMode(boolean bool)
 	{
@@ -57,7 +56,7 @@ public class PCKGManager extends GenericFile
 			e.printStackTrace();
 		}
 	}
-	private void extractPAC(byte[] file)
+	protected void extractPAC(byte[] file)
 	{//turns the pacFile into ArrayLists
 		/*PCKG File layout
 		 * First 32 Bytes: PCKG Header, PCKG and then 28 0x00 bytes
@@ -109,14 +108,18 @@ public class PCKGManager extends GenericFile
 			
 			bFM.Utils.DebugPrint("Found File: " + theName + " File Size: " + Math.abs(data.getInt(nextHeaderPos+4)));
 			bFM.Utils.DebugPrint("\tHeader Size: " + headerSize);
-			if(!bFM.Utils.autoEditSubPackFile) files.add(new GenericFile(name, fileContents));
-			else files.add(OpenedFile.makeFile(theNewName, fileContents));
+			addPackedFile(theNewName, fileContents);
 			
 			
 			nextCnt = data.getInt(nextHeaderPos);
 			nextHeaderPos += nextCnt;
 			}
 		}
+	}
+	protected void addPackedFile(String theNewName, byte[] fileContents)
+	{
+		if(!bFM.Utils.autoEditSubPackFile) files.add(new GenericFile(theNewName, fileContents));
+		else files.add(OpenedFile.makeFile(theNewName, fileContents));
 	}
 	public byte[] getFile(String name)
 	{ 
@@ -157,6 +160,7 @@ public class PCKGManager extends GenericFile
 			if(file.equals(name))
 			{
 				files.remove(file);
+				break;
 			}
 			
 		}
@@ -262,7 +266,7 @@ public class PCKGManager extends GenericFile
 	{
 		return files.get(i).toBytes();
 	}
-	private byte[] getFileWithHeader(OpenedFile file, boolean isLast)
+	protected byte[] getFileWithHeader(OpenedFile file, boolean isLast)
 	{
 		int headerSize = HeaderSizeWithoutName + file.getName().length(); //Get the size of the header
 		if(headerSize % 32 != 0) headerSize = (headerSize / 32 + 1) * 32; //round the header to be the correct length
@@ -279,13 +283,6 @@ public class PCKGManager extends GenericFile
 		ret.put(Utils.encodeStringToBytes(file.getName()));
 		ret.position(headerSize);
 		ret.put(file.toBytes());
-		if(LZMode)
-		{
-			while(ret.remaining()>0)
-			{
-				ret.put((byte)0xff);
-			}
-		}
 		return ret.array();
 	}
 	public int indexOf(String FileName) 
@@ -339,5 +336,9 @@ public class PCKGManager extends GenericFile
 			}
 		}
 		return null;
+	}
+	public void addFile(OpenedFile newFile) 
+	{
+		files.add(newFile);
 	}
 }

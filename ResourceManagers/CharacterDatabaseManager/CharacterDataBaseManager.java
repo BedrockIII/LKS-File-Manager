@@ -39,6 +39,16 @@ public class CharacterDataBaseManager extends GenericFile
 		CharacterDataBase = new PCKGManager(characterDataBaseData);
 		initialize(CharacterDataBase);
 	}
+	public CharacterDataBaseManager() 
+	{
+		name = "Character Data Base File";
+		chrDB2 = new CharacterResourceList();
+		ind3 = new indBinList();
+		JobChangePrice = new JobChangePriceList( this);
+		join = new JoinBinList();
+		seCrd = new SoundEffectCoordinateList();
+		texanim = new TextAnimationList();
+	}
 	private void initialize(PCKGManager CharacterDataBase) 
 	{
 		chrDB2 = new CharacterResourceList(CharacterDataBase.getFile("chrDB2.lst"));

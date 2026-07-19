@@ -127,6 +127,10 @@ public class itemDatabaseManager implements OpenedFile
 		initializeFromLines(lines);
 		
 	}
+	public itemDatabaseManager() 
+	{
+		//Empty Item DB
+	}
 	private void initializeFromLines(List<String> lines)
 	{
 		//TODO, do a loop through all lines that adds the line to the last item made, or makes a new item
@@ -176,7 +180,7 @@ public class itemDatabaseManager implements OpenedFile
 	private byte[] getItemSubList() 
 	{
 		//returns the item1sub.lst file
-		byte[] ret = null;
+		byte[] ret = new byte[0];
 		for(Item i : items)
 		{
 			ret = Utils.mergeArrays(ret, i.getSubList());
@@ -186,7 +190,7 @@ public class itemDatabaseManager implements OpenedFile
 	private byte[] getItemList() 
 	{
 		// returns the item1.lst file
-		byte[] ret = null;
+		byte[] ret = new byte[0];
 		for(Item i : items)
 		{
 			ret = Utils.mergeArrays(ret, i.getList());
@@ -236,7 +240,7 @@ public class itemDatabaseManager implements OpenedFile
 	}
 	public int getSize() 
 	{
-		throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
+		return toBytes().length;
 	}
 	public ArrayList<Item> getItems() 
 	{

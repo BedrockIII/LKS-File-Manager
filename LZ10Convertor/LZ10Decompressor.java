@@ -23,7 +23,6 @@ public class LZ10Decompressor
 		byte[] ret = new byte[dataLength];
 		int inPos = 4;
 		int outPos = 0;
-		boolean first = true;
 		while(dataLength>0)
 		{
 			int d = data[inPos] & 0xFF;

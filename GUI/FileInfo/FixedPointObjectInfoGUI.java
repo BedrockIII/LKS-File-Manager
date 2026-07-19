@@ -36,15 +36,15 @@ public class FixedPointObjectInfoGUI extends GenericFileInfoGUI
 		refIndexText =  new JLabel("" + object.getReferenceIndex());
 		indexText =  new JLabel("" + object.getIndex());
 		
-		xOffsetText = bFM.Utils.createFloatTextField(object.getXPos(), object::setXPos);
-		yOffsetText = bFM.Utils.createFloatTextField(object.getYPos(), object::setYPos);
-		zOffsetText = bFM.Utils.createFloatTextField(object.getZPos(), object::setZPos);
-		xRotationText = bFM.Utils.createFloatTextField(object.getXRot(), object::setXRotation);
-		yRotationText = bFM.Utils.createFloatTextField(object.getYRot(), object::setYRotation);
-		zRotationText = bFM.Utils.createFloatTextField(object.getZRot(), object::setZRotation);
-		xScaleText = bFM.Utils.createFloatTextField(object.getXScale(), object::setXScale);
-		yScaleText = bFM.Utils.createFloatTextField(object.getYScale(), object::setYScale);
-		zScaleText = bFM.Utils.createFloatTextField(object.getZScale(), object::setZScale);
+		xOffsetText = bFM.GUIUtils.createFloatTextField(object.getXPos(), object::setXPos);
+		yOffsetText = bFM.GUIUtils.createFloatTextField(object.getYPos(), object::setYPos);
+		zOffsetText = bFM.GUIUtils.createFloatTextField(object.getZPos(), object::setZPos);
+		xRotationText = bFM.GUIUtils.createFloatTextField(object.getXRot(), object::setXRotation);
+		yRotationText = bFM.GUIUtils.createFloatTextField(object.getYRot(), object::setYRotation);
+		zRotationText = bFM.GUIUtils.createFloatTextField(object.getZRot(), object::setZRotation);
+		xScaleText = bFM.GUIUtils.createFloatTextField(object.getXScale(), object::setXScale);
+		yScaleText = bFM.GUIUtils.createFloatTextField(object.getYScale(), object::setYScale);
+		zScaleText = bFM.GUIUtils.createFloatTextField(object.getZScale(), object::setZScale);
 	}
 	private void addGUI()
 	{

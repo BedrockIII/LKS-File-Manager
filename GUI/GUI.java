@@ -40,7 +40,7 @@ public class GUI
 		//frame.setLayout(new GridBagLayout());
 		frame.setLayout(new BorderLayout());
 		Settings.bgColor = frame.getBackground();
-		MenuBar menuBar = new MenuBar();
+		MenuBar menuBar = new MenuBar(this);
         frame.add(menuBar, BorderLayout.NORTH);
         frame.reshape(Settings.windowX, Settings.windowY, Settings.windowWidth, Settings.windowHeight);
         //openedFile = new Package();
@@ -128,13 +128,17 @@ public class GUI
 		try {
 			data = Files.readAllBytes(filePath);
 			OpenedFile file = OpenedFile.makeFile(filePath.getFileName().toString(), data);
-			GUI.setFileList(FileListFactory.makeListGUI(file, 0));
-			update();
+			setOpenFile(file);
 		} catch (IOException e) 
 		{
 			System.out.println("Failed to read file: " + filePath);
 		}
 		
+	}
+	public void setOpenFile(OpenedFile file) 
+	{
+		GUI.setFileList(FileListFactory.makeListGUI(file, 0, null));
+		update();
 	}
 	public static byte[] getFile() 
 	{

@@ -3,6 +3,7 @@ package bFM;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
+import SystemDataManagers.MenuDB.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import WorldFileManager.fpInterpreter;
@@ -38,7 +39,11 @@ public interface OpenedFile extends Data
 		}else if (fileType.equals("CameraZoneDB"))
 		{
 			return new CameraZoneList(file);
+		}else if (fileType.equals("WonderSpotDB"))
+		{
+			return new WonderSpotManager(file);
 		}
+		
 		return new GenericFile(name, file);
 	}
 }

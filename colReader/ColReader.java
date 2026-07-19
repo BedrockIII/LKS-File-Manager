@@ -18,7 +18,7 @@ public class ColReader extends GenericFile
 	int index = 0;
 	String colName = "all_field";
 	ArrayList<CollisionObject> COLOBJECTS = new ArrayList<CollisionObject>();
-	public ColReader() {}
+	public ColReader() {name = "New Collision.col";}
 	public ColReader(byte[] file)
 	{
 		ByteBuffer data = ByteBuffer.wrap(file);

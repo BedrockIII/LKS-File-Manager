@@ -18,20 +18,22 @@ import GUI.GUI;
 import GUI.FileInfo.FileInfoFactory;
 import GUI.FileInfo.FixedPointObjectInfoGUI;
 import WorldFileManager.fpInterpreter;
+import bFM.GUIUtils;
 import bFM.OpenedFile;
 import bFM.Settings;
-import bFM.Utils;
 import WorldFileManager.FixedPointObject;
 
 @SuppressWarnings("serial")
 public class FixedPoint extends CollapseableFileList
 {
 	int padding = 0;
+	CollapseableFileList parent= null;
 	ArrayList<FixedPointObject> objects = new ArrayList<FixedPointObject>();
-	public FixedPoint(OpenedFile file, int padding) 
+	public FixedPoint(OpenedFile file, int padding, CollapseableFileList parent) 
 	{
 		this.file = file;
 		this.padding = padding;
+		this.parent = parent;
 		initializeAll(padding);
 	}
 	protected void initializeAll(int padding)
@@ -51,16 +53,32 @@ public class FixedPoint extends CollapseableFileList
 		addReplaceAsBFPButton();
 		addExportAction();
 		addExportBFPAction();
+		addDeleteAction();
 		addMouseListener();
 		add(actions);
 	}
+	protected void addDeleteAction()
+	{
+		if(parent==null || padding == 0) return;
+		JMenuItem replace = new JMenuItem("Delete File");
+		replace.addActionListener(e -> 
+		{
+			parent.removeFile(this);
+			GUI.update();
+		});
+		actions.add(replace);
+	}
+	protected void addReplaceButton()
+	{
+		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", file.getName(), ((fpInterpreter)file).getExtenstion(),file::setData, file::setName, parent));
+	}
 	protected void addReplaceAsBFPButton()
 	{
-		actions.add(Utils.createImportAction("Replace From BFP", "Bedrock's Intermediate FP Text File", "bfp", ((fpInterpreter)file)::replaceFromBFP, this));
+		actions.add(GUIUtils.createImportAction("Replace From BFP", "Bedrock's Intermediate FP Text File", "bfp", ((fpInterpreter)file)::replaceFromBFP, this));
 	}
 	private void addExportBFPAction() 
 	{
-		actions.add(Utils.createExportAction("Export As BFP", file.getName().substring(0, file.getName().lastIndexOf('.')) + ".bfp", "Bedrock's Intermediate FP Text File", ((fpInterpreter)file)::toBFPBytes));
+		actions.add(GUIUtils.createExportAction("Export As BFP", file.getName().substring(0, file.getName().lastIndexOf('.')) + ".bfp", "Bedrock's Intermediate FP Text File", ((fpInterpreter)file)::toBFPBytes));
 	}
 	public void initializeSubGUI() 
 	{
@@ -103,6 +121,17 @@ public class FixedPoint extends CollapseableFileList
 			this.addMouseListener();
 			this.add(actions);
 			this.update();
+		}
+		protected void addDeleteAction()
+		{
+			if(getParent()==null) return;
+			JMenuItem replace = new JMenuItem("Delete File");
+			replace.addActionListener(e -> 
+			{
+				((CollapseableFileList)getParent()).removeFile(this);
+				GUI.update();
+			});
+			actions.add(replace);
 		}
 		public Object getObject() 
 		{
