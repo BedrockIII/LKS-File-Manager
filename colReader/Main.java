@@ -60,7 +60,7 @@ public class Main
 		//decodeLightZones();
 		//encodeLightZones();
 		//message();				
-		//enemyManagers();
+		enemyManagers();
 		//decodeEnemyData("CoinPurse.bMos", 4010);
 		//itemManager();
 		//decodeItems(1);
@@ -68,7 +68,7 @@ public class Main
 		//MailManager();
 		//decodeCollision("D:\\LKS Debug!!!!1\\ROMs\\Extracted\\zpack\\mapBoot2.pac\\");
 		//deCompressEventText();
-		compressEventText(1);
+		//compressEventText(1);
 		//characterDataBaseManager();
 		//encodeVMC("CH01_EVT_000");
 		//encodeDebugEventViewer();

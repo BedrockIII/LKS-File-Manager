@@ -5,6 +5,8 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import bFM.Utils;
+
 public class MobDamageColList 
 {
 	short startNum1 = 0;//first 2 bytes,always 0001
@@ -27,6 +29,14 @@ public class MobDamageColList
 		{
 			ret = ret + DamageCol.get(i).toString();
 		}
+		return ret;
+	}
+	public byte[] toBytes() 
+	{
+		byte[] ret = new byte[]{0,1};
+		ret = Utils.mergeArrays(ret, Utils.longToBytes(DamageCol.size(), 2));
+		for(MobDamageCol col : DamageCol)
+			ret = Utils.mergeArrays(ret, col.toBytes());
 		return ret;
 	}
 }

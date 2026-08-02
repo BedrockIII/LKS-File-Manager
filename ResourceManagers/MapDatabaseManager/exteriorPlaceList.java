@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import bFM.Utils;
+
 public class exteriorPlaceList 
 {
 	private static boolean filter = false;
@@ -88,5 +90,12 @@ public class exteriorPlaceList
 			ret +=sdata.get(i).toString();
 		}
 		return ret;
+	}
+	public byte[] toBytes() 
+	{
+		return Utils.encodeStringToBytes(toString());
+	}
+	public ArrayList<exteriorPlace> getPlacements() {
+		return places;
 	}
 }

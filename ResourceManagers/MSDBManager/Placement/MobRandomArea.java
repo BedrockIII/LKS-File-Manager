@@ -2,73 +2,125 @@ package ResourceManagers.MSDBManager.Placement;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 
-public class MobRandomArea 
+import bFM.Data;
+import bFM.Utils;
+
+public class MobRandomArea implements Data
 {
 	int areaCode;
-	int pointCount;
-	int randomPointIndex;
+	//int pointCount;
+	//int randomPointIndex;
 	int zero;//always 0, keeping for the sake of "Why Not"
-	public MobRandomArea(byte[] data)
+	MobAreaData areaData;
+	ArrayList<MobRandomPoint> Points = new ArrayList<MobRandomPoint>();
+	public MobRandomArea(byte[] data, ArrayList<MobRandomPoint> allPoints, ArrayList<MobAreaData> datas)
 	{
 		areaCode = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(0);
-		pointCount = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(2);
-		randomPointIndex = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(4);
+		int pointCount = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(2);
+		int randomPointIndex = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(4);
 		zero = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(6);
+		for(int i = 0; i < pointCount; i ++)
+		{
+			Points.add(allPoints.get(i + randomPointIndex));
+		}
+		for(MobAreaData datum : datas)
+		{
+			if(datum.areaCode==areaCode)
+			{
+				areaData = datum;
+			}
+		}
 	}
-	public MobRandomArea(int code, int pointCount, int index) 
+	public MobRandomArea(int code) 
 	{
 		areaCode = code;
-		this.pointCount = pointCount;
-		randomPointIndex = index;
 		zero = 0;
+		areaData = new MobAreaData(code);
 	}
-	public byte[] toBytes()
+	public byte[] toBytes(int randomPointIndex)
 	{
-		byte[] ret = toByteArr(areaCode, 2);
-		ret = mergeArrays(ret, toByteArr(pointCount, 2));
-		ret = mergeArrays(ret, toByteArr(randomPointIndex, 2));
-		ret = mergeArrays(ret, toByteArr(zero, 2));
+		byte[] ret = Utils.toByteArr(areaCode, 2);
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(Points.size(), 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(randomPointIndex, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(zero, 2));
 		return ret;
 	}
 	public String toBrm()
 	{
-		return "Random Monster: "+areaCode +", "+pointCount +", ";
+		String ret = areaData.toBrm();
+		for( MobRandomPoint Point : Points)
+		{
+			ret += Point.toBrm();
+		}
+		return ret;
 	}
 	public String toString()
 	{
-		return "DAT2 "+areaCode +" ,"+pointCount +" ,"+randomPointIndex +" ,"+zero +"\n";
+		return "DAT2 "+areaCode +" ,"+ 0 +" ,"+ 0 +" ,"+zero +"\n";
 	}
-	private byte[] toByteArr(int input, int arrLength) 
+	public void add(MobAreaData datum) 
 	{
-		byte[] ret = new byte[arrLength];
-		for(int i = 1; i<=arrLength; i++)
+		areaData = datum;
+	}
+	public void add(MobRandomPoint mobRandomPoint) 
+	{
+		Points.add(mobRandomPoint);
+	}
+	public boolean equals(String name) 
+	{
+		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public void setName(String name) 
+	{
+		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+	}
+	public String getName() 
+	{
+		throw new UnsupportedOperationException("getName() should not be called on type " + this.getClass());
+	}
+	public int getSize() 
+	{
+		return 8;
+	}
+	@Override
+	public byte[] toBytes() 
+	{
+		throw new UnsupportedOperationException("toBytes() should not be called on type " + this.getClass());
+	}
+	public int getPointCount() 
+	{
+		return Points.size();
+	}
+	public byte[] getPointBytes() 
+	{
+		byte[] ret = null;
+		for(MobRandomPoint p : Points)
 		{
-			ret[arrLength-i] = (byte) (input%256);
-			input/=256;
-			//System.out.println(ret[arrLength-i]);
-			
+			ret = Utils.mergeArrays(ret, p.toBytes());
 		}
 		return ret;
 	}
-	private static byte[] mergeArrays(byte[] main, byte[] add)
+	public MobAreaData getAreaData() 
 	{
-		if(add==null) return main;
-		if(main==null) return add;
-		byte[] ret = new byte[main.length+add.length];
-		for(int i = 0; i < main.length; i++)
-		{
-			ret[i] = main[i];
-		}
-		for(int i = 0; i < add.length; i++)
-		{
-			ret[i+main.length] = add[i];
-		}
-		return ret;
+		return areaData;
 	}
-	public int getPointIndex()  
+	public int getCode() 
 	{
-		return randomPointIndex;
+		return areaCode;
 	}
-	
+	public ArrayList<MobRandomPoint> getPoints() 
+	{
+		return Points;
+	}
+	public void setCode(int code)
+	{
+		areaCode = code;
+		areaData.areaCode = (short) code;
+	}
 }

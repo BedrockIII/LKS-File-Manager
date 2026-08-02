@@ -18,6 +18,13 @@ public class LabeledInputBox extends JSplitPane
 	JLabel text;
 	int height = 0;
 	double xWeight = .5;
+	protected LabeledInputBox() {}
+	protected LabeledInputBox(String labelText)
+	{
+		height = (int) (Settings.assetHeight*1.5);
+		text = new JLabel(labelText);
+		setTheme();
+	}
 	public LabeledInputBox(String labelText, JComponent comp)
 	{
 		this.comp = comp;
@@ -70,6 +77,7 @@ public class LabeledInputBox extends JSplitPane
 	public void replaceComponent(JComponent comp) 
 	{
 		this.comp = comp;
+		setRightComponent(comp);
 		update();
 		setTheme();
 	}

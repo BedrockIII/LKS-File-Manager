@@ -124,10 +124,7 @@ public abstract class CollapseableFileList extends FileList
 			if(subEntries.size() == 0) isExtended.setEnabled(false);
 			else isExtended.setEnabled(true);
 		}
-		if(infoGUI != null)infoGUI.update();
-		else System.out.println(("Collapseable File List: " + fileName.getText() + " lacks an info GUI"));
-		revalidate();
-		repaint();
+		super.update();
 	}
 	public void reAddComponents()
 	{
@@ -137,6 +134,7 @@ public abstract class CollapseableFileList extends FileList
 		layout.weighty = 0.0;
 		layout.weightx = 1.0;
 		layout.anchor = GridBagConstraints.NORTHWEST;
+		
 		if(isExtended!=null)
 		{
 			if(subEntries.size() == 0) isExtended.setEnabled(false);

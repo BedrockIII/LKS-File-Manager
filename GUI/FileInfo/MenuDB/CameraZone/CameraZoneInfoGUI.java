@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 
 import javax.swing.JTextField;
 
+import GUI.BitFlagPanel;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
 import SystemDataManagers.MenuDB.CameraData.CameraZone;
@@ -40,11 +41,11 @@ public class CameraZoneInfoGUI extends GenericFileInfoGUI
 	JTextField Num24 = null;
 	JTextField Num25 = null;
 	JTextField Num26 = null;
-	JTextField ZoneEnableFlag = null;
+	BitFlagPanel ZoneEnableFlag = null;
 	JTextField Num28 = null;
 	JTextField Num29 = null;
 	JTextField Num30 = null;
-	JTextField ZoneDisableFlag = null;
+	BitFlagPanel ZoneDisableFlag = null;
 	JTextField Num32 = null;
 	JTextField ZoneIndex = null;
 	JTextField Num34 = null;
@@ -87,11 +88,11 @@ public class CameraZoneInfoGUI extends GenericFileInfoGUI
 		add(new LabeledInputBox("Camera Zone Unknown Number 24: ", Num24), layout);
 		add(new LabeledInputBox("Camera Zone Unknown Number 25: ", Num25), layout);
 		add(new LabeledInputBox("Camera Zone Unknown Number 26: ", Num26), layout);
-		add(new LabeledInputBox("Camera Zone Enable Flag: ", ZoneEnableFlag), layout);
+		add(ZoneEnableFlag, layout);
 		add(new LabeledInputBox("Camera Zone Unknown Number 28: ", Num28), layout);
 		add(new LabeledInputBox("Camera Zone Unknown Number 29: ", Num29), layout);
 		add(new LabeledInputBox("Camera Zone Unknown Number 30: ", Num30), layout);
-		add(new LabeledInputBox("Camera Zone Disable Flag: ", ZoneDisableFlag), layout);
+		add(ZoneDisableFlag, layout);
 		add(new LabeledInputBox("Camera Zone Unknown Number 32: ", Num32), layout);
 		add(new LabeledInputBox("Camera Zone Index: ", ZoneIndex), layout);
 		add(new LabeledInputBox("Camera Zone Unknown Number 34: ", Num34), layout);
@@ -128,11 +129,11 @@ public class CameraZoneInfoGUI extends GenericFileInfoGUI
 		Num24 = bFM.GUIUtils.createIntTextField(file.getNum24(), file::setNum24);
 		Num25 = bFM.GUIUtils.createIntTextField(file.getNum25(), file::setNum25);
 		Num26 = bFM.GUIUtils.createIntTextField(file.getNum26(), file::setNum26);
-		ZoneEnableFlag = bFM.GUIUtils.createIntTextField(file.getZoneEnableFlag(), file::setZoneEnableFlag);
+		ZoneEnableFlag =new BitFlagPanel("Activation Flag",file.getZoneEnableFlag(), file::setZoneEnableFlag);
 		Num28 = bFM.GUIUtils.createIntTextField(file.getNum28(), file::setNum28);
 		Num29 = bFM.GUIUtils.createIntTextField(file.getNum29(), file::setNum29);
 		Num30 = bFM.GUIUtils.createIntTextField(file.getNum30(), file::setNum30);
-		ZoneDisableFlag = bFM.GUIUtils.createIntTextField(file.getZoneDisableFlag(), file::setZoneDisableFlag);
+		ZoneDisableFlag = new BitFlagPanel("Deactivation Flag", file.getZoneDisableFlag(), file::setZoneDisableFlag);
 		Num32 = bFM.GUIUtils.createIntTextField(file.getNum32(), file::setNum32);
 		ZoneIndex = bFM.GUIUtils.createIntTextField(file.getZoneIndex(), file::setZoneIndex);
 		Num34 = bFM.GUIUtils.createIntTextField(file.getNum34(), file::setNum34);

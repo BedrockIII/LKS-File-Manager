@@ -3,7 +3,10 @@ package ResourceManagers.MSDBManager.Placement;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class MobConstantPlace 
+import bFM.Data;
+import bFM.Utils;
+
+public class MobConstantPlace implements Data
 {
 	protected int index = -1;
 	protected float xPos; //First 2 Bytes
@@ -11,7 +14,7 @@ public class MobConstantPlace
 	protected float zPos; //Next 2 Bytes
 	protected float rotation; //Next 2 Bytes
 	protected float spawnRadius; //Next 2 Bytes
-	protected float num5; //Next 2 Bytes
+	protected float num5; //Next 2 Bytes DespawnRadius???
 	protected int MobGrouptCode2; //Next 2 Bytes
 	protected int MobGroupCode1; //Next 2 Bytes
 	protected int activationFlag2; //Next 2 Bytes
@@ -20,9 +23,22 @@ public class MobConstantPlace
 	protected int clearFlag; //Next 2 Bytes
 	protected int deactivationFlag; //Next 2 Bytes
 	protected int itemCode;//Next 2 Bytes
-	protected MobConstantPlace()
+	public MobConstantPlace()
 	{
-		
+		xPos = 0; //First 2 Bytes
+		yPos = 0; //Next 2 Bytes
+		zPos = 0; //Next 2 Bytes
+		rotation = 0; //Next 2 Bytes
+		spawnRadius = 30; //Next 2 Bytes
+		num5 = 40; //Next 2 Bytes
+		MobGrouptCode2 = 0; //Next 2 Bytes
+		MobGroupCode1 = 0; //Next 2 Bytes
+		activationFlag2 = -1; //Next 2 Bytes
+		num12 = 0; //Next 2 Bytes
+		activationFlag1 = -1; //Next 2 Bytes
+		clearFlag = -1; //Next 2 Bytes
+		deactivationFlag = -1; //Next 2 Bytes
+		itemCode = -1;//
 	}
 	public MobConstantPlace(byte[] data, int index)
 	{
@@ -149,10 +165,10 @@ public class MobConstantPlace
 	{
 		if(index == -1)
 		{
-			return "Constant Monster: "+xPos +", "+yPos +", "+zPos +", "+rotation +", "+spawnRadius +", "+num5 +", "+activationFlag1+", "+activationFlag2  +", "+clearFlag + ", "+
+			return "Constant Placement: "+xPos +", "+yPos +", "+zPos +", "+rotation +", "+spawnRadius +", "+num5 +", "+activationFlag1+", "+activationFlag2  +", "+clearFlag + ", "+
 					deactivationFlag +", "+itemCode +", "+num12 +"\n";
 		}
-		return "Constant Monster: "+index+", "+xPos +", "+yPos +", "+zPos +", "+rotation +", "+spawnRadius +", "+num5 +", "+activationFlag1+", "+activationFlag2  +", "+clearFlag + ", "+
+		return "Constant Placement: "+index+", "+xPos +", "+yPos +", "+zPos +", "+rotation +", "+spawnRadius +", "+num5 +", "+activationFlag1+", "+activationFlag2  +", "+clearFlag + ", "+
 		deactivationFlag +", "+itemCode +", "+num12 +"\n";
 	}
 	public int getGroup1()
@@ -213,5 +229,121 @@ public class MobConstantPlace
 			return "";
 		}
 		return "Constant Place Index: " + index + ", Item Code: " + itemCode + "\n";
+	}
+	public void addNullGroup(String line) 
+	{
+		int id = Utils.strToInt(line);
+		if(MobGroupCode1 == -1) {MobGroupCode1 = id; MobGrouptCode2 = id;}
+		else if(MobGrouptCode2 == MobGroupCode1) MobGrouptCode2 = id;
+		else throw new IllegalArgumentException("Added too many Groups to Constant Place\n");
+	}
+	public void addGroup(MobGroup group) 
+	{
+		int id = group.getCode();
+		if(MobGroupCode1 == -1 || id == MobGroupCode1) {MobGroupCode1 = id; MobGrouptCode2 = id;}
+		else if(MobGrouptCode2 == MobGroupCode1 || id == MobGrouptCode2) MobGrouptCode2 = id;
+		else throw new IllegalArgumentException("Added too many Groups to Constant Place\n");
+		group.registerPlacement(this);
+	}
+	public void setGroupID(int oldId, int id) 
+	{
+		if(MobGroupCode1 == oldId) MobGroupCode1 = id;
+		else if(MobGrouptCode2 == oldId) MobGrouptCode2 = id;
+		else throw new IllegalArgumentException("Constant Place did not have group " + oldId + " -> " + id + " registerd. ID 1: " + MobGroupCode1 + " ID 2: " + MobGrouptCode2 + "\n");
+	}
+	public boolean equals(String name) 
+	{
+		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public void setName(String name) 
+	{
+		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+	}
+	public String getName() 
+	{
+		throw new UnsupportedOperationException("getName() should not be called on type " + this.getClass());
+	}
+	public int getSize() 
+	{
+		return 40;
+	}
+	public float getxPos() {
+		return xPos;
+	}
+	public void setxPos(float xPos) {
+		this.xPos = xPos;
+	}
+	public float getyPos() {
+		return yPos;
+	}
+	public void setyPos(float yPos) {
+		this.yPos = yPos;
+	}
+	public float getzPos() {
+		return zPos;
+	}
+	public void setzPos(float zPos) {
+		this.zPos = zPos;
+	}
+	public float getRotation() {
+		return rotation;
+	}
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
+	}
+	public float getSpawnRadius() {
+		return spawnRadius;
+	}
+	public void setSpawnRadius(float spawnRadius) {
+		this.spawnRadius = spawnRadius;
+	}
+	public float getNum5() {
+		return num5;
+	}
+	public void setNum5(float num5) {
+		this.num5 = num5;
+	}
+	public int getActivationFlag2() {
+		return activationFlag2;
+	}
+	public void setActivationFlag2(int activationFlag2) {
+		this.activationFlag2 = activationFlag2;
+	}
+	public int getNum12() {
+		return num12;
+	}
+	public void setNum12(int num12) {
+		this.num12 = num12;
+	}
+	public int getActivationFlag1() {
+		return activationFlag1;
+	}
+	public void setActivationFlag1(int activationFlag1) {
+		this.activationFlag1 = activationFlag1;
+	}
+	public int getClearFlag() {
+		return clearFlag;
+	}
+	public void setClearFlag(int clearFlag) {
+		this.clearFlag = clearFlag;
+	}
+	public int getDeactivationFlag() {
+		return deactivationFlag;
+	}
+	public void setDeactivationFlag(int deactivationFlag) {
+		this.deactivationFlag = deactivationFlag;
+	}
+	public int getItemCode() {
+		return itemCode;
+	}
+	public void setItemCode(int itemCode) {
+		this.itemCode = itemCode;
+	}
+	public void setIndex(int index) {
+		this.index = index;
 	}
 }

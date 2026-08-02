@@ -6,16 +6,30 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import PCKGManager.PCKGManager;
+import bFM.OpenedFile;
+import bFM.Utils;
 
-public class mapDataBaseManager 
+public class mapDataBaseManager implements OpenedFile
 {
 	PCKGManager MapDataBase = new PCKGManager("mapDB0");
+	BuildingResourceList buildingList = null;
+	exteriorPlaceList exteriorPlaces = null;
+	public mapDataBaseManager(byte[] data)
+	{
+		initializeFromBytes(data);
+	}
+	private void initializeFromBytes(byte[] data)
+	{
+		MapDataBase = new PCKGManager(data);
+		buildingList = new BuildingResourceList(Utils.bytesToStrs(MapDataBase.getFile("building0.lst")));
+		exteriorPlaces = new exteriorPlaceList(Utils.bytesToStrs(MapDataBase.getFile("extPlace1.lst")));
+	}
 	public mapDataBaseManager(String mapDBPath)
 	{
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to read mapDB package at: " + mapDBPath);
-			MapDataBase = new PCKGManager(Files.readAllBytes(Paths.get(mapDBPath)));
+			initializeFromBytes(Files.readAllBytes(Paths.get(mapDBPath)));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read package. Program will skip this step for now");
@@ -63,8 +77,7 @@ public class mapDataBaseManager
 	{
 		try 
 		{
-			BuildingResourceList buildingList = new BuildingResourceList(Files.readAllLines(Paths.get(inputPath+"building0.lst"), Charset.forName("Shift_JIS")));
-			MapDataBase.addFile("building0.lst", buildingList.toBytes());
+			buildingList = new BuildingResourceList(Files.readAllLines(Paths.get(inputPath+"building0.lst"), Charset.forName("Shift_JIS")));
 			//MapDataBase.addFile("building0.lst", Files.readAllBytes(Paths.get(inputPath+"building0.lst")));
 			//bFM.Utils.DebugPrint("Sucessfully added Building Configuration File");
 		} catch (IOException e) 
@@ -108,12 +121,49 @@ public class mapDataBaseManager
 	}
 	public void writeFile(String mapDBPath)
 	{
+		
 		try 
 		{
-			Files.write(Paths.get(mapDBPath) , MapDataBase.getFile());
+			Files.write(Paths.get(mapDBPath) , toBytes());
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to write Map Data Base File");
 		}
+	}
+	public BuildingResourceList getBuildingDefinitions() 
+	{
+		if(buildingList == null) throw new IllegalArgumentException("Map Database has no defined Building List File.");
+		return buildingList;
+	}
+	public exteriorPlaceList getExteriorPlacements() 
+	{
+		if(exteriorPlaces == null) throw new IllegalArgumentException("Map Database has no defined Exterior Placement File.");
+		return exteriorPlaces;
+	}
+	public boolean equals(String name) 
+	{
+		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public byte[] toBytes() 
+	{
+		MapDataBase.addFile("building0.lst", buildingList.toBytes());
+		MapDataBase.addFile("extPlace1.lst", exteriorPlaces.toBytes());
+		return MapDataBase.getFile();
+	}
+	public void setName(String name) 
+	{
+		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+	}
+	public String getName() 
+	{
+		return "mapDB0.pac";
+	}
+	public int getSize() 
+	{
+		return toBytes().length;
 	}
 }

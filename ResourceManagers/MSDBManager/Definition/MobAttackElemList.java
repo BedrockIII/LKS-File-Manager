@@ -5,6 +5,8 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import bFM.Utils;
+
 public class MobAttackElemList
 {
 	short startNum1 = 0;//first 2 bytes,always 0001
@@ -27,6 +29,14 @@ public class MobAttackElemList
 		{
 			ret = ret + AttackElement.get(i).toString();
 		}
+		return ret;
+	}
+	public byte[] toBytes() 
+	{
+		byte[] ret = new byte[]{0,1};
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(AttackElement.size(), 2));
+		for(MobAttackElem element : AttackElement)
+			ret = Utils.mergeArrays(ret, element.toBytes());
 		return ret;
 	}
 }

@@ -37,7 +37,7 @@ public class CollapseablePanel extends JPanel
 		setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Settings.LighterColor, Settings.DarkerColor));
 		header.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Settings.LighterColor, Settings.DarkerColor));
 	}
-	private void makeGUI(String headerName)
+	protected void makeGUI(String headerName)
 	{
 		headerText = new JLabel(headerName);
 		header = new JPanel();
@@ -121,6 +121,14 @@ public class CollapseablePanel extends JPanel
 				{
 					((LabeledInputBox) c).update();
 				}
+				else if(c instanceof CollapseablePanel)
+				{
+					((CollapseablePanel) c).update();
+				}
+				else if(c instanceof BitFlagPanel)
+				{
+					((BitFlagPanel) c).update();
+				}
 			}
 		}
 		revalidate();
@@ -135,6 +143,13 @@ public class CollapseablePanel extends JPanel
 	{
 		components.remove(c);
 		super.remove(c);
+	}
+	public void removeAll()
+	{
+		
+		for(Component c : components)
+			super.remove(c);
+		components.removeAll(components);
 	}
 	public void isExtended(boolean value) 
 	{

@@ -75,4 +75,15 @@ public class MailManager
 			bFM.Utils.DebugPrint("Could not write questdata pack at: " + questPath);
 		}
 	}
+	public byte[] toBytes()
+	{
+		PCKGManager questData = new PCKGManager();
+		questData.addFile("normalquestdata.bin", normalMail.toBytes());
+		questData.addFile("randamquestdata.bin", randomMail.toBytes());
+		return questData.getFile();
+	}
+	public NormalMailManager getNormalLetters()
+	{
+		return normalMail;
+	}
 }

@@ -72,7 +72,8 @@ public class WonderSpotManager implements OpenedFile
 	}
 	public boolean equals(String name) 
 	{
-		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+		System.err.println("equals() should not be called on type " + this.getClass());
+		return name.equals("Album.bin");
 	}
 	public void setData(byte[] data) 
 	{

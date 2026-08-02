@@ -84,7 +84,7 @@ public class KingdomPlanElement implements Data
 		PopulationMinimum = -1;
 		PrereqPurchaseFlag = -1;
 		PurchaseFlag = -1;
-		ProgranType = 0;
+		ProgranType = 2;
 		SpecialVar1 = -1;
 		SpecialVar2 = -1;
 		cockpitLogCode = -1;

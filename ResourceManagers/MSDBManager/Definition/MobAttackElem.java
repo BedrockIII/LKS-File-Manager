@@ -24,7 +24,6 @@ public class MobAttackElem
 	{
 		index = bFM.Utils.getShort(data, 0);
 		num1 = bFM.Utils.getShort(data, 2);
-		
 		num2 = bFM.Utils.getShort(data, 4);
 		num3 = bFM.Utils.getShort(data, 6);
 		num4 = bFM.Utils.getShort(data, 8);
@@ -40,5 +39,26 @@ public class MobAttackElem
 	{
 		return "Attack Element " + index + ": " + num1 + ", " + num2 + ", " + num3 + 
 				", " + num4 + ", " + num5 + ", \"" + name + "\", " + num6 + ", " + num7 + ", " + num8 + ", " + num9 + ", " + num10 + ", " + "\n";
+	}
+	public byte[] toBytes() 
+	{
+		byte[] ret = Utils.toByteArr(index, 2);
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num1, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num2, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num3, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num4, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num5, 2));
+		ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(name));
+		byte[] finalRet = new byte[28];
+		for(int i = 0; i < finalRet.length && i < ret.length; i++)
+		{
+			finalRet[i] = ret[i];
+		}
+		finalRet = Utils.mergeArrays(finalRet, ByteBuffer.allocate(4).putFloat(num6).array());
+		finalRet = Utils.mergeArrays(finalRet, num7);
+		finalRet = Utils.mergeArrays(finalRet, num8);
+		finalRet = Utils.mergeArrays(finalRet, num9);
+		finalRet = Utils.mergeArrays(finalRet, num10);
+		return finalRet;
 	}
 }

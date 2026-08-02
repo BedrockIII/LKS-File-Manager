@@ -94,4 +94,24 @@ public class MobModList
 			}
 		}
 	}
+	public String getModCodeByName(int code)
+	{
+		String ret = null;
+		for(MobMod mod : Mod)
+		{
+			if(mod.modCode == code)
+			{
+				if(ret != null)
+				{
+					ret = "Multiple Refs";
+				}
+				else
+				{
+					ret = mod.name;
+				}
+			}
+		}
+		if(ret == null) ret = "Invalid Code";
+		return ret;
+	}
 }

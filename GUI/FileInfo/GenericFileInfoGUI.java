@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import GUI.BitFlagPanel;
 import GUI.CollapseablePanel;
 import GUI.LabeledInputBox;
 import bFM.Data;
@@ -75,6 +76,10 @@ public class GenericFileInfoGUI extends JPanel
 			else if(c instanceof CollapseablePanel)
 			{
 				((CollapseablePanel) c).update();
+			}
+			else if(c instanceof BitFlagPanel)
+			{
+				((BitFlagPanel) c).update();
 			}
 		}
 		revalidate();

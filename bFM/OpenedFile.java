@@ -3,6 +3,7 @@ package bFM;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
+import ResourceManagers.MSDBManager.MSDBManager;
 import SystemDataManagers.MenuDB.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
@@ -28,20 +29,80 @@ public interface OpenedFile extends Data
 			return new PCKGManager(file, name);
 		}else if (fileType.equals("KingdomPlanDB"))
 		{
-			return new kingdomPlanManager(file);
+			try
+			{
+				return new kingdomPlanManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+				
 		}else if (fileType.equals("CharacterDB"))
 		{
-			return new CharacterDataBaseManager(file);
+			try
+			{
+				return new CharacterDataBaseManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+			
 		}
 		else if (fileType.equals("ItemDB"))
 		{
-			return new itemDatabaseManager(name, file);
+			try
+			{
+				return new itemDatabaseManager(name, file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+			
 		}else if (fileType.equals("CameraZoneDB"))
 		{
-			return new CameraZoneList(file);
+			try
+			{
+				return new CameraZoneList(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
 		}else if (fileType.equals("WonderSpotDB"))
 		{
-			return new WonderSpotManager(file);
+			try
+			{
+				return new WonderSpotManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+		}else if (fileType.equals("MissionDB"))
+		{
+			try
+			{
+				return new MSDBManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
 		}
 		
 		return new GenericFile(name, file);

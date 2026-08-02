@@ -3,6 +3,8 @@ package ResourceManagers.MSDBManager.Definition;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import bFM.Utils;
+
 public class MobPresetTableList 
 {
 	ArrayList<MobPresetTable> PresetTable = new ArrayList<MobPresetTable>();
@@ -20,6 +22,13 @@ public class MobPresetTableList
 		{
 			ret = ret + PresetTable.get(i).toString();
 		}
+		return ret;
+	}
+	public byte[] toBytes() 
+	{
+		byte[] ret=null;
+		for(MobPresetTable tbl : PresetTable)
+			ret = Utils.mergeArrays(ret, tbl.toBytes());
 		return ret;
 	}
 

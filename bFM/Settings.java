@@ -47,9 +47,10 @@ public class Settings
 	public static void printVersionData()
 	{
 		System.out.println("LKS File Manager");
-		System.out.println("Version 3.6.3");
-		System.out.println("     Various QOL improvements to file Editor GUI");
-		System.out.println("     Fixed: Text-Based _LZ.bin pack editor");
+		System.out.println("Version 3.7");
+		System.out.println("     Added: Editor for Mission Database (msDB) for Placement Data");
+		System.out.println("     Added: Flag Editor for most/all instances of Bit Flags");
+		System.out.println("     Fixed: No Longer Crashes when opening Beta Files");
 	}
 	
 	public static void setSettings() 
@@ -74,16 +75,19 @@ public class Settings
 			if(savePath==null)
 			{
 				Files.write(Paths.get("LKS File Manager Config.cfg"), Utils.encodeStringToBytes(ret));
+				Files.write(Paths.get("BitFlgNameList.txt"), Utils.encodeStringToBytes(FlagManager.getBitFlagList()));
 			}
 			else
 			{
 				Files.write(savePath.resolve("LKS File Manager Config.cfg"), Utils.encodeStringToBytes(ret));
+				Files.write(savePath.resolve("BitFlgNameList.txt"), Utils.encodeStringToBytes(FlagManager.getBitFlagList()));
 			}
 		} catch (IOException e) 
 		{
 			System.out.println("Failed to save settings file");
 			e.printStackTrace();
 		}
+		
 	}
 	public static void getSettings()
 	{
@@ -163,6 +167,24 @@ public class Settings
 				return;
 			}
 			System.out.println("Failed to read User Settings at " + savePath.toString() + ", assuming defaults");
+		}
+		try 
+		{
+			if(savePath==null)
+			{
+				FlagManager.importBitFlags(Files.readAllBytes(Paths.get("BitFlgNameList.txt")));
+			}
+			else
+			{
+				FlagManager.importBitFlags(Files.readAllBytes(savePath.resolve("BitFlgNameList.txt")));
+			}
+		} catch (IOException e) 
+		{
+			if(savePath == null) 
+			{
+				return;
+			}
+			System.out.println("Failed to read Bit Flag Definitions at " + savePath.toString() + ", assuming defaults");
 		}
 	}
 	public static void setSettingsFile(String string) 

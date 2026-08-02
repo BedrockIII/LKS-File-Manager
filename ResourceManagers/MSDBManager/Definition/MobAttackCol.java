@@ -2,6 +2,7 @@ package ResourceManagers.MSDBManager.Definition;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import bFM.Utils;
@@ -28,5 +29,26 @@ public class MobAttackCol
 	public String toString()
 	{
 		return "Attack Collision "+index +": "+num1 +", \""+name+"\", "+num2 + ", "+num3 + ", "+num4 + ", "+num5 + "\n";
+	}
+	public byte[] toBytes() 
+	{
+		byte[] ret = Utils.toByteArr(index, 2);
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num1, 2));
+		try {
+			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(name, Charset.forName("Shift-JIS")));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		byte[] finalRet = new byte[20];
+		for(int i = 0; i < finalRet.length && i < ret.length; i++)
+		{
+			finalRet[i] = ret[i];
+		}
+		finalRet = Utils.mergeArrays(finalRet, ByteBuffer.allocate(4).putFloat(num2).array());
+		finalRet = Utils.mergeArrays(finalRet, ByteBuffer.allocate(4).putFloat(num3).array());
+		finalRet = Utils.mergeArrays(finalRet, ByteBuffer.allocate(4).putFloat(num4).array());
+		finalRet = Utils.mergeArrays(finalRet, ByteBuffer.allocate(4).putFloat(num5).array());
+		return finalRet;
 	}
 }

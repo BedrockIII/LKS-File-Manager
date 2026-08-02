@@ -5,10 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.nio.file.Files;
 import javax.swing.Box;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -91,6 +88,14 @@ public abstract class FileList extends JPanel
 		GUI.deselectAll();
 		fileName.setBackground(Settings.selectedColor);
 		fileName.setOpaque(true);
+		if(infoGUI == null)
+		{
+			initializeInfoGUI();
+		}
+		if(infoGUI == null)
+		{
+			System.err.println("Info GUI is null");
+		}
     	GUI.setFileInfo(infoGUI);
 	}
 	public int getHeight()
@@ -110,7 +115,10 @@ public abstract class FileList extends JPanel
 	public void update() 
 	{
 		repaint();
-		if(infoGUI!=null)infoGUI.update();
+		if(infoGUI != null)infoGUI.update();
+		//else System.out.println((this.getClass() + " " + fileName.getText() + " lacks an info GUI"));
+		revalidate();
+		repaint();
 	}
 	public void deselectAll() 
 	{

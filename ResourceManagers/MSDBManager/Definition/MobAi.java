@@ -1,5 +1,6 @@
 package ResourceManagers.MSDBManager.Definition;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import bFM.Utils;
@@ -34,6 +35,31 @@ public class MobAi
 	public String toString()
 	{
 		return "Mob AI \""+AiType+"\": "+num0 +" ,"+num1 +" ,"+num2 +" ,"+num3 +" ,"+num4 +" ,"+num5 +" ,"+num6 +" ,"+num7 +" ,"+num8 +" ,"+num9 +"\n";
+	}
+	public byte[] toBytes() 
+	{
+		byte[] ret = Utils.toByteArr(num0, 2);
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num1, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num2, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num3, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num4, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num5, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num6, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num7, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num8, 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(num9, 2));
+		try {
+			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(AiType, Charset.forName("Shift-JIS")));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		byte[] finalRet = new byte[52];
+		for(int i = 0; i < finalRet.length && i < ret.length; i++)
+		{
+			finalRet[i] = ret[i];
+		}
+		return finalRet;
 	}
 }
 

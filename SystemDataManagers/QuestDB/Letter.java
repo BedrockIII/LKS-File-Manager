@@ -655,4 +655,484 @@ public class Letter
 				ItemCodes[1] + ", " + ItemCounts[2] + ", " + ItemCodes[2] + ", " + ItemCounts[3] + ", " + ItemCodes[3] + "\n";
 
 	}
+	public String getCompletionMessage() {
+		return CompletionMessage;
+	}
+	public void setCompletionMessage(String completionMessage) {
+		CompletionMessage = completionMessage;
+	}
+	public int[] getItemCodes() {
+		return ItemCodes;
+	}
+	public void setItemCodes(int[] itemCodes) {
+		ItemCodes = itemCodes;
+	}
+	public int[] getItemCounts() {
+		return ItemCounts;
+	}
+	public void setItemCounts(int[] itemCounts) {
+		ItemCounts = itemCounts;
+	}
+	public int getLetterID() {
+		return letterID;
+	}
+	public void setLetterID(int letterID) {
+		this.letterID = letterID;
+	}
+	public int getFlag1() {
+		return flag1;
+	}
+	public void setFlag1(int flag1) {
+		this.flag1 = flag1;
+	}
+	public int getFlag2() {
+		return flag2;
+	}
+	public void setFlag2(int flag2) {
+		this.flag2 = flag2;
+	}
+	public int getFlag3() {
+		return flag3;
+	}
+	public void setFlag3(int flag3) {
+		this.flag3 = flag3;
+	}
+	public int getFlag4() {
+		return flag4;
+	}
+	public void setFlag4(int flag4) {
+		this.flag4 = flag4;
+	}
+	public int getFlag5() {
+		return flag5;
+	}
+	public void setFlag5(int flag5) {
+		this.flag5 = flag5;
+	}
+	public int getActivationFlag() {
+		return activationFlag;
+	}
+	public void setActivationFlag(int activationFlag) {
+		this.activationFlag = activationFlag;
+	}
+	public int getFlag7() {
+		return flag7;
+	}
+	public void setFlag7(int flag7) {
+		this.flag7 = flag7;
+	}
+	public int getFlag8() {
+		return flag8;
+	}
+	public void setFlag8(int flag8) {
+		this.flag8 = flag8;
+	}
+	public int getFlag9() {
+		return flag9;
+	}
+	public void setFlag9(int flag9) {
+		this.flag9 = flag9;
+	}
+	public int getFlag10() {
+		return flag10;
+	}
+	public void setFlag10(int flag10) {
+		this.flag10 = flag10;
+	}
+	public int getFlag11() {
+		return flag11;
+	}
+	public void setFlag11(int flag11) {
+		this.flag11 = flag11;
+	}
+	public int getFlag12() {
+		return flag12;
+	}
+	public void setFlag12(int flag12) {
+		this.flag12 = flag12;
+	}
+	public int getFlag13() {
+		return flag13;
+	}
+	public void setFlag13(int flag13) {
+		this.flag13 = flag13;
+	}
+	public int getFlag14() {
+		return flag14;
+	}
+	public void setFlag14(int flag14) {
+		this.flag14 = flag14;
+	}
+	public int getFlag15() {
+		return flag15;
+	}
+	public void setFlag15(int flag15) {
+		this.flag15 = flag15;
+	}
+	public int getFlag16() {
+		return flag16;
+	}
+	public void setFlag16(int flag16) {
+		this.flag16 = flag16;
+	}
+	public int getFlag17() {
+		return flag17;
+	}
+	public void setFlag17(int flag17) {
+		this.flag17 = flag17;
+	}
+	public int getFlag18() {
+		return flag18;
+	}
+	public void setFlag18(int flag18) {
+		this.flag18 = flag18;
+	}
+	public int getFlag19() {
+		return flag19;
+	}
+	public void setFlag19(int flag19) {
+		this.flag19 = flag19;
+	}
+	public int getFlag20() {
+		return flag20;
+	}
+	public void setFlag20(int flag20) {
+		this.flag20 = flag20;
+	}
+	public int getFlag21() {
+		return flag21;
+	}
+	public void setFlag21(int flag21) {
+		this.flag21 = flag21;
+	}
+	public int getFlag22() {
+		return flag22;
+	}
+	public void setFlag22(int flag22) {
+		this.flag22 = flag22;
+	}
+	public int getFlag23() {
+		return flag23;
+	}
+	public void setFlag23(int flag23) {
+		this.flag23 = flag23;
+	}
+	public int getFlag24() {
+		return flag24;
+	}
+	public void setFlag24(int flag24) {
+		this.flag24 = flag24;
+	}
+	public int getFlag25() {
+		return flag25;
+	}
+	public void setFlag25(int flag25) {
+		this.flag25 = flag25;
+	}
+	public int getFlag26() {
+		return flag26;
+	}
+	public void setFlag26(int flag26) {
+		this.flag26 = flag26;
+	}
+	public int getFlag27() {
+		return flag27;
+	}
+	public void setFlag27(int flag27) {
+		this.flag27 = flag27;
+	}
+	public int getFlag28() {
+		return flag28;
+	}
+	public void setFlag28(int flag28) {
+		this.flag28 = flag28;
+	}
+	public int getFlag29() {
+		return flag29;
+	}
+	public void setFlag29(int flag29) {
+		this.flag29 = flag29;
+	}
+	public int getFlag30() {
+		return flag30;
+	}
+	public void setFlag30(int flag30) {
+		this.flag30 = flag30;
+	}
+	public int getFlag31() {
+		return flag31;
+	}
+	public void setFlag31(int flag31) {
+		this.flag31 = flag31;
+	}
+	public int getFlag32() {
+		return flag32;
+	}
+	public void setFlag32(int flag32) {
+		this.flag32 = flag32;
+	}
+	public int getFlag33() {
+		return flag33;
+	}
+	public void setFlag33(int flag33) {
+		this.flag33 = flag33;
+	}
+	public int getFlag34() {
+		return flag34;
+	}
+	public void setFlag34(int flag34) {
+		this.flag34 = flag34;
+	}
+	public int getFlag35() {
+		return flag35;
+	}
+	public void setFlag35(int flag35) {
+		this.flag35 = flag35;
+	}
+	public int getFlag36() {
+		return flag36;
+	}
+	public void setFlag36(int flag36) {
+		this.flag36 = flag36;
+	}
+	public int getFlag37() {
+		return flag37;
+	}
+	public void setFlag37(int flag37) {
+		this.flag37 = flag37;
+	}
+	public int getFlag38() {
+		return flag38;
+	}
+	public void setFlag38(int flag38) {
+		this.flag38 = flag38;
+	}
+	public int getFlag39() {
+		return flag39;
+	}
+	public void setFlag39(int flag39) {
+		this.flag39 = flag39;
+	}
+	public int getFlag40() {
+		return flag40;
+	}
+	public void setFlag40(int flag40) {
+		this.flag40 = flag40;
+	}
+	public int getFlag41() {
+		return flag41;
+	}
+	public void setFlag41(int flag41) {
+		this.flag41 = flag41;
+	}
+	public int getFlag42() {
+		return flag42;
+	}
+	public void setFlag42(int flag42) {
+		this.flag42 = flag42;
+	}
+	public int getFlag43() {
+		return flag43;
+	}
+	public void setFlag43(int flag43) {
+		this.flag43 = flag43;
+	}
+	public int getFlag44() {
+		return flag44;
+	}
+	public void setFlag44(int flag44) {
+		this.flag44 = flag44;
+	}
+	public int getFlag45() {
+		return flag45;
+	}
+	public void setFlag45(int flag45) {
+		this.flag45 = flag45;
+	}
+	public int getFlag46() {
+		return flag46;
+	}
+	public void setFlag46(int flag46) {
+		this.flag46 = flag46;
+	}
+	public int getFlag47() {
+		return flag47;
+	}
+	public void setFlag47(int flag47) {
+		this.flag47 = flag47;
+	}
+	public int getFlag48() {
+		return flag48;
+	}
+	public void setFlag48(int flag48) {
+		this.flag48 = flag48;
+	}
+	public int getFlag49() {
+		return flag49;
+	}
+	public void setFlag49(int flag49) {
+		this.flag49 = flag49;
+	}
+	public int getFlag50() {
+		return flag50;
+	}
+	public void setFlag50(int flag50) {
+		this.flag50 = flag50;
+	}
+	public int getFlag51() {
+		return flag51;
+	}
+	public void setFlag51(int flag51) {
+		this.flag51 = flag51;
+	}
+	public int getFlag52() {
+		return flag52;
+	}
+	public void setFlag52(int flag52) {
+		this.flag52 = flag52;
+	}
+	public int getFlag53() {
+		return flag53;
+	}
+	public void setFlag53(int flag53) {
+		this.flag53 = flag53;
+	}
+	public int getFlag54() {
+		return flag54;
+	}
+	public void setFlag54(int flag54) {
+		this.flag54 = flag54;
+	}
+	public int getFlag55() {
+		return flag55;
+	}
+	public void setFlag55(int flag55) {
+		this.flag55 = flag55;
+	}
+	public int getFlag56() {
+		return flag56;
+	}
+	public void setFlag56(int flag56) {
+		this.flag56 = flag56;
+	}
+	public int getFlag57() {
+		return flag57;
+	}
+	public void setFlag57(int flag57) {
+		this.flag57 = flag57;
+	}
+	public int getFlag58() {
+		return flag58;
+	}
+	public void setFlag58(int flag58) {
+		this.flag58 = flag58;
+	}
+	public int getFlag59() {
+		return flag59;
+	}
+	public void setFlag59(int flag59) {
+		this.flag59 = flag59;
+	}
+	public int getFlag60() {
+		return flag60;
+	}
+	public void setFlag60(int flag60) {
+		this.flag60 = flag60;
+	}
+	public int getFlag61() {
+		return flag61;
+	}
+	public void setFlag61(int flag61) {
+		this.flag61 = flag61;
+	}
+	public int getFlag62() {
+		return flag62;
+	}
+	public void setFlag62(int flag62) {
+		this.flag62 = flag62;
+	}
+	public int getFlag63() {
+		return flag63;
+	}
+	public void setFlag63(int flag63) {
+		this.flag63 = flag63;
+	}
+	public int getFlag64() {
+		return flag64;
+	}
+	public void setFlag64(int flag64) {
+		this.flag64 = flag64;
+	}
+	public int getFlag65() {
+		return flag65;
+	}
+	public void setFlag65(int flag65) {
+		this.flag65 = flag65;
+	}
+	public int getFlag66() {
+		return flag66;
+	}
+	public void setFlag66(int flag66) {
+		this.flag66 = flag66;
+	}
+	public int getFlag67() {
+		return flag67;
+	}
+	public void setFlag67(int flag67) {
+		this.flag67 = flag67;
+	}
+	public int getBackgroundType() {
+		return backgroundType;
+	}
+	public void setBackgroundType(int backgroundType) {
+		this.backgroundType = backgroundType;
+	}
+	public int getActivationQuestFlag() {
+		return activationQuestFlag;
+	}
+	public void setActivationQuestFlag(int activationQuestFlag) {
+		this.activationQuestFlag = activationQuestFlag;
+	}
+	public int getFlag70() {
+		return flag70;
+	}
+	public void setFlag70(int flag70) {
+		this.flag70 = flag70;
+	}
+	public int getFlag71() {
+		return flag71;
+	}
+	public void setFlag71(int flag71) {
+		this.flag71 = flag71;
+	}
+	public int getFlag72() {
+		return flag72;
+	}
+	public void setFlag72(int flag72) {
+		this.flag72 = flag72;
+	}
+	public int getFlag73() {
+		return flag73;
+	}
+	public void setFlag73(int flag73) {
+		this.flag73 = flag73;
+	}
+	public int getFlag74() {
+		return flag74;
+	}
+	public void setFlag74(int flag74) {
+		this.flag74 = flag74;
+	}
+	public int getIsQuest() {
+		return isQuest;
+	}
+	public void setIsQuest(int isQuest) {
+		this.isQuest = isQuest;
+	}
+	public void setTitle(String title) {
+		Title = title;
+	}
+	public void setMessage(String message) {
+		Message = message;
+	}
 }

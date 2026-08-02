@@ -5,6 +5,8 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import bFM.Utils;
+
 public class MobAiList 
 {
 	short startNum1 = 0;//first 2 bytes,always 0001
@@ -27,6 +29,14 @@ public class MobAiList
 		{
 			ret = ret + Ai.get(i).toString();
 		}
+		return ret;
+	}
+	public byte[] toBytes() 
+	{
+		byte[] ret = new byte[]{0,1};
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(Ai.size(), 2));
+		for(MobAi ai : Ai)
+			ret = Utils.mergeArrays(ret, ai.toBytes());
 		return ret;
 	}
 }

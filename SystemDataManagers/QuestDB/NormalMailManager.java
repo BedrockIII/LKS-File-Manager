@@ -207,4 +207,8 @@ public class NormalMailManager
 		}
 		return ret;
 	}
+	public ArrayList<Letter> getLetters()
+	{
+		return Letters;
+	}
 }

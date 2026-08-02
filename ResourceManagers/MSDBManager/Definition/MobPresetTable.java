@@ -2,6 +2,8 @@ package ResourceManagers.MSDBManager.Definition;
 
 import java.nio.ByteBuffer;
 
+import bFM.Utils;
+
 public class MobPresetTable 
 {
 	float num0; //4
@@ -25,5 +27,15 @@ public class MobPresetTable
 	{
 		return "Mob Preset Table: " + num0 + ", " + num1 + ", " +
 				num2 + ", " +num3 + ", " +num4 + ", " +num5 + "\n";
+	}
+	public byte[] toBytes() 
+	{
+		byte[] ret = ByteBuffer.allocate(4).putFloat(num0).array();
+		ret = Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num1).array());
+		ret = Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num2).array());
+		ret = Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num3).array());
+		ret = Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num4).array());
+		ret = Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num5).array());
+		return ret;
 	}
 }

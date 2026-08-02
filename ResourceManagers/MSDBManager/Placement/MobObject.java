@@ -6,9 +6,27 @@ import java.nio.ByteOrder;
 import ResourceManagers.ItemDatabaseManager.Item;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import ResourceManagers.MSDBManager.ExtractionTester;
+import bFM.Data;
 
-public class MobObject 
+public class MobObject implements Data
 {
+	public enum ObjectDefault
+	{
+		OBJECT("Inanimate Object"),
+		STILLUMA("Stationary Enemy"),
+		WANDERUMA("Wandering Enemy");
+		
+		
+		final String text;
+		ObjectDefault(String text)
+		{
+			this.text = text;
+		}
+		public String toString()
+		{
+			return text;
+		}
+	}
 	protected float xOffset; //First 2 Bytes //these first 3 MAY be the offsets for the target points, like where onii men throw pots
 	protected float yOffset; //Next 2 Bytes
 	protected float zOffset; //Next 2 Bytes
@@ -129,6 +147,41 @@ public class MobObject
 		enemyDrop = num92;
 		itemDrop = enemyDrop2;
 	}
+	public MobObject(ObjectDefault objectType) 
+	{
+		xOffset = 0;
+		yOffset = 0;
+		zOffset = 0;
+		rotation = 0;
+		mobModNumber = 1;
+		num4 = (float) 6.0;
+		numberOfSubObjects = 0;
+		deathEffects = 0;
+		enemyDrop = -1;
+		itemDrop = -1;
+		switch(objectType)
+		{
+		
+		case STILLUMA:
+			RadiusOfView = 5;
+			DegreesOfView = 270;
+			AiCode = 2001;
+			break;
+		case WANDERUMA:
+			RadiusOfView = 5;
+			DegreesOfView = 270;
+			AiCode = 1001;
+			break;
+		case OBJECT:
+			//Default
+		default:
+			RadiusOfView = 0;
+			DegreesOfView = 0;
+			AiCode = 0;
+			break;
+		
+		}
+	}
 	public boolean equals(float float4, float float5, float float6, float float7, float float8, short num32, short num62, float float9, float float10, short num7, short num82, short num92, short enemyDrop2) 
 	{
 		if(xOffset != float4) return false;
@@ -202,11 +255,7 @@ public class MobObject
 	}
 	public String bMos() 
 	{
-		return "\t\tConstant Object: "+xOffset +", "+yOffset +", "+zOffset +", "+rotation +", "+num4 +", "+mobModNumber+", "+numberOfSubObjects +", "+RadiusOfView +", "+DegreesOfView +", "+AiCode +", "+deathEffects+", "+enemyDrop+", "+itemDrop +"\n";
-	}
-	public String bMos2() {
-		// TODO Auto-generated method stub
-		return "\tUnsorted Object: "+xOffset +", "+yOffset +", "+zOffset +", "+rotation +", "+num4 +", "+mobModNumber+", "+numberOfSubObjects +", "+RadiusOfView +", "+DegreesOfView +", "+AiCode +", "+deathEffects+", "+enemyDrop+", "+itemDrop +"\n";
+		return "\t\tMission Object: "+xOffset +", "+yOffset +", "+zOffset +", "+rotation +", "+num4 +", "+mobModNumber+", "+numberOfSubObjects +", "+RadiusOfView +", "+DegreesOfView +", "+AiCode +", "+deathEffects+", "+enemyDrop+", "+itemDrop +"\n";
 	}
 	public int getModCode() 
 	{
@@ -231,5 +280,103 @@ public class MobObject
 			}
 		}
 		return ret;
+	}
+	public boolean equals(String name) 
+	{
+		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public void setName(String name) 
+	{
+		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+	}
+	public String getName() 
+	{
+		throw new UnsupportedOperationException("getName() should not be called on type " + this.getClass());
+	}
+	public int getSize() 
+	{
+		throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
+	}
+	public float getxOffset() {
+		return xOffset;
+	}
+	public void setxOffset(float xOffset) {
+		this.xOffset = xOffset;
+	}
+	public float getyOffset() {
+		return yOffset;
+	}
+	public void setyOffset(float yOffset) {
+		this.yOffset = yOffset;
+	}
+	public float getzOffset() {
+		return zOffset;
+	}
+	public void setzOffset(float zOffset) {
+		this.zOffset = zOffset;
+	}
+	public float getRotation() {
+		return rotation;
+	}
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
+	}
+	public float getNum4() {
+		return num4;
+	}
+	public void setNum4(float num4) {
+		this.num4 = num4;
+	}
+	public int getMobModNumber() {
+		return mobModNumber;
+	}
+	public void setMobModNumber(int mobModNumber) {
+		this.mobModNumber = mobModNumber;
+	}
+	public int getNumberOfSubObjects() {
+		return numberOfSubObjects;
+	}
+	public void setNumberOfSubObjects(int numberOfSubObjects) {
+		this.numberOfSubObjects = numberOfSubObjects;
+	}
+	public float getRadiusOfView() {
+		return RadiusOfView;
+	}
+	public void setRadiusOfView(float radiusOfView) {
+		RadiusOfView = radiusOfView;
+	}
+	public float getDegreesOfView() {
+		return DegreesOfView;
+	}
+	public void setDegreesOfView(float degreesOfView) {
+		DegreesOfView = degreesOfView;
+	}
+	public int getAiCode() {
+		return AiCode;
+	}
+	public void setAiCode(int aiCode) {
+		AiCode = aiCode;
+	}
+	public int getDeathEffects() {
+		return deathEffects;
+	}
+	public void setDeathEffects(int deathEffects) {
+		this.deathEffects = deathEffects;
+	}
+	public int getEnemyDrop() {
+		return enemyDrop;
+	}
+	public void setEnemyDrop(int enemyDrop) {
+		this.enemyDrop = enemyDrop;
+	}
+	public int getItemDrop() {
+		return itemDrop;
+	}
+	public void setItemDrop(int itemDrop) {
+		this.itemDrop = itemDrop;
 	}
 }

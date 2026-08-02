@@ -2,18 +2,17 @@ package GUI.FileList.Resources;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.FileList.CollapseableFileList;
-import GUI.FileList.FileListFactory;
-import PCKGManager.PCKGManager;
-import ResourceManagers.MSDBManager.Placement.MissionObjectPlacementManager;
+import ResourceManagers.MSDBManager.MSDBManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class MissionObjectDatabase extends CollapseableFileList
 {
-	PCKGManager MonsterDataPack;
+	MSDBManager MonsterDataPack;
 	int padding;
-	public MissionObjectDatabase(PCKGManager file, int padding)
+	public MissionObjectDatabase(MSDBManager file, int padding)
 	{
 		this.file = file;
 		MonsterDataPack = file;
@@ -38,37 +37,37 @@ public class MissionObjectDatabase extends CollapseableFileList
 	public void initializeSubGUI()
 	{
 		//TODO
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_MOD.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_ATK_INFO.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_ATK_ELM.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_ATK_COL.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_DMG_COL.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_RES_ASN.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_AI.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_PRESET_TABLE.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("BV_3_HEADER.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("BV_3_NPCPRESET.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("BV_3_MAPJUMP.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("BV_3_ASSIGN.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_CONST_WALL.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_CONST_GROUND.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_RANDOM_WALL.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_RANDOM_GROUND.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_RECT_LIST.lst"), Settings.indentSize + padding, this));
-		subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MDITM_00.bin"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_MOD.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_ATK_INFO.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_ATK_ELM.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_ATK_COL.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_DMG_COL.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_RES_ASN.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_AI.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOB_24_PRESET_TABLE.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("BV_3_HEADER.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("BV_3_NPCPRESET.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("BV_3_MAPJUMP.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("BV_3_ASSIGN.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_CONST_WALL.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_CONST_GROUND.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_RANDOM_WALL.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_RANDOM_GROUND.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_RECT_LIST.lst"), Settings.indentSize + padding, this));
+		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MDITM_00.bin"), Settings.indentSize + padding, this));
 		
-		subEntries.add(new MOPlacementListGUI(new MissionObjectPlacementManager(MonsterDataPack.getFile("MOP_14_CONST_PLACE.lst"), 
-				MonsterDataPack.getFile("MOP_14_GROUP.lst"), MonsterDataPack.getFile("MOP_14_OBJECT.lst"), 
-				MonsterDataPack.getFile("MOP_14_RANDOM_AREA.lst"), MonsterDataPack.getFile("MOP_14_RANDOM_POINT.lst"), 
-				MonsterDataPack.getFile("MOP_14_AREA_DATA.lst"))));
+		subEntries.add(new MOPlacementListGUI(MonsterDataPack.getPlacement(), padding + Settings.indentSize, this));
 	}
 	protected void initializeInfoGUI()
 	{
 		// TODO Auto-generated method stub
+		infoGUI = new GenericFileInfoGUI(MonsterDataPack);
 	}
 	protected void addActions() 
 	{
 		// TODO Auto-generated method stub
+		add(actions);
+		addMouseListener();
 	}
 
 }

@@ -1,4 +1,4 @@
-package ResourceManagers.MSDBManager;
+package ResourceManagers.MSDBManager.CollisionRectangle;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

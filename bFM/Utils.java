@@ -132,7 +132,7 @@ public class Utils
 		//Rounds down at a decimal
 		String allowedChars = "1234567890-";
 		String integer = "";
-		for(int i = line.indexOf(">>"); i<line.length();i++)
+		for(int i = Math.max(line.indexOf(">>"), 0); i<line.length();i++)
 		{
 			if(allowedChars.indexOf(line.charAt(i))!=-1)
 			{
@@ -151,7 +151,7 @@ public class Utils
 		//Rounds down at a decimal
 		String allowedChars = "1234567890-.E";
 		String floatingPoint = "";
-		for(int i = line.indexOf(">>"); i<line.length();i++)
+		for(int i = Math.max(line.indexOf(">>"), 0); i<line.length();i++)
 		{
 			if(allowedChars.indexOf(line.charAt(i))!=-1)
 			{
@@ -478,6 +478,10 @@ public class Utils
 					Settings.LanguageCode = Integer.parseInt("" + name.charAt(8));
 				}
 				return "ItemDB";
+			}
+			else  if(name.indexOf("msDB") != -1||name.equals("Mission Object Data Base"))
+			{
+				return "MissionDB";
 			}
 			else if(name.equals("CameraData.bin")||name.equals("Camera Zone Config"))
 			{
@@ -861,5 +865,9 @@ public class Utils
 		if(name.indexOf("German") != -1) return GERMAN_LANGUAGE;
 		if(name.indexOf("Spanish") != -1) return SPANISH_LANGUAGE;
 		return -1;
+	}
+	public static Integer formatInt(String string) 
+	{
+		return formatFlag(string);
 	}
 }
