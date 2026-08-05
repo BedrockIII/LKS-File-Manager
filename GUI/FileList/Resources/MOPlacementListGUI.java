@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 
 import GUI.GUI;
-import GUI.FileInfo.GroupInfoGUI;
-import GUI.FileInfo.GroupListInfoGUI;
-import GUI.FileInfo.GroupsInfoGUI;
-import GUI.FileInfo.ObjectInfoGUI;
-import GUI.FileInfo.PlacementInfoGUI;
-import GUI.FileInfo.RandomAreaInfoGUI;
-import GUI.FileInfo.RandomAreaListInfoGUI;
-import GUI.FileInfo.RandomPositionGUI;
+import GUI.FileInfo.MissionDataBase.GroupInfoGUI;
+import GUI.FileInfo.MissionDataBase.GroupListInfoGUI;
+import GUI.FileInfo.MissionDataBase.GroupsInfoGUI;
+import GUI.FileInfo.MissionDataBase.ObjectInfoGUI;
+import GUI.FileInfo.MissionDataBase.PlacementInfoGUI;
+import GUI.FileInfo.MissionDataBase.RandomAreaInfoGUI;
+import GUI.FileInfo.MissionDataBase.RandomAreaListInfoGUI;
+import GUI.FileInfo.MissionDataBase.RandomPositionGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
 import GUI.PopupWindows.NewMobGroupTypeWindow;
@@ -50,6 +50,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 	}
 	public void initializeSubGUI() 
 	{
+		subEntries.removeAll(subEntries);
 		Groups = new GroupTypesListGUI(data, padding + Settings.indentSize, this);
 		subEntries.add(Groups);
 		RandomPlaces = new RandomAreasListGUI(data.getAreaList(), padding + Settings.indentSize, this);
@@ -69,7 +70,8 @@ public class MOPlacementListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
-		//TODO import bMos, export bMos, replace bMos
+		addExpandAllAction();
+		addCollapseAllAction();
 		addImportBMosAction();
 		addReplaceBMosAction();
 		exportAsBMosAction();
@@ -78,13 +80,27 @@ public class MOPlacementListGUI extends CollapseableFileList
 	}
 	private void addImportBMosAction()
 	{
-		actions.add(GUIUtils.createImportAction("Replace from text", "Bedrock's Intermediate Mission Object Format", 
-				"bMos", data::importBMos, this));
+		actions.add(GUIUtils.createImportAction("Import from bMos", "Bedrock's Intermediate Mission Object Format", 
+				"bMos", this::importBMos, this));
 	}
 	private void addReplaceBMosAction()
 	{
-		actions.add(GUIUtils.createImportAction("Replace from text", "Bedrock's Intermediate Mission Object Format", 
-				"bMos", data::replaceBMos, this));
+		actions.add(GUIUtils.createImportAction("Replace from bMos", "Bedrock's Intermediate Mission Object Format", 
+				"bMos", this::replaceBMos, this));
+	}
+	private void replaceBMos(byte[] data)
+	{
+		subEntries.removeAll(subEntries);
+		this.data.replaceBMos(data);
+		initializeSubGUI();
+		reAddComponents();
+	}
+	private void importBMos(byte[] data)
+	{
+		subEntries.removeAll(subEntries);
+		this.data.importBMos(data);
+		initializeSubGUI();
+		reAddComponents();
 	}
 	public void exportAsBMosAction() 
 	{
@@ -123,6 +139,8 @@ public class MOPlacementListGUI extends CollapseableFileList
 		}
 		protected void addActions() 
 		{
+			addExpandAllAction();
+			addCollapseAllAction();
 			addAreaAction();
 			add(actions);
 			addMouseListener();
@@ -287,6 +305,8 @@ public class MOPlacementListGUI extends CollapseableFileList
 		}
 		protected void addActions() 
 		{
+			addExpandAllAction();
+			addCollapseAllAction();
 			addGroupCategoryAction();
 			add(actions);
 			addMouseListener();
@@ -347,8 +367,10 @@ public class MOPlacementListGUI extends CollapseableFileList
 			protected void addActions() 
 			{
 				exportAsBMosAction();
-				addDeleteAction();
 				addGroupAction();
+				addExpandAllAction();
+				addCollapseAllAction();
+				addDeleteAction();
 				add(actions);
 				addMouseListener();
 			}
@@ -359,7 +381,10 @@ public class MOPlacementListGUI extends CollapseableFileList
 					for(int i = 0; i < subEntries.size();  i++)
 					{
 						if(subEntries.get(i) instanceof GroupListGUI)
+						{
 							removeGroup((GroupListGUI) subEntries.get(i));
+							i--;
+						}
 					}
 					parent.subEntries.remove(this);
 					parent.reAddComponents();
@@ -670,7 +695,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 			{
 				data.remove(object.data);
 				subEntries.remove(object);
-				parent.parent.data.getMobGroups().remove(object.data);
+				parent.parent.data.removeGroup(object.data);
 				reAddComponents();
 			}
 			public boolean isLast(GroupListGUI object) 

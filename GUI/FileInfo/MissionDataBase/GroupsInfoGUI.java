@@ -1,4 +1,4 @@
-package GUI.FileInfo;
+package GUI.FileInfo.MissionDataBase;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import GUI.CollapseablePanel;
 import GUI.LabeledInputBox;
+import GUI.FileInfo.GenericFileInfoGUI;
 import ResourceManagers.MSDBManager.Placement.MobGroup;
 import bFM.Settings;
 

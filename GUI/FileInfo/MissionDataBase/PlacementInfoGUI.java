@@ -1,19 +1,20 @@
-package GUI.FileInfo;
+package GUI.FileInfo.MissionDataBase;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import GUI.LabeledInputBox;
+import GUI.FileInfo.GenericFileInfoGUI;
 import ResourceManagers.MSDBManager.Placement.MissionObjectPlacementManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class GroupListInfoGUI extends GenericFileInfoGUI 
+public class PlacementInfoGUI extends GenericFileInfoGUI 
 {
 	MissionObjectPlacementManager object = null;
 	JLabel objectCount;
-	JLabel categoryCount;
-	public GroupListInfoGUI(MissionObjectPlacementManager data) 
+	JLabel areaCount;
+	public PlacementInfoGUI(MissionObjectPlacementManager data) 
 	{
 		object = data;
 		makeGUI();
@@ -22,7 +23,7 @@ public class GroupListInfoGUI extends GenericFileInfoGUI
 	private void makeGUI()
 	{
 		objectCount = new JLabel("" + object.getMobGroups().size());
-		categoryCount = new JLabel("" + object.getGroupCodes().size());
+		areaCount = new JLabel("" + object.getAreaList().size());
 	}
 	private void addGUI()
 	{
@@ -31,12 +32,12 @@ public class GroupListInfoGUI extends GenericFileInfoGUI
 		GridBagConstraints layout = Settings.getDefaultConstraints();
 		add(new LabeledInputBox("Group Count: ",  objectCount), layout);
 		layout.weighty = 1.0;
-		add(new LabeledInputBox("Unique Group Types: ",  categoryCount), layout);
+		add(new LabeledInputBox("Random Area Count: ",  areaCount), layout);
 	}
 	public void update()
 	{
 		objectCount.setText("" + object.getMobGroups().size());
-		categoryCount.setText("" + object.getGroupCodes().size());
+		areaCount.setText("" + object.getAreaList().size());
 		super.update();
 	}
 }

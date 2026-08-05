@@ -41,9 +41,9 @@ public class MissionObjectPlacementManager implements Data
 	}
 	public void replaceBMos(byte[] data)
 	{
-		Places = new ArrayList<MobConstantPlace>();
-		Groups = new ArrayList<MobGroup>();
-		Areas = new ArrayList<MobRandomArea>();
+		Places.removeAll(Places);
+		Groups.removeAll(Groups);
+		Areas.removeAll(Areas);
 		parseBMosLines(Utils.bytesToStrs(data));
 	}
  	private MobObject parseObjectLine(String[] line)
@@ -563,5 +563,11 @@ public class MissionObjectPlacementManager implements Data
 			}
 		}
 		return code;
+	}
+	public void removeGroup(MobGroup data)
+	{
+		Groups.remove(data);
+		Places.remove(data.getPlacement());
+		//System.out.println(data.bMos2());
 	}
 }

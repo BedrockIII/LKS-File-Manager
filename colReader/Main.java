@@ -56,11 +56,11 @@ public class Main
 		//menuDBManager();
 		//packBuilding("SurfaceToCaveHole");
 		//packGrid();
-		//mapDataBase();
+		mapDataBase();
 		//decodeLightZones();
 		//encodeLightZones();
 		//message();				
-		enemyManagers();
+		//enemyManagers();
 		//decodeEnemyData("CoinPurse.bMos", 4010);
 		//itemManager();
 		//decodeItems(1);

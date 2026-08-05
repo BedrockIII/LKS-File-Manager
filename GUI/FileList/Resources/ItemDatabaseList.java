@@ -39,7 +39,7 @@ public class ItemDatabaseList extends CollapseableFileList
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
-		initializeInfoGUI();
+		//initializeInfoGUI();
 		System.out.print("█");
 		addActions();
 		System.out.print("█");
@@ -127,7 +127,7 @@ public class ItemDatabaseList extends CollapseableFileList
 		{
 			this.initializeListGUI(padding);
 			this.initializeSubGUI();
-			this.initializeInfoGUI();
+			//this.initializeInfoGUI();
 			this.addActions();
 			this.reAddComponents();
 		}
@@ -286,7 +286,7 @@ public class ItemDatabaseList extends CollapseableFileList
 			protected void initializeAll(int padding) 
 			{
 				this.initializeListGUI(padding);
-				this.initializeInfoGUI();
+				//this.initializeInfoGUI();
 				this.addActions();
 			}
 			protected void initializeListGUI(int padding) 
@@ -317,7 +317,7 @@ public class ItemDatabaseList extends CollapseableFileList
 			protected void initializeAll(int padding) 
 			{
 				initializeListGUI(padding);
-				this.initializeInfoGUI();
+				//this.initializeInfoGUI();
 				this.addActions();
 			}
 			protected void initializeListGUI(int padding) 
@@ -350,7 +350,7 @@ public class ItemDatabaseList extends CollapseableFileList
 			protected void initializeAll(int padding) 
 			{
 				initializeListGUI(padding);
-				initializeInfoGUI();
+				//initializeInfoGUI();
 				addActions();
 			}
 			protected void initializeListGUI(int padding) 

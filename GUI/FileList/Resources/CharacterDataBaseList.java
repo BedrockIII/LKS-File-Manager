@@ -84,7 +84,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		initializeListGUI(padding);
 		this.padding = padding;
 		initializeSubGUI();
-		initializeInfoGUI();
+		//initializeInfoGUI();
 		System.out.println("█\nComplete!");
 		addActions();
 		reAddComponents();
@@ -137,7 +137,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
 			initializeSubGUI();
-			initializeInfoGUI();
+			//initializeInfoGUI();
 			addActions();
 			reAddComponents();
 		}
@@ -199,7 +199,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
-				this.initializeInfoGUI();
+				//this.initializeInfoGUI();
 				addActions();
 			}
 			protected void initializeListGUI(int padding) 
@@ -253,7 +253,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
-				this.initializeInfoGUI();
+				//this.initializeInfoGUI();
 				addActions();
 			}
 			protected void initializeListGUI(int padding) 
@@ -333,7 +333,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
-			initializeInfoGUI();
+			//initializeInfoGUI();
 			initializeSubGUI();
 			addActions();
 			reAddComponents();
@@ -380,7 +380,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
-				this.initializeInfoGUI();
+				//this.initializeInfoGUI();
 				addActions();
 			}
 			protected void addActions()
@@ -449,7 +449,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
-			initializeInfoGUI();
+			//initializeInfoGUI();
 			initializeSubGUI();
 			addActions();
 			reAddComponents();
@@ -496,7 +496,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
-				this.initializeInfoGUI();
+				//this.initializeInfoGUI();
 				addActions();
 			}
 			protected void initializeListGUI(int padding) 
@@ -569,7 +569,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		{
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
-			initializeInfoGUI();
+			//initializeInfoGUI();
 			initializeSubGUI();
 			addActions();
 			reAddComponents();
@@ -623,7 +623,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
-				this.initializeInfoGUI();
+				//this.initializeInfoGUI();
 				addActions();
 			}
 			protected void initializeListGUI(int padding) 
@@ -671,7 +671,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			this.padding = padding;
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
-			initializeInfoGUI();
+			//initializeInfoGUI();
 			initializeSubGUI();
 			addActions();
 			reAddComponents();
@@ -722,7 +722,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding)
 			{
 				this.initializeListGUI(padding);
-				this.initializeInfoGUI();
+				//this.initializeInfoGUI();
 				addActions();
 			}
 			public JobPrices getFile()
@@ -798,7 +798,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			this.padding = padding;
 			fileTypes = new FileNameExtensionFilter("Character Texture Animation File", "bin");
 			initializeListGUI(padding);
-			initializeInfoGUI();
+			//initializeInfoGUI();
 			initializeSubGUI();
 			addActions();
 			reAddComponents();
@@ -832,7 +832,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				this.padding = padding;
 				initializeListGUI(padding);
 				initializeSubGUI();
-				initializeInfoGUI();
+				//initializeInfoGUI();
 				addActions();
 				reAddComponents();
 			}
@@ -871,7 +871,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					this.padding = padding;
 					initializeListGUI(padding);
 					initializeSubGUI();
-					initializeInfoGUI();
+					//initializeInfoGUI();
 					addActions();
 					reAddComponents();
 				}
@@ -911,7 +911,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					{
 						initializeListGUI(padding);
 						initializeSubGUI();
-						initializeInfoGUI();
+						//initializeInfoGUI();
 						addActions();
 						reAddComponents();
 					}
@@ -951,7 +951,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						protected void initializeAll(int padding) 
 						{
 							initializeListGUI(padding);
-							initializeInfoGUI();
+							//initializeInfoGUI();
 							addActions();
 						}
 						protected void initializeListGUI(int padding) 
@@ -986,7 +986,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			protected void initializeAll(int padding) 
 			{
 				initializeListGUI(padding);
-				initializeInfoGUI();
+				//initializeInfoGUI();
 				initializeSubGUI();
 				addActions();
 				reAddComponents();
@@ -1023,7 +1023,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				protected void initializeAll(int padding) 
 				{
 					initializeListGUI(padding, "Pattern: " + file.getName());
-					initializeInfoGUI();
+					//initializeInfoGUI();
 					initializeSubGUI();
 					addActions();
 					reAddComponents();
@@ -1062,7 +1062,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					protected void initializeAll(int padding) 
 					{
 						initializeListGUI(padding, "Part: " + file.getName());
-						initializeInfoGUI();
+						//initializeInfoGUI();
 						initializeSubGUI();
 						addActions();
 						reAddComponents();
@@ -1101,7 +1101,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						protected void initializeAll(int padding) 
 						{
 							initializeListGUI(padding);
-							initializeInfoGUI();
+							//initializeInfoGUI();
 							addActions();
 						}
 						protected void initializeListGUI(int padding) 
@@ -1133,7 +1133,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						protected void initializeAll(int padding) 
 						{
 							initializeListGUI(padding);
-							initializeInfoGUI();
+							//initializeInfoGUI();
 							addActions();
 						}
 						protected void initializeListGUI(int padding) 

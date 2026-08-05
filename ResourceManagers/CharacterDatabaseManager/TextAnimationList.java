@@ -69,7 +69,8 @@ public class TextAnimationList implements OpenedFile
 				}
 				else
 				{
-					animation.addLine(line);
+					if(animation!=null)animation.addLine(line);
+					else System.err.println("Error Importing Animation: AnimationList constructor, " + this.getClass());
 				}
 			}
 		}
@@ -301,7 +302,8 @@ public class TextAnimationList implements OpenedFile
 				}
 				else
 				{
-					Pattern.addLine(line);
+					if(Pattern!=null)Pattern.addLine(line);
+					else System.err.println("Error Importing Animation: PatternList constructor, " + this.getClass());
 				}
 			}
 		}

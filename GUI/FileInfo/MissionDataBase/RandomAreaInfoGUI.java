@@ -1,10 +1,11 @@
-package GUI.FileInfo;
+package GUI.FileInfo.MissionDataBase;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
+import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.FileList.Resources.MOPlacementListGUI.RandomAreasListGUI.RandomAreaListGUI;
 import ResourceManagers.MSDBManager.Placement.MobRandomArea;
 import bFM.GUIUtils;

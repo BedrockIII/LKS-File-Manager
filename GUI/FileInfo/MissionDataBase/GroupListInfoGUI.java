@@ -1,23 +1,20 @@
-package GUI.FileInfo;
+package GUI.FileInfo.MissionDataBase;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
-
 import javax.swing.JLabel;
-import GUI.CollapseablePanel;
 import GUI.LabeledInputBox;
+import GUI.FileInfo.GenericFileInfoGUI;
 import ResourceManagers.MSDBManager.Placement.MissionObjectPlacementManager;
-import ResourceManagers.MSDBManager.Placement.MobGroup;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class MissionObjectInfoGUI extends GenericFileInfoGUI 
+public class GroupListInfoGUI extends GenericFileInfoGUI 
 {
 	MissionObjectPlacementManager object = null;
 	JLabel objectCount;
 	JLabel categoryCount;
-	public MissionObjectInfoGUI(MissionObjectPlacementManager data) 
+	public GroupListInfoGUI(MissionObjectPlacementManager data) 
 	{
 		object = data;
 		makeGUI();

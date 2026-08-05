@@ -11,6 +11,7 @@ import GUI.GUI;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
 import ResourceManagers.CharacterDatabaseManager.CharacterResourceList.CharacterBody;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class CharacterBodyInfoGUI extends GenericFileInfoGUI
@@ -232,12 +233,7 @@ public class CharacterBodyInfoGUI extends GenericFileInfoGUI
 	{
 		removeAll();
 		setLayout(new GridBagLayout());
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
-		layout.weighty = 0.0;
-		layout.fill = GridBagConstraints.HORIZONTAL;
-		layout.weightx = 1.0;
+		GridBagConstraints layout = Settings.getDefaultConstraints();
 		add(new LabeledInputBox("Name", nameText), layout);
 		add(new LabeledInputBox("Character Code", characterCodeText), layout);
 		add(new LabeledInputBox("Job Code", jobCodeText), layout);
@@ -245,7 +241,7 @@ public class CharacterBodyInfoGUI extends GenericFileInfoGUI
 		add(new LabeledInputBox("Gender Code", genderCodeText), layout);
 		add(new LabeledInputBox("Num 2", num2Text), layout);
 		add(new LabeledInputBox("Model", modelText), layout);
-		add(new LabeledInputBox("Num 3", num3Text), layout);
+		add(new LabeledInputBox("Allocated Memory", num3Text), layout);
 		add(new LabeledInputBox("Num 4", num4Text), layout);
 		add(new LabeledInputBox("Num 5", num5Text), layout);
 		add(new LabeledInputBox("Num 6", num6Text), layout);

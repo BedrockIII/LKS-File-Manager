@@ -169,14 +169,16 @@ public abstract class CollapseableFileList extends FileList
 		JMenuItem collapseAll = new JMenuItem("Collapse All");
 		collapseAll.addActionListener(e -> {
 			collapseAll();
+			reAddComponents();
 		});
 		actions.add(collapseAll);
 	}
 	protected void addExpandAllAction()
 	{
-		JMenuItem expandAll = new JMenuItem("Collapse All");
+		JMenuItem expandAll = new JMenuItem("Expand All");
 		expandAll.addActionListener(e -> {
 			expandAll();
+			reAddComponents();
 		});
 		actions.add(expandAll);
 	}
@@ -190,7 +192,6 @@ public abstract class CollapseableFileList extends FileList
 				((CollapseableFileList)entry).collapseAll();
 			}
 		}
-		reAddComponents();
 	}
 	protected void expandAll()
 	{
@@ -202,7 +203,6 @@ public abstract class CollapseableFileList extends FileList
 				((CollapseableFileList)entry).expandAll();
 			}
 		}
-		reAddComponents();
 	}
 	public void removeFile(FileList fileList) 
 	{
