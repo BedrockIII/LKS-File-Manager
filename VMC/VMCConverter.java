@@ -4,11 +4,14 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import bFM.OpenedFile;
 import bFM.Utils;
 
-public class VMCConverter 
+public class VMCConverter implements OpenedFile
 {
+	private String name;
 	private final String version = "LKS Virtual Machine Code Version 1.0";
+	@SuppressWarnings("unused")
 	private static String[] notinstrutionTypes = new String[] {"#SUSPEND",
 	                                                     "#EXECUTE_SEQUENCE",
 	                                                     "#NOP",
@@ -238,23 +241,27 @@ public class VMCConverter
 	                                                     "弓矢刺さり待ち"
 	                                                     };
 	//External is 0x12, OR 18. 19th in list
+	@SuppressWarnings("unused")
 	private static String[] instrutionTypes = new String[] {"Label","Load","Address","Push","Pop",
 															"Assign","Add","Subtraction","Multiply","Divide",
 															"Modulus","Invert","Compare","JMP","CJMP",
 															"CALL","RET","PRNT","EXT","HALT","SPND" };
 	ArrayList<String> Instructions = new ArrayList<String>();
 	ArrayList<vmInstruction> code = new ArrayList<vmInstruction>();
-	ArrayList<String> Strings = new ArrayList<String>();
+	ArrayList<VMString> Strings = new ArrayList<VMString>();
 	ByteBuffer data = null;
 	int size = -1;
-	public VMCConverter(byte[] data1)
+	int type = -1;
+	private void initializeFromBytes(byte[] data1)
 	{
 		//ArrayList<String> Instructions = new ArrayList<String>();
 		//this.data = data1;
 		
 		data = ByteBuffer.wrap(data1);
-		data.position(12);
+		data.position(0xc);
 		size = data.getInt(4);
+		type = data.getInt(8);
+		if(type != 0) data.position(0x10);
 		code = new ArrayList<vmInstruction>();
 		vmInstruction lastInstruction = null;
 		while(data.position() < data.limit() && (lastInstruction == null || !lastInstruction.equals("Halt")))
@@ -263,6 +270,24 @@ public class VMCConverter
 			code.add(lastInstruction);
 		}
 		Strings = extractStrings();
+		System.out.println("Possibly Size: " + size + ", Instruction Count: " + code.size());
+		//System.out.println("(" + code.size() + ",  " + size + ")");
+		System.out.println("" + size + ",  " + data1.length + "");
+	}
+	public VMCConverter(String name, byte[] data1)
+	{
+		this.name = name;
+		initializeFromBytes(data1);
+	}
+	public VMCConverter(byte[] data1)
+	{
+		name = "Event.vmc0";
+		initializeFromBytes(data1);
+	}
+	public static boolean isVMC(byte[] data)
+	{
+		return data[0] == 'V' && data[1] == 'M' && data[2] == 'C' && data[3] == ' ';
+		
 	}
 	public VMCConverter(List<String> Lines) 
 	{
@@ -304,7 +329,7 @@ public class VMCConverter
 		byte[] ret = null;
 		ret = bFM.Utils.mergeArrays(ret, Utils.encodeStringToBytes("VMC "));
 		ret = bFM.Utils.mergeArrays(ret, Utils.toByteArr(size, 4));
-		ret = bFM.Utils.mergeArrays(ret, new byte[4]);
+		//ret = bFM.Utils.mergeArrays(ret, new byte[4]);
 		for(vmInstruction i : code)
 		{
 			ret = bFM.Utils.mergeArrays(ret, i.toBytes());
@@ -323,9 +348,10 @@ public class VMCConverter
 		}
 		return ret;
 	}
-	private ArrayList<String> extractStrings() 
+	private ArrayList<VMString> extractStrings() 
 	{
 		//Skip filler 0's
+		if(data.hasRemaining() == false) return new ArrayList<VMString>();
 		byte b = data.get(data.position());
 		int zeroCount = 0;
 		while(b == 0)
@@ -334,7 +360,7 @@ public class VMCConverter
 			zeroCount++;
 		}
 		if(zeroCount!=0) System.out.println("ZeroCount = " + zeroCount);
-		ArrayList<String> Strings = new ArrayList<String>();
+		ArrayList<VMString> Strings = new ArrayList<VMString>();
 		String temp = "";
 		int startIndex = data.position();
 		int endIndex = startIndex;
@@ -349,12 +375,55 @@ public class VMCConverter
 				temp = temp.replace("\r", "\\r");
 				temp = temp.replace("\n", "\\n");
 				temp = temp.replace("\t", "\\t");
-				Strings.add(temp);
+				Strings.add(new VMString(temp));
 				i = ((int)(i/4)+1)*4-1;
 				startIndex = i+1;
 				temp = "";
 			}
 		}
 		return Strings;
+	}
+	public boolean equals(String name) 
+	{
+		return this.name.equals(name);
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public void setName(String name) 
+	{
+		this.name = name;
+	}
+	public String getName() 
+	{
+		return name;
+	}
+	public int getSize() 
+	{
+		//TODO, calculate. 8 + instructions size + strings size
+		return toBytes().length;
+	}
+	public int getNum()
+	{
+		return size;
+	}
+	public void setNum(int num)
+	{
+		size = num;
+	}
+	public ArrayList<vmInstruction> getInstructions()
+	{
+		return code;
+	}
+	public ArrayList<VMString> getStrings()
+	{
+		return Strings;
+	}
+	public int getHeaderSize()
+	{
+		if(type == -1) throw new IllegalArgumentException("Invalid VM Type");
+		if(type == 0) return 12;//Header, Entry, Padding
+		return 16;//Header, Entry, Type, Padding
 	}
 }

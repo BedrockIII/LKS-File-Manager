@@ -1,34 +1,28 @@
 package GUI;
 
-import java.awt.Dimension;
-
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 
 import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class LabeledInputBox extends JSplitPane
+public class LabeledInputBox extends SplitPanel
 {
 	JComponent comp;
 	JLabel text;
-	int height = 0;
-	double xWeight = .5;
-	protected LabeledInputBox() {}
 	protected LabeledInputBox(String labelText)
 	{
-		height = (int) (Settings.assetHeight*1.5);
 		text = new JLabel(labelText);
+		comp = new JLabel("");
+		addGUI();
+		update();
 		setTheme();
 	}
 	public LabeledInputBox(String labelText, JComponent comp)
 	{
 		this.comp = comp;
-		height = (int) (Settings.assetHeight*1.5);
 		text = new JLabel(labelText);
 		addGUI();
 		update();
@@ -37,42 +31,23 @@ public class LabeledInputBox extends JSplitPane
 	public LabeledInputBox(String labelText, JComponent comp, double xWeight) 
 	{
 		this.comp = comp;
-		height = (int) (Settings.assetHeight*1.5);
 		text = new JLabel(labelText);
 		this.xWeight = xWeight;
 		addGUI();
 		update();
 		setTheme();
 	}
-	private void setTheme()
+	protected void setTheme()
 	{
-		setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Settings.LighterColor, Settings.DarkerColor));
-		text.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Settings.LighterColor, Settings.DarkerColor));
+		if(text != null) text.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Settings.LighterColor, Settings.DarkerColor));
+		super.setTheme();
 		//comp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Settings.LighterColor, Settings.DarkerColor));
 	}
-	private void addGUI()
+	protected void addGUI()
 	{
-		setBorder(null);
-		setContinuousLayout(true);
-		text.setMinimumSize(new Dimension(Settings.buttonWidth, height));
-		comp.setMinimumSize(new Dimension(Settings.buttonWidth, height));
-		
-		setDividerSize(0);
-		setDividerLocation(xWeight);
-		setResizeWeight(xWeight);
-		
-		setLeftComponent(text);
-		setRightComponent(comp);
-	}
-	public void update()
-	{
-		SwingUtilities.invokeLater(() -> 
-		{
-			setResizeWeight(xWeight);
-			setDividerLocation(xWeight);
-		});
-		revalidate();
-		repaint();
+		left = text;
+		right = comp;
+		super.addGUI();
 	}
 	public void replaceComponent(JComponent comp) 
 	{

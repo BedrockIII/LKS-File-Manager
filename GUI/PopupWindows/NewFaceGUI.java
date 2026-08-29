@@ -1,80 +1,31 @@
 package GUI.PopupWindows;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import GUI.LabeledInputBox;
 import GUI.FileList.Resources.CharacterDataBaseList.CharacterResourceAssignmentList;
 
 @SuppressWarnings("serial")
-public class NewFaceGUI extends JDialog
+public class NewFaceGUI extends GenericPopupWindow
 {
+	CharacterResourceAssignmentList gui;
+	JTextField newTitle;
+	JTextField newTitle2;
 	public NewFaceGUI(CharacterResourceAssignmentList gui)
 	{
-		setVisible(true);  
-		setSize(220, 125);  
-		setLocationRelativeTo(GUI.GUI.frame);
-		setPreferredSize(new Dimension(200, 150)); 
-		setResizable(false);
-		setVisible(true);  
-		setAlwaysOnTop(true);
-		setTitle("Create Face Definition");  
-        JPanel contentPanel = new JPanel();  
-        contentPanel.setLayout(new BorderLayout());  
-        getContentPane().add(contentPanel);  
-		
-		contentPanel.setLayout(new GridBagLayout());
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.weightx = 1.0;
-		layout.weighty = 1.0;
-		layout.gridwidth =2;
-		JLabel labelOptions = new JLabel("New Face Name:");  
-	    labelOptions.setPreferredSize(new Dimension(100, 20));  
-	    contentPanel.add(labelOptions, layout);  
-	    final JTextField newTitle = new JTextField(); 
-	    newTitle.setEditable(true);
-	    newTitle.setPreferredSize(new Dimension(100, 20));  
-	    
-	    layout.gridwidth =GridBagConstraints.REMAINDER;
-	    contentPanel.add(newTitle, layout);
-	    layout.gridwidth =2;
+		super("Create Face Definition");
+		this.gui = gui;
+	}
+	protected void addGUI()
+	{
+	    newTitle = new JTextField(); 
+	    add(new LabeledInputBox("New Face Name", newTitle));
 	        
-	    JLabel labelOptions2 = new JLabel("Job Code:");  
-	    labelOptions2.setPreferredSize(new Dimension(100, 20));  
-	    contentPanel.add(labelOptions2, layout);  
-	    final JTextField newTitle2 = new JTextField("-1"); 
-	    newTitle2.setEditable(true);
-	    newTitle2.setPreferredSize(new Dimension(100, 20));  
-	    layout.gridwidth =GridBagConstraints.REMAINDER;
-	    contentPanel.add(newTitle2, layout);
-	    
-        
-        layout.gridwidth =2;
-        
-        JButton Cancel = new JButton();
-        Cancel.setText("Cancel");
-        Cancel.addActionListener(g -> 
-        {
-        	dispose();
-        });
-        contentPanel.add(Cancel, layout);
-        
-        layout.gridwidth =GridBagConstraints.REMAINDER;
-        
-        JButton Confirm = new JButton();
-        Confirm.setText("Confirm");
-        Confirm.addActionListener(g -> 
-        {
-        	gui.createFace(newTitle.getText(), bFM.Utils.strToInt(newTitle2.getText()));
-        	dispose();
-        });
-        contentPanel.add(Confirm, layout);
+	    newTitle2 = new JTextField(); 
+	    add(new LabeledInputBox("Job Code", newTitle2));
+	}
+	protected void execute()
+	{
+		gui.createFace(newTitle.getText(), bFM.Utils.strToInt(newTitle2.getText()));
 	}
 }

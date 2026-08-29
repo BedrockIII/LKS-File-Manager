@@ -117,7 +117,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 		chrTexAnim = new CharacterTextAnimationList(((CharacterDataBaseManager)file).getTextureAnimations(), padding + Settings.indentSize);
 		subEntries.add(chrTexAnim);
 		System.out.print("█");
-		chrJobPrc = new CharacterJobPriceChangeList(((CharacterDataBaseManager)file).getJobChangePriceList(), padding + Settings.indentSize);
+		chrJobPrc = new CharacterJobPriceChangeList(((CharacterDataBaseManager)file).getJobChangePriceList(), padding + Settings.indentSize, this);
 		subEntries.add(chrJobPrc);
 		System.out.print("█");
 	}
@@ -661,9 +661,11 @@ public class CharacterDataBaseList extends CollapseableFileList
 	{
 		int padding = 0;
 		ArrayList<JobPrices> objects = new ArrayList<JobPrices>();
-		public CharacterJobPriceChangeList(JobChangePriceList file, int padding) 
+		CharacterDataBaseList parent;
+		public CharacterJobPriceChangeList(JobChangePriceList file, int padding, CharacterDataBaseList parent) 
 		{
 			this.file = file;
+			this.parent = parent;
 			initializeAll(padding);
 		}
 		protected void initializeAll(int padding)
@@ -765,15 +767,15 @@ public class CharacterDataBaseList extends CollapseableFileList
 				});
 				actions.add(replace);
 			}
-			public void setCode(String text) 
+			public void setCode(int num) 
 			{
-				object.setCode(bFM.Utils.strToInt(text));
-				fileName.setText(object.getName());
+				object.setCode(num);
+				fileName.setText(((CharacterDataBaseManager)(parent.file)).getNameByCode(num) + " (" + num + ")");
 			}
 			public void update()
 			{
 				object.updateCode();
-				fileName.setText(object.getName());
+				fileName.setText(((CharacterDataBaseManager)(parent.file)).getNameByCode(object.getJobCode()) + " (" + object.getJobCode() + ")");
 			}
 		}
 		public void createJob(String code, String price) 

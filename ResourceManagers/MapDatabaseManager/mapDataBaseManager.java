@@ -97,7 +97,7 @@ public class mapDataBaseManager implements OpenedFile
 	{
 		try 
 		{
-			MapDataBase.addFile("extPlace1.lst", Files.readAllBytes(Paths.get(inputPath+"extPlace1.lst")));
+			exteriorPlaces = new exteriorPlaceList(Files.readAllLines(Paths.get(inputPath+"extPlace1.lst")));
 			bFM.Utils.DebugPrint("Sucessfully added Exterior Places Configuration File");
 		} catch (IOException e) 
 		{

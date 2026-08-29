@@ -570,4 +570,8 @@ public class MissionObjectPlacementManager implements Data
 		Places.remove(data.getPlacement());
 		//System.out.println(data.bMos2());
 	}
+	public ArrayList<MobConstantPlace> getMobPlacements()
+	{
+		return Places;
+	}
 }

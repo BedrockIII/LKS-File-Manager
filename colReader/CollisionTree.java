@@ -111,6 +111,12 @@ class CollisionTree implements Data
 	}
 	private void makeIndex(ByteBuffer data, int size) 
 	{
+		if(data.limit() < indexPos || indexPos < 0)
+		{
+			String err = "Error in: " + getClass() + ". Index Position: " + indexPos + "is out of bounds for file size: " + data.limit() + ". Is this one of Bedrock's older collision files?\n";
+			System.err.print(err);
+			throw new IllegalArgumentException(err);
+		}
 		data.position(indexPos);
 		for(int i = 0; i<size; i++)
 		{

@@ -11,6 +11,7 @@ import javax.swing.JTextArea;
 import GUI.BitFlagPanel;
 import GUI.CollapseablePanel;
 import GUI.LabeledInputBox;
+import GUI.SplitPanel;
 import bFM.Data;
 import bFM.Settings;
 import bFM.Utils;
@@ -69,9 +70,9 @@ public class GenericFileInfoGUI extends JPanel
 		else fileSize.replaceComponent(new JLabel("" + file.toBytes().length));
 		for(Component c : this.getComponents())
 		{
-			if(c instanceof LabeledInputBox)
+			if(c instanceof SplitPanel)
 			{
-				((LabeledInputBox) c).update();
+				((SplitPanel) c).update();
 			}
 			else if(c instanceof CollapseablePanel)
 			{

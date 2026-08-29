@@ -69,7 +69,7 @@ public class indBinList extends GenericFile
 			}
 		}
 		System.err.println("The Job Code " + jobCode + " has no defined index");
-		return "Not A Job";
+		return "Invalid";
 	}
 	public class ind implements Data
 	{

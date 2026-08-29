@@ -10,11 +10,14 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class FileListPanel extends JScrollPane
 {
+	static final int SCROLL_STRENGTH = 10;
+	static final double MIN_SCROLL_PERCENT = .01;
 	JViewport panel = null;
 	FileList file;
 	public FileListPanel()
 	{
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		getVerticalScrollBar().setUnitIncrement(Settings.assetHeight*SCROLL_STRENGTH);
 		setBackground(null);
 		panel = getViewport();
 		panel.setBackground(null);
@@ -30,9 +33,9 @@ public class FileListPanel extends JScrollPane
 	{
 		if(getViewport()==null||getViewport().getView()==null)
 		{
-			return Settings.assetHeight;
+			return 0;
 		}
-		return Math.max(getViewport().getView().getHeight(),Settings.assetHeight);
+		return Math.max(getViewport().getView().getHeight(),0);
 	}
 	//bar.
 	//frame.add(bar);
@@ -53,6 +56,7 @@ public class FileListPanel extends JScrollPane
 		int finalS = Math.min(getVerticalScrollBar().getMaximum(), scroll);
 		SwingUtilities.invokeLater(() -> {
 			getVerticalScrollBar().setValue(finalS);
+			getVerticalScrollBar().setUnitIncrement(Math.min(Settings.assetHeight*SCROLL_STRENGTH,Math.floorDiv((int)(getHeight()*MIN_SCROLL_PERCENT), Settings.assetHeight)*Settings.assetHeight));
 		});
 	}
 	public void deselectAll() 

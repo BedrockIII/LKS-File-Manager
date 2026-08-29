@@ -57,8 +57,8 @@ public class ExtractionTester
 			//testBeta1()
 			//testPlacement();
 			//testItems(); 
-			testDefinition();
-			//testRepacDefinition();
+			//testDefinition();
+			testRepacDefinition();
 			//testItemDropTableExtract();
 			throw new IOException("all okay");
 		} catch (IOException e) {
@@ -194,40 +194,50 @@ public class ExtractionTester
 	}
 	private static void testDefinition() throws IOException
 	{
-		MobAiList ai = new MobAiList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_AI.lst")));
-		//Files.write(Paths.get(outputPath+"MobAiList.lst"), ai.toString().getBytes("Shift-JIS"));
-		MobResAsn res = new MobResAsn(Files.readAllBytes(Paths.get(inputPath+"MOB_24_RES_ASN.lst")));
-		//Files.write(Paths.get(outputPath+"MobResList.bMos"), res.toBMos().getBytes("Shift-JIS"));
-		MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
-		//Files.write(Paths.get(outputPath+"MobModList.bMos"), mod.toBMos().getBytes("Shift-JIS"));
-		MobAttackColList AttackCol = new MobAttackColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst")));
-		//Files.write(Paths.get(outputPath+"MobAttackCollisionList.lst"), AttackCol.toString().getBytes("Shift-JIS"));
-		MobAttackElemList AttackElem = new MobAttackElemList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst")));
-		//Files.write(Paths.get(outputPath+"MobAttackElementList.lst"), AttackElem.toString().getBytes("Shift-JIS"));
-		MobAttackInfoList AttackInfo = new MobAttackInfoList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst")));
-		//Files.write(Paths.get(outputPath+"MobAttackInfoList.lst"), AttackInfo.toString().getBytes("Shift-JIS"));
-		MobDamageColList DamageCol = new MobDamageColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_DMG_COL.lst")));
-		//Files.write(Paths.get(outputPath+"MobDamageCollisionList.lst"), DamageCol.toString().getBytes("Shift-JIS"));
-		MobPresetTableList PresetTable = new MobPresetTableList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_PRESET_TABLE.lst")));
-		//Files.write(Paths.get(outputPath+"MobPresetTableList.lst"), PresetTable.toString().getBytes("Shift-JIS"));
-		
-		
-		
+		MobAttackElemList AttackElem;
+		boolean fromString = true;
+		if(!fromString)
+		{
+			MobAiList ai = new MobAiList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_AI.lst")));
+			//Files.write(Paths.get(outputPath+"MobAiList.lst"), ai.toString().getBytes("Shift-JIS"));
+			MobResAsn res = new MobResAsn(Files.readAllBytes(Paths.get(inputPath+"MOB_24_RES_ASN.lst")));
+			//Files.write(Paths.get(outputPath+"MobResList.bMos"), res.toBMos().getBytes("Shift-JIS"));
+			MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
+			//Files.write(Paths.get(outputPath+"MobModList.bMos"), mod.toBMos().getBytes("Shift-JIS"));
+			MobAttackColList AttackCol = new MobAttackColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst")));
+			//Files.write(Paths.get(outputPath+"MobAttackCollisionList.lst"), AttackCol.toString().getBytes("Shift-JIS"));
+			AttackElem = new MobAttackElemList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst")));
+			//Files.write(Paths.get(outputPath+"MobAttackElementList.lst"), AttackElem.toString().getBytes("Shift-JIS"));
+			MobAttackInfoList AttackInfo = new MobAttackInfoList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst")));
+			//Files.write(Paths.get(outputPath+"MobAttackInfoList.lst"), AttackInfo.toString().getBytes("Shift-JIS"));
+			MobDamageColList DamageCol = new MobDamageColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_DMG_COL.lst")));
+			//Files.write(Paths.get(outputPath+"MobDamageCollisionList.lst"), DamageCol.toString().getBytes("Shift-JIS"));
+			MobPresetTableList PresetTable = new MobPresetTableList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_PRESET_TABLE.lst")));
+			//Files.write(Paths.get(outputPath+"MobPresetTableList.lst"), PresetTable.toString().getBytes("Shift-JIS"));
+		}
+		else
+		{
+			AttackElem = new MobAttackElemList(Files.readAllLines(Paths.get(inputPath+"MobAttackElementList.lst")));
+			Files.write(Paths.get(outputPath+"MOB_24_ATK_ELM.lst2"), AttackElem.toBytes());
+		}
+
 		//Test
 		
-		Utils.testDifferences(ai.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_AI.lst"))); //100
+		//Utils.testDifferences(ai.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_AI.lst"))); //100
 		//Utils.testDifferences(res.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_RES_ASN.lst"))); //100
 		//Utils.testDifferences(mod.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst"))); //100
 		//Utils.testDifferences(AttackCol.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst"))); //100
-		//Utils.testDifferences(AttackElem.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst"))); //100
+		Utils.testDifferences(AttackElem.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst"))); //100"
 		//Utils.testDifferences(AttackInfo.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst"))); //100
 		//Utils.testDifferences(DamageCol.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_DMG_COL.lst"))); //100
 		//Utils.testDifferences(PresetTable.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_PRESET_TABLE.lst"))); //100
+		
 	}
 	public static void testRepacDefinition() throws IOException
 	{
 		MobModList mod = new MobModList(Utils.bytesToStrs(Files.readAllBytes(Paths.get("D:\\ModTest\\MobModList.bMos"))), true);
 		MobResAsn res = new MobResAsn(Utils.bytesToStrs(Files.readAllBytes(Paths.get("D:\\ModTest\\MobResList.bMos"))));
+		MobAttackElemList AttackElem = new MobAttackElemList(Files.readAllLines(Paths.get(inputPath+"MobAttackElementList.lst")));
 		PCKGManager MonsterDataBase = new PCKGManager("MSDB");
 		try
 		{
@@ -243,6 +253,7 @@ public class ExtractionTester
 		//Utils.testDifferences(res.toBytes(), MonsterDataBase.getFile("MOB_24_RES_ASN.lst"));
 		//Files.write(Paths.get("D:\\ModTest\\MobResfile.bin"),res.toBytes());
 		//Utils.testDifferences(mod.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
+		MonsterDataBase.addFile("MOB_24_ATK_ELM.lst", AttackElem.toBytes());
 		MonsterDataBase.addFile("MOB_24_MOD.lst", mod.toBytes());
 		MonsterDataBase.addFile("MOB_24_RES_ASN.lst", res.toBytes());
 		Files.write(Paths.get(Settings.outputPath+"Resources\\msDB27.pac"), MonsterDataBase.toBytes());

@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.Box;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
@@ -17,7 +16,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
 import GUI.FileInfo.GenericFileInfoGUI;
-import GUI.PopupWindows.RenameWindow;
 import bFM.Data;
 import bFM.GUIUtils;
 import bFM.Settings;
@@ -131,15 +129,6 @@ public abstract class FileList extends JPanel
 	public FileNameExtensionFilter getFileExtensions()
 	{
 		return fileTypes;
-	}
-	protected void addRenameAction()
-	{
-		JMenuItem rename = new JMenuItem("Rename");
-		rename.addActionListener(e -> 
-		{
-			new RenameWindow(this);
-		});
-		actions.add(rename);
 	}
 	protected void addExportAction()
 	{

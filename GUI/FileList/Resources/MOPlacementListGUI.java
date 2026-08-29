@@ -334,7 +334,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 			{
 				this.parent = parent;
 				data = new ArrayList<MobGroup>();
-				data.add(new MobGroup(parent.data.getIndexForGroup(code), code));
+				MobGroup g = new MobGroup(parent.data.getIndexForGroup(code), code);
+				parent.data.getMobGroups().add(g);
+				data.add(g);
 				this.padding = padding;
 				initializeAll(padding);
 			}
@@ -530,7 +532,8 @@ public class MOPlacementListGUI extends CollapseableFileList
 							if(infoGUI == null) initializeInfoGUI();
 							actions.remove(addPlacement);
 							MobConstantPlace c = new MobConstantPlace();
-							data.registerPlacement(c);
+							c.addGroup(data);
+							parent.parent.data.getMobPlacements().add(c);
 							((GroupInfoGUI) infoGUI).addPlace(c);
 							removeConstantPlaceAction();
 							infoGUI.update();
@@ -547,6 +550,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 						{
 							if(infoGUI == null) initializeInfoGUI();
 							actions.remove(removePlacement);
+							parent.parent.data.getMobPlacements().remove(data.getPlacement());
 							data.unregisterPlacement();
 							((GroupInfoGUI) infoGUI).removePlace();
 							addConstantPlaceAction();

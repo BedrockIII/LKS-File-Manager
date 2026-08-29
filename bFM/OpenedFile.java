@@ -7,6 +7,7 @@ import ResourceManagers.MSDBManager.MSDBManager;
 import SystemDataManagers.MenuDB.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
+import VMC.VMCConverter;
 import WorldFileManager.fpInterpreter;
 import colReader.ColReader;
 
@@ -23,6 +24,10 @@ public interface OpenedFile extends Data
 		else if(fileType.equals("Collision"))
 		{
 			return new ColReader(file,name);
+		}
+		else if(fileType.equals("Virtual Machine Code"))
+		{
+			return new VMCConverter(name, file);
 		}
 		else if (fileType.equals("Package"))
 		{

@@ -70,6 +70,7 @@ public class Main
 		//deCompressEventText();
 		//compressEventText(1);
 		//characterDataBaseManager();
+		//decodeVMC("CH01_EVT_005");
 		//encodeVMC("CH01_EVT_000");
 		//encodeDebugEventViewer();
 	}

@@ -63,7 +63,15 @@ public class ColReader extends GenericFile
 		{
 			data.position(i);
 			bFM.Utils.DebugPrint("File Index: " + i);
-			COLOBJECTS.add(new CollisionObject(data));
+			try
+			{
+				COLOBJECTS.add(new CollisionObject(data));
+			}
+			catch(IllegalArgumentException e)
+			{
+				System.err.println("Failed to Parse Collision Object at Index: " + i);
+				e.printStackTrace();
+			}
 		}
 	}
 	public static boolean same(byte[] arr1, byte[] arr2)

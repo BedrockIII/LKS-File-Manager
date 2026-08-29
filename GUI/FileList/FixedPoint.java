@@ -48,7 +48,6 @@ public class FixedPoint extends CollapseableFileList
 	} 
 	protected void addActions()
 	{
-		addRenameAction();
 		addReplaceButton();
 		addReplaceAsBFPButton();
 		addExportAction();
@@ -86,9 +85,14 @@ public class FixedPoint extends CollapseableFileList
 		objects = ((fpInterpreter)file).getObjects();
 		for(FixedPointObject object : objects)
 		{
-			System.out.println(object.getName());
+			//System.out.println(object.getName());
 			subEntries.add(new FixedPointObjectListGUI(object, padding + Settings.indentSize));
 		}
+	}
+	public void update()
+	{
+		fileName.setText(((fpInterpreter)file).getName());
+		super.update();
 	}
 	public void removeFile(FileList file) 
 	{
@@ -205,6 +209,11 @@ public class FixedPoint extends CollapseableFileList
 		protected void initializeInfoGUI() 
 		{
 			this.infoGUI = new FixedPointObjectInfoGUI(object);
+		}
+		public void update()
+		{
+			fileName.setText(object.getName());
+			super.update();
 		}
 	}
 	protected void initializeInfoGUI() 

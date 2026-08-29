@@ -26,7 +26,7 @@ public class exteriorPlaceList
 				exteriorPlace place = new exteriorPlace(Line);
 				if(!filter||place.fitsFilter(xMin, xMax, zMin, zMax, AllOutside))
 				{
-					System.out.println("Fits Filter");
+					//System.out.println("Fits Filter");
 					places.add(place);
 				}
 				

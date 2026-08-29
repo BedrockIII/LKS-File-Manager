@@ -2,17 +2,42 @@ package VMC;
 
 import java.nio.ByteBuffer;
 
-public abstract class vmInstruction 
+import javax.swing.JLabel;
+
+import bFM.Data;
+
+public abstract class vmInstruction implements Data
 {
+	public final static int CODE_LABEL = 0;
+	public final static int CODE_LOAD = 1;
+	public final static int CODE_ADDRESS = 2;
+	public final static int CODE_PUSH = 3;
+	public final static int CODE_POP = 4;
+	public final static int CODE_ASSIGN = 5;
+	public final static int CODE_ADD = 6;
+	public final static int CODE_SUBTRACT = 7;
+	public final static int CODE_MULTIPLY = 8;
+	public final static int CODE_DIVIDE = 9;
+	public final static int CODE_MODULUS = 10;
+	public final static int CODE_INVERT = 11;
+	public final static int CODE_COMPARE = 12;
+	public final static int CODE_JUMP = 13;
+	public final static int CODE_COMPARE_JUMP = 14;
+	public final static int CODE_CALL = 15;
+	public final static int CODE_RETURN = 16;
+	public final static int CODE_PRINT = 17;
+	public final static int CODE_EXTENSION = 18;
+	public final static int CODE_HALT = 19;
+	public final static int CODE_SUSPEND = 20;
 	final private static String[] instrutionTypes = new String[] 
 			{"Label","Load","Address","Push","Pop",
 			"Assign","Add","Subtract","Multiply","Divide",
 			"Modulus","Invert","Compare: ","Jump: ","Compare Jump",
-			"Call","Return","Print","External","Halt","Suspend" }; // Names of instructions for equals
-	final private static int instructionCodeInt = 0;
-	final private static int instructionCodeFloat = 1;
-	final private static int instructionCodeString = 2;
-	final private static int instructionCodePointer = 3;
+			"Call","Return","Print","Extension","Halt","Suspend" }; // Names of instructions for equals
+	final public static int instructionCodeInt = 0;
+	final public static int instructionCodeFloat = 1;
+	final public static int instructionCodeString = 2;
+	final public static int instructionCodePointer = 3;
 	final private int opCode;
 	final private int size;
 	protected vmInstruction(int opCode, int size) 
@@ -20,11 +45,6 @@ public abstract class vmInstruction
 		//Stack max seems to be 130
 		this.opCode = opCode;
 		this.size = size;
-	}
-	public byte[] toBytes()
-	{
-		//Not Represented in byte form
-		return null;
 	}
 	public boolean equals(int opCode)
 	{
@@ -43,6 +63,47 @@ public abstract class vmInstruction
 			}
 		}
 		return index == opCode;
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public void setName(String name) 
+	{
+		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+	}
+	public int getValue() 
+	{
+		throw new UnsupportedOperationException("getValue() should not be called on type " + this.getClass());
+	}
+	public int getMode() 
+	{
+		throw new UnsupportedOperationException("getMode() should not be called on type " + this.getClass());
+	}
+	public int getSize() 
+	{
+		return size * 4;
+	}
+	public int getInstructionSize() 
+	{
+		
+		return size;
+	}
+	public String getName() 
+	{
+		return instrutionTypes[opCode];
+	}
+	public int getInstructionType()
+	{
+		return opCode;
+	}
+	public void addLabel(vmLabel label)
+	{
+		throw new UnsupportedOperationException("addLabel(vmLabel label) should not be called on type " + this.getClass());
+	}
+	public vmLabel getLabel()
+	{
+		throw new UnsupportedOperationException("getLabel() should not be called on type " + this.getClass());
 	}
 	public static vmInstruction createInstruction(String line) 
 	{
@@ -241,17 +302,21 @@ public abstract class vmInstruction
 		
 		return ret;
 	}
-	private static class vmLabel extends vmInstruction
+	public static class vmLabel extends vmInstruction
 	{
 		static final int opCode = 0;
 		static final int size = 0;
+		String name;
+		JLabel asLabel = new JLabel();
 		private vmLabel(ByteBuffer data) 
 		{
 			super(opCode, size);
 		}
-		private vmLabel(String line) 
+		vmLabel(String line) 
 		{
 			super(opCode, size);
+			name = line;
+			asLabel.setText(name);
 		}
 		public byte[] toBytes()
 		{
@@ -260,10 +325,23 @@ public abstract class vmInstruction
 		}
 		public String toString()
 		{
-			return "Label\n";
+			return name + "\n";
+		}
+		public String getName() 
+		{
+			return name;
+		}
+		public void setName(String name) 
+		{
+			this.name = name;
+			asLabel.setText(name);
+		}
+		public JLabel asLabel() 
+		{
+			return asLabel;
 		}
 	}
-	private static class vmLoad extends vmInstruction
+	public static class vmLoad extends vmInstruction
 	{
 		static final int opCode = 1;
 		static final int size = 3;
@@ -293,8 +371,16 @@ public abstract class vmInstruction
 		{
 			return "Load " + value + ", " + mode + "\n";
 		}
+		public int getValue()
+		{
+			return value;
+		}
+		public int getMode()
+		{
+			return mode;
+		}
 	}
-	private static class vmAddress extends vmInstruction
+	public static class vmAddress extends vmInstruction
 	{
 		static final int opCode = 2;
 		static final int size = 3;
@@ -324,13 +410,22 @@ public abstract class vmInstruction
 		{
 			return "Address " + value + ", " + mode + "\n";
 		}
+		public int getValue()
+		{
+			return value;
+		}
+		public int getMode()
+		{
+			return mode;
+		}
 	}
-	private static class vmPush extends vmInstruction
+	public static class vmPush extends vmInstruction
 	{
 		static final int opCode = 3;
 		static final int size = 3;
 		int valueInt;
 		float valueFloat;
+		String valueString = null;
 		int mode;
 		private vmPush(ByteBuffer data)
 		{
@@ -346,6 +441,10 @@ public abstract class vmInstruction
 				valueFloat = data.getFloat(pos);
 			}
 			else if(mode == 2)
+			{
+				valueInt = data.getInt(pos);
+			}
+			else if(mode == 3)
 			{
 				valueInt = data.getInt(pos);
 			}
@@ -406,8 +505,45 @@ public abstract class vmInstruction
 			}
 			throw new IllegalArgumentException("Push Instruction Type is Invalid Mode: " + mode);
 		}
+		public int getValueI()
+		{
+			return valueInt;
+		}
+		public float getValueF()
+		{
+			return valueFloat;
+		}
+		public String getValueS()
+		{
+			return valueString;
+		}
+		public void setValue(int val)
+		{
+			valueInt = val;
+			valueFloat = (float)val;
+			if(mode == instructionCodeFloat)
+			{
+				mode = instructionCodeInt;
+			}
+			
+		}
+		public void setValue(float val)
+		{
+			valueInt = (int)val;
+			valueFloat = val;
+			mode = instructionCodeFloat;
+		}
+		public int getMode()
+		{
+			return mode;
+		}
+		public void setValue(String string) 
+		{
+			valueString = string;
+			mode = instructionCodeString;
+		}
 	}
-	private static class vmPop extends vmInstruction
+	public static class vmPop extends vmInstruction
 	{
 		static final int opCode = 4;
 		static final int size = 1;
@@ -418,7 +554,7 @@ public abstract class vmInstruction
 		private vmPop(String line) 
 		{
 			super(opCode, size);
-			String[] data = line.split(" ");
+			//String[] data = line.split(" ");
 		}
 		public byte[] toBytes()
 		{
@@ -430,7 +566,7 @@ public abstract class vmInstruction
 			return "Pop\n";
 		}
 	}
-	private static class vmAssign extends vmInstruction
+	public static class vmAssign extends vmInstruction
 	{
 		static final int opCode = 5;
 		static final int size = 1;
@@ -441,7 +577,7 @@ public abstract class vmInstruction
 		private vmAssign(String line) 
 		{
 			super(opCode, size);
-			String[] data = line.split(" ");
+			//String[] data = line.split(" ");
 		}
 		public byte[] toBytes()
 		{
@@ -453,7 +589,7 @@ public abstract class vmInstruction
 			return "Assign\n";
 		}
 	}
-	private static class vmAdd extends vmInstruction
+	public static class vmAdd extends vmInstruction
 	{
 		static final int opCode = 6;
 		static final int size = 1;
@@ -464,7 +600,7 @@ public abstract class vmInstruction
 		private vmAdd(String line) 
 		{
 			super(opCode, size);
-			String[] data = line.split(" ");
+			//String[] data = line.split(" ");
 		}
 		public byte[] toBytes()
 		{
@@ -476,7 +612,7 @@ public abstract class vmInstruction
 			return "Add\n";
 		}
 	}
-	private static class vmSubtract extends vmInstruction
+	public static class vmSubtract extends vmInstruction
 	{
 		static final int opCode = 7;
 		static final int size = 1;
@@ -487,7 +623,7 @@ public abstract class vmInstruction
 		private vmSubtract(String line) 
 		{
 			super(opCode, size);
-			String[] data = line.split(" ");
+			//String[] data = line.split(" ");
 		}
 		public byte[] toBytes()
 		{
@@ -499,7 +635,7 @@ public abstract class vmInstruction
 			return "Subtract\n";
 		}
 	}
-	private static class vmMultiply extends vmInstruction
+	public static class vmMultiply extends vmInstruction
 	{
 		static final int opCode = 8;
 		static final int size = 1;
@@ -510,7 +646,7 @@ public abstract class vmInstruction
 		private vmMultiply(String line) 
 		{
 			super(opCode, size);
-			String[] data = line.split(" ");
+			//String[] data = line.split(" ");
 		}
 		public byte[] toBytes()
 		{
@@ -522,7 +658,7 @@ public abstract class vmInstruction
 			return "Multiply\n";
 		}
 	}
-	private static class vmDivide extends vmInstruction
+	public static class vmDivide extends vmInstruction
 	{
 		static final int opCode = 9;
 		static final int size = 1;
@@ -533,7 +669,7 @@ public abstract class vmInstruction
 		private vmDivide(String line) 
 		{
 			super(opCode, size);
-			String[] data = line.split(" ");
+			//String[] data = line.split(" ");
 		}
 		public byte[] toBytes()
 		{
@@ -545,7 +681,7 @@ public abstract class vmInstruction
 			return "Divide\n";
 		}
 	}
-	private static class vmRemainder extends vmInstruction
+	public static class vmRemainder extends vmInstruction
 	{
 		static final int opCode = 10;
 		static final int size = 1;
@@ -556,7 +692,7 @@ public abstract class vmInstruction
 		private vmRemainder(String line) 
 		{
 			super(opCode, size);
-			String[] data = line.split(" ");
+			//String[] data = line.split(" ");
 		}
 		public byte[] toBytes()
 		{
@@ -568,7 +704,7 @@ public abstract class vmInstruction
 			return "Modulus\n";
 		}
 	}
-	private static class vmInvert extends vmInstruction
+	public static class vmInvert extends vmInstruction
 	{
 		static final int opCode = 11;
 		static final int size = 1;
@@ -579,7 +715,7 @@ public abstract class vmInstruction
 		private vmInvert(String line) 
 		{
 			super(opCode, size);
-			String[] data = line.split(" ");
+			//String[] data = line.split(" ");
 		}
 		public byte[] toBytes()
 		{
@@ -591,8 +727,34 @@ public abstract class vmInstruction
 			return "Invert\n";
 		}
 	}
-	private static class vmCompare extends vmInstruction
+	public static class vmCompare extends vmInstruction
 	{
+		public enum ComparisonTypes
+		{
+			LESS_THAN("Less Than", 0),
+			LESS_THAN_EQUAL("Less Than or Equal", 1),
+			GREATER_THAN("Greater Than", 2),
+			GREATER_THAN_EQUAL("Greater Than or Equal", 3),
+			EQUAL("Equal", 4),
+			NOT_EQUAL("Not Equal", 5),
+			BOOLEAN_AND("And", 6),
+			BOOLEAN_OR("Or", 7);
+			private final String name;
+			private final int id;
+			private ComparisonTypes(String name, int num)
+			{
+				this.name = name;
+				this.id = num;
+			}
+			public String toString()
+			{
+				return name;
+			}
+			public int id()
+			{
+				return id;
+			}
+		}
 		static final int opCode = 12;
 		static final int size = 2;
 		int value;
@@ -600,12 +762,14 @@ public abstract class vmInstruction
 		{
 			super(opCode, size);
 			value = data.getInt();
+			if(value < 0 || value > 7) throw new IllegalArgumentException("Comparison Type is Out of Bounds");
 		}
 		private vmCompare(String line) 
 		{
 			super(opCode, size);
 			String[] data = line.split(" ");
 			value = bFM.Utils.strToInt(data[1]);
+			if(value < 0 || value > 7) throw new IllegalArgumentException("Comparison Type is Out of Bounds");
 		}
 		public byte[] toBytes()
 		{
@@ -617,12 +781,22 @@ public abstract class vmInstruction
 		{
 			return "Compare: " + value + "\n";
 		}
+		public int getValue()
+		{
+			return value;
+		}
+		public void setValue(int newValue)
+		{
+			value = newValue;
+			if(value < 0 || value > 7) throw new IllegalArgumentException("Comparison Type is Out of Bounds");
+		}
 	}
-	private static class vmJump extends vmInstruction
+	public static class vmJump extends vmInstruction
 	{
 		static final int opCode = 13;
 		static final int size = 2;
 		int value;
+		vmLabel referenceLabel = null;
 		private vmJump(ByteBuffer data)
 		{
 			super(opCode, size);
@@ -644,13 +818,26 @@ public abstract class vmInstruction
 		{
 			return "Jump: " + value + "\n";
 		}
+		public int getValue()
+		{
+			return value;
+		}
+		public void addLabel(vmLabel label)
+		{
+			referenceLabel = label;
+		}
+		public vmLabel getLabel()
+		{
+			return referenceLabel;
+		}
 	}
-	private static class vmCompareJump extends vmInstruction
+	public static class vmCompareJump extends vmInstruction
 	{
 		static final int opCode = 14;
 		static final int size = 3;
 		int value;
 		int mode;
+		vmLabel referenceLabel = null;
 		private vmCompareJump(ByteBuffer data)
 		{
 			super(opCode, size);
@@ -675,13 +862,30 @@ public abstract class vmInstruction
 		{
 			return "Compare Jump " + value + ", " + mode + "\n";
 		}
+		public int getValue()
+		{
+			return value;
+		}
+		public int getMode()
+		{
+			return mode;
+		}
+		public void addLabel(vmLabel label)
+		{
+			referenceLabel = label;
+		}
+		public vmLabel getLabel()
+		{
+			return referenceLabel;
+		}
 	}
-	private static class vmCall extends vmInstruction
+	public static class vmCall extends vmInstruction
 	{
 		static final int opCode = 15;
 		static final int size = 3;
 		int value;
 		int mode;
+		vmLabel referenceLabel = null;
 		private vmCall(ByteBuffer data)
 		{
 			super(opCode, size);
@@ -706,8 +910,24 @@ public abstract class vmInstruction
 		{
 			return "Call " + value + ", " + mode + "\n";
 		}
+		public int getValue()
+		{
+			return value;
+		}
+		public int getMode()
+		{
+			return mode;
+		}
+		public void addLabel(vmLabel label)
+		{
+			referenceLabel = label;
+		}
+		public vmLabel getLabel()
+		{
+			return referenceLabel;
+		}
 	}
-	private static class vmReturn extends vmInstruction
+	public static class vmReturn extends vmInstruction
 	{
 		static final int opCode = 16;
 		static final int size = 1;
@@ -729,7 +949,7 @@ public abstract class vmInstruction
 			return "Return\n";
 		}
 	}
-	private static class vmPrint extends vmInstruction
+	public static class vmPrint extends vmInstruction
 	{
 		static final int opCode = 17;
 		static final int size = 2;
@@ -755,8 +975,12 @@ public abstract class vmInstruction
 		{
 			return "Print " + ArgumentCount + "\n";
 		}
+		public int getValue()
+		{
+			return ArgumentCount;
+		}
 	}
-	private static class vmExternal extends vmInstruction
+	public static class vmExternal extends vmInstruction
 	{
 		static final int opCode = 18;
 		static final int size = 2;
@@ -782,8 +1006,12 @@ public abstract class vmInstruction
 		{
 			return "External " + instructionsBackForFunctionIndex + "\n";
 		}
+		public int getValue()
+		{
+			return instructionsBackForFunctionIndex;
+		}
 	}
-	private static class vmHalt extends vmInstruction
+	public static class vmHalt extends vmInstruction
 	{
 		static final int opCode = 19;
 		static final int size = 1;
@@ -805,7 +1033,7 @@ public abstract class vmInstruction
 			return "Halt\n";
 		}
 	}
-	private static class vmSuspend extends vmInstruction
+	public static class vmSuspend extends vmInstruction
 	{
 		static final int opCode = 20;
 		static final int size = 1;

@@ -13,6 +13,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import VMC.VMCConverter;
+
 public class Utils 
 {
 	public final static int JAPANESE_LANGUAGE = 0;
@@ -230,6 +232,7 @@ public class Utils
 		while(line.length()>0)
 		{
 			int endex = line.indexOf(',');
+			if(endex == -1) endex = line.indexOf(':');
 			if(endex == -1) endex = line.indexOf(';');
 			if(endex == -1) endex = line.length();
 			String value = line.substring(0, endex);
@@ -503,6 +506,10 @@ public class Utils
 		{
 			return "Fixed Point";
 		}
+		else if(VMCConverter.isVMC(file))
+		{
+			return "Virtual Machine Code";
+		}
 		return "Todo";
 	}
 	public static float[] formatCoords(String line) 
@@ -586,7 +593,7 @@ public class Utils
 	{
 		debugOutput = b;
 	}
-	public static float strToFloat(String str) 
+	public static float strToFloat(String str) throws NumberFormatException
 	{
 		String allowedChars = "1234567890-.";
 		String integer = "";
@@ -597,15 +604,7 @@ public class Utils
 				integer+=str.charAt(i);
 			}
 		}
-		try
-		{
-			return Float.parseFloat(integer);
-		}
-		catch (NumberFormatException w)
-		{
-			
-		}
-		return 0;
+		return Float.parseFloat(integer);
 	}
 	public static int getShort(ByteBuffer data)
 	{

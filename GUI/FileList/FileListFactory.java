@@ -13,6 +13,7 @@ import ResourceManagers.MSDBManager.MSDBManager;
 import SystemDataManagers.MenuDB.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
+import VMC.VMCConverter;
 import WorldFileManager.fpInterpreter;
 import bFM.OpenedFile;
 import colReader.ColReader;
@@ -56,6 +57,10 @@ public class FileListFactory
 		else if(file instanceof MSDBManager)
 		{
 			return new MissionObjectDatabase((MSDBManager) file, padding);
+		}
+		else if(file instanceof VMCConverter)
+		{
+			return new EventListGUI((VMCConverter) file, padding);
 		}
 		return new Generic(file, padding, parent);
 	}

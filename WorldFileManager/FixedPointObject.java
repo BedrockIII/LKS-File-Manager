@@ -4,62 +4,233 @@ import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import bFM.Data;
+import bFM.Utils;
 
 public class FixedPointObject implements Data
 {
+	private class RotationMatrix
+	{
+		float xScale, yScale, zScale;
+		float xRotation, yRotation, zRotation;
+		float xPos, yPos, zPos;
+		private RotationMatrix()
+		{
+			xScale = 1;
+			yScale = 1;
+			zScale = 1;
+			xRotation = 0;
+			yRotation = 0;
+			zRotation = 0;
+			xPos = 0;
+			yPos = 0;
+			zPos = 0;
+		}
+		public void initializeFromBytes(ByteBuffer data) 
+		{
+			int offset = data.position();
+			float xSquared = data.getFloat(offset + 0x00) * data.getFloat(offset + 0x00);
+			xSquared += data.getFloat(offset + 0x10) * data.getFloat(offset + 0x10);
+			xSquared += data.getFloat(offset + 0x20) * data.getFloat(offset + 0x20);
+			xScale = (float) Math.sqrt(xSquared);
+			float ySquared = data.getFloat(offset + 0x04) * data.getFloat(offset + 0x04);
+			ySquared += data.getFloat(offset + 0x14) * data.getFloat(offset + 0x14);
+			ySquared += data.getFloat(offset + 0x24) * data.getFloat(offset + 0x24);
+			yScale = (float) Math.sqrt(ySquared);
+			float zSquared = data.getFloat(offset + 0x08) * data.getFloat(offset + 0x08);
+			zSquared += data.getFloat(offset + 0x18) * data.getFloat(offset + 0x18);
+			zSquared += data.getFloat(offset + 0x28) * data.getFloat(offset + 0x28);
+			zScale = (float) Math.sqrt(zSquared);
+			
+			xRotation = (float) Math.atan(
+					-(data.getFloat(offset + 0x24)/yScale) /
+					(data.getFloat(offset + 0x28)/zScale));
+			yRotation = (float) Math.asin(data.getFloat(offset + 0x08)/zScale);
+			zRotation = (float) Math.atan(
+					-(data.getFloat(offset + 0x04) /yScale) /
+					(data.getFloat(offset)/yScale));
+			
+			
+			xPos = data.getFloat(offset + 0x30);
+			yPos = data.getFloat(offset + 0x34);
+			zPos = data.getFloat(offset + 0x38);
+		}
+		public float getEulerXRotationDegrees()
+		{
+			if(xRotation==Float.NaN) return 0;
+			return (float) (xRotation*180/Math.PI);
+		}
+		public float getEulerYRotationDegrees()
+		{
+			if(yRotation==Float.NaN) return 0;
+			return (float) (yRotation*180/Math.PI);
+		}
+		public float getEulerZRotationDegrees()
+		{
+			if(zRotation==Float.NaN) return 0;
+			return (float) (zRotation*180/Math.PI);
+		}
+		public float getEulerXScale()
+		{
+			if(xScale==Float.NaN) return 0;
+			return xScale;
+		}
+		public float getEulerYScale()
+		{
+			if(yScale==Float.NaN) return 0;
+			return yScale;
+		}
+		public float getEulerZScale()
+		{
+			if(zScale==Float.NaN) return 0;
+			return zScale;
+		}
+		public void setEulerXRotationDegrees(float xRotation)
+		{
+			this.xRotation = (float) (xRotation/180*Math.PI);
+		}
+		public void setEulerXRotationRadian(float xRotation)
+		{
+			this.xRotation = xRotation;
+		}
+		public void setEulerYRotationRadian(float yRotation)
+		{
+			this.yRotation = yRotation;
+		}
+		public void setEulerZRotationRadian(float zRotation)
+		{
+			this.zRotation = zRotation;
+		}
+		public void setEulerYRotationDegrees(float yRotation)
+		{
+			this.yRotation = (float) (yRotation/180*Math.PI);
+		}
+		public void setEulerZRotationDegrees(float zRotation)
+		{
+			this.zRotation = (float) (zRotation/180*Math.PI);
+		}
+		private float[][] setMatrixFromMatricies(float[][] a, float[][] b)
+		{
+			float[][] ret = new float[4][4];
+			ret[0][0] = 1;
+			ret[1][1] = 1;
+			ret[2][2] = 1;
+			ret[3][3] = 1;
+			
+			ret[0][0] = a[0][0]*b[0][0] + a[0][1]*b[1][0] + a[0][2]*b[2][0];
+			ret[0][1] = a[0][0]*b[0][1] + a[0][1]*b[1][1] + a[0][2]*b[2][1];
+			ret[0][2] = a[0][0]*b[0][2] + a[0][1]*b[1][2] + a[0][2]*b[2][2];
+			
+			ret[1][0] = a[1][0]*b[0][0] + a[1][1]*b[1][0] + a[1][2]*b[2][0];
+			ret[1][1] = a[1][0]*b[0][1] + a[1][1]*b[1][1] + a[1][2]*b[2][1];
+			ret[1][2] = a[1][0]*b[0][2] + a[1][1]*b[1][2] + a[1][2]*b[2][2];
+			
+			ret[2][0] = a[2][0]*b[0][0] + a[2][1]*b[1][0] + a[2][2]*b[2][0];
+			ret[2][1] = a[2][0]*b[0][1] + a[2][1]*b[1][1] + a[2][2]*b[2][1];
+			ret[2][2] = a[2][0]*b[0][2] + a[2][1]*b[1][2] + a[2][2]*b[2][2];
+			
+			return ret;
+		}
+		public void setEulerXScale(float xScale)
+		{
+			this.xScale = xScale;
+		}
+		public void setEulerYScale(float yScale)
+		{
+			this.yScale = yScale;
+		}
+		public void setEulerZScale(float zScale)
+		{
+			this.zScale = zScale;
+		}
+		public byte[] toArray()
+		{
+			float[][] scalingMtx = new float[4][4];
+			scalingMtx[0][0] = xScale;
+			scalingMtx[1][1] = yScale;
+			scalingMtx[2][2] = zScale;
+			float[][] rotationMtx = new float[4][4];
+			rotationMtx[0][0] = (float) (Math.cos(yRotation) * Math.cos(zRotation));
+			rotationMtx[0][1] = (float) (-1 * Math.cos(yRotation) * Math.sin(zRotation));
+			rotationMtx[0][2] = (float) Math.sin(yRotation);
+			rotationMtx[1][0] = (float) (Math.cos(xRotation) * Math.sin(zRotation) + Math.cos(zRotation) * Math.sin(xRotation) * Math.sin(yRotation));
+			rotationMtx[1][1] = (float) (Math.cos(xRotation) * Math.cos(zRotation) - Math.sin(xRotation) * Math.sin(yRotation) * Math.sin(zRotation));
+			rotationMtx[1][2] = (float) (-Math.cos(yRotation) * Math.sin(xRotation));
+			rotationMtx[2][0] = (float) (Math.sin(xRotation) * Math.sin(zRotation) - Math.cos(xRotation) * Math.cos(zRotation) * Math.sin(yRotation));
+			rotationMtx[2][1] = (float) (Math.cos(zRotation) * Math.sin(xRotation) + Math.cos(xRotation) * Math.sin(yRotation) * Math.sin(zRotation));
+			rotationMtx[2][2] = (float) (Math.cos(xRotation) * Math.cos(yRotation));
+			
+			Utils.DebugPrint(toString());
+			float[][] mtx = setMatrixFromMatricies(rotationMtx, scalingMtx);
+			Utils.DebugPrint("Pre Scaling:\n" + toString(rotationMtx));
+			mtx[3][0] = xPos;
+			mtx[3][1] = yPos;
+			mtx[3][2] = zPos;
+			Utils.DebugPrint("Post Scaling:\n" + toString(mtx));
+			
+			
+			ByteBuffer ret = ByteBuffer.allocate(0x40);
+			ret.putFloat(0x0, mtx[0][0]);
+			ret.putFloat(0x4, mtx[0][1]);
+			ret.putFloat(0x8, mtx[0][2]);
+			ret.putFloat(0xc, mtx[0][3]);
+			ret.putFloat(0x10, mtx[1][0]);
+			ret.putFloat(0x14, mtx[1][1]);
+			ret.putFloat(0x18, mtx[1][2]);
+			ret.putFloat(0x1c, mtx[1][3]);
+			ret.putFloat(0x20, mtx[2][0]);
+			ret.putFloat(0x24, mtx[2][1]);
+			ret.putFloat(0x28, mtx[2][2]);
+			ret.putFloat(0x2c, mtx[2][3]);
+			ret.putFloat(0x30, mtx[3][0]);
+			ret.putFloat(0x34, mtx[3][1]);
+			ret.putFloat(0x38, mtx[3][2]);
+			ret.putFloat(0x3c, mtx[3][3]);
+			return ret.array();
+		}
+		public String toString()
+		{
+			return String.format(
+					"----------\n"
+					+ "Scale: [%f, %f, %f]\n"
+					+ "Rotation: [%f, %f, %f]\n"
+					+ "Position: [%f, %f, %f]",
+					xScale, yScale, zScale,
+					xRotation, yRotation, zRotation, 
+					xPos, yPos, zPos);
+					
+		}
+		public String toString(float[][] mtx)
+		{
+			return String.format(
+					"[%f, %f, %f, %f]\n"
+					+ "[%f, %f, %f, %f]\n"
+					+ "[%f, %f, %f, %f]\n"
+					+ "[%f, %f, %f, %f]", 
+					mtx[0][0], mtx[0][1], mtx[0][2], mtx[0][3],
+					mtx[1][0], mtx[1][1], mtx[1][2], mtx[1][3],
+					mtx[2][0], mtx[2][1], mtx[2][2], mtx[2][3],
+					mtx[3][0], mtx[3][1], mtx[3][2], mtx[3][3]);
+					
+		}
+		public void setYPos(float yPos) 
+		{
+			this.yPos = yPos;
+			toArray();//ForDebugPrint
+		}
+	}
 	public String name;
 	int index;
 	int objectType = -1;
-	float xUnknownTransformation;
-	float yUnknownTransformation;
-	float zUnknownTransformation;
-	float wUnknownTransformation;
-	float xStretch = 1;
-	float yStretch = 1;
-	float zStretch = 1;
-	float wStretch = 1;
-	float xAxisRotation;
-	float yAxisRotation;
-	float zAxisRotation;
-	float wAxisRotation;
-	float xPos;
-	float yPos;
-	float zPos;
-	float wPos;
+	RotationMatrix rot;
 	boolean blenderCoords, randomizeRotation, randomizeScale = false;
 	private static final DecimalFormat round = new DecimalFormat("0.00");
 	ArrayList<FixedPointObject> referenceObjects = new ArrayList<FixedPointObject>();
 	String type = "";
-	public FixedPointObject(String name, int index, int objectType, 
-			float xUnknownTransformation, float yUnknownTransformation, float zUnknownTransformation, float wUnknownTransformation, 
-			float xStretch, float yStretch, float zStretch, float wStretch, 
-			float xAxisRotation, float yAxisRotation, float zAxisRotation, float wAxisRotation, 
-			float xPos, float yPos, float zPos, float wPos)
-	{
-		this.name = name;
-		this.index = index;
-		this.objectType = objectType;
-		this.xUnknownTransformation = xUnknownTransformation;
-		this.yUnknownTransformation = yUnknownTransformation;
-		this.zUnknownTransformation = zUnknownTransformation;
-		this.wUnknownTransformation = wUnknownTransformation;
-		this.xStretch = xStretch;
-		this.yStretch = yStretch;
-		this.zStretch = zStretch;
-		this.wStretch = wStretch;
-		this.xAxisRotation = xAxisRotation;
-		this.yAxisRotation = yAxisRotation;
-		this.zAxisRotation = zAxisRotation;
-		this.wAxisRotation = wAxisRotation;
-		this.xPos = xPos;
-		this.yPos = yPos;
-		this.zPos = zPos;
-		this.wPos = wPos;
-	}
 	public FixedPointObject(String name, ArrayList<FixedPointObject> refObj)
 	{
 		this.name = bFM.Utils.formatString(name);
 		referenceObjects = refObj;
+		rot = new RotationMatrix();
 		this.index = refObj.size();
 	}
 	public FixedPointObject(byte[] data)
@@ -82,25 +253,9 @@ public class FixedPointObject implements Data
 				index = data.getInt(64);
 				objectType = data.getInt(68);
 				
-				if(0!=data.getFloat(84)) System.out.println(name + " 84 " + data.getFloat(84));
-				if(0!=data.getFloat(92)) System.out.println(name + " 92 " + data.getFloat(92));
-				if(0!=data.getFloat(108)) System.out.println(name + " 108 " + data.getFloat(108));
-				if(0!=data.getFloat(112)) System.out.println(name + " 112 " + data.getFloat(112));
-				if(0!=data.getFloat(124)) System.out.println(name + " 124 " + data.getFloat(124));
-				if(0!=data.getFloat(132)) System.out.println(name + " 132 " + data.getFloat(132));
-				//if(0!=data.getFloat(156)) System.out.println(name + " 156 " + data.getFloat(156));
-				
-				xStretch = data.getFloat(96);//Stretch Z
-				yStretch = data.getFloat(116);//Stretch Y
-				zStretch = data.getFloat(136);
-				
-				zAxisRotation = data.getFloat(100); 
-				yAxisRotation = data.getFloat(104);//Rotate Y
-				xAxisRotation = data.getFloat(120);// Rotate x
-
-				xPos = data.getFloat(144);
-				yPos = data.getFloat(148);
-				zPos = data.getFloat(152);
+				rot = new RotationMatrix();
+				data.position(0x60);
+				rot.initializeFromBytes(data);
 	}
 	public FixedPointObject(ArrayList<String> lines, int index, ArrayList<FixedPointObject> refObj,boolean blenderCoords,boolean randomizeRotation,boolean randomizeScale)
 	{
@@ -108,13 +263,10 @@ public class FixedPointObject implements Data
 		this.randomizeRotation = randomizeRotation;
 		this.randomizeScale = randomizeScale;
 		referenceObjects = refObj;
-		wPos = 1;
-		zStretch = 1;
-		yStretch = 1;
-		xStretch = 1;
 		objectType = 0;
 		this.index = index;
 		if(index == 0) objectType = -1;
+		rot = new RotationMatrix();
 		
 		for(int i = 0; i<lines.size(); i++)
 		{
@@ -137,10 +289,6 @@ public class FixedPointObject implements Data
 			else if(lines.get(i).indexOf("<<Rotation>>")!=-1)
 			{
 				addRotationLine(lines.get(i));
-			}
-			else if(lines.get(i).indexOf("<<Shear>>")!=-1)
-			{
-				addShearLine(lines.get(i));
 			}
 		}
 	}
@@ -167,10 +315,6 @@ public class FixedPointObject implements Data
 		{
 			addRotationLine(line);
 		}
-		else if(line.indexOf("<<Shear>>")!=-1)
-		{
-			addShearLine(line);
-		}
 	}
 	private void addObjectLine(String line)
 	{
@@ -189,10 +333,9 @@ public class FixedPointObject implements Data
 		float[] vals = getCoords(line);
 		if(vals!=null)
 		{
-			wPos = vals[0];
-			xPos = vals[1];
-			yPos = vals[2];
-			zPos = vals[3];
+			rot.xPos = vals[1];
+			rot.yPos = vals[2];
+			rot.zPos = vals[3];
 		}
 	}
 	private void addStretchLine(String line)
@@ -200,39 +343,25 @@ public class FixedPointObject implements Data
 		float[] vals = getCoords(line);
 		if(vals!=null)
 		{
-			wStretch = vals[0];
-			xStretch = vals[1];
-			yStretch = vals[2];
-			zStretch = vals[3];
+			rot.setEulerXScale(vals[1]);
+			rot.setEulerYScale(vals[2]);
+			rot.setEulerZScale(vals[3]);
 		}
 	}
 	private void addRotationLine(String line)
 	{
 		float[] vals = getCoords(line);
-		if(vals!=null)
-		{
-			wAxisRotation = vals[0];
-			xAxisRotation = vals[1];
-			yAxisRotation = vals[2];
-			zAxisRotation = vals[3];
-		}
 		if(fpInterpreter.DEGREEMODE)
 		{
-			wAxisRotation = (float) (wAxisRotation*Math.PI/180);
-			xAxisRotation = (float) (xAxisRotation*Math.PI/180);
-			yAxisRotation = (float) (yAxisRotation*Math.PI/180);
-			zAxisRotation = (float) (zAxisRotation*Math.PI/180);
+			rot.setEulerXRotationDegrees((float) (vals[1]));
+			rot.setEulerYRotationDegrees((float) (vals[2]));
+			rot.setEulerZRotationDegrees((float) (vals[3]));
 		}
-	}
-	private void addShearLine(String line)
-	{
-		float[] vals = getCoords(line);
-		if(vals!=null)
+		else
 		{
-			wUnknownTransformation = vals[0];
-			xUnknownTransformation = vals[1];
-			yUnknownTransformation = vals[2];
-			zUnknownTransformation = vals[3];
+			rot.setEulerXRotationRadian(vals[1]);
+			rot.setEulerYRotationRadian(vals[2]);
+			rot.setEulerZRotationRadian(vals[3]);
 		}
 	}
 	private float[] getCoords(String line)
@@ -255,7 +384,6 @@ public class FixedPointObject implements Data
 		String positionLine = "";
 		String stretchLine = "";
 		String rotationLine = "";
-		String shearLine = "";
 		if(name.length()>0)
 		{
 			nameLine = "<<Name>> \"" + name + "\"\n";
@@ -264,69 +392,21 @@ public class FixedPointObject implements Data
 		{
 			objectLine = "\t<<Object>> \"" + type + "\"\n";
 		}
-		if(xPos!=0.0||yPos!=0.0||zPos!=0.0||wPos!=0.0)
+		if(rot.xPos!=0.0||rot.yPos!=0.0||rot.zPos!=0.0)
 		{
 			positionLine = "\t\t<<Position>> ";
-			if(wPos!=0.0) positionLine += "{" + round.format(wPos) +"} ";
-			if(xPos!=0.0||yPos!=0.0||zPos!=0.0) positionLine += "(" + round.format(xPos) + ", " + round.format(yPos) + ", " + round.format(zPos) + ")";
-			positionLine+="\n";
+			positionLine += String.format("(%f,%f,%f)\n", round.format(rot.xPos), round.format(rot.zPos), round.format(rot.zPos));
 		}
-		if(xStretch!=1||yStretch!=1||zStretch!=1||(wStretch!=0&&wStretch!=1))
+		if(rot.getEulerXScale()!=1||rot.getEulerYScale()!=1||rot.getEulerZScale()!=1)
 		{
 			stretchLine = "\t\t<<Scale>> ";
-			if(wStretch!=0&&wStretch!=1) stretchLine += "{" + round.format(wStretch) +"} ";
-			if(xStretch!=1||yStretch!=1||zStretch!=1) stretchLine += "(" + round.format(xStretch) + ", " + round.format(yStretch) + ", " + round.format(zStretch) + ")";
-			stretchLine += "\n";
+			positionLine += String.format("(%f,%f,%f)\n", round.format(rot.getEulerXScale()), round.format(rot.getEulerYScale()), round.format(rot.getEulerZScale()));
 		}
-		if(xAxisRotation!=0||yAxisRotation!=0||zAxisRotation!=0||wAxisRotation!=0)
+		if(rot.getEulerXRotationDegrees()!=0||rot.getEulerYRotationDegrees()!=0||rot.getEulerZRotationDegrees()!=0)
 		{
-			rotationLine = "\t\t<<Rotation>> ";
-			if(wAxisRotation!=0) rotationLine += "{" + wAxisRotation +"} ";
-			if(xAxisRotation!=0||yAxisRotation!=0||zAxisRotation!=0) 
-			{
-				if(fpInterpreter.DEGREEMODE) rotationLine += "(" + xAxisRotation/Math.PI*180 + ", " + yAxisRotation/Math.PI*180 + ", " + zAxisRotation/Math.PI*180 + ")";
-				else rotationLine += "(" + xAxisRotation + ", " + yAxisRotation + ", " + zAxisRotation + ")";
-			}
-			rotationLine += "\n";
+			rotationLine += String.format("(%f,%f,%f)\n", rot.getEulerXRotationDegrees(), rot.getEulerYRotationDegrees(), rot.getEulerZRotationDegrees());
 		}
-		if(xUnknownTransformation!=0||yUnknownTransformation!=0||zUnknownTransformation!=0||wUnknownTransformation!=0)
-		{
-			shearLine = "\t\t<<Shear>> ";
-			if(wUnknownTransformation!=0) shearLine += "{" + wUnknownTransformation +"} ";
-			if(xUnknownTransformation!=0||yUnknownTransformation!=0||zUnknownTransformation!=0) shearLine += "(" + xUnknownTransformation + ", " + yUnknownTransformation + ", " + zUnknownTransformation + ")";
-			shearLine += "\n";
-		}
-		return nameLine + objectLine + positionLine + stretchLine + rotationLine + shearLine;
-	}
-	public String toString()
-	{
-		if((xPos==yPos)&&(0==yPos)) return "";
-		System.out.print("Object:" );
-		System.out.println(name);
-		String ret = "";
-		if(wStretch!=1)
-			System.out.println(wStretch*.01);
-		//ret += "??? Values:" + xUnknownTransformation + "," + yUnknownTransformation + "," + zUnknownTransformation + "," + wUnknownTransformation + ";\n";
-		//ret += "Stretch Values:" + xStretch + "," + yStretch + "," + zStretch + "," + wStretch + ";\n";
-		//ret += "Rotation Values:\n" ;
-		//ret +=xAxisRotation + "\n";
-		
-		//ret +=zAxisRotation + "\n";
-		//ret +=wAxisRotation + ";\n";
-		//ret += "PositionData:\n" ;
-		ret += + (int)xPos*.01 + "\n"+ (int)zPos*-.01 + "\n"+ (int)(10*yPos)*.001 + "\n";
-		//+ wPos + ";";
-		ret +=yAxisRotation + "r";//+"\n";
-		
-		
-		
-		//ret = "v  " + xPos + " " + yPos + " " + zPos;
-		return ret;
-	}
-	public float[] getPosData() 
-	{
-		float[] ret = {xPos, yPos, zPos, wPos};
-		return ret;
+		return nameLine + objectLine + positionLine + stretchLine + rotationLine;
 	}
 	public void setRandomScale(boolean b) 
 	{
@@ -350,39 +430,39 @@ public class FixedPointObject implements Data
 	}
 	public float getXPos() 
 	{
-		return xPos;
+		return rot.xPos;
 	}
 	public float getYPos() 
 	{
-		return yPos;
+		return rot.yPos;
 	}
 	public float getZPos() 
 	{
-		return zPos;
+		return rot.zPos;
 	}
 	public float getXRot() 
 	{
-		return xAxisRotation;
+		return rot.getEulerXRotationDegrees();
 	}
 	public float getYRot() 
 	{
-		return yAxisRotation;
+		return rot.getEulerYRotationDegrees();
 	}
 	public float getZRot() 
 	{
-		return zAxisRotation;
+		return rot.getEulerZRotationDegrees();
 	}
 	public float getXScale() 
 	{
-		return xStretch;
+		return rot.getEulerXScale();
 	}
 	public float getYScale() 
 	{
-		return yStretch;
+		return rot.getEulerYScale();
 	}
 	public float getZScale() 
 	{
-		return zStretch;
+		return rot.getEulerZScale();
 	}
 	public boolean equals(String name) 
 	{
@@ -393,10 +473,9 @@ public class FixedPointObject implements Data
 		ByteBuffer bytes = ByteBuffer.wrap(data);
 		initializeFromBytes(bytes);
 	}
-	
 	public byte[] toBytes() 
 	{
-		ByteBuffer ret = ByteBuffer.allocate(160);
+		ByteBuffer ret = ByteBuffer.allocate(0x60);
 		if(name==null)
 		{
 			name = "Unknown Name";
@@ -408,61 +487,48 @@ public class FixedPointObject implements Data
 		ret.putInt(64, index);
 		ret.putInt(68, objectType);
 		
-		ret.putFloat(96, xStretch);
-		ret.putFloat(116, yStretch);
-		ret.putFloat(136, zStretch);
-		
-		ret.putFloat(120, xAxisRotation);
-		ret.putFloat(104, yAxisRotation);
-		ret.putFloat(100, zAxisRotation);
-		
-		ret.putFloat(144, xPos);
-		ret.putFloat(148, yPos);
-		ret.putFloat(152, zPos);
-		ret.putFloat(156, wPos);
-		
-		return ret.array();
+		return Utils.mergeArrays(ret.array(), rot.toArray());
 	}
 	
 	public int getSize() 
 	{
 		return 160;
 	}
-	public void setXPos(float num) 
+	public void setXPos(float xPos) 
 	{
-		this.xPos = num;
+		rot.xPos = xPos;
 	}
-	public void setYPos(float num) 
+	public void setYPos(float yPos) 
 	{
-		this.yPos = num;
+		rot.setYPos(yPos);
 	}
-	public void setZPos(float num) 
+	public void setZPos(float zPos) 
 	{
-		this.zPos = num;
+		rot.zPos = zPos;
 	}
-	public void setXRotation(float num) 
+	public void setXRotation(float xRotation) 
 	{
-		this.xAxisRotation = num;
+		rot.setEulerXRotationDegrees(xRotation);
 	}
-	public void setYRotation(float num) 
+	public void setYRotation(float yRotation) 
 	{
-		this.yAxisRotation = num;
+		rot.setEulerYRotationDegrees(yRotation);
 	}
-	public void setZRotation(float num) 
+	public void setZRotation(float zRotation) 
 	{
-		this.zAxisRotation = num;
+		rot.setEulerZRotationDegrees(zRotation);
 	}
-	public void setXScale(float num) 
+	public void setXScale(float xScl) 
 	{
-		this.xStretch = num;
+		rot.setEulerXScale(xScl);
 	}
-	public void setYScale(float num) 
+	public void setYScale(float yScl) 
 	{
-		this.yStretch = num;
+		rot.setEulerYScale(yScl);
 	}
-	public void setZScale(float num) 
+	public void setZScale(float zScl) 
 	{
-		this.zStretch = num;
+		rot.setEulerZScale(zScl);
 	}
 	public int getIndex() 
 	{

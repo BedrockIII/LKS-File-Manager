@@ -129,9 +129,9 @@ public class fpInterpreter extends GenericFile
 		String ret = "BFP \n";
 		for(int i = 0; i<objects.size();i++)
 		{
-			if(objects.get(i).xPos>=xMin&&objects.get(i).xPos<=xMax)
+			if(objects.get(i).getXPos()>=xMin&&objects.get(i).getXPos()<=xMax)
 			{
-				if(objects.get(i).zPos>=zMin&&objects.get(i).zPos<=zMax)
+				if(objects.get(i).getZPos()>=zMin&&objects.get(i).getZPos()<=zMax)
 				{
 					ret += objects.get(i).toBFP();
 				}

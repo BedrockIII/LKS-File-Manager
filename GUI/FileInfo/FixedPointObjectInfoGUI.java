@@ -7,12 +7,14 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import GUI.LabeledInputBox;
 import WorldFileManager.FixedPointObject;
+import bFM.GUIUtils;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class FixedPointObjectInfoGUI extends GenericFileInfoGUI
 {
 	FixedPointObject object = null;
+	JTextField fileName = null;
 	JLabel refIndexText = null;
 	JLabel indexText = null;
 	JTextField xOffsetText = null;
@@ -33,6 +35,7 @@ public class FixedPointObjectInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
+		fileName = GUIUtils.createNameTextField(object.getName(), object::setName);
 		refIndexText =  new JLabel("" + object.getReferenceIndex());
 		indexText =  new JLabel("" + object.getIndex());
 		
@@ -51,6 +54,7 @@ public class FixedPointObjectInfoGUI extends GenericFileInfoGUI
 		removeAll();
 		setLayout(new GridBagLayout());
 		GridBagConstraints layout = Settings.getDefaultConstraints();
+		add(new LabeledInputBox("File Name: ", fileName), layout);
 		
 		add(new LabeledInputBox("Index: ", indexText), layout);
 		add(new LabeledInputBox("Reference Index: ", refIndexText), layout);

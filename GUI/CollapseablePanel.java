@@ -117,9 +117,9 @@ public class CollapseablePanel extends JPanel
 			for(Component c : components)
 			{
 				super.add(c, layout);
-				if(c instanceof LabeledInputBox)
+				if(c instanceof SplitPanel)
 				{
-					((LabeledInputBox) c).update();
+					((SplitPanel) c).update();
 				}
 				else if(c instanceof CollapseablePanel)
 				{

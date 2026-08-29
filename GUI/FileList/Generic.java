@@ -66,7 +66,6 @@ public class Generic extends FileList
 	protected void addActions()
 	{
 		addExportAction();
-		addRenameAction();
 		addReplaceButton();
 		addDeleteAction();
 		addMouseListener();
