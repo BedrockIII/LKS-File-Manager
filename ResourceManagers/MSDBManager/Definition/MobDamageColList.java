@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import bFM.Utils;
 
@@ -20,6 +21,13 @@ public class MobDamageColList
 		for(int i = 4; i<data.length; i+=40)
 		{
 			DamageCol.add(new MobDamageCol(Arrays.copyOfRange(data, i, i+40)));
+		}
+	}
+	public MobDamageColList(List<String> lines)
+	{
+		for(String line : lines)
+		{
+			if(line.indexOf("Mob Damage Collision") != -1)DamageCol.add(new MobDamageCol(line));
 		}
 	}
 	public String toString()

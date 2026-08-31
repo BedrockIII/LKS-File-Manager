@@ -17,6 +17,14 @@ public class MobDamageCol
 		num0 = data2.getFloat(32);
 		num1 = data2.getFloat(36);
 	}
+	public MobDamageCol(String line)
+	{
+		// Parse from CSV
+		String[] data = Utils.toStrArr(line);
+		word1 = Utils.formatString(data[0]);
+		num0 = Utils.strToFloat(data[1]);
+		num1 = Utils.strToFloat(data[2]);
+	}
 	public String toString()
 	{
 		return "Mob Damage Collision: \"" + word1 + "\", " + num0 + ", " + num1 + "\n";

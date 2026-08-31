@@ -9,8 +9,8 @@ import bFM.Utils;
 
 public class MobAttackCol 
 {
-	short index;
-	short num1;
+	int index;
+	int num1;
 	String name;//16 bytes
 	float num2;
 	float num3;
@@ -25,6 +25,18 @@ public class MobAttackCol
 		num3 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(24);
 		num4 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(28);
 		num5 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(32);
+	}
+	public MobAttackCol(String line)
+	{
+		// Parse from CSV
+		String[] data = Utils.toStrArr(line);
+		index = Utils.strToInt(data[0]);
+		num1 = Utils.strToInt(data[1]);
+		name = Utils.formatString(data[2]);
+		num2 = Utils.strToFloat(data[3]);
+		num3 = Utils.strToFloat(data[4]);
+		num4 = Utils.strToFloat(data[5]);
+		num5 = Utils.strToFloat(data[6]);
 	}
 	public String toString()
 	{
