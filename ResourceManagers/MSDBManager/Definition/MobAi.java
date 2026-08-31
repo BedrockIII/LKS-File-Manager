@@ -32,6 +32,22 @@ public class MobAi
 		num9 = Utils.getShort(data, 18);
 		AiType = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 20, 52)));
 	}
+	public MobAi(String line)
+	{
+		// Parse from CSV
+		String[] data = Utils.toStrArr(line);
+		AiType = Utils.formatString(data[0]);
+		num0 = Utils.strToInt(data[1]);
+		num1 = Utils.strToInt(data[2]);
+		num2 = Utils.strToInt(data[3]);
+		num3 = Utils.strToInt(data[4]);
+		num4 = Utils.strToInt(data[5]);
+		num5 = Utils.strToInt(data[6]);
+		num6 = Utils.strToInt(data[7]);
+		num7 = Utils.strToInt(data[8]);
+		num8 = Utils.strToInt(data[9]);
+		num9 = Utils.strToInt(data[10]);
+	}
 	public String toString()
 	{
 		return "Mob AI \""+AiType+"\": "+num0 +" ,"+num1 +" ,"+num2 +" ,"+num3 +" ,"+num4 +" ,"+num5 +" ,"+num6 +" ,"+num7 +" ,"+num8 +" ,"+num9 +"\n";

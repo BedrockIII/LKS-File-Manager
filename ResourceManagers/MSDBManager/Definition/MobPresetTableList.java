@@ -2,6 +2,7 @@ package ResourceManagers.MSDBManager.Definition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import bFM.Utils;
 
@@ -13,6 +14,13 @@ public class MobPresetTableList
 		for(int i = 0; i<data.length; i+=24)
 		{
 			PresetTable.add(new MobPresetTable(Arrays.copyOfRange(data, i, i+24)));
+		}
+	}
+	public MobPresetTableList(List<String> lines)
+	{
+		for(String line : lines)
+		{
+			if(line.indexOf("Attack Element") != -1)PresetTable.add(new MobPresetTable(line));
 		}
 	}
 	public String toString()

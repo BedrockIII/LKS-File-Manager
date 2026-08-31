@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import bFM.Utils;
 
@@ -20,6 +21,13 @@ public class MobAiList
 		for(int i = 4; i<data.length-51; i+=52)
 		{
 			Ai.add(new MobAi(Arrays.copyOfRange(data, i, i+52)));
+		}
+	}
+	public MobAiList(List<String> lines)
+	{
+		for(String line : lines)
+		{
+			if(line.indexOf("Mob AI") != -1)Ai.add(new MobAi(line));
 		}
 	}
 	public String toString()

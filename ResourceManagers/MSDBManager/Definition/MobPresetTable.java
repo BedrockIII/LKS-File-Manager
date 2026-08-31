@@ -23,6 +23,17 @@ public class MobPresetTable
 		num5 = data2.getFloat(20);
 	
 	}
+	public MobPresetTable(String line)
+	{
+		// Parse from CSV
+		String[] data = Utils.toStrArr(line);
+		num0 = Utils.strToFloat(data[0]);
+		num1 = Utils.strToFloat(data[1]);
+		num2 = Utils.strToFloat(data[2]);
+		num3 = Utils.strToFloat(data[3]);
+		num4 = Utils.strToFloat(data[4]);
+		num5 = Utils.strToFloat(data[5]);
+	}
 	public String toString()
 	{
 		return "Mob Preset Table: " + num0 + ", " + num1 + ", " +
