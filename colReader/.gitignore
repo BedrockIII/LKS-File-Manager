@@ -6,3 +6,9 @@
 /face.class
 /otherObject.class
 /vertex.class
+/CollisionFace.class
+/CollisionMaterial.class
+/CollisionObject$CollisionHeader.class
+/CollisionObject.class
+/CollisionTree.class
+/CollisionVertex.class

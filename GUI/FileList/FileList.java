@@ -102,6 +102,11 @@ public abstract class FileList extends JPanel
 	}
 	public byte[] getBytes() 
 	{
+		if(file == null)
+		{
+			System.err.println("Warning, File \"" + fileName.getText() + "\" is null!");
+			return new byte[0];
+		}
 		return file.toBytes();
 	}
 	public void deselect()
@@ -136,8 +141,17 @@ public abstract class FileList extends JPanel
 	}
 	protected boolean filterFiles(String filter)
 	{
+		if(filter.length()<=0) return true;
 		String name = fileName.getText().toLowerCase();
 		boolean ret = name.indexOf(filter.toLowerCase())!=-1;
 		return ret;
+	}
+	public String toString()
+	{
+		return fileName.getText();
+	}
+	public boolean filterAddFiles(String filter) 
+	{
+		return filterFiles(filter);
 	}
 }

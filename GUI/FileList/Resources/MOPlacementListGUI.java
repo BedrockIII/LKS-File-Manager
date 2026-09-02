@@ -287,10 +287,13 @@ public class MOPlacementListGUI extends CollapseableFileList
 		}
 		public void initializeSubGUI() 
 		{
+			//System.out.println("Initializing Group Sub-GUI");
 			for(int code : data.getGroupCodes())
 			{
 				subEntries.add(new GroupsListGUI(data.getGroupsByCode(code), padding + Settings.indentSize, this));
+				//System.out.print(".");
 			}
+			//System.out.println("\nFinished");
 		}
 		protected void initializeAll(int padding) 
 		{
@@ -349,10 +352,13 @@ public class MOPlacementListGUI extends CollapseableFileList
 			}
 			public void initializeSubGUI() 
 			{
+				//System.out.println("Group 2");
 				for(MobGroup Group : data)
 				{
 					subEntries.add(new GroupListGUI(Group, padding + Settings.indentSize, this));
+					//System.out.print(".");
 				}
+				//System.out.println("\nG2 Done");
 			}
 			protected void initializeAll(int padding) 
 			{

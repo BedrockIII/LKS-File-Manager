@@ -20,11 +20,13 @@ import javax.swing.border.EmptyBorder;
 
 import GUI.GUI;
 import bFM.Settings;
+import sun.jvm.hotspot.tools.JStack;
 
 @SuppressWarnings("serial")
 public abstract class CollapseableFileList extends FileList
 {
 	protected ArrayList<FileList> subEntries = new ArrayList<FileList>();
+	boolean canExpand = true;
 	JCheckBox isExtended = null;
 	JPanel headerPanel = new JPanel();
 	String filter = "";
@@ -78,7 +80,7 @@ public abstract class CollapseableFileList extends FileList
 		    public void itemStateChanged(ItemEvent e) 
 		    {
 		    	reAddComponents();
-		    	GUI.update();
+			    GUI.update();    	
 		    }
 		});
 		headerPanel.add(isExtended, layout);
@@ -154,17 +156,23 @@ public abstract class CollapseableFileList extends FileList
 		{
 			//Update Everything
 			add(headerPanel, layout);
+			//Thread.dumpStack();
 			for(int j = 0; j<subEntries.size();j++)
 			{
 				if(subEntries.size()-1==j)
 				{
 					layout.weighty = 1.0;
 				}
+				//System.out.print(subEntries.get(j).toString() + " ");
+				//add(subEntries.get(j), layout);
+				
 				if(subEntries.get(j).filterFiles(filter))
 				{
 					add(subEntries.get(j), layout);
 				}
+				
 			}
+			System.out.print("\n");
 		}
 		setSize(new Dimension(Settings.rowWidth, getHeight()));
 		setPreferredSize(new Dimension(Settings.rowWidth, getHeight()));
@@ -226,11 +234,23 @@ public abstract class CollapseableFileList extends FileList
 	protected boolean filterFiles(String filter)
 	{
 		this.filter = filter;
+		boolean ret = false;
+		for(int j = 0; j<subEntries.size();j++)
+		{
+			FileList c = subEntries.get(j);
+			ret = ret || c.filterFiles(filter);
+		}
+		return ret || super.filterFiles(filter);
+	}
+	public boolean filterAddFiles(String filter)
+	{
+		this.filter = filter;
 		reAddComponents();
 		boolean ret = false;
 		for(int j = 0; j<subEntries.size();j++)
 		{
-			ret = ret || subEntries.get(j).filterFiles(filter);
+			FileList c = subEntries.get(j);
+			ret = ret || c.filterAddFiles(filter);
 		}
 		return ret || super.filterFiles(filter);
 	}

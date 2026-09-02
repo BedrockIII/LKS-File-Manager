@@ -22,3 +22,7 @@
 /MobRectangleList.class
 /MobRes.class
 /MobResAsn.class
+/DropTable$DropItem.class
+/DropTable.class
+/MSDBManager.class
+/MobDropTableList.class

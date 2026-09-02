@@ -1,11 +1,13 @@
 package GUI.FileList;
 
-import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+
 import GUI.GUI;
 import bFM.GUIUtils;
 import bFM.Settings;
@@ -22,47 +24,54 @@ public class FileListPanel extends JScrollPane
 	{
 		super(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		getVerticalScrollBar().setUnitIncrement(Settings.assetHeight*SCROLL_STRENGTH);
-		setBackground(null);
+		//setBackground(null);
 		initializePanel();
 		setViewportView(panel);
 	}
 	private void initializePanel()
 	{
-		panel.setLayout(new BorderLayout());
+		panel.setLayout(new GridBagLayout());
 		filter = GUIUtils.createStringTextField("", this::filterFiles);
 	}
 	private void filterFiles(String filter)
 	{
-		file.filterFiles(filter);
+		if(filter.length() <= 0 ) return;
+		file.filterAddFiles(filter);
+		GUI.update();
 	}
 	private void repackPanel()
 	{
+		GridBagConstraints layout = Settings.getDefaultConstraints();
 		panel.removeAll();
-		panel.add(filter, BorderLayout.NORTH);
-		if(file!=null)panel.add(file, BorderLayout.CENTER);
+		if(file==null) layout.weighty = 1.0;
+		panel.add(filter, layout);
+		layout.weighty = 1.0;
+		if(file!=null)panel.add(file, layout);
 	}
 	public void setFile(FileList file) 
 	{
 		this.file = file;
 		repackPanel();
 		setViewportView(panel);
-		GUI.update();
+		//GUI.update();
 		update();
 	}
 	public int getHeight()
 	{
-		if(getViewport()==null||getViewport().getView()==null)
+		int ret = filter.getHeight();
+		if(file==null)
 		{
-			return 0;
+			return ret;
 		}
-		return Math.max(getViewport().getView().getHeight(),0);
+		int fileHeight = Math.max(file.getHeight(),0);
+		return ret + fileHeight;
 	}
 	public void update() 
 	{
-		repackPanel();
-		if(getViewport()==null||getViewport().getView()==null) return;
+		//repackPanel();
+		if(file==null) return;
 		int scroll = getVerticalScrollBar().getValue();
-		getViewport().setSize(getWidth(), getHeight());
+		//getViewport().setSize(getWidth(), getHeight());
 		if(file!=null) file.update();
 		int finalS = Math.min(getVerticalScrollBar().getMaximum(), scroll);
 		SwingUtilities.invokeLater(() -> {

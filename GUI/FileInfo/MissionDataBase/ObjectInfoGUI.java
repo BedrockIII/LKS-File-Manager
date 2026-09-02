@@ -3,9 +3,12 @@ package GUI.FileInfo.MissionDataBase;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 
 import GUI.LabeledInputBox;
+import GUI.FileInfo.ButtonedInfoBox;
 import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.FileList.Resources.MOPlacementListGUI.GroupTypesListGUI.GroupsListGUI.GroupListGUI.ObjectListGUI;
 import ResourceManagers.MSDBManager.MSDBManager;
@@ -18,7 +21,7 @@ public class ObjectInfoGUI extends GenericFileInfoGUI
 	MSDBManager parent =  null;
 	MobObject object = null;
 	ObjectListGUI objectListGUI= null;
-	protected LabeledInputBox mobLabel = null;
+	protected ButtonedInfoBox mobLabel = null;
 	protected JTextField xOffset; //First 2 Bytes //these first 3 MAY be the offsets for the target points, like where onii men throw pots
 	protected JTextField yOffset; //Next 2 Bytes
 	protected JTextField zOffset; //Next 2 Bytes
@@ -48,7 +51,7 @@ public class ObjectInfoGUI extends GenericFileInfoGUI
 		rotation = bFM.GUIUtils.createFloatTextField(object.getRotation(), object::setRotation);
 		num4 = bFM.GUIUtils.createFloatTextField(object.getNum4(), object::setNum4);
 		mobModNumber = bFM.GUIUtils.createIntTextField(object.getMobModNumber(), this::setModCode);
-		mobLabel =  new LabeledInputBox("Mod Number: ",  mobModNumber);
+		mobLabel = new ButtonedInfoBox(this::selectMobButton, new JLabel("Mod Number: "),  mobModNumber);
 		setModCode(object.getModCode());
 		numberOfSubObjects = bFM.GUIUtils.createIntTextField(object.getNumberOfSubObjects(), object::setNumberOfSubObjects);
 		RadiusOfView = bFM.GUIUtils.createFloatTextField(object.getRadiusOfView(), object::setRadiusOfView);
@@ -58,10 +61,23 @@ public class ObjectInfoGUI extends GenericFileInfoGUI
 		enemyDrop = bFM.GUIUtils.createIntTextField(object.getEnemyDrop(), object::setEnemyDrop);
 		itemDrop = bFM.GUIUtils.createIntTextField(object.getItemDrop(), object::setItemDrop);
 	}
+	private void selectMobButton()
+	{
+		System.out.println("TODO: Make This Show the MOB_MOD Info GUI");
+		
+	}
 	private void setModCode(int code)
 	{
 		String name = "Mod Code: (" + parent.getModCodeByName(code) + ")";
-		mobLabel.replaceText(name);
+		if(name.indexOf("Invalid Code") != -1)
+		{
+			mobLabel.setButtonEnabled(false);
+		}
+		else
+		{
+			mobLabel.setButtonEnabled(true);
+		}
+		((JLabel) mobLabel.getLeftComponent()).setText(name);
 		object.setMobModNumber(code);
 		objectListGUI.update();
 	}

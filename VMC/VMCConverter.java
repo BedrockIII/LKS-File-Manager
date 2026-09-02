@@ -306,7 +306,7 @@ public class VMCConverter implements OpenedFile
 		{
 			String line = Lines.get(i);
 			if(line.indexOf("Strings:")!=-1) {}
-			else Strings.add(line);
+			else Strings.add(new VMString(line));
 		}
 	}
 	public String toString()
@@ -318,9 +318,9 @@ public class VMCConverter implements OpenedFile
 			ret += i;
 		}
 		ret += "Strings: ";
-		for(String i : Strings)
+		for(VMString i : Strings)
 		{
-			ret += '\n' + i;
+			ret += '\n' + i.toString();
 		}
 		return ret;
 	}
@@ -334,12 +334,12 @@ public class VMCConverter implements OpenedFile
 		{
 			ret = bFM.Utils.mergeArrays(ret, i.toBytes());
 		}
-		for(String i : Strings)
+		for(VMString i : Strings)
 		{
-			i = i.replace("\\r", "\r");
-			i = i.replace("\\n", "\n");
-			i = i.replace("\\t", "\t");
-			ret = bFM.Utils.mergeArrays(ret, Utils.encodeStringToBytes(i));
+			i.setValue(i.toString().replace("\\r", "\r"));
+			i.setValue(i.toString().replace("\\n", "\n"));
+			i.setValue(i.toString().replace("\\t", "\t"));
+			ret = bFM.Utils.mergeArrays(ret, Utils.encodeStringToBytes(i.toString()));
 			ret = bFM.Utils.mergeArrays(ret, (byte)0);
 			if(ret.length%4!=0)
 			{

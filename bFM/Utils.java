@@ -8,6 +8,7 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
+import java.nio.charset.UnmappableCharacterException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -747,12 +748,17 @@ public class Utils
 		CharsetEncoder encoder = charset.newEncoder();
 		encoder.onMalformedInput(CodingErrorAction.REPORT);
 		encoder.onUnmappableCharacter(CodingErrorAction.REPORT);
-		
-		ByteBuffer data = encoder.encode(CharBuffer.wrap(text));
-		
-		byte[] ret = new byte[data.remaining()];
-		data.get(ret);
-		return ret;
+		try
+		{
+			ByteBuffer data = encoder.encode(CharBuffer.wrap(text));
+			byte[] ret = new byte[data.remaining()];
+			data.get(ret);
+			return ret;
+		}
+		catch(UnmappableCharacterException e)
+		{
+			return "".getBytes(charset);
+		}
 	}
 	public static String decodeBytesToString(byte[] data)
 	{

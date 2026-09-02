@@ -89,7 +89,12 @@ public class PCKGManager extends GenericFile
 			int FileStartPosition = nextHeaderPos+headerSize;
 			int FileEndPosition = FileStartPosition + data.getInt(nextHeaderPos+4);
 			
-			
+			if(FileStartPosition>FileEndPosition)
+			{
+				System.err.println("Package Could Not Read All Files. FileStartPosition > FileEndPosition");
+				break;
+			}
+			//if()
 			fileContents = Arrays.copyOfRange(file, FileStartPosition, FileEndPosition);	
 			
 			fileName = Arrays.copyOfRange(file, nextHeaderPos+12, nextHeaderPos+headerSize);
