@@ -27,6 +27,7 @@ public abstract class CollapseableFileList extends FileList
 	protected ArrayList<FileList> subEntries = new ArrayList<FileList>();
 	JCheckBox isExtended = null;
 	JPanel headerPanel = new JPanel();
+	String filter = "";
 	protected void initializeListGUI(int padding)
 	{
 		initializeListGUI(padding, file.getName());
@@ -95,7 +96,10 @@ public abstract class CollapseableFileList extends FileList
 		if(subEntries == null) return ret;
 		for(FileList entry : subEntries)
 		{
-			ret += entry.getHeight();
+			if(entry.filterFiles(filter))
+			{
+				ret += entry.getHeight();
+			}
 		}
 		return ret;
 	}
@@ -156,7 +160,10 @@ public abstract class CollapseableFileList extends FileList
 				{
 					layout.weighty = 1.0;
 				}
-				add(subEntries.get(j), layout);
+				if(subEntries.get(j).filterFiles(filter))
+				{
+					add(subEntries.get(j), layout);
+				}
 			}
 		}
 		setSize(new Dimension(Settings.rowWidth, getHeight()));
@@ -216,4 +223,15 @@ public abstract class CollapseableFileList extends FileList
 		reAddComponents();
 	}
 	public abstract void initializeSubGUI();
+	protected boolean filterFiles(String filter)
+	{
+		this.filter = filter;
+		reAddComponents();
+		boolean ret = false;
+		for(int j = 0; j<subEntries.size();j++)
+		{
+			ret = ret || subEntries.get(j).filterFiles(filter);
+		}
+		return ret || super.filterFiles(filter);
+	}
 }

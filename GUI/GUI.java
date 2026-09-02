@@ -31,41 +31,49 @@ public class GUI
 	static JSplitPane contents = new JSplitPane();
 	public static JFrame frame = new JFrame();
 	JPanel fileArea = new JPanel();
-	@SuppressWarnings("deprecation")
 	public GUI()
 	{
-		frame.setName("LKS File Manager");
 		Settings.getSettings();
+		setTheme();
+		setMenu();
+		createFileGUIs();
+        showWindow();
+	}
+	private void createFileGUIs()
+	{
+		openedFileList.setBackground(Settings.bgColor);
+		fileInfoPanel.setBackground(Settings.bgColor);
+		openedFileList.setMinimumSize(Settings.buttonSize);
+		contents.setTopComponent(openedFileList);
+		contents.setDividerSize(3);
+		contents.setResizeWeight(0);
+		contents.setContinuousLayout(true);
+		contents.setBottomComponent(fileInfoPanel);
+		contents.setDividerLocation((int)(Settings.buttonWidth * 1.5));
+		frame.add(contents);
+	}
+	private void setTheme()
+	{
+		frame.setName("LKS File Manager");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//frame.setLayout(new GridBagLayout());
 		frame.setLayout(new BorderLayout());
 		Settings.bgColor = frame.getBackground();
+		frame.setBackground(Settings.bgColor);
+		frame.setBounds(Settings.windowX, Settings.windowY, Settings.windowWidth, Settings.windowHeight);
+	}
+	private void setMenu()
+	{
 		MenuBar menuBar = new MenuBar(this);
         frame.add(menuBar, BorderLayout.NORTH);
-        frame.reshape(Settings.windowX, Settings.windowY, Settings.windowWidth, Settings.windowHeight);
-        //openedFile = new Package();
-        //frame.add(openedFile, layout);
-        frame.setBackground(Settings.bgColor);
-       
-        
-        openedFileList.setBackground(Settings.bgColor);
-        fileInfoPanel.setBackground(Settings.bgColor);
-        openedFileList.setMinimumSize(Settings.buttonSize);
-        contents.setTopComponent(openedFileList);
-        contents.setDividerSize(3);
-        contents.setResizeWeight(0);
-        contents.setContinuousLayout(true);
-        contents.setBottomComponent(fileInfoPanel);
-        contents.setDividerLocation((int)(Settings.buttonWidth * 1.5));
-        
-        frame.add(contents);
-        frame.setMinimumSize(new Dimension(Settings.rowWidth*2, Settings.assetHeight*25));
-        if(Settings.windowMaximized)
-        {
-        	frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-        }
-        //frame.pack();
-        update();
+	}
+	private void showWindow()
+	{
+		frame.setMinimumSize(new Dimension(Settings.rowWidth*2, Settings.assetHeight*25));
+		if(Settings.windowMaximized)
+		{
+			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+		}
+		update();
 		frame.setVisible(true);
 		frame.addWindowListener(new WindowAdapter()
 		{
@@ -75,6 +83,7 @@ public class GUI
 				Settings.setSettings();
 				frame.dispose();
 				System.exit(0);
+
 			}
 		});
 	}
@@ -99,11 +108,6 @@ public class GUI
 	public static void setFileList(FileList generic) 
 	{
 		openedFileList.setFile(generic);
-		//contents.setDividerLocation(.33);
-		//JScrollPane LeftWindow = new JScrollPane((Package)package1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		//LeftWindow.setMinimumSize(buttonSize);
-		//frame.setContentPane(LeftWindow);
-        //contents.setTopComponent(LeftWindow);
 	}
 	public static void setFileInfo(GenericFileInfoGUI gui) 
 	{

@@ -134,4 +134,10 @@ public abstract class FileList extends JPanel
 	{
 		actions.add(GUIUtils.createExportAction("Export Raw Data", file.getName(), "Raw File", file::toBytes));
 	}
+	protected boolean filterFiles(String filter)
+	{
+		String name = fileName.getText().toLowerCase();
+		boolean ret = name.indexOf(filter.toLowerCase())!=-1;
+		return ret;
+	}
 }
