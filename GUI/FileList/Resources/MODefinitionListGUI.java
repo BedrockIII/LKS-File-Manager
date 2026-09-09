@@ -1,7 +1,9 @@
 package GUI.FileList.Resources;
 
 import GUI.FileInfo.MissionDataBase.AttackCollisionInfoGUI;
+import GUI.FileInfo.MissionDataBase.AttacksInfoGUI;
 import GUI.FileInfo.MissionDataBase.MobAttackInfoGUI;
+import GUI.FileInfo.MissionDataBase.MobDefinitionsInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
 import ResourceManagers.MSDBManager.Definition.MissionObjectDefinitionManager;
@@ -51,8 +53,7 @@ public class MODefinitionListGUI extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		// TODO Auto-generated method stub
-		
+		infoGUI = new MobDefinitionsInfoGUI(Definitions);
 	}
 	protected void addActions()
 	{
@@ -97,8 +98,7 @@ public class MODefinitionListGUI extends CollapseableFileList
 		}
 		protected void initializeInfoGUI()
 		{
-			// TODO Auto-generated method stub
-			
+			infoGUI = new AttacksInfoGUI(Attacks);
 		}
 		protected void addActions()
 		{

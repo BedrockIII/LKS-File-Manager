@@ -47,4 +47,8 @@ public class MobAiList
 			ret = Utils.mergeArrays(ret, ai.toBytes());
 		return ret;
 	}
+	public int getSize()
+	{
+		return Ai.size();
+	}
 }

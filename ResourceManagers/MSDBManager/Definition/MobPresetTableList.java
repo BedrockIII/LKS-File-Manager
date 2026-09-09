@@ -39,5 +39,9 @@ public class MobPresetTableList
 			ret = Utils.mergeArrays(ret, tbl.toBytes());
 		return ret;
 	}
+	public int getSize()
+	{
+		return PresetTable.size();
+	}
 
 }

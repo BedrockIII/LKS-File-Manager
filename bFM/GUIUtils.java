@@ -2,8 +2,6 @@ package bFM;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -375,17 +373,29 @@ public abstract class GUIUtils
 	{
 		JTextField field = new JTextField("" + value);
 		
-		field.addFocusListener(new FocusAdapter() {
-		    public void focusLost(FocusEvent e)
-		    {
-		    	try
+		field.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void insertUpdate(DocumentEvent e)
+			{
+				try
 				{
 					setterFunction.accept(Utils.strToFloat(field.getText()));
 				}
 				catch(NumberFormatException d)
 				{}
-		    }
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				try
+				{
+					setterFunction.accept(Utils.strToFloat(field.getText()));
+				}
+				catch(NumberFormatException d)
+				{}
+			}
+			public void changedUpdate(DocumentEvent e) {}
 		});
+		
 		return field;
 	}
 

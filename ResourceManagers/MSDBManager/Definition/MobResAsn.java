@@ -73,4 +73,8 @@ public class MobResAsn
 		}
 		return ret;
 	}
+	public ArrayList<MobRes> getResources()
+	{
+		return Res;
+	}
 }

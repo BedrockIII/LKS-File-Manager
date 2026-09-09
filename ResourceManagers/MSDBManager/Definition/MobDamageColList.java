@@ -47,4 +47,8 @@ public class MobDamageColList
 			ret = Utils.mergeArrays(ret, col.toBytes());
 		return ret;
 	}
+	public int getSize()
+	{
+		return DamageCol.size();
+	}
 }

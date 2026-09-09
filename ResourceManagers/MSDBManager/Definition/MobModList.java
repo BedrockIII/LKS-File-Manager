@@ -114,4 +114,8 @@ public class MobModList
 		if(ret == null) ret = "Invalid Code";
 		return ret;
 	}
+	public int getSize()
+	{
+		return Mod.size();
+	}
 }

@@ -1,5 +1,7 @@
 package ResourceManagers.MSDBManager.Definition;
 
+import java.awt.Component;
+
 import bFM.Data;
 
 public class MissionObjectDefinitionManager implements Data
@@ -82,5 +84,25 @@ public class MissionObjectDefinitionManager implements Data
 	public MobAttackList getAttacks()
 	{
 		return Attacks;
+	}
+	public MobResAsn getResources()
+	{
+		return Resources;
+	}
+	public MobModList getDefinitions()
+	{
+		return Definitions;
+	}
+	public MobAiList getAis()
+	{
+		return AI;
+	}
+	public MobPresetTableList getPresetTable()
+	{
+		return PresetTable;
+	}
+	public MobDamageColList getDamageCols()
+	{
+		return DamageCol;
 	}
 }

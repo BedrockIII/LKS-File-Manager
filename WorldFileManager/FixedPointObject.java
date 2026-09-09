@@ -3,6 +3,8 @@ package WorldFileManager;
 import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import bFM.Data;
 import bFM.Utils;
 
@@ -133,6 +135,7 @@ public class FixedPointObject implements Data
 		public void setEulerXScale(float xScale)
 		{
 			this.xScale = xScale;
+			toArray();
 		}
 		public void setEulerYScale(float yScale)
 		{
@@ -185,6 +188,10 @@ public class FixedPointObject implements Data
 			ret.putFloat(0x34, mtx[3][1]);
 			ret.putFloat(0x38, mtx[3][2]);
 			ret.putFloat(0x3c, mtx[3][3]);
+			System.out.println(Arrays.toString(mtx[0]) + "\n" + 
+			Arrays.toString(mtx[1]) + "\n" + 
+			Arrays.toString(mtx[2]) + "\n" + 
+			Arrays.toString(mtx[3]));
 			return ret.array();
 		}
 		public String toString()
