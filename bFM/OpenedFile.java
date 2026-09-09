@@ -11,7 +11,7 @@ import VMC.VMCConverter;
 import WorldFileManager.fpInterpreter;
 import colReader.ColReader;
 
-public interface OpenedFile extends Data
+public interface OpenedFile extends Data, Nameable
 {
 	//Different than Raw Data for some reason..? Idk it feels right
 	public static OpenedFile makeFile(String name, byte[] file) 

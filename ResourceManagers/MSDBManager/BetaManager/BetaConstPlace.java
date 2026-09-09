@@ -77,9 +77,9 @@ public class BetaConstPlace extends MobConstantPlace
 		rotation = data.getFloat();
 		spawnRadius = data.getFloat();
 		num5 = 0f;
-		MobGroupCode1 = bFM.Utils.getShort(data);
+		PlacementID = bFM.Utils.getShort(data);
 		activationFlag1 = bFM.Utils.getShort(data);
-		MobGrouptCode2 = bFM.Utils.getShort(data);
+		GroupID = bFM.Utils.getShort(data);
 		activationFlag2 = bFM.Utils.getShort(data);
 		clearFlag = bFM.Utils.getShort(data);
 		deactivationFlag = -1;
@@ -95,9 +95,9 @@ public class BetaConstPlace extends MobConstantPlace
 		rotation = data.getFloat();
 		spawnRadius = data.getFloat();
 		num5 = 0f;
-		MobGroupCode1 = bFM.Utils.getShort(data);
+		PlacementID = bFM.Utils.getShort(data);
 		activationFlag1 = bFM.Utils.getShort(data);
-		MobGrouptCode2 = bFM.Utils.getShort(data);
+		GroupID = bFM.Utils.getShort(data);
 		activationFlag2 = bFM.Utils.getShort(data);
 		clearFlag = bFM.Utils.getShort(data);
 		deactivationFlag = bFM.Utils.getShort(data);

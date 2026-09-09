@@ -9,6 +9,7 @@ import bFM.Utils;
 
 public class VMCConverter implements OpenedFile
 {
+	byte[] dataForSkippingToBytesUntilFixedThisBetterBeTemporaryBedrock = null;
 	private String name;
 	private final String version = "LKS Virtual Machine Code Version 1.0";
 	@SuppressWarnings("unused")
@@ -254,6 +255,7 @@ public class VMCConverter implements OpenedFile
 	int type = -1;
 	private void initializeFromBytes(byte[] data1)
 	{
+		dataForSkippingToBytesUntilFixedThisBetterBeTemporaryBedrock = data1;
 		//ArrayList<String> Instructions = new ArrayList<String>();
 		//this.data = data1;
 		
@@ -346,7 +348,8 @@ public class VMCConverter implements OpenedFile
 				ret = bFM.Utils.mergeArrays(ret, new byte[4-ret.length%4]);
 			}
 		}
-		return ret;
+		System.err.println("EDITING VMCS IS DISABLED. CHANGES ARE NOT SAVED");
+		return dataForSkippingToBytesUntilFixedThisBetterBeTemporaryBedrock;
 	}
 	private ArrayList<VMString> extractStrings() 
 	{

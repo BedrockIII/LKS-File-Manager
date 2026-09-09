@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import PCKGManager.PCKGManager;
 import bFM.Data;
+import bFM.Nameable;
 import bFM.OpenedFile;
 import bFM.Utils;
 
@@ -49,7 +50,7 @@ public class TextAnimationList implements OpenedFile
 	{
 		return 0;
 	}
-	public class AnimationList implements Data
+	public class AnimationList implements Data, Nameable
 	{
 		ArrayList<Animation> animations = new ArrayList<Animation>();
 		public AnimationList(byte[] data) 
@@ -117,7 +118,7 @@ public class TextAnimationList implements OpenedFile
 			return animations;
 		}
 	}
-	public class Animation implements Data
+	public class Animation implements Data, Nameable
 	{
 		String name = "";
 		Part part = null;
@@ -171,7 +172,7 @@ public class TextAnimationList implements OpenedFile
 			return part;
 		}
 	}
-	public class Part implements Data
+	public class Part implements Data, Nameable
 	{
 		String name = "Part";
 		ArrayList<AnimationPattern> patterns = new ArrayList<AnimationPattern>();
@@ -224,7 +225,7 @@ public class TextAnimationList implements OpenedFile
 			return patterns;
 		}
 	}
-	public class AnimationPattern implements Data
+	public class AnimationPattern implements Data, Nameable
 	{
 		String name = "Ptn";
 		int num1 = 0;
@@ -282,7 +283,7 @@ public class TextAnimationList implements OpenedFile
 			this.num2 = num2;
 		}
 	}
-	public class PatternList implements Data
+	public class PatternList implements Data, Nameable
 	{
 		ArrayList<PatternPart> Patterns = new ArrayList<PatternPart>();
 		public PatternList(byte[] data) 
@@ -355,7 +356,7 @@ public class TextAnimationList implements OpenedFile
 			return Patterns;
 		}
 	}
-	public class PatternPart implements Data
+	public class PatternPart implements Data, Nameable
 	{
 		ArrayList<Part2> Parts = new ArrayList<Part2>();
 		Part2 lastPart;
@@ -418,7 +419,7 @@ public class TextAnimationList implements OpenedFile
 			return Parts;
 		}
 	}
-	public class Part2 implements Data
+	public class Part2 implements Data, Nameable
 	{
 		String name = "Part";
 		Material mat;
@@ -490,7 +491,7 @@ public class TextAnimationList implements OpenedFile
 			return patterns;
 		}
 	}
-	public class Material implements Data
+	public class Material implements Data, Nameable
 	{
 		String name = "Material";
 		int width = -1;
@@ -559,7 +560,7 @@ public class TextAnimationList implements OpenedFile
 			this.height = height;
 		}
 	}
-	public class Pattern implements Data
+	public class Pattern implements Data, Nameable
 	{
 		int index;
 		String name = "Pattern";

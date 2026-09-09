@@ -274,7 +274,7 @@ public class MissionObjectPlacementManager implements Data
 		{
 			for(MobGroup g : Groups)
 			{
-				if(g.getGroupIndex()==c.getGroup2())
+				if(g.getGroupIndex()==c.getGroupCode())
 				{
 					c.addGroup(g);
 				}
@@ -402,7 +402,6 @@ public class MissionObjectPlacementManager implements Data
 	private void sortPlacesByIndex()
 	{
 		ArrayList<MobConstantPlace> sortPlaces = new ArrayList<MobConstantPlace>();
-		int places = Places.size();
 		int searchedIndex = 0;
 		while( Places.size()>0)
 		{
@@ -453,8 +452,8 @@ public class MissionObjectPlacementManager implements Data
 			int groupIndex2 = -1;
 			for(int j = 0; j<Groups.size(); j++)
 			{
-				if(Groups.get(j).getCode()==place.getGroup1()) groupIndex1 = j;
-				if(Groups.get(j).getCode()==place.getGroup2()) groupIndex2 = j;
+				if(Groups.get(j).getCode()==place.getPlacementID()) groupIndex1 = j;
+				if(Groups.get(j).getCode()==place.getGroupCode()) groupIndex2 = j;
 			}
 			ret+=place.toBMos();
 			if(groupIndex1!=-1)
@@ -462,15 +461,15 @@ public class MissionObjectPlacementManager implements Data
 				ret += Groups.get(groupIndex1).bMos();
 				unprintedGroups.remove(Groups.get(groupIndex1));
 			}
-			else ret+= "\tNull Group: " + place.getGroup1() + "\n";
-			if(place.getGroup1()!=place.getGroup2())
+			else ret+= "\tNull Group: " + place.getPlacementID() + "\n";
+			if(place.getPlacementID()!=place.getGroupCode())
 			{
 				if(groupIndex2!=-1)
 				{
 					ret += Groups.get(groupIndex2).bMos();
 					unprintedGroups.remove(Groups.get(groupIndex2));
 				}
-				else ret+= "\tNull Group: " + place.getGroup2() + "\n";
+				else ret+= "\tNull Group: " + place.getGroupCode() + "\n";
 			}
 		}
 		for(MobGroup group : unprintedGroups)

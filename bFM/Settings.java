@@ -48,10 +48,12 @@ public class Settings
 	public static void printVersionData()
 	{
 		System.out.println("LKS File Manager");
-		System.out.println("Version 3.8b");
+		System.out.println("Version 3.8d");
 		System.out.println("     Added: Bit Flag Editor");
 		System.out.println("     		Automatically savesw in format compatible with Debug mode, and can also be loaded from debug bit flag list");
 		System.out.println("     		VMC Editor (WIP)");
+		System.out.println("     		Search Bar");
+		System.out.println("     		Nameable Mission Object Group Categories");
 		System.out.println("     Fixed: FP Editor (WIP, Combining scaling and rotations doesn't work properly, but this may be an issue with the game not my code.");
 		try {
 			TimeUnit.MILLISECONDS.sleep(100);
@@ -94,11 +96,13 @@ public class Settings
 			{
 				Files.write(Paths.get("LKS File Manager Config.cfg"), Utils.encodeStringToBytes(ret));
 				Files.write(Paths.get("BitFlgNameList.txt"), Utils.encodeStringToBytes(FlagManager.getBitFlagList()));
+				Files.write(Paths.get("MissionObjectGroupCategories.txt"), Utils.encodeStringToBytes(GroupCategoryManager.getCategoryList()));
 			}
 			else
 			{
 				Files.write(savePath.resolve("LKS File Manager Config.cfg"), Utils.encodeStringToBytes(ret));
 				Files.write(savePath.resolve("BitFlgNameList.txt"), Utils.encodeStringToBytes(FlagManager.getBitFlagList()));
+				Files.write(savePath.resolve("MissionObjectGroupCategories.txt"), Utils.encodeStringToBytes(GroupCategoryManager.getCategoryList()));
 			}
 		} catch (IOException e) 
 		{
@@ -191,10 +195,12 @@ public class Settings
 			if(savePath==null)
 			{
 				FlagManager.importBitFlags(Files.readAllBytes(Paths.get("BitFlgNameList.txt")));
+				GroupCategoryManager.importCategories(Files.readAllBytes(Paths.get("MissionObjectGroupCategories.txt")));
 			}
 			else
 			{
 				FlagManager.importBitFlags(Files.readAllBytes(savePath.resolve("BitFlgNameList.txt")));
+				GroupCategoryManager.importCategories(Files.readAllBytes(savePath.resolve("MissionObjectGroupCategories.txt")));
 			}
 		} catch (IOException e) 
 		{

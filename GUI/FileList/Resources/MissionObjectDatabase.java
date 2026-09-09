@@ -55,8 +55,8 @@ public class MissionObjectDatabase extends CollapseableFileList
 		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_RANDOM_GROUND.lst"), Settings.indentSize + padding, this));
 		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_RECT_LIST.lst"), Settings.indentSize + padding, this));
 		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MDITM_00.bin"), Settings.indentSize + padding, this));
-		
 		subEntries.add(new MOPlacementListGUI(MonsterDataPack.getPlacement(), padding + Settings.indentSize, this));
+		subEntries.add(new MODefinitionListGUI(MonsterDataPack.getDefinitions(), padding + Settings.indentSize, this));
 	}
 	protected void initializeInfoGUI()
 	{

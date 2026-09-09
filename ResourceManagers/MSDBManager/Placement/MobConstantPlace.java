@@ -15,8 +15,8 @@ public class MobConstantPlace implements Data
 	protected float rotation; //Next 2 Bytes
 	protected float spawnRadius; //Next 2 Bytes
 	protected float num5; //Next 2 Bytes DespawnRadius???
-	protected int MobGrouptCode2; //Next 2 Bytes
-	protected int MobGroupCode1; //Next 2 Bytes
+	protected int GroupID; //Next 2 Bytes
+	protected int PlacementID; //Next 2 Bytes
 	protected int activationFlag2; //Next 2 Bytes
 	protected int num12; //Next 2 Bytes
 	protected int activationFlag1; //Next 2 Bytes
@@ -31,8 +31,8 @@ public class MobConstantPlace implements Data
 		rotation = 0; //Next 2 Bytes
 		spawnRadius = 30; //Next 2 Bytes
 		num5 = 40; //Next 2 Bytes
-		MobGrouptCode2 = 0; //Next 2 Bytes
-		MobGroupCode1 = 0; //Next 2 Bytes
+		GroupID = -1; //Next 2 Bytes
+		PlacementID = -1; //Next 2 Bytes
 		activationFlag2 = -1; //Next 2 Bytes
 		num12 = 0; //Next 2 Bytes
 		activationFlag1 = -1; //Next 2 Bytes
@@ -49,9 +49,9 @@ public class MobConstantPlace implements Data
 		rotation = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(12);
 		spawnRadius = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(16);
 		num5 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(20);
-		MobGroupCode1 = bFM.Utils.getShort(data, 24);
+		PlacementID = bFM.Utils.getShort(data, 24);
 		activationFlag1 = bFM.Utils.getShort(data, 26);
-		MobGrouptCode2 = bFM.Utils.getShort(data, 28);
+		GroupID = bFM.Utils.getShort(data, 28);
 		activationFlag2 = bFM.Utils.getShort(data, 30);
 		clearFlag = bFM.Utils.getShort(data, 32);
 		deactivationFlag = bFM.Utils.getShort(data, 34);
@@ -86,13 +86,13 @@ public class MobConstantPlace implements Data
 		num5 = Float.valueOf(line.substring(0, index));
 		line = line.substring(index,line.length()-1);
 		index = line.indexOf(',');
-		MobGroupCode1 = Integer.valueOf(line.substring(0, index)).shortValue();
+		PlacementID = Integer.valueOf(line.substring(0, index)).shortValue();
 		line = line.substring(index,line.length()-1);
 		index = line.indexOf(',');
 		activationFlag1 = Integer.valueOf(line.substring(0, index)).shortValue();
 		line = line.substring(index,line.length()-1);
 		index = line.indexOf(',');
-		MobGrouptCode2 = Integer.valueOf(line.substring(0, index)).shortValue();
+		GroupID = Integer.valueOf(line.substring(0, index)).shortValue();
 		line = line.substring(index,line.length()-1);
 		index = line.indexOf(',');
 		activationFlag2 = Integer.valueOf(line.substring(0, index)).shortValue();
@@ -121,8 +121,8 @@ public class MobConstantPlace implements Data
 		rotation = placeRotation;
 		spawnRadius = float2;
 		num5 = float3;
-		MobGroupCode1 = groupIndex1;
-		MobGrouptCode2 = groupIndex2;
+		PlacementID = groupIndex1;
+		GroupID = groupIndex2;
 		this.activationFlag1 = activationFlag1;
 		this.activationFlag2 = activationFlag2;
 		this.clearFlag = clearFlag;
@@ -142,8 +142,8 @@ public class MobConstantPlace implements Data
 		rotation = placeRotation;
 		spawnRadius = float2;
 		num5 = float3;
-		MobGroupCode1 = groupIndex1;
-		MobGrouptCode2 = groupIndex2;
+		PlacementID = groupIndex1;
+		GroupID = groupIndex2;
 		this.activationFlag1 = activationFlag1;
 		this.activationFlag2 = activationFlag2;
 		this.clearFlag = clearFlag;
@@ -158,7 +158,7 @@ public class MobConstantPlace implements Data
 	}
 	public String toString()
 	{
-		return ""+xPos +", "+yPos +", "+zPos +", "+rotation +", "+spawnRadius +", "+num5 +", "+MobGroupCode1 +", "+activationFlag1 +", "+MobGrouptCode2 +", "+activationFlag2 +", "+clearFlag + ", "+
+		return ""+xPos +", "+yPos +", "+zPos +", "+rotation +", "+spawnRadius +", "+num5 +", "+PlacementID +", "+activationFlag1 +", "+GroupID +", "+activationFlag2 +", "+clearFlag + ", "+
 				deactivationFlag +", "+itemCode +", "+num12 +"\n";
 	}
 	public String toBMos()
@@ -171,13 +171,17 @@ public class MobConstantPlace implements Data
 		return "Constant Placement: "+index+", "+xPos +", "+yPos +", "+zPos +", "+rotation +", "+spawnRadius +", "+num5 +", "+activationFlag1+", "+activationFlag2  +", "+clearFlag + ", "+
 		deactivationFlag +", "+itemCode +", "+num12 +"\n";
 	}
-	public int getGroup1()
+	public int getPlacementID()
 	{
-		return  MobGroupCode1;
+		return PlacementID;
 	}
-	public int getGroup2()
+	public void setPlacementID(int PlacementID)
 	{
-		return MobGrouptCode2;
+		this.PlacementID = PlacementID;
+	}
+	public int getGroupCode()
+	{
+		return GroupID;
 	}
 	
 	public byte[] toBytes()
@@ -188,9 +192,9 @@ public class MobConstantPlace implements Data
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(rotation).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(spawnRadius).array());
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num5).array());
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(MobGroupCode1, 2));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(PlacementID, 2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(activationFlag1, 2));
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(MobGrouptCode2, 2));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(GroupID, 2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(activationFlag2, 2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(clearFlag, 2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(deactivationFlag, 2));
@@ -233,23 +237,25 @@ public class MobConstantPlace implements Data
 	public void addNullGroup(String line) 
 	{
 		int id = Utils.strToInt(line);
-		if(MobGroupCode1 == -1) {MobGroupCode1 = id; MobGrouptCode2 = id;}
-		else if(MobGrouptCode2 == MobGroupCode1) MobGrouptCode2 = id;
+		if(PlacementID == -1) {PlacementID = id; GroupID = id;}
+		else if(GroupID == PlacementID) GroupID = id;
 		else throw new IllegalArgumentException("Added too many Groups to Constant Place\n");
 	}
 	public void addGroup(MobGroup group) 
 	{
 		int id = group.getCode();
-		if(MobGroupCode1 == -1 || id == MobGroupCode1) {MobGroupCode1 = id; MobGrouptCode2 = id;}
-		else if(MobGrouptCode2 == MobGroupCode1 || id == MobGrouptCode2) MobGrouptCode2 = id;
-		else throw new IllegalArgumentException("Added too many Groups to Constant Place\n");
+		//if(MobGroupCode1 == -1 || id == MobGroupCode1) {MobGroupCode1 = id; MobGrouptCode2 = id;}
+		//else if(MobGrouptCode2 == MobGroupCode1 || id == MobGrouptCode2) MobGrouptCode2 = id;
+		//else throw new IllegalArgumentException("Added too many Groups to Constant Place\n");
+		if(PlacementID == -1 || GroupID == PlacementID) PlacementID = id;
+		GroupID = id;
 		group.registerPlacement(this);
 	}
 	public void setGroupID(int oldId, int id) 
 	{
-		if(MobGroupCode1 == oldId) MobGroupCode1 = id;
-		else if(MobGrouptCode2 == oldId) MobGrouptCode2 = id;
-		else throw new IllegalArgumentException("Constant Place did not have group " + oldId + " -> " + id + " registerd. ID 1: " + MobGroupCode1 + " ID 2: " + MobGrouptCode2 + "\n");
+		if(PlacementID == oldId) PlacementID = id;
+		else if(GroupID == oldId) GroupID = id;
+		else throw new IllegalArgumentException("Constant Place did not have group " + oldId + " -> " + id + " registerd. ID 1: " + PlacementID + " ID 2: " + GroupID + "\n");
 	}
 	public boolean equals(String name) 
 	{

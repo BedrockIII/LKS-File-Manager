@@ -1,6 +1,7 @@
 package GUI.FileList;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,6 +20,7 @@ import GUI.FileInfo.FileInfoFactory;
 import GUI.FileInfo.FixedPointObjectInfoGUI;
 import WorldFileManager.fpInterpreter;
 import bFM.GUIUtils;
+import bFM.Nameable;
 import bFM.OpenedFile;
 import bFM.Settings;
 import WorldFileManager.FixedPointObject;
@@ -41,7 +43,7 @@ public class FixedPoint extends CollapseableFileList
 		fileTypes = new FileNameExtensionFilter("LKS Fixed Placement File", "fp", "vfp", "sfp", "lfp", "plfp");
 		initializeListGUI(padding);
 		initializeInfoGUI();
-		fileName.setText(file.getName());
+		fileName.setText(((Nameable) file).getName());
 		initializeSubGUI();
 		addActions();
 		reAddComponents();
@@ -69,7 +71,7 @@ public class FixedPoint extends CollapseableFileList
 	}
 	protected void addReplaceButton()
 	{
-		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", file.getName(), ((fpInterpreter)file).getExtenstion(),file::setData, file::setName, parent));
+		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", ((Nameable) file).getName(), ((fpInterpreter)file).getExtenstion(),file::setData, ((Nameable)file)::setName, parent));
 	}
 	protected void addReplaceAsBFPButton()
 	{
@@ -77,7 +79,7 @@ public class FixedPoint extends CollapseableFileList
 	}
 	private void addExportBFPAction() 
 	{
-		actions.add(GUIUtils.createExportAction("Export As BFP", file.getName().substring(0, file.getName().lastIndexOf('.')) + ".bfp", "Bedrock's Intermediate FP Text File", ((fpInterpreter)file)::toBFPBytes));
+		actions.add(GUIUtils.createExportAction("Export As BFP", ((Nameable) file).getName().substring(0, ((Nameable) file).getName().lastIndexOf('.')) + ".bfp", "Bedrock's Intermediate FP Text File", ((fpInterpreter)file)::toBFPBytes));
 	}
 	public void initializeSubGUI() 
 	{

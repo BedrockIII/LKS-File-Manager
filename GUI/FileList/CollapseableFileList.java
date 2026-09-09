@@ -19,8 +19,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import GUI.GUI;
+import bFM.Nameable;
 import bFM.Settings;
-import sun.jvm.hotspot.tools.JStack;
 
 @SuppressWarnings("serial")
 public abstract class CollapseableFileList extends FileList
@@ -32,7 +32,7 @@ public abstract class CollapseableFileList extends FileList
 	String filter = "";
 	protected void initializeListGUI(int padding)
 	{
-		initializeListGUI(padding, file.getName());
+		initializeListGUI(padding, ((Nameable) file).getName());
 	}
 	protected void initializeListGUI(int padding, String name) 
 	{
@@ -242,16 +242,14 @@ public abstract class CollapseableFileList extends FileList
 		}
 		return ret || super.filterFiles(filter);
 	}
-	public boolean filterAddFiles(String filter)
+	public void filterAddFiles(String filter)
 	{
 		this.filter = filter;
 		reAddComponents();
-		boolean ret = false;
 		for(int j = 0; j<subEntries.size();j++)
 		{
 			FileList c = subEntries.get(j);
-			ret = ret || c.filterAddFiles(filter);
+			c.filterAddFiles(filter);
 		}
-		return ret || super.filterFiles(filter);
 	}
 }

@@ -1,14 +1,11 @@
 package bFM;
 
-public interface Data 
+public interface Data
 {
 	//Used for every file type and subfile type
 	//Not implemented for most...
-	public boolean equals(String name);
 	public void setData(byte[] data);
 	public byte[] toBytes();
-	public void setName(String name);
-	public String getName();
 	public String toString();
 	public int getSize();
 	/*

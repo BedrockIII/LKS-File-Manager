@@ -21,6 +21,7 @@ import GUI.GUI;
 import GUI.FileInfo.CollisionObjectInfoGUI;
 import GUI.FileInfo.FileInfoFactory;
 import bFM.GUIUtils;
+import bFM.Nameable;
 import bFM.OpenedFile;
 import bFM.Settings;
 import colReader.ColReader;
@@ -55,7 +56,7 @@ public class Collision extends CollapseableFileList
 	}
 	private void addExportOBJAction() 
  	{
-		actions.add(GUIUtils.createExportAction("Export as OBJ", file.getName().substring(0, file.getName().lastIndexOf('.')) + ".obj", "Collison File as OBJ", ((ColReader)file)::toOBJ));
+		actions.add(GUIUtils.createExportAction("Export as OBJ", ((Nameable) file).getName().substring(0, ((Nameable) file).getName().lastIndexOf('.')) + ".obj", "Collison File as OBJ", ((ColReader)file)::toOBJ));
 	}
 	protected void addActions()
 	{
@@ -80,7 +81,7 @@ public class Collision extends CollapseableFileList
 	}
 	protected void addReplaceButton()
 	{
-		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", file.getName(), "col",file::setData, file::setName, parent));
+		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", ((Nameable) file).getName(), "col",file::setData, ((Nameable)file)::setName, parent));
 	}
 	public void initializeSubGUI() 
 	{
@@ -263,7 +264,7 @@ public class Collision extends CollapseableFileList
 	}
 	public void update()
 	{
-		fileName.setText(file.getName());
+		fileName.setText(((Nameable) file).getName());
 		super.update();
 	}
 }

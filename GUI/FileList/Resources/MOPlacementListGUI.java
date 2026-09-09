@@ -26,6 +26,7 @@ import ResourceManagers.MSDBManager.Placement.MobObject.ObjectDefault;
 import ResourceManagers.MSDBManager.Placement.MobRandomArea;
 import ResourceManagers.MSDBManager.Placement.MobRandomPoint;
 import bFM.GUIUtils;
+import bFM.GroupCategoryManager;
 import bFM.Settings;
 import bFM.Utils;
 
@@ -362,11 +363,16 @@ public class MOPlacementListGUI extends CollapseableFileList
 			}
 			protected void initializeAll(int padding) 
 			{
-				initializeListGUI(padding, "Group Category " + data.get(0).getGroupNumber());
+				initializeListGUI(padding, GroupCategoryManager.getCategory(data.get(0).getGroupNumber()).name().toString());
 				initializeSubGUI();
 				//initializeInfoGUI();
 				addActions();
 				reAddComponents();
+			}
+			public void update()
+			{
+				fileName.setText(GroupCategoryManager.getCategory(data.get(0).getGroupNumber()).name().toString());
+				super.update();
 			}
 			protected void initializeInfoGUI() 
 			{

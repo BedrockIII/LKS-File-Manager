@@ -1,5 +1,6 @@
 package GUI.FileInfo;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -8,6 +9,7 @@ import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
 import bFM.GUIUtils;
+import bFM.Nameable;
 import bFM.Settings;
 import colReader.ColReader;
 
@@ -25,7 +27,7 @@ public class CollisionInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		fileName = GUIUtils.createNameTextField(file.getName(), file::setName);
+		fileName = GUIUtils.createNameTextField(((Nameable) file).getName(), ((Nameable)file)::setName);
 		fileSizeText = new JLabel("" + file.toBytes().length);
 		objectCountText = new JLabel("" + ((ColReader)file).getObjects().size());
 	}

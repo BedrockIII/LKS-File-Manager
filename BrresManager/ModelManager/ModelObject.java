@@ -10,8 +10,8 @@ public class ModelObject implements Data
     int matrixIndex; // -1 if null
     byte[] cache;     // Cache of the first 32 bytes of PrePrimDL
 
-    ResTagDLData  tagPrePrimDL;        // Offset to PrePrimDL, and so on
-    ResTagDLData  tagPrimDL;           // Offset to PrimDL, and so on
+    //ResTagDLData  tagPrePrimDL;        // Offset to PrePrimDL, and so on
+    //ResTagDLData  tagPrimDL;           // Offset to PrimDL, and so on
 
     // Record the presence or absence of vcd as a bit pattern.
     // The layout uses 0 for the upper 11 bits, followed by GX_VA_PNMTXIDX through GX_VA_TEX7, in order, from GXAttr.
