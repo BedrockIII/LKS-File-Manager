@@ -20,7 +20,6 @@ import javax.swing.border.EmptyBorder;
 
 import GUI.GUI;
 import bFM.Settings;
-import sun.jvm.hotspot.tools.JStack;
 
 @SuppressWarnings("serial")
 public abstract class CollapseableFileList extends FileList

@@ -50,7 +50,7 @@ public class Settings
 		System.out.println("LKS File Manager");
 		System.out.println("Version 3.8b");
 		System.out.println("     Added: Bit Flag Editor");
-		System.out.println("     		Automatically savesw in format compatible with Debug mode, and can also be loaded from debug bit flag list");
+		System.out.println("     		Automatically saves in format compatible with Debug mode, and can also be loaded from debug bit flag list");
 		System.out.println("     		VMC Editor (WIP)");
 		System.out.println("     Fixed: FP Editor (WIP, Combining scaling and rotations doesn't work properly, but this may be an issue with the game not my code.");
 		try {
@@ -63,11 +63,8 @@ public class Settings
 		System.err.println("   	 	 	 VMC Editor Fails to read some types of events properly");
 		System.err.println("    	 	 VMC Editor Fails to get Strings");
 		System.err.println("     		 FP Editor Fails to properly Extract rotation when there are scalars applied to perpendicular axes");
-		System.err.println("     		 There is a fly in my room as I am writing this. Help.");
-		System.err.println("     		 Generic File Text Editor Terminates at null strings");
-		System.err.println("     		 Generic Text Editor doesn't save edits.");
 		System.err.println("     		 Flag Viewer can only display same flag label in one place at a time");
-		System.err.println("     		 Some Editors still load all sub-GUIs when they aren't neaded");
+		System.err.println("     		 Some Editors still load all sub-GUIs when they aren't needed");
 		System.err.println("     		 Some Editors dont load Bit Flags Labels and still use int flags");
 	}
 	

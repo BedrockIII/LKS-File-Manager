@@ -15,11 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import com.sun.jna.Native;
-import com.sun.jna.platform.win32.Shell32;
-import com.sun.jna.platform.win32.WinNT.HRESULT;
-import com.sun.jna.win32.StdCallLibrary;
-
 import GUI.FileInfo.FileInfoPanel;
 import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.FileList.FileList;
@@ -36,25 +31,14 @@ public class GUI
 	static JSplitPane contents = new JSplitPane();
 	public static JFrame frame = new JFrame();
 	JPanel fileArea = new JPanel();
-	private interface Shell32 extends StdCallLibrary
-	{
-		Shell32 INSTANCE = Native.load("shell32", Shell32.class);
-        HRESULT SetCurrentProcessExplicitAppUserModelID(String AppID);
-	}
 	public GUI()
 	{
 		Settings.getSettings();
-		makeWindowsStack();
 		setTheme();
 		setMenu();
 		createFileGUIs();
         showWindow();
 	}
-	private void makeWindowsStack()
-	{
-		String appId = "LittleKingsStoryFileManager.3.8";
-		HRESULT hr = Shell32.INSTANCE.SetCurrentProcessExplicitAppUserModelID(appId);
-		}
 	private void createFileGUIs()
 	{
 		openedFileList.setBackground(Settings.bgColor);
@@ -95,6 +79,7 @@ public class GUI
 		{
 			public void windowClosing(WindowEvent e)
 			{
+				frame.setVisible(false);
 				System.out.println("Thanks for Using this!");
 				Settings.setSettings();
 				frame.dispose();

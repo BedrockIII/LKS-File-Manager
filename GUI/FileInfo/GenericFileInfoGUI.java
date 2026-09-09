@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.nio.charset.Charset;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -38,7 +40,8 @@ public class GenericFileInfoGUI extends JPanel
 		fileSize = new LabeledInputBox("File Size: ",  new JLabel("" + file.getSize()));
 		if(file.toBytes().length<50000)
 		{
-			data.setText(Utils.decodeBytesToString(file.toBytes()));
+			data.setText(new String(file.toBytes(), Charset.forName("Shift-JIS")));
+			data.setEditable(false);
 		}
 		
 	}

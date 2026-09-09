@@ -39,7 +39,7 @@ public class KingdomPlanFileList extends CollapseableFileList
 		initializeSubGUI();
 		System.out.print("█");
 		initializeInfoGUI();
-		System.out.print("█");
+		//System.out.print("█");
 		addActions();
 		System.out.print("█");
 		reAddComponents();
@@ -119,7 +119,7 @@ public class KingdomPlanFileList extends CollapseableFileList
 		protected void initializeAll(int padding) 
 		{
 			initializeListGUI(padding, "Area: \"" + area.getName() + "\"");
-			initializeInfoGUI();
+			//initializeInfoGUI();
 			initializeSubGUI();
 			addActions();
 			reAddComponents();
@@ -227,7 +227,7 @@ public class KingdomPlanFileList extends CollapseableFileList
 			protected void initializeAll(int padding) 
 			{
 				initializeListGUI(padding, "Element: \"" + element.getName() + "\"");
-				initializeInfoGUI();
+				//initializeInfoGUI();
 				addActions();
 				reAddComponents();
 			}
