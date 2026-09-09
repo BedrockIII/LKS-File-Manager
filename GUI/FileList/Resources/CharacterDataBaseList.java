@@ -59,6 +59,7 @@ import ResourceManagers.CharacterDatabaseManager.TextAnimationList.PatternList;
 import ResourceManagers.CharacterDatabaseManager.TextAnimationList.PatternPart;
 import ResourceManagers.CharacterDatabaseManager.indBinList;
 import ResourceManagers.CharacterDatabaseManager.indBinList.ind;
+import bFM.Nameable;
 import bFM.OpenedFile;
 import bFM.Settings;
 
@@ -879,7 +880,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				}
 				protected void initializeListGUI(int padding)
 				{
-					initializeListGUI(padding, "Animation: " + file.getName());
+					initializeListGUI(padding, "Animation: " + ((Nameable) file).getName());
 				}
 				protected void initializeInfoGUI() 
 				{
@@ -887,7 +888,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				}
 				public void update()
 				{
-					fileName.setText("Animation: " + file.getName());
+					fileName.setText("Animation: " + ((Nameable) file).getName());
 					super.update();
 				}
 				public void initializeSubGUI()  
@@ -919,7 +920,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					}
 					protected void initializeListGUI(int padding)
 					{
-						initializeListGUI(padding, "Part: " + file.getName());
+						initializeListGUI(padding, "Part: " + ((Nameable) file).getName());
 					}
 					protected void initializeInfoGUI() 
 					{
@@ -927,7 +928,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					}
 					public void update()
 					{
-						fileName.setText("Part: " + file.getName());
+						fileName.setText("Part: " + ((Nameable) file).getName());
 						super.update();
 					}
 					public void initializeSubGUI()  
@@ -958,7 +959,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						}
 						protected void initializeListGUI(int padding) 
 						{
-							initializeListGUI(padding, "Pattern: " + file.getName());
+							initializeListGUI(padding, "Pattern: " + ((Nameable) file).getName());
 						}
 						protected void initializeInfoGUI() 
 						{
@@ -971,7 +972,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						}
 						public void update()
 						{
-							fileName.setText("Pattern: " + file.getName());
+							fileName.setText("Pattern: " + ((Nameable) file).getName());
 						}
 					}
 				}
@@ -1024,7 +1025,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				}
 				protected void initializeAll(int padding) 
 				{
-					initializeListGUI(padding, "Pattern: " + file.getName());
+					initializeListGUI(padding, "Pattern: " + ((Nameable) file).getName());
 					//initializeInfoGUI();
 					initializeSubGUI();
 					addActions();
@@ -1049,7 +1050,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				}
 				public void update()
 				{
-					fileName.setText("Pattern: " + file.getName());
+					fileName.setText("Pattern: " + ((Nameable) file).getName());
 					super.update();
 				}
 				public class CharacterPartGUI extends CollapseableFileList
@@ -1063,7 +1064,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					}
 					protected void initializeAll(int padding) 
 					{
-						initializeListGUI(padding, "Part: " + file.getName());
+						initializeListGUI(padding, "Part: " + ((Nameable) file).getName());
 						//initializeInfoGUI();
 						initializeSubGUI();
 						addActions();
@@ -1090,7 +1091,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					}
 					public void update()
 					{
-						fileName.setText("Part: " + file.getName());
+						fileName.setText("Part: " + ((Nameable) file).getName());
 						super.update();
 					}
 					public class CharacterMaterialGUI extends FileList
@@ -1108,7 +1109,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						}
 						protected void initializeListGUI(int padding) 
 						{
-							initializeListGUI(padding, "Material: " + file.getName());
+							initializeListGUI(padding, "Material: " + ((Nameable) file).getName());
 						}
 						protected void initializeInfoGUI() 
 						{
@@ -1121,7 +1122,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						}
 						public void update()
 						{
-							fileName.setText("Material: " + file.getName());
+							fileName.setText("Material: " + ((Nameable) file).getName());
 						}
 					}
 					public class CharacterPatternDetailGUI extends FileList
@@ -1140,7 +1141,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						}
 						protected void initializeListGUI(int padding) 
 						{
-							initializeListGUI(padding, "Pattern: " + file.getName());
+							initializeListGUI(padding, "Pattern: " + ((Nameable) file).getName());
 						}
 						protected void initializeInfoGUI() 
 						{
@@ -1153,7 +1154,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						}
 						public void update()
 						{
-							fileName.setText("Pattern: " + file.getName());
+							fileName.setText("Pattern: " + ((Nameable) file).getName());
 						}
 					}
 				}

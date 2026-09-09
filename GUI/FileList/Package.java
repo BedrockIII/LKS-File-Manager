@@ -16,6 +16,7 @@ import GUI.GUI;
 import GUI.FileInfo.FileInfoFactory;
 import PCKGManager.PCKGManager;
 import bFM.GUIUtils;
+import bFM.Nameable;
 import bFM.OpenedFile;
 import bFM.Settings;
 
@@ -127,27 +128,27 @@ public class Package extends CollapseableFileList
 			}
 			if(chooseFile.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
 			{
-				Path directory = Paths.get(chooseFile.getSelectedFile().toPath().toString()+ "\\" + file.getName());
+				Path directory = Paths.get(chooseFile.getSelectedFile().toPath().toString()+ "\\" + ((Nameable) file).getName());
 				try 
 				{
+					System.out.println("Attempting to create directory without file extension");
+					directory = Paths.get(chooseFile.getSelectedFile().toPath().toString()+ "\\" + ((Nameable) file).getName().substring(0, ((Nameable) file).getName().lastIndexOf('.')));
 					Files.createDirectories(directory);
+					System.out.println("Success!");
 				}
 				catch(FileAlreadyExistsException e1)
 				{
 					System.out.println("Failed to create directory at: " + directory.toString() + " File Already Exists!!!");
-					System.out.println("Attempting to create directory without file extension");
-					directory = Paths.get(chooseFile.getSelectedFile().toPath().toString()+ "\\" + file.getName().substring(0, file.getName().lastIndexOf('.')));
-					try 
+					try
 					{
 						Files.createDirectories(directory);
-						System.out.println("Sucess!");
-					}
-					catch (IOException e2) 
+					} catch (IOException e2)
 					{
 						System.out.println("Failed to create directory at: " + directory.toString());
 						e2.printStackTrace();
 						return;
 					}
+					
 				} 
 				catch (IOException e1) 
 				{
@@ -175,12 +176,12 @@ public class Package extends CollapseableFileList
 	{
 		remove(fileList);
 		subEntries.remove(fileList);
-		packageFile.removeFile(fileList.getFile().getName());
+		packageFile.removeFile(((Nameable) fileList.getFile()).getName());
 		reAddComponents();
 	}
 	public void update()
 	{
-		fileName.setText(file.getName());
+		fileName.setText(((Nameable) file).getName());
 		super.update();
 	}
 	protected void initializeInfoGUI() 

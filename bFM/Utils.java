@@ -537,9 +537,13 @@ public class Utils
 		}
 		System.out.println("File 1 size: " + file1.length);
 		System.out.println("File 2 size: " + file2.length);
-		if(file1.length!=file2.length) ret = false;
+		if(file1.length!=file2.length)
+		{
+			ret = false;
+			count += Math.abs(file1.length-file2.length);
+		}
 		System.out.println("Total Differences: " + count);
-		System.out.println("Percent Difference: " + ((double)count/((file1.length+file2.length+0.0)/2.0))*100);
+		System.out.println("Percent Difference: " + ((double)count/(Math.max(file1.length, file2.length)))*100);
 		if(firstDifference!=-1)
 		{
 			System.out.println("First Difference at: " + firstDifference + ". File 1 is: " + file1[firstDifference] + ". File 2 is: " + file2[firstDifference] + ".");
@@ -745,6 +749,7 @@ public class Utils
 	}
 	public static byte[] encodeStringToBytes(String text, Charset charset) throws Exception
 	{
+		if(text == null || text.length() == 0) return new byte[0];
 		CharsetEncoder encoder = charset.newEncoder();
 		encoder.onMalformedInput(CodingErrorAction.REPORT);
 		encoder.onUnmappableCharacter(CodingErrorAction.REPORT);

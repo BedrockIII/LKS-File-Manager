@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import BrresManager.ModelManager.MDL0;
 import bFM.Data;
+import bFM.Nameable;
 
 public class BrresHelpers 
 {
@@ -112,7 +113,7 @@ public class BrresHelpers
 		return n;
 	}
 	@SuppressWarnings("unused")
-	public static class ResDicNode implements Data
+	public static class ResDicNode implements Data, Nameable
 	{
 		//Byte Vars
 		private int ref;
@@ -132,9 +133,9 @@ public class BrresHelpers
 		{
 			return dataPos;
 		}
-		public void setData(Data data) 
+		public void setData(Data dic) 
 		{
-			this.data = data;
+			this.data = dic;
 		}
 		public boolean equals(String name) 
 		{

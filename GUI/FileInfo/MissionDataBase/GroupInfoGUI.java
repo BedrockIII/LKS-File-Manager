@@ -41,7 +41,8 @@ public class GroupInfoGUI extends GenericFileInfoGUI
 	BitFlagPanel activationFlag1; //Next 2 Bytes
 	BitFlagPanel clearFlag; //Next 2 Bytes
 	BitFlagPanel deactivationFlag; //Next 2 Bytes
-	JTextField itemCode; 
+	JTextField itemCode;
+	JTextField nullGroupCode; 
 	GroupListGUI parent;
 	public GroupInfoGUI(MobGroup object, GroupListGUI parent) 
 	{
@@ -86,6 +87,7 @@ public class GroupInfoGUI extends GenericFileInfoGUI
 		clearFlag = new BitFlagPanel("Clear Flag", object.getClearFlag(), object::setClearFlag);
 		deactivationFlag = new BitFlagPanel("Deactivation Flag", object.getDeactivationFlag(), object::setDeactivationFlag);
 		itemCode = bFM.GUIUtils.createIntTextField(object.getItemCode(), object::setItemCode);
+		nullGroupCode = bFM.GUIUtils.createIntTextField(object.getPlacementID(), object::setPlacementID);
 	}
 	private void addGUI()
 	{
@@ -111,6 +113,7 @@ public class GroupInfoGUI extends GenericFileInfoGUI
 	private void addPlacementGUI()
 	{
 		PlacementInfo.removeAll();
+		PlacementInfo.add(new LabeledInputBox("Placement ID: ",  nullGroupCode));
 		PlacementInfo.add(new LabeledInputBox("X Position: ",  xPos));
 		PlacementInfo.add(new LabeledInputBox("Y Position: ",  yPos));
 		PlacementInfo.add(new LabeledInputBox("Z Position: ",  zPos));
@@ -123,6 +126,7 @@ public class GroupInfoGUI extends GenericFileInfoGUI
 		PlacementInfo.add(clearFlag);
 		PlacementInfo.add(deactivationFlag);
 		PlacementInfo.add(new LabeledInputBox("Item Drop: ",  itemCode));
+		
 	}
 	public void update()
 	{

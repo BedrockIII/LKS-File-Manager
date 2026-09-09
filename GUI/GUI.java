@@ -31,6 +31,13 @@ public class GUI
 	static JSplitPane contents = new JSplitPane();
 	public static JFrame frame = new JFrame();
 	JPanel fileArea = new JPanel();
+	/*
+	private interface Shell32 extends StdCallLibrary
+	{
+		Shell32 INSTANCE = Native.load("shell32", Shell32.class);
+        HRESULT SetCurrentProcessExplicitAppUserModelID(String AppID);
+	}
+	*/
 	public GUI()
 	{
 		Settings.getSettings();
@@ -38,6 +45,11 @@ public class GUI
 		setMenu();
 		createFileGUIs();
         showWindow();
+	}
+	private void makeWindowsStack()
+	{
+		//String appId = "LittleKingsStoryFileManager.3.8";
+		//HRESULT hr = Shell32.INSTANCE.SetCurrentProcessExplicitAppUserModelID(appId);
 	}
 	private void createFileGUIs()
 	{
@@ -79,14 +91,16 @@ public class GUI
 		{
 			public void windowClosing(WindowEvent e)
 			{
-				frame.setVisible(false);
-				System.out.println("Thanks for Using this!");
-				Settings.setSettings();
-				frame.dispose();
-				System.exit(0);
-
+				onClose();
 			}
 		});
+	}
+	private static void onClose()
+	{
+		System.out.println("Thanks for Using this!");
+		Settings.setSettings();
+		frame.dispose();
+		System.exit(0);
 	}
 	public static FileListPanel getFileListPanel()
 	{

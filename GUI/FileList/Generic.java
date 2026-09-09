@@ -5,8 +5,8 @@ import javax.swing.JMenuItem;
 import GUI.GUI;
 import GUI.FileInfo.FileInfoFactory;
 import PCKGManager.PCKGManager;
-import bFM.Data;
 import bFM.GUIUtils;
+import bFM.Nameable;
 import bFM.OpenedFile;
 import bFM.Settings;
 
@@ -57,7 +57,7 @@ public class Generic extends FileList
 	}
 	protected void initializeListGUI()
 	{
-		initializeListGUI(padding, file.getName());
+		initializeListGUI(padding, ((Nameable) file).getName());
 	}
 	protected void initializeInfoGUI()
 	{
@@ -85,7 +85,7 @@ public class Generic extends FileList
 	}
 	protected void addReplaceButton()
 	{
-		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", "Generic File", null, file::setData, file::setName, parent));
+		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", "Generic File", null, file::setData, ((Nameable)file)::setName, parent));
 	}
 	protected void select()
 	{
@@ -99,7 +99,7 @@ public class Generic extends FileList
 	}
 	public byte[] getBytes() 
 	{
-		System.out.println(file.getName());
+		System.out.println(((Nameable) file).getName());
 		if(infoGUI==null) return new byte[0];
 		return infoGUI.getBytes();
 	}
@@ -109,7 +109,7 @@ public class Generic extends FileList
 	}
 	public void update() 
 	{
-		fileName.setText(file.getName());
+		fileName.setText(((Nameable) file).getName());
 		super.update();
 	}
 	public void deselectAll() 
@@ -119,11 +119,11 @@ public class Generic extends FileList
 	public void setName(String name)
 	{
 		fileName.setText(name);
-		file.setName(name);
+		((Nameable) file).setName(name);
 		GUI.update();
 	}
-	public Data getFile() 
+	public OpenedFile getFile() 
 	{
-		return file;
+		return (OpenedFile) file;
 	}
 }

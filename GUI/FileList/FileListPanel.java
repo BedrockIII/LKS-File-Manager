@@ -8,7 +8,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import GUI.GUI;
 import bFM.GUIUtils;
 import bFM.Settings;
 
@@ -35,9 +34,11 @@ public class FileListPanel extends JScrollPane
 	}
 	private void filterFiles(String filter)
 	{
-		if(filter.length() <= 0 ) return;
+		//if(filter.length() <= 0 ) return;
 		file.filterAddFiles(filter);
-		GUI.update();
+		SwingUtilities.invokeLater(() -> {
+			update();
+		});
 	}
 	private void repackPanel()
 	{

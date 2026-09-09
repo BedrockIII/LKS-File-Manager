@@ -2,7 +2,7 @@ package ResourceManagers.MSDBManager;
 
 import PCKGManager.PCKGManager;
 import ResourceManagers.MSDBManager.CollisionRectangle.MissionObjectCollisionRectangles;
-import ResourceManagers.MSDBManager.Definition.MissionObjectManager;
+import ResourceManagers.MSDBManager.Definition.MissionObjectDefinitionManager;
 import ResourceManagers.MSDBManager.MissionObjectBV.MissionObjectBV;
 import ResourceManagers.MSDBManager.Placement.MissionObjectPlacementManager;
 import bFM.OpenedFile;
@@ -10,7 +10,7 @@ import bFM.OpenedFile;
 public class MSDBManager implements OpenedFile
 {
 	protected MissionObjectPlacementManager MOP;
-	protected MissionObjectManager MOB;
+	protected MissionObjectDefinitionManager MOB;
 	protected MobDropTableList ItemDrops;
 	protected MissionObjectCollisionRectangles MOCR;
 	protected MissionObjectBV BV;
@@ -28,7 +28,7 @@ public class MSDBManager implements OpenedFile
 				msDB.getFile("MOP_14_RANDOM_POINT.lst"), 
 				msDB.getFile("MOP_14_AREA_DATA.lst"));
 		
-		MOB = new MissionObjectManager(msDB.getFile("MOB_24_AI.lst"),
+		MOB = new MissionObjectDefinitionManager(msDB.getFile("MOB_24_AI.lst"),
 				msDB.getFile("MOB_24_RES_ASN.lst"),
 				msDB.getFile("MOB_24_MOD.lst"),
 				msDB.getFile("MOB_24_ATK_COL.lst"),
@@ -116,5 +116,9 @@ public class MSDBManager implements OpenedFile
 	public String getModCodeByName(int code) 
 	{
 		return MOB.getModCodeByName(code);
+	}
+	public MissionObjectDefinitionManager getDefinitions()
+	{
+		return MOB;
 	}
 }

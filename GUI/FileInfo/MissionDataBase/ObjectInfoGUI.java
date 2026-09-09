@@ -5,8 +5,6 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.text.JTextComponent;
-
 import GUI.LabeledInputBox;
 import GUI.FileInfo.ButtonedInfoBox;
 import GUI.FileInfo.GenericFileInfoGUI;

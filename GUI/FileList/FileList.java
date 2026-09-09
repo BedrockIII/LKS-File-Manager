@@ -18,6 +18,7 @@ import GUI.GUI;
 import GUI.FileInfo.GenericFileInfoGUI;
 import bFM.Data;
 import bFM.GUIUtils;
+import bFM.Nameable;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
@@ -137,7 +138,8 @@ public abstract class FileList extends JPanel
 	}
 	protected void addExportAction()
 	{
-		actions.add(GUIUtils.createExportAction("Export Raw Data", file.getName(), "Raw File", file::toBytes));
+		if(!(file instanceof Nameable)) return;
+		actions.add(GUIUtils.createExportAction("Export Raw Data", ((Nameable) file).getName(), "Raw File", file::toBytes));
 	}
 	protected boolean filterFiles(String filter)
 	{
@@ -150,8 +152,8 @@ public abstract class FileList extends JPanel
 	{
 		return fileName.getText();
 	}
-	public boolean filterAddFiles(String filter) 
+	public void filterAddFiles(String filter) 
 	{
-		return filterFiles(filter);
+		filterFiles(filter);
 	}
 }

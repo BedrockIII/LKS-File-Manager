@@ -2,24 +2,20 @@ package ResourceManagers.MSDBManager.Definition;
 
 import bFM.Data;
 
-public class MissionObjectManager implements Data
+public class MissionObjectDefinitionManager implements Data
 {
 	MobAiList AI;
 	MobResAsn Resources;
 	MobModList Definitions;
-	MobAttackColList AttackCol;
-	MobAttackElemList AttackElem;
-	MobAttackInfoList AttackInfo;
+	MobAttackList Attacks;
 	MobDamageColList DamageCol;
 	MobPresetTableList PresetTable;
-	public MissionObjectManager(byte[] ai, byte[] res, byte[] mod, byte[] AttackCol, byte[] AttackElem, byte[] AttackInfo, byte[] DamageCol, byte[] PresetTable)
+	public MissionObjectDefinitionManager(byte[] ai, byte[] res, byte[] mod, byte[] AttackCol, byte[] AttackElem, byte[] AttackInfo, byte[] DamageCol, byte[] PresetTable)
 	{
 		this.AI = new MobAiList(ai);
 		this.Resources = new MobResAsn(res);
 		this.Definitions = new MobModList(mod);
-		this.AttackCol = new MobAttackColList(AttackCol);
-		this.AttackElem = new MobAttackElemList(AttackElem);
-		this.AttackInfo = new MobAttackInfoList(AttackInfo);
+		this.Attacks = new MobAttackList(AttackInfo, AttackElem, AttackCol);
 		this.DamageCol = new MobDamageColList(DamageCol);
 		this.PresetTable = new MobPresetTableList(PresetTable);
 	}
@@ -61,15 +57,15 @@ public class MissionObjectManager implements Data
 	}
 	public byte[] getAttackElement()
 	{
-		return AttackElem.toBytes();
+		return Attacks.getAttackElement();
 	}
 	public byte[] getAttackCol() 
 	{
-		return AttackCol.toBytes();
+		return Attacks.getAttackCol();
 	}
 	public byte[] getAttackInfo() 
 	{
-		return AttackInfo.toBytes();
+		return Attacks.getAttackInfo();
 	}
 	public byte[] getDamageCol()
 	{
@@ -82,5 +78,9 @@ public class MissionObjectManager implements Data
 	public String getModCodeByName(int code) 
 	{
 		return Definitions.getModCodeByName(code);
+	}
+	public MobAttackList getAttacks()
+	{
+		return Attacks;
 	}
 }

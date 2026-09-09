@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import GUI.LabeledInputBox;
 import WorldFileManager.fpInterpreter;
 import bFM.GUIUtils;
+import bFM.Nameable;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
@@ -25,7 +26,7 @@ public class FixedPointInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		fileName = GUIUtils.createNameTextField(file.getName(), file::setName);
+		fileName = GUIUtils.createNameTextField(((Nameable)file).getName(), ((Nameable)file)::setName);
 		fileSizeText = new JLabel("" + file.toBytes().length);
 		objectCountText = new JLabel("" + ((fpInterpreter)file).getObjects().size());
 	}

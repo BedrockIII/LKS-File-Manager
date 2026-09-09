@@ -18,6 +18,7 @@ import ResourceManagers.MSDBManager.Definition.MobAiList;
 import ResourceManagers.MSDBManager.Definition.MobAttackColList;
 import ResourceManagers.MSDBManager.Definition.MobAttackElemList;
 import ResourceManagers.MSDBManager.Definition.MobAttackInfoList;
+import ResourceManagers.MSDBManager.Definition.MobAttackList;
 import ResourceManagers.MSDBManager.Definition.MobDamageColList;
 import ResourceManagers.MSDBManager.Definition.MobModList;
 import ResourceManagers.MSDBManager.Definition.MobPresetTableList;
@@ -57,8 +58,8 @@ public class ExtractionTester
 			//testBeta1()
 			//testPlacement();
 			//testItems(); 
-			//testDefinition();
-			testRepacDefinition();
+			testDefinition();
+			//testRepacDefinition();
 			//testItemDropTableExtract();
 			throw new IOException("all okay");
 		} catch (IOException e) {
@@ -195,7 +196,8 @@ public class ExtractionTester
 	private static void testDefinition() throws IOException
 	{
 		MobAttackElemList AttackElem;
-		boolean fromString = true;
+		MobAttackList Attacks = null;
+		boolean fromString = false;
 		if(!fromString)
 		{
 			MobAiList ai = new MobAiList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_AI.lst")));
@@ -203,12 +205,14 @@ public class ExtractionTester
 			MobResAsn res = new MobResAsn(Files.readAllBytes(Paths.get(inputPath+"MOB_24_RES_ASN.lst")));
 			//Files.write(Paths.get(outputPath+"MobResList.bMos"), res.toBMos().getBytes("Shift-JIS"));
 			MobModList mod = new MobModList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
+			Attacks = new MobAttackList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst")), 
+					Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst")), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst")));
 			//Files.write(Paths.get(outputPath+"MobModList.bMos"), mod.toBMos().getBytes("Shift-JIS"));
-			MobAttackColList AttackCol = new MobAttackColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst")));
+			//MobAttackColList AttackCol = new MobAttackColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst")));
 			//Files.write(Paths.get(outputPath+"MobAttackCollisionList.lst"), AttackCol.toString().getBytes("Shift-JIS"));
-			AttackElem = new MobAttackElemList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst")));
+			//AttackElem = new MobAttackElemList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst")));
 			//Files.write(Paths.get(outputPath+"MobAttackElementList.lst"), AttackElem.toString().getBytes("Shift-JIS"));
-			MobAttackInfoList AttackInfo = new MobAttackInfoList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst")));
+			//MobAttackInfoList AttackInfo = new MobAttackInfoList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst")));
 			//Files.write(Paths.get(outputPath+"MobAttackInfoList.lst"), AttackInfo.toString().getBytes("Shift-JIS"));
 			MobDamageColList DamageCol = new MobDamageColList(Files.readAllBytes(Paths.get(inputPath+"MOB_24_DMG_COL.lst")));
 			//Files.write(Paths.get(outputPath+"MobDamageCollisionList.lst"), DamageCol.toString().getBytes("Shift-JIS"));
@@ -227,10 +231,14 @@ public class ExtractionTester
 		//Utils.testDifferences(res.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_RES_ASN.lst"))); //100
 		//Utils.testDifferences(mod.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst"))); //100
 		//Utils.testDifferences(AttackCol.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst"))); //100
-		Utils.testDifferences(AttackElem.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst"))); //100"
+		//Utils.testDifferences(AttackElem.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst"))); //100"
 		//Utils.testDifferences(AttackInfo.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst"))); //100
 		//Utils.testDifferences(DamageCol.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_DMG_COL.lst"))); //100
 		//Utils.testDifferences(PresetTable.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_PRESET_TABLE.lst"))); //100
+		
+		Utils.testDifferences(Attacks.getAttackInfo(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst"))); //
+		//Utils.testDifferences(Attacks.getAttackElement(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst"))); //
+		//Utils.testDifferences(Attacks.getAttackCol(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst"))); //
 		
 	}
 	public static void testRepacDefinition() throws IOException
