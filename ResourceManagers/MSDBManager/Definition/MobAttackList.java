@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-import ResourceManagers.MSDBManager.Placement.MobGroup;
 import bFM.Data;
 import bFM.Nameable;
 import bFM.Utils;
@@ -316,6 +315,216 @@ public class MobAttackList implements Data
 		public ArrayList<MobAttackCol> getCollisions()
 		{
 			return Hitboxes;
+		}
+		public String getAttackType() {
+			return AttackType;
+		}
+		public void setSoundEffect(String attackName) {
+			name = attackName;
+		}
+		public String getSoundEffect() {
+			return name;
+		}
+		public void setAttackType(String attackType) {
+			AttackType = attackType;
+		}
+		public float getNum0() {
+			return num0;
+		}
+		public void setNum0(float num0) {
+			this.num0 = num0;
+		}
+		public float getNum1() {
+			return num1;
+		}
+		public void setNum1(float num1) {
+			this.num1 = num1;
+		}
+		public float getNum2() {
+			return num2;
+		}
+		public void setNum2(float num2) {
+			this.num2 = num2;
+		}
+		public float getNum3() {
+			return num3;
+		}
+		public void setNum3(float num3) {
+			this.num3 = num3;
+		}
+		public float getNum4() {
+			return num4;
+		}
+		public void setNum4(float num4) {
+			this.num4 = num4;
+		}
+		public float getNum5() {
+			return num5;
+		}
+		public void setNum5(float num5) {
+			this.num5 = num5;
+		}
+		public float getNum6() {
+			return num6;
+		}
+		public void setNum6(float num6) {
+			this.num6 = num6;
+		}
+		public float getNum7() {
+			return num7;
+		}
+		public void setNum7(float num7) {
+			this.num7 = num7;
+		}
+		public float getNum8() {
+			return num8;
+		}
+		public void setNum8(float num8) {
+			this.num8 = num8;
+		}
+		public float getNum9() {
+			return num9;
+		}
+		public void setNum9(float num9) {
+			this.num9 = num9;
+		}
+		public float getNum10() {
+			return num10;
+		}
+		public void setNum10(float num10) {
+			this.num10 = num10;
+		}
+		public float getNum11() {
+			return num11;
+		}
+		public void setNum11(float num11) {
+			this.num11 = num11;
+		}
+		public int getAttackCode() {
+			return attackCode;
+		}
+		public void setAttackCode(int attackCode) {
+			this.attackCode = attackCode;
+		}
+		public int getNum13() {
+			return num13;
+		}
+		public void setNum13(int num13) {
+			this.num13 = num13;
+		}
+		public byte getNum14() {
+			return num14;
+		}
+		public void setNum14(int num14) {
+			this.num14 = (byte) num14;
+		}
+		public byte getNum15() {
+			return num15;
+		}
+		public void setNum15(int num15) {
+			this.num15 = (byte) num15;
+		}
+		public byte getNum16() {
+			return num16;
+		}
+		public void setNum16(int num16) {
+			this.num16 = (byte) num16;
+		}
+		public byte getNum17() {
+			return num17;
+		}
+		public void setNum17(int num17) {
+			this.num17 = (byte) num17;
+		}
+		public byte getNum18() {
+			return num18;
+		}
+		public void setNum18(int num18) {
+			this.num18 = (byte) num18;
+		}
+		public byte getNum19() {
+			return num19;
+		}
+		public void setNum19(int num19) {
+			this.num19 = (byte) num19;
+		}
+		public byte getNum20() {
+			return num20;
+		}
+		public void setNum20(int num20) {
+			this.num20 = (byte) num20;
+		}
+		public byte getNum21() {
+			return num21;
+		}
+		public void setNum21(int num21) {
+			this.num21 = (byte) num21;
+		}
+		public int getDamage() {
+			return Damage;
+		}
+		public void setDamage(int damage) {
+			Damage = damage;
+		}
+		public int getAtkNum2() {
+			return atkNum2;
+		}
+		public void setAtkNum2(int atkNum2) {
+			this.atkNum2 = atkNum2;
+		}
+		public int getHitTypes() {
+			return HitTypes;
+		}
+		public void setHitTypes(int hitTypes) {
+			HitTypes = hitTypes;
+		}
+		public int getElementalType() {
+			return ElementalType;
+		}
+		public void setElementalType(int elementalType) {
+			ElementalType = elementalType;
+		}
+		public int getAtkNum5() {
+			return atkNum5;
+		}
+		public void setAtkNum5(int atkNum5) {
+			this.atkNum5 = atkNum5;
+		}
+		public float getAtkNum6() {
+			return atkNum6;
+		}
+		public void setAtkNum6(float atkNum6) {
+			this.atkNum6 = atkNum6;
+		}
+		public byte getAtkNum7() {
+			return atkNum7;
+		}
+		public void setAtkNum7(int atkNum7) {
+			this.atkNum7 = (byte) atkNum7;
+		}
+		public byte getAtkNum8() {
+			return atkNum8;
+		}
+		public void setAtkNum8(int atkNum8) {
+			this.atkNum8 = (byte) atkNum8;
+		}
+		public byte getHitEffect() {
+			return HitEffect;
+		}
+		public void setHitEffect(int hitEffect) {
+			HitEffect = (byte) hitEffect;
+		}
+		public byte getAtkNum10() {
+			return atkNum10;
+		}
+		public void setAtkNum10(int atkNum10) {
+			this.atkNum10 = (byte) atkNum10;
+		}
+		public ArrayList<MobAttackCol> getHitboxes() {
+			return Hitboxes;
+		}
+		public void setHitboxes(ArrayList<MobAttackCol> hitboxes) {
+			Hitboxes = hitboxes;
 		}
 	}
 	public ArrayList<MobAttack> getAttacks()

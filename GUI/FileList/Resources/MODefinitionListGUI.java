@@ -1,6 +1,7 @@
 package GUI.FileList.Resources;
 
 import GUI.FileInfo.MissionDataBase.AttackCollisionInfoGUI;
+import GUI.FileInfo.MissionDataBase.MobAttackInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
 import ResourceManagers.MSDBManager.Definition.MissionObjectDefinitionManager;
@@ -142,13 +143,17 @@ public class MODefinitionListGUI extends CollapseableFileList
 			}
 			protected void initializeInfoGUI()
 			{
-				// TODO Auto-generated method stub
-				
+				infoGUI = new MobAttackInfoGUI(Attack);
 			}
 			protected void addActions()
 			{
 				add(actions);
 				addMouseListener();
+			}
+			public void update()
+			{
+				fileName.setText("Attack: " + Attack.getName());
+				super.update();
 			}
 			private class MobAttackColListGUI extends FileList
 			{

@@ -16,6 +16,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
 import GUI.FileInfo.GenericFileInfoGUI;
+import GUI.FileInfo.NullFileInfoGUI;
 import bFM.Data;
 import bFM.GUIUtils;
 import bFM.Nameable;
@@ -29,6 +30,7 @@ public abstract class FileList extends JPanel
 	protected JLabel fileName = new JLabel();
 	protected JPopupMenu actions = new JPopupMenu();
 	protected FileNameExtensionFilter fileTypes = null;
+	protected static GenericFileInfoGUI nullGUI = null;
 	protected void initializeAll()
 	{
 		initializeAll(0);
@@ -93,7 +95,9 @@ public abstract class FileList extends JPanel
 		}
 		if(infoGUI == null)
 		{
-			System.err.println("Info GUI is null");
+			nullGUI = new NullFileInfoGUI();
+			GUI.setFileInfo(nullGUI);
+			return;
 		}
     	GUI.setFileInfo(infoGUI);
 	}
