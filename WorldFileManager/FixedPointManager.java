@@ -243,4 +243,31 @@ public class FixedPointManager implements OpenedFile
 		}
 		throw new IllegalArgumentException("Fixed Point Object has an undefined parent: " + name);
 	}
+	public void removePoint(FixedPointObject object)
+	{
+		object.parent = null;
+		objects.remove(object);
+		for(FixedPointObject child : object.getChildren())
+		{
+			removePoint(child);
+		}
+		object.getChildren().removeAll(object.getChildren());
+	}
+	public ArrayList<FixedPointObject> clearEmptyNodes()
+	{
+		ArrayList<FixedPointObject> allObjects = new ArrayList<FixedPointObject>(objects);
+		ArrayList<FixedPointObject> removedObjects = new ArrayList<FixedPointObject>();
+		for(FixedPointObject object : allObjects)
+		{
+			if(object.parent != null && object.parent.isParentNode())
+			{
+				if(object.getChildren().size() == 0)
+				{
+					removedObjects.add(object);
+					removePoint(object);
+				}
+			}
+		}
+		return removedObjects;
+	}
 }

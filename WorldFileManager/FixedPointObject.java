@@ -1,5 +1,6 @@
 package WorldFileManager;
 
+import java.awt.Component;
 import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -496,5 +497,16 @@ public class FixedPointObject implements Data
 	public boolean isParentNode()
 	{
 		return parent == null || parent == this;
+	}
+	public FixedPointObject addChild()
+	{
+		FixedPointObject child = new FixedPointObject("New Fixed Placement", manager);
+		manager.objects.add(child);
+		registerChild(child);
+		return child;
+	}
+	public FixedPointObject getParent()
+	{
+		return parent;
 	}
 }

@@ -160,4 +160,17 @@ public abstract class FileList extends JPanel
 	{
 		filterFiles(filter);
 	}
+	public GenericFileInfoGUI getInfoGUI()
+	{
+		if(infoGUI == null)
+		{
+			initializeInfoGUI();
+		}
+		if(infoGUI == null)
+		{
+			nullGUI = new NullFileInfoGUI();
+			return nullGUI;
+		}
+		return infoGUI;
+	}
 }

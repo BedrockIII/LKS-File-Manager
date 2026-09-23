@@ -19,11 +19,13 @@ import WorldFileManager.FixedPointObject;
 public class FixedPoint extends CollapseableFileList
 {
 	int padding = 0;
+	FixedPointManager data;
 	CollapseableFileList parent= null;
 	ArrayList<FixedPointObject> objects = new ArrayList<FixedPointObject>();
 	public FixedPoint(OpenedFile file, int padding, CollapseableFileList parent) 
 	{
 		this.file = file;
+		data = (FixedPointManager) file;
 		this.padding = padding;
 		this.parent = parent;
 		initializeAll(padding);
@@ -33,7 +35,7 @@ public class FixedPoint extends CollapseableFileList
 		fileTypes = new FileNameExtensionFilter("LKS Fixed Placement File", "fp", "vfp", "sfp", "lfp", "plfp");
 		initializeListGUI(padding);
 		initializeInfoGUI();
-		fileName.setText(((Nameable) file).getName());
+		fileName.setText(data.getName());
 		initializeSubGUI();
 		addActions();
 		reAddComponents();
@@ -41,12 +43,33 @@ public class FixedPoint extends CollapseableFileList
 	protected void addActions()
 	{
 		addReplaceButton();
+		addExpandAllAction();
 		addReplaceAsBFPButton();
 		addExportAction();
 		addExportBFPAction();
 		addDeleteAction();
+		//addClearEmptyNodes();
 		addMouseListener();
 		add(actions);
+	}
+	protected void addClearEmptyNodes()
+	{
+		//TODO Fix This
+		if(objects.size()==0) return;
+		JMenuItem replace = new JMenuItem("Remove Empty Data Nodes");
+		replace.addActionListener(e -> 
+		{
+			data.clearEmptyNodes();
+			subEntries.removeAll(subEntries);
+			for(FixedPointObject object : objects)
+			{
+				if(object.isParentNode())
+				{
+					subEntries.add(new FixedPointObjectListGUI(object, padding + Settings.indentSize, data));
+				}
+			}
+		});
+		actions.add(replace);
 	}
 	protected void addDeleteAction()
 	{
@@ -79,7 +102,7 @@ public class FixedPoint extends CollapseableFileList
 		{
 			if(object.isParentNode())
 			{
-				subEntries.add(new FixedPointObjectListGUI(object, padding + Settings.indentSize));
+				subEntries.add(new FixedPointObjectListGUI(object, padding + Settings.indentSize, data));
 			}
 		}
 	}
@@ -88,20 +111,22 @@ public class FixedPoint extends CollapseableFileList
 		fileName.setText(((FixedPointManager)file).getName());
 		super.update();
 	}
-	public void removeFile(FileList file) 
+	public void removeObject(FixedPointObjectListGUI file) 
 	{
 		remove(file);
-		objects.remove(((FixedPointObjectListGUI)file).object);
+		data.removePoint(file.object);
 		subEntries.remove(file);
 	}
-	private class FixedPointObjectListGUI extends CollapseableFileList
+	public static class FixedPointObjectListGUI extends CollapseableFileList
 	{
 		int padding;
 		FixedPointObject object;
+		FixedPointManager data;
 		ArrayList<FixedPointObject> children;
-		public FixedPointObjectListGUI(FixedPointObject object, int padding) 
+		public FixedPointObjectListGUI(FixedPointObject object, int padding, FixedPointManager data) 
 		{
 			this.object = object;
+			this.data = data;
 			this.padding = padding;
 			children = object.getChildren();
 			initializeAll(padding);
@@ -116,27 +141,51 @@ public class FixedPoint extends CollapseableFileList
 		protected void addActions()
 		{
 			addDeleteAction();
-			if(children!=null && children.size() != 0)
-			{
-				addExpandAllAction();
-			}
+			addNewAction();
+			addExpandAllAction();
 			addMouseListener();
 			add(actions);
 		}
-		protected void addDeleteAction()
+		protected void addNewAction()
 		{
-			if(getParent()==null) return;
-			JMenuItem replace = new JMenuItem("Delete File");
+			JMenuItem replace = new JMenuItem("Create New Sub-Object");
 			replace.addActionListener(e -> 
 			{
-				((CollapseableFileList)getParent()).removeFile(this);
+				addNewObject();
+				reAddComponents();
+			});
+			actions.add(replace);
+		}
+		private void addNewObject()
+		{
+			FixedPointObject child = object.addChild();
+			subEntries.add(new FixedPointObjectListGUI(child, padding + Settings.indentSize, data));
+		}
+		protected void addDeleteAction()
+		{
+			if(object.isParentNode())
+			{
+				return;
+			}
+			JMenuItem replace = new JMenuItem("Delete Object");
+			replace.addActionListener(e -> 
+			{
+				if(getParent() instanceof FixedPoint)
+				{
+					((FixedPoint)getParent()).removeObject(this);
+				}
+				else
+				if(getParent() instanceof FixedPointObjectListGUI)
+				{
+					((FixedPointObjectListGUI)getParent()).removeObject(this);
+				}
 				GUI.update();
 			});
 			actions.add(replace);
 		}
 		protected void initializeInfoGUI() 
 		{
-			this.infoGUI = new FixedPointObjectInfoGUI(object);
+			this.infoGUI = new FixedPointObjectInfoGUI(object, this);
 		}
 		public void update()
 		{
@@ -148,8 +197,14 @@ public class FixedPoint extends CollapseableFileList
 			subEntries.removeAll(subEntries);
 			for(FixedPointObject child : children)
 			{
-				subEntries.add(new FixedPointObjectListGUI(child, padding + Settings.indentSize));
+				subEntries.add(new FixedPointObjectListGUI(child, padding + Settings.indentSize, data));
 			}
+		}
+		public void removeObject(FixedPointObjectListGUI file) 
+		{
+			remove(file);
+			data.removePoint(file.object);
+			subEntries.remove(file);
 		}
 	}
 	protected void initializeInfoGUI() 
