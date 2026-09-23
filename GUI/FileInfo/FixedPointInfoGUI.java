@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
-import WorldFileManager.fpInterpreter;
+import WorldFileManager.FixedPointManager;
 import bFM.GUIUtils;
 import bFM.Nameable;
 import bFM.Settings;
@@ -18,7 +18,7 @@ public class FixedPointInfoGUI extends GenericFileInfoGUI
 	JLabel fileSizeText = null;
 	JTextField fileName = null;
 	JLabel objectCountText = null;
-	public FixedPointInfoGUI(fpInterpreter file) 
+	public FixedPointInfoGUI(FixedPointManager file) 
 	{
 		this.file = file;
 		makeGUI();
@@ -28,7 +28,7 @@ public class FixedPointInfoGUI extends GenericFileInfoGUI
 	{
 		fileName = GUIUtils.createNameTextField(((Nameable)file).getName(), ((Nameable)file)::setName);
 		fileSizeText = new JLabel("" + file.toBytes().length);
-		objectCountText = new JLabel("" + ((fpInterpreter)file).getObjects().size());
+		objectCountText = new JLabel("" + ((FixedPointManager)file).getObjects().size());
 	}
 	private void addGUI()
 	{

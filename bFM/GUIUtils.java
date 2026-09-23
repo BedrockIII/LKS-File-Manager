@@ -23,7 +23,7 @@ import GUI.FileList.CollapseableFileList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
-import WorldFileManager.fpInterpreter;
+import WorldFileManager.FixedPointManager;
 import colReader.ColReader;
 
 public abstract class GUIUtils 
@@ -65,31 +65,31 @@ public abstract class GUIUtils
 		JMenu newFP = new JMenu("Fixed Placement (.*fp)");
 		JMenuItem fp = new JMenuItem("Fixed Placement (.fp)");
 		fp.addActionListener(e -> {
-			OpenedFile newFile = new fpInterpreter("fp");
+			OpenedFile newFile = new FixedPointManager("fp");
 			function.accept(newFile);
 		});
 		newFP.add(fp);
 		JMenuItem vfp = new JMenuItem("Visual Fixed Placement (.vfp)");
 		vfp.addActionListener(e -> {
-			OpenedFile newFile = new fpInterpreter("vfp");
+			OpenedFile newFile = new FixedPointManager("vfp");
 			function.accept(newFile);
 		});
 		newFP.add(vfp);
 		JMenuItem sfp = new JMenuItem("Sound Zone Fixed Placement (.sfp)");
 		sfp.addActionListener(e -> {
-			OpenedFile newFile = new fpInterpreter("sfp");
+			OpenedFile newFile = new FixedPointManager("sfp");
 			function.accept(newFile);
 		});
 		newFP.add(sfp);
 		JMenuItem lfp = new JMenuItem("Light Zone Fixed Placement (.lfp)");
 		lfp.addActionListener(e -> {
-			OpenedFile newFile = new fpInterpreter("lfp");
+			OpenedFile newFile = new FixedPointManager("lfp");
 			function.accept(newFile);
 		});
 		newFP.add(lfp);
 		JMenuItem plfp = new JMenuItem("??? Fixed Placement (.plfp)");
 		plfp.addActionListener(e -> {
-			OpenedFile newFile = new fpInterpreter("plfp");
+			OpenedFile newFile = new FixedPointManager("plfp");
 			function.accept(newFile);
 		});
 		newFP.add(plfp);

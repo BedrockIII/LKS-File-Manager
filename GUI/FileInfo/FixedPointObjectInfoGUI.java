@@ -36,18 +36,18 @@ public class FixedPointObjectInfoGUI extends GenericFileInfoGUI
 	private void makeGUI()
 	{
 		fileName = GUIUtils.createNameTextField(object.getName(), object::setName);
-		refIndexText =  new JLabel("" + object.getReferenceIndex());
-		indexText =  new JLabel("" + object.getIndex());
+		//refIndexText =  new JLabel("" + object.getReferenceIndex());
+		//indexText =  new JLabel("" + object.getIndex());
 		
-		xOffsetText = bFM.GUIUtils.createFloatTextField(object.getXPos(), object::setXPos);
-		yOffsetText = bFM.GUIUtils.createFloatTextField(object.getYPos(), object::setYPos);
-		zOffsetText = bFM.GUIUtils.createFloatTextField(object.getZPos(), object::setZPos);
-		xRotationText = bFM.GUIUtils.createFloatTextField(object.getXRot(), object::setXRotation);
-		yRotationText = bFM.GUIUtils.createFloatTextField(object.getYRot(), object::setYRotation);
-		zRotationText = bFM.GUIUtils.createFloatTextField(object.getZRot(), object::setZRotation);
-		xScaleText = bFM.GUIUtils.createFloatTextField(object.getXScale(), object::setXScale);
-		yScaleText = bFM.GUIUtils.createFloatTextField(object.getYScale(), object::setYScale);
-		zScaleText = bFM.GUIUtils.createFloatTextField(object.getZScale(), object::setZScale);
+		xOffsetText = GUIUtils.createFloatTextField(object.getXPos(), object::setXPos);
+		yOffsetText = GUIUtils.createFloatTextField(object.getYPos(), object::setYPos);
+		zOffsetText = GUIUtils.createFloatTextField(object.getZPos(), object::setZPos);
+		xRotationText = GUIUtils.createFloatTextField(object.getXRot(), object::setXRotation);
+		yRotationText = GUIUtils.createFloatTextField(object.getYRot(), object::setYRotation);
+		zRotationText = GUIUtils.createFloatTextField(object.getZRot(), object::setZRotation);
+		xScaleText = GUIUtils.createFloatTextField(object.getXScale(), object::setXScale);
+		yScaleText = GUIUtils.createFloatTextField(object.getYScale(), object::setYScale);
+		zScaleText = GUIUtils.createFloatTextField(object.getZScale(), object::setZScale);
 	}
 	private void addGUI()
 	{

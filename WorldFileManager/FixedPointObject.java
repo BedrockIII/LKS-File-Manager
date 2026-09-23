@@ -226,22 +226,21 @@ public class FixedPointObject implements Data
 		}
 	}
 	public String name;
-	int index;
-	int objectType = -1;
 	RotationMatrix rot;
 	boolean blenderCoords, randomizeRotation, randomizeScale = false;
 	private static final DecimalFormat round = new DecimalFormat("0.00");
-	ArrayList<FixedPointObject> referenceObjects = new ArrayList<FixedPointObject>();
-	String type = "";
-	public FixedPointObject(String name, ArrayList<FixedPointObject> refObj)
+	FixedPointObject parent;
+	FixedPointManager manager;
+	ArrayList<FixedPointObject> children = new ArrayList<FixedPointObject>();
+	public FixedPointObject(String name, FixedPointManager manager)
 	{
 		this.name = bFM.Utils.formatString(name);
-		referenceObjects = refObj;
+		this.manager = manager;
 		rot = new RotationMatrix();
-		this.index = refObj.size();
 	}
-	public FixedPointObject(byte[] data)
+	public FixedPointObject(byte[] data, FixedPointManager manager)
 	{
+		this.manager = manager;
 		ByteBuffer bytes = ByteBuffer.wrap(data);
 		initializeFromBytes(bytes);
 	}
@@ -250,56 +249,17 @@ public class FixedPointObject implements Data
 		//byteBuffer.order(ByteOrder.BIG_ENDIAN);
 		byte chara = data.get();
 		name = "";
-		//System.out.println("aab");
 		while(chara!=0)
 		{
 			name += (char)chara;
-			//System.out.println((char)chara);
-			chara = data.get();
+			chara = data.get();		
 		}
-				index = data.getInt(64);
-				objectType = data.getInt(68);
+		manager.registerToParentFromIndex(this, data.getInt(68));
 				
-				rot = new RotationMatrix();
-				data.position(0x60);
-				rot.initializeFromBytes(data);
-	}
-	public FixedPointObject(ArrayList<String> lines, int index, ArrayList<FixedPointObject> refObj,boolean blenderCoords,boolean randomizeRotation,boolean randomizeScale)
-	{
-		this.blenderCoords = blenderCoords;
-		this.randomizeRotation = randomizeRotation;
-		this.randomizeScale = randomizeScale;
-		referenceObjects = refObj;
-		objectType = 0;
-		this.index = index;
-		if(index == 0) objectType = -1;
 		rot = new RotationMatrix();
-		
-		for(int i = 0; i<lines.size(); i++)
-		{
-			if(lines.get(i).indexOf("<<Name>>")!=-1)
-			{
-				name = bFM.Utils.formatString(lines.get(i));
-			}
-			else if(lines.get(i).indexOf("<<Object>>")!=-1)
-			{
-				addObjectLine(lines.get(i));
-			}
-			else if(lines.get(i).indexOf("<<Position>>")!=-1)
-			{
-				addPositionLine(lines.get(i));
-			}
-			else if(lines.get(i).indexOf("<<Stretch>>")!=-1)
-			{
-				addStretchLine(lines.get(i));
-			}
-			else if(lines.get(i).indexOf("<<Rotation>>")!=-1)
-			{
-				addRotationLine(lines.get(i));
-			}
-		}
+		data.position(0x60);
+		rot.initializeFromBytes(data);
 	}
-
 	public String getName()
 	{
 		return name;
@@ -325,15 +285,7 @@ public class FixedPointObject implements Data
 	}
 	private void addObjectLine(String line)
 	{
-		String objectName =  bFM.Utils.formatString(line);
-		for(int i = 0; i < referenceObjects.size(); i++)
-		{
-			if(objectName.equals(referenceObjects.get(i).name))
-			{
-				objectType = i;
-				break;
-			}
-		}
+		parent = manager.getObject(Utils.formatString(line));
 	}
 	private void addPositionLine(String line)
 	{
@@ -358,7 +310,7 @@ public class FixedPointObject implements Data
 	private void addRotationLine(String line)
 	{
 		float[] vals = getCoords(line);
-		if(fpInterpreter.DEGREEMODE)
+		if(FixedPointManager.DEGREEMODE)
 		{
 			rot.setEulerXRotationDegrees((float) (vals[1]));
 			rot.setEulerYRotationDegrees((float) (vals[2]));
@@ -375,14 +327,6 @@ public class FixedPointObject implements Data
 	{
 		return bFM.Utils.formatCoords(line, blenderCoords);
 	}
-	public int getObjectType()
-	{
-		return objectType;
-	}
-	public void setType(String type)
-	{
-		this.type = type;
-	}
  	public String toBFP()
 	{
  		
@@ -395,9 +339,9 @@ public class FixedPointObject implements Data
 		{
 			nameLine = "<<Name>> \"" + name + "\"\n";
 		}
-		if(type.length()>0)
+		if(parent != null)
 		{
-			objectLine = "\t<<Object>> \"" + type + "\"\n";
+			objectLine = "\t<<Object>> \"" + parent.name + "\"\n";
 		}
 		if(rot.xPos!=0.0||rot.yPos!=0.0||rot.zPos!=0.0)
 		{
@@ -426,10 +370,6 @@ public class FixedPointObject implements Data
 	public void setBlenderCoords(boolean b) 
 	{
 		blenderCoords = b;
-	}
-	public int getReferenceIndex() 
-	{
-		return objectType;
 	}
 	public void setName(String name) 
 	{
@@ -491,9 +431,15 @@ public class FixedPointObject implements Data
 		{
 			ret.put((byte) name.charAt(i));
 		}
-		ret.putInt(64, index);
-		ret.putInt(68, objectType);
-		
+		ret.putInt(64, manager.getObjects().indexOf(this));
+		if(parent == null || parent == this)
+		{
+			ret.putInt(68, -1);
+		}
+		else
+		{
+			ret.putInt(68, manager.getObjects().indexOf(parent));
+		}
 		return Utils.mergeArrays(ret.array(), rot.toArray());
 	}
 	
@@ -537,8 +483,18 @@ public class FixedPointObject implements Data
 	{
 		rot.setEulerZScale(zScl);
 	}
-	public int getIndex() 
+	public void registerChild(FixedPointObject child)
 	{
-		return index;
+		if(this==child) throw new IllegalArgumentException("A Child Cannot Be It's Own Parent!!!");
+		child.parent = this;
+		children.add(child);
+	}
+	public ArrayList<FixedPointObject> getChildren()
+	{
+		return children;
+	}
+	public boolean isParentNode()
+	{
+		return parent == null || parent == this;
 	}
 }

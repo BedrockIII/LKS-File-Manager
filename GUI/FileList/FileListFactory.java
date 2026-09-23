@@ -18,7 +18,7 @@ import SystemDataManagers.MenuDB.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import VMC.VMCConverter;
-import WorldFileManager.fpInterpreter;
+import WorldFileManager.FixedPointManager;
 import bFM.OpenedFile;
 import colReader.ColReader;
 
@@ -26,7 +26,7 @@ public class FileListFactory
 {
 	public static FileList makeListGUI(OpenedFile file, int padding, CollapseableFileList parent)
 	{
-		if(file instanceof fpInterpreter)
+		if(file instanceof FixedPointManager)
 		{
 			return new FixedPoint(file, padding, parent);
 		}

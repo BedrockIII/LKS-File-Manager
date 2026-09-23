@@ -10,7 +10,7 @@ import SystemDataManagers.MenuDB.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import VMC.VMCConverter;
-import WorldFileManager.fpInterpreter;
+import WorldFileManager.FixedPointManager;
 import colReader.ColReader;
 
 public interface OpenedFile extends Data, Nameable
@@ -21,7 +21,7 @@ public interface OpenedFile extends Data, Nameable
 		String fileType = Utils.getFileType(name, file);
 		if(fileType.equals("Fixed Point"))
 		{
-			return new fpInterpreter(file, name);
+			return new FixedPointManager(file, name);
 		}
 		else if(fileType.equals("Collision"))
 		{

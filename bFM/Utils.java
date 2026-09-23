@@ -511,7 +511,7 @@ public class Utils
 		{
 			return "Collision";
 		}
-		else if(WorldFileManager.fpInterpreter.isFixedPointFile(file))
+		else if(WorldFileManager.FixedPointManager.isFixedPointFile(file))
 		{
 			return "Fixed Point";
 		}
