@@ -15,9 +15,11 @@ import GUI.FileInfo.MissionDataBase.RandomAreaListInfoGUI;
 import GUI.FileInfo.MissionDataBase.RandomPositionGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
+import GUI.PopupWindows.ChangeCategoryWindow;
 import GUI.PopupWindows.NewMobGroupTypeWindow;
 import GUI.PopupWindows.NewMobObjectWindow;
 import GUI.PopupWindows.NewMobRandomAreaWindow;
+import GUI.PopupWindows.SetPlacementClearFlagsPopupWindow;
 import ResourceManagers.MSDBManager.Placement.MissionObjectPlacementManager;
 import ResourceManagers.MSDBManager.Placement.MobConstantPlace;
 import ResourceManagers.MSDBManager.Placement.MobGroup;
@@ -25,6 +27,7 @@ import ResourceManagers.MSDBManager.Placement.MobObject;
 import ResourceManagers.MSDBManager.Placement.MobObject.ObjectDefault;
 import ResourceManagers.MSDBManager.Placement.MobRandomArea;
 import ResourceManagers.MSDBManager.Placement.MobRandomPoint;
+import bFM.FlagManager;
 import bFM.GUIUtils;
 import bFM.GroupCategoryManager;
 import bFM.Settings;
@@ -34,11 +37,11 @@ import bFM.Utils;
 public class MOPlacementListGUI extends CollapseableFileList
 {
 	MissionObjectPlacementManager data;
-	MissionObjectDatabase parent;
+	public MissionObjectDatabase parent;
 	
 	//Things
 	RandomAreasListGUI RandomPlaces;
-	GroupTypesListGUI Groups;
+	GroupCategoriesListGUI Groups;
 	
 	int padding = 0;
 	public MOPlacementListGUI(MissionObjectPlacementManager file, int padding, MissionObjectDatabase parent) 
@@ -52,7 +55,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 	public void initializeSubGUI() 
 	{
 		subEntries.removeAll(subEntries);
-		Groups = new GroupTypesListGUI(data, padding + Settings.indentSize, this);
+		Groups = new GroupCategoriesListGUI(data, padding + Settings.indentSize, this);
 		subEntries.add(Groups);
 		RandomPlaces = new RandomAreasListGUI(data.getAreaList(), padding + Settings.indentSize, this);
 		subEntries.add(RandomPlaces);
@@ -274,12 +277,12 @@ public class MOPlacementListGUI extends CollapseableFileList
 			reAddComponents();
 		}
 	}
-	public class GroupTypesListGUI extends CollapseableFileList
+	public class GroupCategoriesListGUI extends CollapseableFileList
 	{
 		MissionObjectPlacementManager data;
-		MOPlacementListGUI parent;
+		public MOPlacementListGUI parent;
 		int padding = 0;
-		public GroupTypesListGUI(MissionObjectPlacementManager file, int padding, MOPlacementListGUI parent) 
+		public GroupCategoriesListGUI(MissionObjectPlacementManager file, int padding, MOPlacementListGUI parent) 
 		{
 			this.parent = parent;
 			data = file;
@@ -291,7 +294,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 			//System.out.println("Initializing Group Sub-GUI");
 			for(int code : data.getGroupCodes())
 			{
-				subEntries.add(new GroupsListGUI(data.getGroupsByCode(code), padding + Settings.indentSize, this));
+				subEntries.add(new GroupCategoryListGUI(data.getGroupsByCode(code), padding + Settings.indentSize, this));
 				//System.out.print(".");
 			}
 			//System.out.println("\nFinished");
@@ -326,15 +329,15 @@ public class MOPlacementListGUI extends CollapseableFileList
 		}
 		public void newGroupCategory(int code)
 		{
-			subEntries.add(new GroupsListGUI(code, padding + Settings.indentSize, this));
+			subEntries.add(new GroupCategoryListGUI(code, padding + Settings.indentSize, this));
 			reAddComponents();
 		}
-		public class GroupsListGUI extends CollapseableFileList
+		public static class GroupCategoryListGUI extends CollapseableFileList
 		{
 			ArrayList<MobGroup> data;
-			GroupTypesListGUI parent;
+			public GroupCategoriesListGUI parent;
 			int padding = 0;
-			private GroupsListGUI(int code, int padding, GroupTypesListGUI parent) 
+			private GroupCategoryListGUI(int code, int padding, GroupCategoriesListGUI parent) 
 			{
 				this.parent = parent;
 				data = new ArrayList<MobGroup>();
@@ -344,7 +347,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 				this.padding = padding;
 				initializeAll(padding);
 			}
-			public GroupsListGUI(ArrayList<MobGroup> file, int padding, GroupTypesListGUI parent) 
+			public GroupCategoryListGUI(ArrayList<MobGroup> file, int padding, GroupCategoriesListGUI parent) 
 			{
 				this.parent = parent;
 				data = file;
@@ -363,7 +366,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 			}
 			protected void initializeAll(int padding) 
 			{
-				initializeListGUI(padding, GroupCategoryManager.getCategory(data.get(0).getGroupNumber()).name().toString());
+				initializeListGUI(padding, GroupCategoryManager.getCategory(data.get(0).getGroupCategoryID()).name().toString());
 				initializeSubGUI();
 				//initializeInfoGUI();
 				addActions();
@@ -371,7 +374,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 			}
 			public void update()
 			{
-				fileName.setText(GroupCategoryManager.getCategory(data.get(0).getGroupNumber()).name().toString());
+				fileName.setText(GroupCategoryManager.getCategory(data.get(0).getGroupCategoryID()).name().toString());
 				super.update();
 			}
 			protected void initializeInfoGUI() 
@@ -380,6 +383,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 			}
 			protected void addActions() 
 			{
+				setNullFlagsByBaseAction();
 				exportAsBMosAction();
 				addGroupAction();
 				addExpandAllAction();
@@ -406,9 +410,18 @@ public class MOPlacementListGUI extends CollapseableFileList
 				});
 				actions.add(removeElem);
 			}
+			public void setNullFlagsByBaseAction() 
+			{
+				JMenuItem setFlags = new JMenuItem("Set Clear Flags");
+				setFlags.addActionListener(e -> {
+					new SetPlacementClearFlagsPopupWindow(this);
+				});
+				actions.add(setFlags);
+				
+			}
 			public void exportAsBMosAction() 
 			{
-				actions.add(GUIUtils.createExportAction("Export as bMos", "Group " + data.get(0).getGroupNumber() + ".bMos", "bMos", this::toBMos));
+				actions.add(GUIUtils.createExportAction("Export as bMos", "Group " + data.get(0).getGroupCategoryID() + ".bMos", "bMos", this::toBMos));
 			}
 			private byte[] toBMos()
 			{
@@ -424,8 +437,8 @@ public class MOPlacementListGUI extends CollapseableFileList
 				JMenuItem removeElem = new JMenuItem("Add Group");
 				removeElem.addActionListener(e -> 
 				{
-					int index = parent.data.getIndexForGroup(data.get(0).getGroupNumber());
-					MobGroup g = new MobGroup(index, data.get(0).getGroupNumber());
+					int index = parent.data.getIndexForGroup(data.get(0).getGroupCategoryID());
+					MobGroup g = new MobGroup(index, data.get(0).getGroupCategoryID());
 					parent.data.getMobGroups().add(g);
 					data.add(g);
 					subEntries.add(new GroupListGUI(g, padding + Settings.indentSize, this));
@@ -433,14 +446,14 @@ public class MOPlacementListGUI extends CollapseableFileList
 				});
 				actions.add(removeElem);
 			}
-			public class GroupListGUI extends CollapseableFileList
+			public static class GroupListGUI extends CollapseableFileList
 			{
-				MobGroup data;
-				GroupsListGUI parent;
+				public MobGroup data;
+				public GroupCategoryListGUI parent;
 				JMenuItem moveUp = null;
 				JMenuItem moveDown = null;
 				int padding = 0;
-				public GroupListGUI(MobGroup file, int padding, GroupsListGUI parent) 
+				public GroupListGUI(MobGroup file, int padding, GroupCategoryListGUI parent) 
 				{
 					this.parent = parent;
 					data = file;
@@ -471,12 +484,22 @@ public class MOPlacementListGUI extends CollapseableFileList
 				{
 					if(data.getPlacement() == null) addConstantPlaceAction();
 					else removeConstantPlaceAction();
+					addChangeCategoryAction();
 					addObjectAction();
 					addDeleteAction();
 					addMoveDownAction();
 					addMoveUpAction();
 					add(actions);
 					addMouseListener();
+				}
+				private void addChangeCategoryAction()
+				{
+					JMenuItem removeElem = new JMenuItem("Change Group Category");
+					removeElem.addActionListener(e -> {
+						new ChangeCategoryWindow(this);
+						GUI.update();
+					});
+					actions.add(removeElem);
 				}
 				protected void addObjectAction()
 				{
@@ -700,18 +723,22 @@ public class MOPlacementListGUI extends CollapseableFileList
 					data.getObjects().add(index - 1, object.data);
 					reAddComponents();
 				}
-				public void newObject(ObjectDefault objectType) 
+				public void newObject(ObjectDefault objectType, int id) 
 				{
-					MobObject o = data.addObject(objectType);
+					MobObject o = data.addObject(id, objectType);
 					subEntries.add(new ObjectListGUI(o, padding + Settings.indentSize, this));
 					reAddComponents();
 				}
 			}
 			public void removeGroup(GroupListGUI object)
 			{
+				removeGroupFromCategory(object);
+				parent.parent.data.removeGroup(object.data);
+			}
+			public void removeGroupFromCategory(GroupListGUI object)
+			{
 				data.remove(object.data);
 				subEntries.remove(object);
-				parent.parent.data.removeGroup(object.data);
 				reAddComponents();
 			}
 			public boolean isLast(GroupListGUI object) 
@@ -748,6 +775,85 @@ public class MOPlacementListGUI extends CollapseableFileList
 				data.add(index - 1, object.data);
 				reAddComponents();
 			}
+			public int getGroupCategoryID()
+			{
+				if(data.size() == 0) return -1;
+				return data.get(0).getGroupCategoryID();
+			}
+			public void setPlacementClearFlags(int flagInt, boolean nullFlag, boolean setFlag, boolean generateName)
+			{
+				int flagCounter = flagInt;
+				for(MobGroup group : data)
+				{
+					if(group.getPlacement() != null)
+					{
+						MobConstantPlace placement = group.getPlacement();
+						int clearFlag = placement.getClearFlag();
+						if(clearFlag == -1 && nullFlag)
+						{
+							placement.setClearFlag(flagCounter);
+							if(generateName)
+							{
+								FlagManager.getBitFlag(flagCounter).setName(GroupCategoryManager.getCategory(group.getGroupCategoryID()).name().toString() + "_" + (flagCounter - flagInt));
+							}
+							flagCounter++;
+						}
+						if(clearFlag != -1 && setFlag)
+						{
+							placement.setClearFlag(flagCounter);
+							flagCounter++;
+							if(generateName)
+							{
+								FlagManager.getBitFlag(flagCounter).setName(GroupCategoryManager.getCategory(group.getGroupCategoryID()).name().toString() + "_" + (flagCounter - flagInt));
+							}
+							flagCounter++;
+						}
+					}
+				}
+				update();
+			}
+			public void addGroup(GroupListGUI object)
+			{
+				subEntries.remove(object);//to be safe
+				data.add(object.data);
+				subEntries.add(object);
+				object.parent = this;
+				reAddComponents();
+			}
 		}
+		public void addGroupGUI(MOPlacementListGUI.GroupCategoriesListGUI.GroupCategoryListGUI.GroupListGUI newGUI)
+		{
+			for(FileList gui : subEntries)
+			{
+				if(gui instanceof GroupCategoryListGUI)
+				{
+					if(((GroupCategoryListGUI)gui).getGroupCategoryID()==newGUI.data.getGroupCategoryID())
+					{
+						
+						newGUI.parent.removeGroupFromCategory(newGUI);
+						((GroupCategoryListGUI)gui).addGroup(newGUI);
+						reAddComponents();
+						return;
+					}
+				}
+			}
+		}
+		public void reOrganizeByCategory()
+		{
+			MissionObjectPlacementManager db = parent.data;
+			ArrayList<MobGroup> Groups = db.getMobGroups();
+			Groups.removeAll(Groups);
+			for(FileList gui : subEntries)
+			{
+				if(gui instanceof GroupCategoryListGUI)
+				{
+					Groups.addAll(((GroupCategoryListGUI)gui).data);
+				}
+			}
+		}
+	}
+	public void reOrganizeByCategory()
+	{
+		Groups.reOrganizeByCategory();
 	}
 }

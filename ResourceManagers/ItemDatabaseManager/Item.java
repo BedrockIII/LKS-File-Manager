@@ -5,9 +5,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import bFM.Data;
+import bFM.Nameable;
 import bFM.Utils;
 
-public class Item implements Data
+public class Item implements Data, Nameable
 {
 	//Item Flags
 	final static int item1Mask = 0x0001;

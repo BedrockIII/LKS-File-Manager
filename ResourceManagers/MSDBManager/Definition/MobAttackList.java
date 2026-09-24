@@ -14,6 +14,8 @@ import bFM.Utils;
 public class MobAttackList implements Data
 {
 	private ArrayList<MobAttack> Attacks;
+	private ArrayList<MobAttackCol> AttacklessCols = new ArrayList<MobAttackCol>();
+	private ArrayList<MobAttack> AttackElems = new ArrayList<MobAttack>();
 	public MobAttackList(byte[] atkInfo, byte[] atkElem, byte[] atkCol)
 	{
 		Attacks = new ArrayList<MobAttack>();
@@ -34,7 +36,7 @@ public class MobAttackList implements Data
 		if(atkElem.length<4) return;
 		for(int i = 4; i<atkElem.length; i+=36)
 		{
-			int atkCode = ByteBuffer.wrap(atkElem).order(ByteOrder.BIG_ENDIAN).getShort(i);
+			int atkCode = Utils.getShort(atkElem, i);
 			try
 			{
 				getAttackFromCode(atkCode).addElemData(Arrays.copyOfRange(atkElem, i, i+36));
@@ -42,6 +44,7 @@ public class MobAttackList implements Data
 			catch(NoSuchElementException e)
 			{
 				System.err.println("Error Finding Defined Attack with code (Element): " + atkCode);
+				AttackElems.add(MobAttack.fromElement(Arrays.copyOfRange(atkElem, i, i+36)));
 			}
 		}
 	}
@@ -50,7 +53,7 @@ public class MobAttackList implements Data
 		if(atkCol.length<4) return;
 		for(int i = 4; i<atkCol.length; i+=36)
 		{
-			int atkCode = ByteBuffer.wrap(atkCol).order(ByteOrder.BIG_ENDIAN).getShort(i);
+			int atkCode = Utils.getShort(atkCol, i);
 			try
 			{
 				getAttackFromCode(atkCode).addColData(Arrays.copyOfRange(atkCol, i, i+36));
@@ -58,6 +61,7 @@ public class MobAttackList implements Data
 			catch(NoSuchElementException e)
 			{
 				System.err.println("Error Finding Defined Attack with code (Collision): " + atkCode);
+				AttacklessCols.add(new MobAttackCol(Arrays.copyOfRange(atkCol, i, i+36)));
 			}
 		}
 	}
@@ -69,7 +73,8 @@ public class MobAttackList implements Data
 			if(a.attackCode == atkCode)
 			{
 				if(ret == null) ret = a;
-				else throw new IllegalArgumentException("There are >1 Attacks with the same code!!! " + atkCode);
+				//else throw new IllegalArgumentException("There are >1 Attacks with the same code!!! " + atkCode);
+				else System.err.println("There are >1 Attacks with the same code!!! " + atkCode);
 			}
 		}
 		if(ret == null) throw new NoSuchElementException("There are no Attacks with the same code!!! " + atkCode);
@@ -90,8 +95,10 @@ public class MobAttackList implements Data
 	public byte[] getAttackElement()
 	{
 		byte[] ret = new byte[]{0,1};
-		ret = Utils.mergeArrays(ret, Utils.toByteArr(Attacks.size(), 2));
+		ret = Utils.mergeArrays(ret, Utils.toByteArr(Attacks.size() + AttackElems.size(), 2));
 		for(MobAttack element : Attacks)
+			ret = Utils.mergeArrays(ret, element.toElemBytes());
+		for(MobAttack element : AttackElems)
 			ret = Utils.mergeArrays(ret, element.toElemBytes());
 		return ret;
 	}
@@ -100,14 +107,61 @@ public class MobAttackList implements Data
 		ArrayList<MobAttackCol> AttackCol = new ArrayList<MobAttackCol>();
 		for(MobAttack atk : Attacks)
 			if(atk.Hitboxes != null)AttackCol.addAll(atk.Hitboxes);
+		AttackCol.addAll(AttacklessCols);;
 		byte[] ret = new byte[]{0,1};
 		ret = Utils.mergeArrays(ret, Utils.toByteArr(AttackCol.size(), 2));
-		for(MobAttackCol col : AttackCol)
-			ret = Utils.mergeArrays(ret, col.toBytes());
+		for(int i = 0; i < AttackCol.size(); i++)
+		{
+			if((int)(ret.length/36) == 597)
+			{//If the amount of added things at the end is equal to the index of the first special col
+				ret = addSpecialCollisions(ret, AttackCol);
+			}
+			MobAttackCol col = AttackCol.get(i);
+			if(!isSpecialCollision(col))
+			{
+				ret = Utils.mergeArrays(ret, col.toBytes());
+			}
+		}
+		while((int)(ret.length/36) < 597)
+		{//If the amount of added things at the end is less than the index of the first special col
+			ret = Utils.mergeArrays(ret, new MobAttackCol().toBytes());
+		}
+		if((int)(ret.length/36) == 597)
+		{//If the amount of added things at the end is equal to the index of the first special col
+			ret = addSpecialCollisions(ret, AttackCol);
+		}
 		return ret;
-		
 	}
-	public byte[] getAttackInfo()
+	static final int specialCollisionIndex = 597;
+	static final int[] specialCollisionIDs = {200 , 201, 202, 38000, 
+			3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+			19, 20, 21, 22, 23, 24, 25, 26, 140, 28, 29, 30, 31, 32, 
+			127, 128, 129, 130, 131, 132, 133, 42, 43, 44, 45, 46, 
+			47, 48, 49, 50};
+	private boolean isSpecialCollision(MobAttackCol col)
+	{
+		for(int i : specialCollisionIDs)
+		{
+			if(i == col.attackCode) return true;
+		}
+		return false;
+	}
+	private byte[] addSpecialCollisions(byte[] ret, ArrayList<MobAttackCol> AttackCol)
+	{
+		for(int i : specialCollisionIDs)
+		{
+			for(MobAttackCol col : AttackCol)
+			{
+				if(i == col.attackCode)
+				{
+					ret = Utils.mergeArrays(ret, col.toBytes());
+					break;
+				}
+			}
+		}
+		return ret;
+	}
+ 	public byte[] getAttackInfo()
 	{
 		byte[] ret = new byte[]{0,1};
 		ret = Utils.mergeArrays(ret, Utils.toByteArr(Attacks.size(), 2));
@@ -115,7 +169,7 @@ public class MobAttackList implements Data
 			ret = Utils.mergeArrays(ret, atk.toInfoBytes());
 		return ret;
 	}
-	public class MobAttack implements Nameable, Data
+	public static class MobAttack implements Nameable, Data
 	{
 		String AttackName;//16
 		String AttackType;//16
@@ -156,6 +210,10 @@ public class MobAttackList implements Data
 		//ATK Cols
 		ArrayList<MobAttackCol> Hitboxes = new ArrayList<MobAttackCol>();
 		
+		private MobAttack()
+		{
+			
+		}
 		private MobAttack(byte[] data)
 		{
 			ByteBuffer data2 = ByteBuffer.wrap(data);
@@ -183,6 +241,14 @@ public class MobAttackList implements Data
 			num19 = data[89];
 			num20 = data[90];
 			num21 = data[91];
+			//Utils.DebugPrint(String.format("Registered New Attack: %s, %d", AttackName, attackCode));
+		}
+		private static MobAttack fromElement(byte[] data)
+		{
+			MobAttack ret = new MobAttack();
+			ret.attackCode = Utils.getShort(data, 0);
+			ret.addElemData(data);
+			return ret;
 		}
 		public void addColData(byte[] data) 
 		{
@@ -250,6 +316,7 @@ public class MobAttackList implements Data
 			finalRet = Utils.mergeArrays(finalRet, num19);
 			finalRet = Utils.mergeArrays(finalRet, num20);
 			finalRet = Utils.mergeArrays(finalRet, num21);
+			//Utils.DebugPrint(String.format("Wrote Attack: %s, %d", AttackName, attackCode));
 			return finalRet;
 		}
 		private byte[] toElemBytes()

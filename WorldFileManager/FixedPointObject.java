@@ -30,6 +30,7 @@ public class FixedPointObject implements Data
 		public void initializeFromBytes(ByteBuffer data) 
 		{
 			int offset = data.position();
+			/*
 			float xSquared = data.getFloat(offset + 0x00) * data.getFloat(offset + 0x00);
 			xSquared += data.getFloat(offset + 0x10) * data.getFloat(offset + 0x10);
 			xSquared += data.getFloat(offset + 0x20) * data.getFloat(offset + 0x20);
@@ -50,6 +51,30 @@ public class FixedPointObject implements Data
 			zRotation = (float) Math.atan(
 					-(data.getFloat(offset + 0x04) /yScale) /
 					(data.getFloat(offset)/yScale));
+			*/
+			
+			float xSquared = data.getFloat(offset + 0x00) * data.getFloat(offset + 0x00);
+			xSquared += data.getFloat(offset + 0x04) * data.getFloat(offset + 0x04);
+			xSquared += data.getFloat(offset + 0x08) * data.getFloat(offset + 0x08);
+			xScale = (float) Math.sqrt(xSquared);
+			float ySquared = data.getFloat(offset + 0x10) * data.getFloat(offset + 0x10);
+			ySquared += data.getFloat(offset + 0x14) * data.getFloat(offset + 0x14);
+			ySquared += data.getFloat(offset + 0x18) * data.getFloat(offset + 0x18);
+			yScale = (float) Math.sqrt(ySquared);
+			float zSquared = data.getFloat(offset + 0x20) * data.getFloat(offset + 0x20);
+			zSquared += data.getFloat(offset + 0x24) * data.getFloat(offset + 0x24);
+			zSquared += data.getFloat(offset + 0x28) * data.getFloat(offset + 0x28);
+			zScale = (float) Math.sqrt(zSquared);
+			
+			xRotation = (float) Math.atan(
+					-(data.getFloat(offset + 0x18)/yScale) /
+					(data.getFloat(offset + 0x28)/zScale));
+			yRotation = (float) Math.asin(data.getFloat(offset + 0x20)/zScale);
+			zRotation = (float) Math.atan(
+					-(data.getFloat(offset + 0x10) /yScale) /
+					(data.getFloat(offset)/yScale));
+			
+			
 			
 			
 			xPos = data.getFloat(offset + 0x30);
@@ -110,7 +135,7 @@ public class FixedPointObject implements Data
 		{
 			this.zRotation = (float) (zRotation/180*Math.PI);
 		}
-		private float[][] setMatrixFromMatricies(float[][] a, float[][] b)
+		private float[][] applyScaling(float[][] a)
 		{
 			float[][] ret = new float[4][4];
 			ret[0][0] = 1;
@@ -118,17 +143,17 @@ public class FixedPointObject implements Data
 			ret[2][2] = 1;
 			ret[3][3] = 1;
 			
-			ret[0][0] = a[0][0]*b[0][0] + a[0][1]*b[1][0] + a[0][2]*b[2][0];
-			ret[0][1] = a[0][0]*b[0][1] + a[0][1]*b[1][1] + a[0][2]*b[2][1];
-			ret[0][2] = a[0][0]*b[0][2] + a[0][1]*b[1][2] + a[0][2]*b[2][2];
+			ret[0][0] = a[0][0]*xScale;
+			ret[0][1] = a[0][1]*xScale;
+			ret[0][2] = a[0][2]*xScale;
 			
-			ret[1][0] = a[1][0]*b[0][0] + a[1][1]*b[1][0] + a[1][2]*b[2][0];
-			ret[1][1] = a[1][0]*b[0][1] + a[1][1]*b[1][1] + a[1][2]*b[2][1];
-			ret[1][2] = a[1][0]*b[0][2] + a[1][1]*b[1][2] + a[1][2]*b[2][2];
+			ret[1][0] = a[1][0]*yScale;
+			ret[1][1] = a[1][1]*yScale;
+			ret[1][2] = a[1][2]*yScale;
 			
-			ret[2][0] = a[2][0]*b[0][0] + a[2][1]*b[1][0] + a[2][2]*b[2][0];
-			ret[2][1] = a[2][0]*b[0][1] + a[2][1]*b[1][1] + a[2][2]*b[2][1];
-			ret[2][2] = a[2][0]*b[0][2] + a[2][1]*b[1][2] + a[2][2]*b[2][2];
+			ret[2][0] = a[2][0]*zScale;
+			ret[2][1] = a[2][1]*zScale;
+			ret[2][2] = a[2][2]*zScale;
 			
 			return ret;
 		}
@@ -147,23 +172,31 @@ public class FixedPointObject implements Data
 		}
 		public byte[] toArray()
 		{
-			float[][] scalingMtx = new float[4][4];
-			scalingMtx[0][0] = xScale;
-			scalingMtx[1][1] = yScale;
-			scalingMtx[2][2] = zScale;
 			float[][] rotationMtx = new float[4][4];
 			rotationMtx[0][0] = (float) (Math.cos(yRotation) * Math.cos(zRotation));
-			rotationMtx[0][1] = (float) (-1 * Math.cos(yRotation) * Math.sin(zRotation));
-			rotationMtx[0][2] = (float) Math.sin(yRotation);
-			rotationMtx[1][0] = (float) (Math.cos(xRotation) * Math.sin(zRotation) + Math.cos(zRotation) * Math.sin(xRotation) * Math.sin(yRotation));
+			rotationMtx[1][0] = (float) (-1 * Math.cos(yRotation) * Math.sin(zRotation));
+			rotationMtx[2][0] = (float) Math.sin(yRotation);
+			rotationMtx[0][1] = (float) (Math.cos(xRotation) * Math.sin(zRotation) + Math.cos(zRotation) * Math.sin(xRotation) * Math.sin(yRotation));
 			rotationMtx[1][1] = (float) (Math.cos(xRotation) * Math.cos(zRotation) - Math.sin(xRotation) * Math.sin(yRotation) * Math.sin(zRotation));
-			rotationMtx[1][2] = (float) (-Math.cos(yRotation) * Math.sin(xRotation));
-			rotationMtx[2][0] = (float) (Math.sin(xRotation) * Math.sin(zRotation) - Math.cos(xRotation) * Math.cos(zRotation) * Math.sin(yRotation));
-			rotationMtx[2][1] = (float) (Math.cos(zRotation) * Math.sin(xRotation) + Math.cos(xRotation) * Math.sin(yRotation) * Math.sin(zRotation));
+			rotationMtx[2][1] = (float) (-Math.cos(yRotation) * Math.sin(xRotation));
+			rotationMtx[0][2] = (float) (Math.sin(xRotation) * Math.sin(zRotation) - Math.cos(xRotation) * Math.cos(zRotation) * Math.sin(yRotation));
+			rotationMtx[1][2] = (float) (Math.cos(zRotation) * Math.sin(xRotation) + Math.cos(xRotation) * Math.sin(yRotation) * Math.sin(zRotation));
 			rotationMtx[2][2] = (float) (Math.cos(xRotation) * Math.cos(yRotation));
 			
+			//Rotate to fix my mistakes
+			float[][] fixedMtx = new float[4][4];
+			fixedMtx[0][0] = rotationMtx[0][0];
+			fixedMtx[1][0] = rotationMtx[0][1];
+			fixedMtx[2][0] = rotationMtx[0][2];
+			fixedMtx[0][1] = rotationMtx[1][0];
+			fixedMtx[1][1] = rotationMtx[1][1];
+			fixedMtx[2][1] = rotationMtx[1][2];
+			fixedMtx[0][2] = rotationMtx[2][0];
+			fixedMtx[1][2] = rotationMtx[2][1];
+			fixedMtx[2][2] = rotationMtx[2][2];
+					
 			Utils.DebugPrint(toString());
-			float[][] mtx = setMatrixFromMatricies(rotationMtx, scalingMtx);
+			float[][] mtx = applyScaling(fixedMtx);
 			Utils.DebugPrint("Pre Scaling:\n" + toString(rotationMtx));
 			mtx[3][0] = xPos;
 			mtx[3][1] = yPos;

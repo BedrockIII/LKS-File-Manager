@@ -13,9 +13,13 @@ public class GroupCategoryManager
 			this.name.setLength(0);
 			this.name.append(name);
 		}
-		public String toString()
+		public String toCSVString()
 		{
 			return id + "\t" + name + "\t\n";
+		}
+		public String toString()
+		{
+			return "Category " + id + ": " + name;
 		}
 	};
 	private static void sortList()
@@ -57,6 +61,10 @@ public class GroupCategoryManager
 		}
 		return ret;
 	}
+	public static ArrayList<Category> getCategories()
+	{
+		return new ArrayList<Category>(Categories);
+	}
 	public static void importCategories(byte[] data)
 	{
 		List<String> lines = Utils.bytesToStrs(data);
@@ -81,7 +89,7 @@ public class GroupCategoryManager
 		String ret = "";
 		for(Category f : Categories)
 		{
-			ret += f.toString();
+			ret += f.toCSVString();
 		}
 		return ret;
 	}

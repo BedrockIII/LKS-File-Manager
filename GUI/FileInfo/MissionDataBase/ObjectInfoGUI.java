@@ -8,7 +8,7 @@ import javax.swing.JTextField;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.ButtonedInfoBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import GUI.FileList.Resources.MOPlacementListGUI.GroupTypesListGUI.GroupsListGUI.GroupListGUI.ObjectListGUI;
+import GUI.FileList.Resources.MOPlacementListGUI.GroupCategoriesListGUI.GroupCategoryListGUI.GroupListGUI.ObjectListGUI;
 import ResourceManagers.MSDBManager.MSDBManager;
 import ResourceManagers.MSDBManager.Placement.MobObject;
 import bFM.Settings;
@@ -86,7 +86,7 @@ public class ObjectInfoGUI extends GenericFileInfoGUI
 		GridBagConstraints layout = Settings.getDefaultConstraints();
 		add(mobLabel, layout);
 		add(new LabeledInputBox("AI Code: ",  AiCode), layout);
-		add(new LabeledInputBox("Death Type: ",  deathEffects), layout);
+		add(new LabeledInputBox("Script Code: ",  deathEffects), layout);
 		add(new LabeledInputBox("X Offset: ",  xOffset), layout);
 		add(new LabeledInputBox("Y Offset: ",  yOffset), layout);
 		add(new LabeledInputBox("Z Offset: ",  zOffset), layout);

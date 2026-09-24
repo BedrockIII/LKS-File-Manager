@@ -521,7 +521,7 @@ public class indBinList extends GenericFile
 			//if(num39b!=0) System.out.print(", num39b: " + num39b);
 			if(num40a!=0) System.out.print(", num40a: " + num40a);
 			//if(num40b!=0) System.out.print(", num40b: " + num40b);
-			System.out.println();
+			//System.out.println();
 		}
 		public String toString()
 		{

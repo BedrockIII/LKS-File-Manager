@@ -10,7 +10,7 @@ import GUI.BitFlagPanel;
 import GUI.CollapseablePanel;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import GUI.FileList.Resources.MOPlacementListGUI.GroupTypesListGUI.GroupsListGUI.GroupListGUI;
+import GUI.FileList.Resources.MOPlacementListGUI.GroupCategoriesListGUI.GroupCategoryListGUI.GroupListGUI;
 import ResourceManagers.MSDBManager.Placement.MobConstantPlace;
 import ResourceManagers.MSDBManager.Placement.MobGroup;
 import bFM.Settings;
@@ -131,6 +131,10 @@ public class GroupInfoGUI extends GenericFileInfoGUI
 	public void update()
 	{
 		super.update();
+		if(object.getPlacement()!=null)
+		{
+			clearFlag.setFlag(object.getPlacement().getClearFlag());
+		}
 	}
 	public void addPlace(MobConstantPlace c) 
 	{

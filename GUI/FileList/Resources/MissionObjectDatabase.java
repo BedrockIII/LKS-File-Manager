@@ -10,7 +10,8 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class MissionObjectDatabase extends CollapseableFileList
 {
-	MSDBManager MonsterDataPack;
+	public MSDBManager MonsterDataPack;
+	private MOPlacementListGUI placementGUI;
 	int padding;
 	public MissionObjectDatabase(MSDBManager file, int padding)
 	{
@@ -55,7 +56,8 @@ public class MissionObjectDatabase extends CollapseableFileList
 		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_RANDOM_GROUND.lst"), Settings.indentSize + padding, this));
 		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MOCR_0_RECT_LIST.lst"), Settings.indentSize + padding, this));
 		//subEntries.add(FileListFactory.makeListGUI((MonsterDataPack).getPackedFile("MDITM_00.bin"), Settings.indentSize + padding, this));
-		subEntries.add(new MOPlacementListGUI(MonsterDataPack.getPlacement(), padding + Settings.indentSize, this));
+		placementGUI = new MOPlacementListGUI(MonsterDataPack.getPlacement(), padding + Settings.indentSize, this);
+		subEntries.add(placementGUI);
 		subEntries.add(new MODefinitionListGUI(MonsterDataPack.getDefinitions(), padding + Settings.indentSize, this));
 	}
 	protected void initializeInfoGUI()
@@ -69,5 +71,9 @@ public class MissionObjectDatabase extends CollapseableFileList
 		add(actions);
 		addMouseListener();
 	}
-
+	public byte[] getBytes()
+	{
+		placementGUI.reOrganizeByCategory();
+		return super.getBytes();
+	}
 }

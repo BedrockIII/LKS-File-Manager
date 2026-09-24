@@ -30,8 +30,8 @@ public class GroupsInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		name = GUIUtils.createNameTextField(GroupCategoryManager.getCategory(object.get(0).getGroupNumber()).name().toString(), 
-				GroupCategoryManager.getCategory(object.get(0).getGroupNumber())::setName);
+		name = GUIUtils.createNameTextField(GroupCategoryManager.getCategory(object.get(0).getGroupCategoryID()).name().toString(), 
+				GroupCategoryManager.getCategory(object.get(0).getGroupCategoryID())::setName);
 		objectCount = new JLabel("" + object.size());
 	}
 	private void addGUI()

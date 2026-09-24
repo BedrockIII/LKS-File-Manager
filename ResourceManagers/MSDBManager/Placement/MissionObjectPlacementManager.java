@@ -283,7 +283,7 @@ public class MissionObjectPlacementManager implements Data
 	}
 	private void registerGroupIDFromGroup(MobGroup g)
 	{
-		registerGroupIDFromInt(g.getGroupNumber());
+		registerGroupIDFromInt(g.getGroupCategoryID());
 		
 	}
 	private void registerGroupIDFromInt(int num)
@@ -545,7 +545,7 @@ public class MissionObjectPlacementManager implements Data
 		ArrayList<MobGroup> ret = new ArrayList<MobGroup>();
 		for(MobGroup group : Groups)
 		{
-			if(group.getGroupNumber() == code)
+			if(group.getGroupCategoryID() == code)
 			{
 				ret.add(group);
 			}

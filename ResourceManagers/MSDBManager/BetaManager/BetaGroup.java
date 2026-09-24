@@ -70,7 +70,7 @@ public class BetaGroup extends MobGroup
 		objectIndex = bFM.Utils.getShort(data);
 		objectCount = bFM.Utils.getShort(data);
 		num4 = bFM.Utils.getShort(data);
-		groupNumber = bFM.Utils.getShort(data);
+		GroupCategoryID = bFM.Utils.getShort(data);
 		num6 = -1;
 		num7 = 0;
 		num8 = data.getFloat();
@@ -82,7 +82,7 @@ public class BetaGroup extends MobGroup
 		objectIndex = bFM.Utils.getShort(data);
 		objectCount = bFM.Utils.getShort(data);
 		num4 = bFM.Utils.getShort(data);
-		groupNumber = bFM.Utils.getShort(data);
+		GroupCategoryID = bFM.Utils.getShort(data);
 		num6 = -1;
 		num7 = 0;
 		num8 = 5.0f;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
@@ -66,7 +67,29 @@ public class Package extends CollapseableFileList
 		addFileButton();
 		addNewFileButton();
 		addExportAllButton();
+		SwingUtilities.invokeLater(() ->
+		{
+			addDeleteAction();
+		});
+		
 		add(actions);
+	}
+	private void addDeleteAction()
+	{
+		if(getParent() == null) return;
+		if(!(getParent() instanceof Package)) return;
+		Package parent = (Package)getParent();
+		JMenuItem addFile = new JMenuItem("Delete File");
+		addFile.addActionListener(e -> {
+			parent.remove(this);
+			if(parent instanceof Package)
+			{
+				((Package) parent).packageFile.removeFile(packageFile.getName());
+				((Package) parent).subEntries.remove(this);
+				((Package) parent).reAddComponents();
+			}
+		});
+		actions.add(addFile);
 	}
 	private void addFileButton()
 	{ 

@@ -172,7 +172,7 @@ public abstract class CollapseableFileList extends FileList
 				}
 				
 			}
-			System.out.print("\n");
+			//System.out.print("\n");
 		}
 		setSize(new Dimension(Settings.rowWidth, getHeight()));
 		setPreferredSize(new Dimension(Settings.rowWidth, getHeight()));

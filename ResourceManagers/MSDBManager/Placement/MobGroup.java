@@ -15,7 +15,7 @@ public class MobGroup implements Data//probably who has attack bonus
 	//protected int objectIndex; //Next 2 Bytes
 	//protected int objectCount; //Next 2 Bytes
 	protected int num4; //Next 2 Bytes
-	protected int groupNumber; //Next 2 Bytes
+	protected int GroupCategoryID; //Next 2 Bytes
 	protected int num6; //Next 2 Bytes
 	protected int num7; //Next 2 Bytes
 	protected float num8; //Next 4 Bytes
@@ -34,7 +34,7 @@ public class MobGroup implements Data//probably who has attack bonus
 		int objectIndex = (int)bFM.Utils.getShort(data, 4);
 		int objectCount = (int)bFM.Utils.getShort(data, 6);
 		num4 = (int)bFM.Utils.getShort(data, 8);
-		groupNumber = (int)bFM.Utils.getShort(data, 10);
+		GroupCategoryID = (int)bFM.Utils.getShort(data, 10);
 		num6 = (int)bFM.Utils.getShort(data, 12);
 		num7 = (int)bFM.Utils.getShort(data, 14);
 		num8 = (ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(16));
@@ -53,7 +53,7 @@ public class MobGroup implements Data//probably who has attack bonus
 		this.groupIndex = groupIndex;
 		this.num1 = num2;
 		this.num4 = num122;
-		this.groupNumber = groupNumber;
+		this.GroupCategoryID = groupNumber;
 		this.num6 = num14;
 		this.num7 = num15;
 		this.num8 = num16;
@@ -67,7 +67,7 @@ public class MobGroup implements Data//probably who has attack bonus
 		num7 = 0; //Next 2 Bytes
 		num8 = (float) 5.0; //Next 4 Bytes
 		num9 = 0;
-		groupNumber = groupNumber2;
+		GroupCategoryID = groupNumber2;
 	}
 	public String toString()
 	{
@@ -81,7 +81,7 @@ public class MobGroup implements Data//probably who has attack bonus
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(objectIndex,2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(Objects.size(),2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(num4,2));
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(groupNumber,2));
+		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(GroupCategoryID,2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(num6,2));
 		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(num7,2));
 		ret = bFM.Utils.mergeArrays(ret, ByteBuffer.allocate(4).putFloat(num8).array());
@@ -93,7 +93,7 @@ public class MobGroup implements Data//probably who has attack bonus
 	}
 	public String bMos() 
 	{
-		String ret =  "\tMission Group: "+ groupIndex + ", "+num1+", "+num4 +", "+groupNumber +", "+num6 +", "+num7 +", "+num8 +"\n";
+		String ret =  "\tMission Group: "+ groupIndex + ", "+num1+", "+num4 +", "+GroupCategoryID +", "+num6 +", "+num7 +", "+num8 +"\n";
 		for(MobObject object : Objects)
 		{
 			ret += object.bMos();
@@ -106,7 +106,7 @@ public class MobGroup implements Data//probably who has attack bonus
 	}
 	public String bMos2() 
 	{
-		String ret =  "Unsorted Group: "+groupIndex +", "+num1+", "+num4 +", "+groupNumber +", "+num6 +", "+num7 +", "+num8+"\n";
+		String ret =  "Unsorted Group: "+groupIndex +", "+num1+", "+num4 +", "+GroupCategoryID +", "+num6 +", "+num7 +", "+num8+"\n";
 		for(MobObject object : Objects)
 		{
 			ret += object.bMos();
@@ -119,9 +119,9 @@ public class MobGroup implements Data//probably who has attack bonus
 		groupIndex = id;
 		if(placement!=null)placement.setGroupID(oldId, id);
 	}
-	public int getGroupNumber()
+	public int getGroupCategoryID()
 	{
-		return groupNumber;
+		return GroupCategoryID;
 	}
 	public byte[] getObjectBytes() 
 	{
@@ -217,16 +217,21 @@ public class MobGroup implements Data//probably who has attack bonus
 		this.num9 = num9;
 	}
 	public void setGroupNumber(int groupNumber) {
-		this.groupNumber = groupNumber;
+		this.GroupCategoryID = groupNumber;
 	}
 	public MobConstantPlace getPlacement() {
 		// TODO Auto-generated method stub
 		return placement;
 	}
-	public MobObject addObject(ObjectDefault objectType) 
+	public MobObject addObject(int id, ObjectDefault objectType) 
 	{
 		MobObject obj = new MobObject(objectType);
+		obj.mobModNumber = id;
 		Objects.add(obj);
 		return obj;
+	}
+	public void setGroupCategoryID(int id)
+	{
+		GroupCategoryID = id;
 	}
 }

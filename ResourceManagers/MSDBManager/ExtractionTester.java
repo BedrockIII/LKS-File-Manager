@@ -15,6 +15,7 @@ import ResourceManagers.MSDBManager.BetaManager.BetaGroup;
 import ResourceManagers.MSDBManager.BetaManager.BetaObject;
 import ResourceManagers.MSDBManager.CollisionRectangle.MobRectangleList;
 import ResourceManagers.MSDBManager.Definition.MobAiList;
+import ResourceManagers.MSDBManager.Definition.MobAttackCol;
 import ResourceManagers.MSDBManager.Definition.MobAttackColList;
 import ResourceManagers.MSDBManager.Definition.MobAttackElemList;
 import ResourceManagers.MSDBManager.Definition.MobAttackInfoList;
@@ -58,8 +59,8 @@ public class ExtractionTester
 			//testBeta1()
 			//testPlacement();
 			//testItems(); 
-			testDefinition();
-			//testRepacDefinition();
+			//testDefinition();
+			testRepacDefinition();
 			//testItemDropTableExtract();
 			throw new IOException("all okay");
 		} catch (IOException e) {
@@ -181,7 +182,7 @@ public class ExtractionTester
 		{
 			bMos.setFilterCode(modCode);
 		}
-
+		/*
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to write raw text at: " + extractedPath+outputFileName);
@@ -191,6 +192,7 @@ public class ExtractionTester
 			bFM.Utils.DebugPrint("Failed to write bMos file at: " + extractedPath+outputFileName);
 			return;
 		}
+		*/
 		System.exit(0);
 	}
 	private static void testDefinition() throws IOException
@@ -236,15 +238,18 @@ public class ExtractionTester
 		//Utils.testDifferences(DamageCol.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_DMG_COL.lst"))); //100
 		//Utils.testDifferences(PresetTable.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_PRESET_TABLE.lst"))); //100
 		
-		Utils.testDifferences(Attacks.getAttackInfo(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst"))); //
+		//Utils.testDifferences(Attacks.getAttackInfo(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_INFO.lst"))); //
 		//Utils.testDifferences(Attacks.getAttackElement(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_ELM.lst"))); //
-		//Utils.testDifferences(Attacks.getAttackCol(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst"))); //
 		
+		
+		Utils.testDifferences(Attacks.getAttackCol(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_ATK_COL.lst"))); //
+		Files.write(Paths.get(outputPath+"MOB_24_ATK_COL.lst2"), Attacks.getAttackCol());
 	}
 	public static void testRepacDefinition() throws IOException
 	{
 		MobModList mod = new MobModList(Utils.bytesToStrs(Files.readAllBytes(Paths.get("D:\\ModTest\\MobModList.bMos"))), true);
 		MobResAsn res = new MobResAsn(Utils.bytesToStrs(Files.readAllBytes(Paths.get("D:\\ModTest\\MobResList.bMos"))));
+		MobAttackColList AttackCol = new MobAttackColList(Utils.bytesToStrs(Files.readAllBytes(Paths.get(inputPath+"MobAttackCollisionList.lst"))));
 		MobAttackElemList AttackElem = new MobAttackElemList(Files.readAllLines(Paths.get(inputPath+"MobAttackElementList.lst")));
 		PCKGManager MonsterDataBase = new PCKGManager("MSDB");
 		try
@@ -261,7 +266,8 @@ public class ExtractionTester
 		//Utils.testDifferences(res.toBytes(), MonsterDataBase.getFile("MOB_24_RES_ASN.lst"));
 		//Files.write(Paths.get("D:\\ModTest\\MobResfile.bin"),res.toBytes());
 		//Utils.testDifferences(mod.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
-		MonsterDataBase.addFile("MOB_24_ATK_ELM.lst", AttackElem.toBytes());
+		//MonsterDataBase.addFile("MOB_24_ATK_ELM.lst", AttackElem.toBytes());
+		MonsterDataBase.addFile("MOB_24_ATK_COL.lst", AttackCol.toBytes());
 		MonsterDataBase.addFile("MOB_24_MOD.lst", mod.toBytes());
 		MonsterDataBase.addFile("MOB_24_RES_ASN.lst", res.toBytes());
 		Files.write(Paths.get(Settings.outputPath+"Resources\\msDB27.pac"), MonsterDataBase.toBytes());
@@ -293,8 +299,8 @@ public class ExtractionTester
 		{
 			Objects.add(new BetaObject(objectData, version));
 		}
-		MissionObjectPlacementManager aaa = new MissionObjectPlacementManager(Places, Groups, Objects);
-		Files.write(Paths.get(inputPath), Utils.encodeStringToBytes(aaa.toString()));
+		//MissionObjectPlacementManager aaa = new MissionObjectPlacementManager(Places, Groups, Objects);
+		//Files.write(Paths.get(inputPath), Utils.encodeStringToBytes(aaa.toString()));
 	}
 	@SuppressWarnings("unused")
 	private static void testMod() throws IOException

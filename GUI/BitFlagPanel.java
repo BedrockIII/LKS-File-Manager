@@ -15,7 +15,6 @@ import javax.swing.event.DocumentListener;
 
 import bFM.FlagManager;
 import bFM.Settings;
-import bFM.Utils;
 import bFM.FlagManager.Flag;
 
 @SuppressWarnings("serial")
@@ -169,5 +168,9 @@ public class BitFlagPanel extends JSplitPane
 		repaint();
 		info.revalidate();
 		info.repaint();
+	}
+	public void setFlag(int flag)
+	{
+		updateFlagInfo(flag);
 	}
 }

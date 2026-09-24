@@ -233,8 +233,8 @@ public class Utils
 		while(line.length()>0)
 		{
 			int endex = line.indexOf(',');
-			if(endex == -1) endex = line.indexOf(':');
-			if(endex == -1) endex = line.indexOf(';');
+			if(endex == -1 || (endex > line.indexOf(':') && line.indexOf(':') != -1)) endex = line.indexOf(':');
+			if(endex == -1 || (endex > line.indexOf(';') && line.indexOf(';') != -1)) endex = line.indexOf(';');
 			if(endex == -1) endex = line.length();
 			String value = line.substring(0, endex);
 			ret.add(value);

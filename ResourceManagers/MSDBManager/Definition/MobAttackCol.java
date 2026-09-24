@@ -11,17 +11,17 @@ import bFM.Utils;
 
 public class MobAttackCol implements Data, Nameable 
 {
-	int attackCode;
-	int num1;
-	String boneAttachmentName;//16 bytes
-	float num2;
-	float num3;
-	float num4;
-	float num5;
+	int attackCode = -1;
+	int num1 = -1;
+	String boneAttachmentName = "null";//16 bytes
+	float num2 = 9999.9f;
+	float num3 = 9999.9f;
+	float num4 = 9999.9f;
+	float num5 = 9999.9f;
 	public MobAttackCol(byte[] data)
 	{
-		attackCode = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(0);
-		num1 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getShort(2);
+		attackCode = Utils.getShort(data, 0);
+		num1 = Utils.getShort(data, 2);
 		boneAttachmentName = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 4, 20)));
 		num2 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(20);
 		num3 = ByteBuffer.wrap(data).order(ByteOrder.BIG_ENDIAN).getFloat(24);
@@ -33,12 +33,16 @@ public class MobAttackCol implements Data, Nameable
 		// Parse from CSV
 		String[] data = Utils.toStrArr(line);
 		attackCode = Utils.strToInt(data[0]);
+		//System.out.println(data[0]);
 		num1 = Utils.strToInt(data[1]);
 		boneAttachmentName = Utils.formatString(data[2]);
 		num2 = Utils.strToFloat(data[3]);
 		num3 = Utils.strToFloat(data[4]);
 		num4 = Utils.strToFloat(data[5]);
 		num5 = Utils.strToFloat(data[6]);
+	}
+	public MobAttackCol()
+	{
 	}
 	public String toString()
 	{

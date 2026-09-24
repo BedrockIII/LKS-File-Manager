@@ -1,6 +1,5 @@
 package GUI;
 
-import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
@@ -19,6 +18,7 @@ public class SplitPanel extends JSplitPane
 	JComponent right;
 	int height = 0;
 	double xWeight = .5;
+	double yWeight = 1.0;
 	public SplitPanel()
 	{
 		height = (int) (Settings.assetHeight*1.5);
@@ -32,7 +32,7 @@ public class SplitPanel extends JSplitPane
 	{
 		this.left = left;
 		this.right = right;
-		height = (int) (Settings.assetHeight*1.5);
+		height = (int) (Settings.assetHeight*yWeight);
 		addGUI();
 		update();
 		setTheme();
@@ -43,6 +43,17 @@ public class SplitPanel extends JSplitPane
 		this.right = right;
 		this.xWeight = xWeight;
 		height = (int) (Settings.assetHeight*1.5);
+		addGUI();
+		update();
+		setTheme();
+	}
+	public SplitPanel(JComponent left, JComponent right, double xWeight, double yWeight)
+	{
+		this.left = left;
+		this.right = right;
+		this.xWeight = xWeight;
+		this.yWeight = yWeight;
+		height = (int) (Settings.assetHeight*yWeight);
 		addGUI();
 		update();
 		setTheme();

@@ -1,7 +1,5 @@
 package ResourceManagers.MSDBManager.Definition;
 
-import java.awt.Component;
-
 import bFM.Data;
 
 public class MissionObjectDefinitionManager implements Data

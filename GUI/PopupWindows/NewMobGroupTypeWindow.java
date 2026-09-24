@@ -3,15 +3,15 @@ package GUI.PopupWindows;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
-import GUI.FileList.Resources.MOPlacementListGUI.GroupTypesListGUI;
+import GUI.FileList.Resources.MOPlacementListGUI.GroupCategoriesListGUI;
 import bFM.Utils;
 
 @SuppressWarnings("serial")
 public class NewMobGroupTypeWindow extends GenericPopupWindow
 {
-	GroupTypesListGUI gui;
+	GroupCategoriesListGUI gui;
 	JTextField code;
-	public NewMobGroupTypeWindow(GroupTypesListGUI gui)
+	public NewMobGroupTypeWindow(GroupCategoriesListGUI gui)
 	{
 		super("Create new Group Category");
 		this.gui = gui;
