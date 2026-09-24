@@ -495,6 +495,14 @@ public class Utils
 			{
 				return "WonderSpotDB";
 			}
+			else if(name.equals("AnimalBook.bin"))
+			{
+				return "AnimalBookDB";
+			}
+			else if(name.equals("Jewel.bin"))
+			{
+				return "JewelBookDB";
+			}
 			//Check if special TODO
 			//else return "Package"
 			return "Package";
@@ -503,7 +511,7 @@ public class Utils
 		{
 			return "Collision";
 		}
-		else if(WorldFileManager.fpInterpreter.isFixedPointFile(file))
+		else if(WorldFileManager.FixedPointManager.isFixedPointFile(file))
 		{
 			return "Fixed Point";
 		}

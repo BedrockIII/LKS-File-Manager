@@ -42,12 +42,12 @@ public class fixedPointExtractor
 	}
 	private static void decodeFixedPoints(String importPath, String name, String outputPath)
 	{
-		fpInterpreter fixedPoints = null;
+		FixedPointManager fixedPoints = null;
 		
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to read Fixed Points file pack at: " + importPath);
-			fixedPoints = new fpInterpreter(Files.readAllBytes(Paths.get(importPath)));
+			fixedPoints = new FixedPointManager(Files.readAllBytes(Paths.get(importPath)));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read Fixed Point Pack.");

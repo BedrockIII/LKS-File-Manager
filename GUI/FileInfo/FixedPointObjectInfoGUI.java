@@ -6,6 +6,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import GUI.LabeledInputBox;
+import GUI.FileList.FileList;
+import GUI.FileList.FixedPoint.FixedPointObjectListGUI;
 import WorldFileManager.FixedPointObject;
 import bFM.GUIUtils;
 import bFM.Settings;
@@ -14,9 +16,10 @@ import bFM.Settings;
 public class FixedPointObjectInfoGUI extends GenericFileInfoGUI
 {
 	FixedPointObject object = null;
+	FixedPointObjectListGUI gui = null;
 	JTextField fileName = null;
-	JLabel refIndexText = null;
-	JLabel indexText = null;
+	JLabel parentName = null;
+	ButtonedInfoBox parent = null;
 	JTextField xOffsetText = null;
 	JTextField yOffsetText = null;
 	JTextField zOffsetText = null;
@@ -27,27 +30,34 @@ public class FixedPointObjectInfoGUI extends GenericFileInfoGUI
 	JTextField yScaleText = null;
 	JTextField zScaleText = null;
 	
-	public FixedPointObjectInfoGUI(FixedPointObject object) 
+	public FixedPointObjectInfoGUI(FixedPointObject object, FixedPointObjectListGUI gui) 
 	{
 		this.object = object;
+		this.gui = gui;
 		makeGUI();
 		addGUI();
+	}
+	private void openParentGUI()
+	{
+		GUI.GUI.setFileInfo(((FileList) gui.getParent()).getInfoGUI());
 	}
 	private void makeGUI()
 	{
 		fileName = GUIUtils.createNameTextField(object.getName(), object::setName);
-		refIndexText =  new JLabel("" + object.getReferenceIndex());
-		indexText =  new JLabel("" + object.getIndex());
-		
-		xOffsetText = bFM.GUIUtils.createFloatTextField(object.getXPos(), object::setXPos);
-		yOffsetText = bFM.GUIUtils.createFloatTextField(object.getYPos(), object::setYPos);
-		zOffsetText = bFM.GUIUtils.createFloatTextField(object.getZPos(), object::setZPos);
-		xRotationText = bFM.GUIUtils.createFloatTextField(object.getXRot(), object::setXRotation);
-		yRotationText = bFM.GUIUtils.createFloatTextField(object.getYRot(), object::setYRotation);
-		zRotationText = bFM.GUIUtils.createFloatTextField(object.getZRot(), object::setZRotation);
-		xScaleText = bFM.GUIUtils.createFloatTextField(object.getXScale(), object::setXScale);
-		yScaleText = bFM.GUIUtils.createFloatTextField(object.getYScale(), object::setYScale);
-		zScaleText = bFM.GUIUtils.createFloatTextField(object.getZScale(), object::setZScale);
+		if(!object.isParentNode())
+		{
+			parentName = new JLabel(object.getParent().getName());
+			parent =  new ButtonedInfoBox(this::openParentGUI, new JLabel("Parent:"), parentName);
+		}
+		xOffsetText = GUIUtils.createFloatTextField(object.getXPos(), object::setXPos);
+		yOffsetText = GUIUtils.createFloatTextField(object.getYPos(), object::setYPos);
+		zOffsetText = GUIUtils.createFloatTextField(object.getZPos(), object::setZPos);
+		xRotationText = GUIUtils.createFloatTextField(object.getXRot(), object::setXRotation);
+		yRotationText = GUIUtils.createFloatTextField(object.getYRot(), object::setYRotation);
+		zRotationText = GUIUtils.createFloatTextField(object.getZRot(), object::setZRotation);
+		xScaleText = GUIUtils.createFloatTextField(object.getXScale(), object::setXScale);
+		yScaleText = GUIUtils.createFloatTextField(object.getYScale(), object::setYScale);
+		zScaleText = GUIUtils.createFloatTextField(object.getZScale(), object::setZScale);
 	}
 	private void addGUI()
 	{
@@ -56,8 +66,10 @@ public class FixedPointObjectInfoGUI extends GenericFileInfoGUI
 		GridBagConstraints layout = Settings.getDefaultConstraints();
 		add(new LabeledInputBox("File Name: ", fileName), layout);
 		
-		add(new LabeledInputBox("Index: ", indexText), layout);
-		add(new LabeledInputBox("Reference Index: ", refIndexText), layout);
+		if(!object.isParentNode())
+		{
+			add(parent, layout);
+		}
 		add(new LabeledInputBox("X Position: ",  xOffsetText), layout);
 		add(new LabeledInputBox("Y Position: ",  yOffsetText), layout);
 		add(new LabeledInputBox("Z Position: ",  zOffsetText), layout);

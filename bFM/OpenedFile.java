@@ -4,11 +4,13 @@ import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import ResourceManagers.MSDBManager.MSDBManager;
+import SystemDataManagers.MenuDB.AnimalManager;
+import SystemDataManagers.MenuDB.JewelBookManager;
 import SystemDataManagers.MenuDB.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import VMC.VMCConverter;
-import WorldFileManager.fpInterpreter;
+import WorldFileManager.FixedPointManager;
 import colReader.ColReader;
 
 public interface OpenedFile extends Data, Nameable
@@ -16,10 +18,10 @@ public interface OpenedFile extends Data, Nameable
 	//Different than Raw Data for some reason..? Idk it feels right
 	public static OpenedFile makeFile(String name, byte[] file) 
 	{
-		String fileType = bFM.Utils.getFileType(name, file);
+		String fileType = Utils.getFileType(name, file);
 		if(fileType.equals("Fixed Point"))
 		{
-			return new fpInterpreter(file, name);
+			return new FixedPointManager(file, name);
 		}
 		else if(fileType.equals("Collision"))
 		{
@@ -89,6 +91,31 @@ public interface OpenedFile extends Data, Nameable
 			try
 			{
 				return new WonderSpotManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+		}else if (fileType.equals("AnimalBookDB"))
+		{
+			try
+			{
+				return new AnimalManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+		}
+		else if (fileType.equals("JewelBookDB"))
+		{
+			try
+			{
+				return new JewelBookManager(file);
 			}
 			catch (Exception e)
 			{

@@ -21,7 +21,7 @@ import ResourceManagers.MSDBManager.Placement.MissionObjectPlacementManager;
 import ResourceManagers.MapDatabaseManager.BuildingResourceList;
 import ResourceManagers.MapDatabaseManager.exteriorPlaceList;
 import ResourceManagers.MapDatabaseManager.mapDataBaseManager;
-import WorldFileManager.fpInterpreter;
+import WorldFileManager.FixedPointManager;
 import bFM.Data;
 import bFM.Settings;
 import bFM.Utils;
@@ -163,7 +163,7 @@ public class Main
 		}
 		//Extract allfield.lfp
 		byte[] data = mapBootPack.getFile("allfield.lfp");
-		fpInterpreter lightingFixedPoints = new fpInterpreter(data);
+		FixedPointManager lightingFixedPoints = new FixedPointManager(data);
 		try {
 			Files.write(Paths.get(Settings.importPath+"AllLightZones.blfp"), Utils.encodeStringToBytes(lightingFixedPoints.toBFP()));
 		} catch (IOException e) 
@@ -325,11 +325,11 @@ public class Main
 	}
 	private static void encodeLightZones()
 	{
-		fpInterpreter fixedPoints = null;
+		FixedPointManager fixedPoints = null;
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to read Light Zone File at: " + Settings.importPath+"LightZones.blfp");
-			fixedPoints = new fpInterpreter(Files.readAllLines(Paths.get(Settings.importPath+"LightZones.blfp")),"LFP");
+			fixedPoints = new FixedPointManager(Files.readAllLines(Paths.get(Settings.importPath+"LightZones.blfp")),"LFP");
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read Light Zone File. Will attempt to decode from a pack.");
@@ -1035,12 +1035,12 @@ public class Main
 	}
 	private static void decodeFixedPoints()
 	{
-		fpInterpreter fixedPoints = null;
+		FixedPointManager fixedPoints = null;
 		
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to read Fixed Points file pack at: " + Settings.importPath+name+'\\'+name+fpType);
-			fixedPoints = new fpInterpreter(Files.readAllBytes(Paths.get(Settings.importPath+name+'\\'+name+fpType)));
+			fixedPoints = new FixedPointManager(Files.readAllBytes(Paths.get(Settings.importPath+name+'\\'+name+fpType)));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read Fixed Point Pack.");
@@ -1058,11 +1058,11 @@ public class Main
 	}
 	private static void encodeFixedPoints()
 	{
-		fpInterpreter fixedPoints = null;
+		FixedPointManager fixedPoints = null;
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to read Fixed Points File at: " + Settings.importPath+name+'\\'+name+".bfp");
-			fixedPoints = new fpInterpreter(Files.readAllLines(Paths.get(Settings.importPath+name+'\\'+name+".bfp")),fpType.toUpperCase().substring(1));
+			fixedPoints = new FixedPointManager(Files.readAllLines(Paths.get(Settings.importPath+name+'\\'+name+".bfp")),fpType.toUpperCase().substring(1));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read Fixed Point File. Will attempt to decode from a pack.");

@@ -3,7 +3,7 @@ package GUI.FileInfo;
 import GUI.FileInfo.MenuDB.KingdomPlan.KingdomPlanAreaSelectorGUI;
 import PCKGManager.PCKGManager;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
-import WorldFileManager.fpInterpreter;
+import WorldFileManager.FixedPointManager;
 import bFM.Data;
 import colReader.ColReader;
 
@@ -24,9 +24,9 @@ public class FileInfoFactory
 		{
 			return new CollisionInfoGUI((ColReader)file);
 		}
-		else if(file instanceof fpInterpreter)
+		else if(file instanceof FixedPointManager)
 		{
-			return new FixedPointInfoGUI((fpInterpreter)file);
+			return new FixedPointInfoGUI((FixedPointManager)file);
 		}
 		return new GenericFileInfoGUI(file);
 	}
