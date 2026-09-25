@@ -20,6 +20,7 @@ import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.FileList.FileList;
 import GUI.FileList.FileListFactory;
 import GUI.FileList.FileListPanel;
+import GUI.PopupWindows.ConsoleWindow;
 import bFM.OpenedFile;
 import bFM.Settings;
 
@@ -27,6 +28,7 @@ public class GUI
 {
 	private static FileListPanel openedFileList = new FileListPanel();
 	private static FileInfoPanel fileInfoPanel = new FileInfoPanel();
+	public static ConsoleWindow debugOutput = new ConsoleWindow();
 	private static GenericFileInfoGUI fileInfo = null;
 	static JSplitPane contents = new JSplitPane();
 	public static JFrame frame = new JFrame();
@@ -46,10 +48,15 @@ public class GUI
 		createFileGUIs();
         showWindow();
 	}
+	/*
 	private void makeWindowsStack()
 	{
 		//String appId = "LittleKingsStoryFileManager.3.8";
 		//HRESULT hr = Shell32.INSTANCE.SetCurrentProcessExplicitAppUserModelID(appId);
+	}
+	*/
+	private void createConsoleGUI()
+	{
 	}
 	private void createFileGUIs()
 	{

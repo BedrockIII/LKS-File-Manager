@@ -9,3 +9,8 @@
 /NewMobObjectWindow.class
 /NewMobRandomAreaWindow.class
 /RetypeJobWindow.class
+/ChangeCategoryWindow.class
+/SetPlacementClearFlagsPopupWindow.class
+/ConsoleWindow.class
+/ConsoleWindow$1.class
+/ConsoleWindow$2.class

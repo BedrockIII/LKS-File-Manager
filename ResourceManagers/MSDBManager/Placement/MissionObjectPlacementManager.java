@@ -348,14 +348,19 @@ public class MissionObjectPlacementManager implements Data
 	}
 	public byte[] getConstantPlaces()
 	{
-		byte[] ret = bFM.Utils.toByteArr(1,2);
+		byte[] ret = new byte[0];
 		sortPlacesByIndex();
-		ret = bFM.Utils.mergeArrays(ret, bFM.Utils.toByteArr(Places.size(), 2));
+		int placeCount = 0;
 		for( int i = 0; i < Places.size(); i++)
 		{
-			ret = bFM.Utils.mergeArrays(ret, Places.get(i).toBytes());
+			if(getGroup(Places.get(i).GroupID)!=null)
+			{
+				ret = Utils.mergeArrays(ret, Places.get(i).toBytes());
+				placeCount++;
+			}
+					
 		}
-		return ret;
+		return Utils.mergeArrays(Utils.mergeArrays(Utils.toByteArr(1,2),Utils.toByteArr(placeCount, 2)), ret);
 	}
 	public byte[] getGroups()
 	{
@@ -572,5 +577,16 @@ public class MissionObjectPlacementManager implements Data
 	public ArrayList<MobConstantPlace> getMobPlacements()
 	{
 		return Places;
+	}
+	public MobGroup getGroup(int groupCode)
+	{
+		for(MobGroup group : Groups)
+		{
+			if(group.getGroupIndex() == groupCode)
+			{
+				return group;
+			}
+		}
+		return null;
 	}
 }
