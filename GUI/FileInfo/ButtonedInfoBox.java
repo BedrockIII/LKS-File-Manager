@@ -7,10 +7,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
-
-import GUI.GUI;
-import GUI.LabeledInputBox;
 import GUI.SplitPanel;
 import bFM.Settings;
 
