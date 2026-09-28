@@ -4,9 +4,11 @@ import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import ResourceManagers.MSDBManager.MSDBManager;
-import SystemDataManagers.MenuDB.AnimalManager;
-import SystemDataManagers.MenuDB.JewelBookManager;
-import SystemDataManagers.MenuDB.WonderSpotManager;
+import SystemDataManagers.MenuDB.CockpitLogManager;
+import SystemDataManagers.MenuDB.Books.AnimalManager;
+import SystemDataManagers.MenuDB.Books.HummingBookManager;
+import SystemDataManagers.MenuDB.Books.JewelBookManager;
+import SystemDataManagers.MenuDB.Books.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import VMC.VMCConverter;
@@ -116,6 +118,31 @@ public interface OpenedFile extends Data, Nameable
 			try
 			{
 				return new JewelBookManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+		}
+		else if (fileType.equals("HummingBookDB"))
+		{
+			try
+			{
+				return new HummingBookManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+		}else if (fileType.equals("CockpitLogDB"))
+		{
+			try
+			{
+				return new CockpitLogManager(file);
 			}
 			catch (Exception e)
 			{

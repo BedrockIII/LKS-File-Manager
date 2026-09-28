@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.MenuDB.AnimalManager;
+import SystemDataManagers.MenuDB.Books.AnimalManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

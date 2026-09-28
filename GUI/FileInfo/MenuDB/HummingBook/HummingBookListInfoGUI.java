@@ -1,4 +1,4 @@
-package GUI.FileInfo.MenuDB.JewelBook;
+package GUI.FileInfo.MenuDB.HummingBook;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -7,15 +7,15 @@ import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.MenuDB.Books.JewelBookManager;
+import SystemDataManagers.MenuDB.Books.HummingBookManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class JewelBookListInfoGUI extends GenericFileInfoGUI
+public class HummingBookListInfoGUI extends GenericFileInfoGUI
 {
-	JewelBookManager manager;
+	HummingBookManager manager;
 	JLabel entryCount;
-	public JewelBookListInfoGUI(JewelBookManager manager)
+	public HummingBookListInfoGUI(HummingBookManager manager)
 	{
 		this.manager = manager;
 		makeGUI();
@@ -31,7 +31,7 @@ public class JewelBookListInfoGUI extends GenericFileInfoGUI
 		setLayout(new GridBagLayout());
 		GridBagConstraints layout = Settings.getDefaultConstraints();
 		layout.weighty = 1.0;
-		add(new LabeledInputBox("Jewel Entry Count: ", entryCount), layout);
+		add(new LabeledInputBox("Hum Entry Count: ", entryCount), layout);
 	}
 	public void update() 
 	{

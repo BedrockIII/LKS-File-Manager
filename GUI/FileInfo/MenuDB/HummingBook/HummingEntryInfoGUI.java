@@ -1,4 +1,4 @@
-package GUI.FileInfo.MenuDB.WonderSpot;
+package GUI.FileInfo.MenuDB.HummingBook;
 
 import java.awt.GridBagConstraints;
 
@@ -6,18 +6,18 @@ import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.MenuDB.Books.WonderSpotManager.WonderSpot;
+import SystemDataManagers.MenuDB.Books.HummingBookEntry;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class WonderSpotInfoGUI extends GenericFileInfoGUI
+public class HummingEntryInfoGUI extends GenericFileInfoGUI
 {
-	WonderSpot file;
+	HummingBookEntry file;
 	JTextField Name = null;
 	JTextField Description = null;
 	JTextField Image = null;
-	JTextField DebugDescription = null;
-	public WonderSpotInfoGUI(WonderSpot file) 
+	JTextField Flag = null;
+	public HummingEntryInfoGUI(HummingBookEntry file) 
 	{
 		this.file = file;
 		makeGUI();
@@ -31,13 +31,13 @@ public class WonderSpotInfoGUI extends GenericFileInfoGUI
 		add(new LabeledInputBox("Description: ", Description), layout);
 		add(new LabeledInputBox("Image: ", Image), layout);
 		layout.weighty = 1.0;
-		add(new LabeledInputBox("Debug Detail: ", DebugDescription), layout);
+		add(new LabeledInputBox("Humming Book Activation Flag: ", Flag), layout);
 	}
 	private void makeGUI()
 	{
 		Name = bFM.GUIUtils.createNameTextField(file.getName(), file::setName);
 		Description = bFM.GUIUtils.createStringTextField(file.getText(), file::setText);
 		Image = bFM.GUIUtils.createStringTextField(file.getImage(), file::setImage);
-		DebugDescription = bFM.GUIUtils.createStringTextField(file.getDebugText(), file::setDebugText);
+		Flag = bFM.GUIUtils.createIntTextField(file.getHummingBookFlag(), file::setHummingBookFlag);
 	}
 }

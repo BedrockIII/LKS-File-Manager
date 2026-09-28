@@ -10,8 +10,8 @@ import GUI.FileInfo.MenuDB.WonderSpot.WonderSpotInfoGUI;
 import GUI.FileInfo.MenuDB.WonderSpot.WonderSpotListInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.WonderSpotManager;
-import SystemDataManagers.MenuDB.WonderSpotManager.WonderSpot;
+import SystemDataManagers.MenuDB.Books.WonderSpotManager;
+import SystemDataManagers.MenuDB.Books.WonderSpotManager.WonderSpot;
 import bFM.GUIUtils;
 import bFM.Settings;
 

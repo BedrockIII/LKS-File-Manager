@@ -10,8 +10,8 @@ import GUI.FileInfo.MenuDB.AnimalBook.AnimalBookListInfoGUI;
 import GUI.FileInfo.MenuDB.AnimalBook.AnimalEntryInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.AnimalManager;
-import SystemDataManagers.MenuDB.AnimalManager.AnimalEntry;
+import SystemDataManagers.MenuDB.Books.AnimalManager;
+import SystemDataManagers.MenuDB.Books.AnimalManager.AnimalEntry;
 import bFM.GUIUtils;
 import bFM.Settings;
 

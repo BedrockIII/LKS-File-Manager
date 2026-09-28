@@ -503,6 +503,14 @@ public class Utils
 			{
 				return "JewelBookDB";
 			}
+			else if(name.equals("Humming.bin"))
+			{
+				return "HummingBookDB";
+			}
+			else if(name.equals("CockpitLog.bin"))
+			{
+				return "CockpitLogDB";
+			}
 			//Check if special TODO
 			//else return "Package"
 			return "Package";

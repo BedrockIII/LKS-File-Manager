@@ -5,6 +5,8 @@ import GUI.FileList.Resources.ItemDatabaseList;
 import GUI.FileList.Resources.MissionObjectDatabase;
 import GUI.FileList.SystemData.AnimalBookFileList;
 import GUI.FileList.SystemData.CameraZoneListGUI;
+import GUI.FileList.SystemData.CockpitLogFileList;
+import GUI.FileList.SystemData.HummingBookFileList;
 import GUI.FileList.SystemData.JewelBookFileList;
 import GUI.FileList.SystemData.KingdomPlanFileList;
 import GUI.FileList.SystemData.WonderSpotFileList;
@@ -12,9 +14,11 @@ import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import ResourceManagers.MSDBManager.MSDBManager;
-import SystemDataManagers.MenuDB.AnimalManager;
-import SystemDataManagers.MenuDB.JewelBookManager;
-import SystemDataManagers.MenuDB.WonderSpotManager;
+import SystemDataManagers.MenuDB.CockpitLogManager;
+import SystemDataManagers.MenuDB.Books.AnimalManager;
+import SystemDataManagers.MenuDB.Books.HummingBookManager;
+import SystemDataManagers.MenuDB.Books.JewelBookManager;
+import SystemDataManagers.MenuDB.Books.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import VMC.VMCConverter;
@@ -65,6 +69,14 @@ public class FileListFactory
 		else if (file instanceof JewelBookManager)
 		{
 			return new JewelBookFileList((JewelBookManager) file, padding);
+		}
+		else if (file instanceof HummingBookManager)
+		{
+			return new HummingBookFileList((HummingBookManager) file, padding);
+		}
+		else if (file instanceof CockpitLogManager)
+		{
+			return new CockpitLogFileList((CockpitLogManager) file, padding);
 		}
 		else if(file instanceof MSDBManager)
 		{

@@ -6,22 +6,22 @@ import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
-import GUI.FileInfo.MenuDB.JewelBook.JewelBookListInfoGUI;
-import GUI.FileInfo.MenuDB.JewelBook.JewelEntryInfoGUI;
+import GUI.FileInfo.MenuDB.HummingBook.HummingBookListInfoGUI;
+import GUI.FileInfo.MenuDB.HummingBook.HummingEntryInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.Books.JewelBookManager;
-import SystemDataManagers.MenuDB.Books.JewelBookManager.JewelEntry;
+import SystemDataManagers.MenuDB.Books.HummingBookEntry;
+import SystemDataManagers.MenuDB.Books.HummingBookManager;
 import bFM.GUIUtils;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class JewelBookFileList extends CollapseableFileList
+public class HummingBookFileList extends CollapseableFileList
 {
 	private int padding = 0;
-	private ArrayList<JewelEntry> Entries = new ArrayList<JewelEntry>();
-	JewelBookManager manager;
-	public JewelBookFileList(JewelBookManager file, int padding) 
+	private ArrayList<HummingBookEntry> Entries = new ArrayList<HummingBookEntry>();
+	HummingBookManager manager;
+	public HummingBookFileList(HummingBookManager file, int padding) 
 	{
 		manager = file;
 		this.padding = padding;
@@ -30,9 +30,9 @@ public class JewelBookFileList extends CollapseableFileList
 	}
 	protected void initializeAll(int padding) 
 	{
-		System.out.print("Opening Jewel Book Binary File: █");
-		fileTypes = new FileNameExtensionFilter("Jewel Book Binary File", "bin");
-		initializeListGUI(padding, "Jewel Book Manager");
+		System.out.print("Opening Humming Book Binary File: █");
+		fileTypes = new FileNameExtensionFilter("Humming Book Binary File", "bin");
+		initializeListGUI(padding, "Humming Book Manager");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
@@ -47,14 +47,14 @@ public class JewelBookFileList extends CollapseableFileList
 	{
 		subEntries.removeAll(subEntries);
 		Entries = manager.getEntries();
-		for(JewelEntry object : Entries)
+		for(HummingBookEntry object : Entries)
 		{
-			subEntries.add(new JewelGUI(object, padding + Settings.indentSize, this));
+			subEntries.add(new HumGUI(object, padding + Settings.indentSize, this));
 		}
 	}
 	protected void initializeInfoGUI()
 	{
-		infoGUI = new JewelBookListInfoGUI(manager);
+		infoGUI = new HummingBookListInfoGUI(manager);
 	}
 	protected void addActions() 
 	{
@@ -69,38 +69,38 @@ public class JewelBookFileList extends CollapseableFileList
 	}
 	private void addZoneAction()
 	{
-		JMenuItem newZone = new JMenuItem("Create New Jewel");
+		JMenuItem newZone = new JMenuItem("Create New Hum");
 		newZone.addActionListener(e -> 
 		{
-			JewelEntry entry = new JewelEntry();
+			HummingBookEntry entry = new HummingBookEntry();
 			Entries.add(entry);
-			subEntries.add(new JewelGUI(entry, padding + Settings.indentSize, this));
+			subEntries.add(new HumGUI(entry, padding + Settings.indentSize, this));
 			reAddComponents();
 		});
 		actions.add(newZone);
 	}
 	private void addExportBJBAction()
 	{
-		actions.add(GUIUtils.createExportAction("Export Entries as .bjb text file", "JewelBook.bjb", "Bedrock's Jewel Book Text File", manager::toBAB));
+		actions.add(GUIUtils.createExportAction("Export Entries as .bit text file", "HummingBook.bit", "Bedrock's Intermediate Text File", manager::toIntermediateText));
 	}
 	private void addImportBJBAction()
 	{
-		actions.add(GUIUtils.createImportAction("Import Entries from .bjb text file", "Bedrock's Jewel Book Text File", "bjb", manager::importFromBJB, this));
+		actions.add(GUIUtils.createImportAction("Import Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::importFromIntermediateText, this));
 	}
 	private void addReplaceBJBAction()
 	{
-		actions.add(GUIUtils.createImportAction("Replace Entries from .bab text file", "Bedrock's Jewel Book Text File", "bjb", manager::replaceFromBJB, this));
+		actions.add(GUIUtils.createImportAction("Replace Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::replaceFromIntermediateText, this));
 	}
 	private void addReplaceRawAction()
 	{
-		actions.add(GUIUtils.createImportAction("Replace Entries from raw Jewel.bin file", "Jewel Book Database Binary File", "bin", manager::replaceFromData, this));
+		actions.add(GUIUtils.createImportAction("Replace Entries from raw Humming.bin file", "Humming Book Database Binary File", "bin", manager::replaceFromData, this));
 	}
-	public class JewelGUI extends FileList
+	public class HumGUI extends FileList
 	{
-		JewelEntry file;
+		HummingBookEntry file;
 		int padding;
-		JewelBookFileList parent;
-		public JewelGUI(JewelEntry entry, int padding, JewelBookFileList parent)
+		HummingBookFileList parent;
+		public HumGUI(HummingBookEntry entry, int padding, HummingBookFileList parent)
 		{
 			this.padding = padding;
 			this.file = entry;
@@ -115,7 +115,7 @@ public class JewelBookFileList extends CollapseableFileList
 		}
 		protected void initializeInfoGUI() 
 		{
-			this.infoGUI = new JewelEntryInfoGUI(file);
+			this.infoGUI = new HummingEntryInfoGUI(file);
 		}
 		protected void addActions() 
 		{
@@ -130,7 +130,7 @@ public class JewelBookFileList extends CollapseableFileList
 		}
 		protected void addDeleteAction()
 		{
-			JMenuItem replace = new JMenuItem("Delete Jewel Entry");
+			JMenuItem replace = new JMenuItem("Delete Hum Entry");
 			replace.addActionListener(e -> 
 			{
 				parent.removeEntry(this);
@@ -139,7 +139,7 @@ public class JewelBookFileList extends CollapseableFileList
 			actions.add(replace);
 		}
 	}
-	public void removeEntry(JewelGUI gui) 
+	public void removeEntry(HumGUI gui) 
 	{
 		subEntries.remove(gui);
 		Entries.remove(gui.file);

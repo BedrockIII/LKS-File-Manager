@@ -1,4 +1,4 @@
-package SystemDataManagers.MenuDB;
+package SystemDataManagers.MenuDB.Books;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,14 +8,14 @@ import bFM.Data;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class AnimalManager implements OpenedFile
+public class JewelBookManager implements OpenedFile
 {
-	ArrayList<AnimalEntry> Entries = new ArrayList<AnimalEntry>();
-	public AnimalManager(byte[] data)
+	ArrayList<JewelEntry> Entries = new ArrayList<JewelEntry>();
+	public JewelBookManager(byte[] data)
 	{
 		initializeFromBytes(data);
 	}
-	public AnimalManager(List<String> lines)
+	public JewelBookManager(List<String> lines)
 	{
 		initializeFromLines(lines);
 	}
@@ -25,37 +25,37 @@ public class AnimalManager implements OpenedFile
 		List<String> names = Utils.extractStringsNoFormatting(pack.getFile("Name"));
 		List<String> texts = Utils.extractStringsNoFormatting(pack.getFile("Text"));
 		List<String> images = Utils.extractStringsNoFormatting(pack.getFile("Image"));
-		List<String> details = Utils.extractStringsNoFormatting(pack.getFile("Detail"));
+		List<String> details = Utils.extractStringsNoFormatting(pack.getFile("GourmetImage"));
 		int entryCount = names.size();
 		if(entryCount > texts.size() || entryCount > images.size() || entryCount > details.size())
 		{
-			throw new IllegalArgumentException("Animal Book Pack is incorrectly formatted. \n"
+			throw new IllegalArgumentException("Jewel Book Pack is incorrectly formatted. \n"
 					+ "Name Count: " + entryCount + "\n"
 					+ "Text Count: " + texts.size() + "\n"
 					+ "Image Count: " + images.size() + "\n"
-					+ "Detail Count: " + details.size() + "\n");
+					+ "Gourmet Image Count: " + details.size() + "\n");
 		}
 		else if(entryCount != texts.size() || entryCount != images.size() || entryCount != details.size())
 		{
-			System.err.print("Animal Book Pack is incorrectly formatted. \n"
+			System.err.print("Jewel Book Pack is incorrectly formatted. \n"
 					+ "Name Count: " + entryCount + "\n"
 					+ "Text Count: " + texts.size() + "\n"
 					+ "Image Count: " + images.size() + "\n"
-					+ "Detail Count: " + details.size() + "\n");
+					+ "Gourmet Image Count: " + details.size() + "\n");
 		}
 		for(int i = 0; i < entryCount; i++)
 		{
-			Entries.add(new AnimalEntry(names.get(i), texts.get(i), images.get(i), details.get(i)));
+			Entries.add(new JewelEntry(names.get(i), texts.get(i), images.get(i), details.get(i)));
 		}
 	}
 	private void initializeFromLines(List<String> lines)
 	{
-		AnimalEntry lastEntry = null;
+		JewelEntry lastEntry = null;
 		for(String line : lines)
 		{
-			if(line.indexOf("<<Animal Name>>") != -1)
+			if(line.indexOf("<<Jewel Name>>") != -1)
 			{
-				lastEntry = new AnimalEntry(line);
+				lastEntry = new JewelEntry(line);
 				Entries.add(lastEntry);
 			}
 			else if(lastEntry != null) lastEntry.addLine(line);
@@ -63,8 +63,8 @@ public class AnimalManager implements OpenedFile
 	}
 	public String toString()
 	{
-		String ret = "Bedrock's Animal Book Intermediate File v1.0\n";
-		for(AnimalEntry entry : Entries)
+		String ret = "Bedrock's Jewel Book Intermediate File v1.0\n";
+		for(JewelEntry entry : Entries)
 		{
 			ret += entry.toString();
 		}
@@ -73,7 +73,7 @@ public class AnimalManager implements OpenedFile
 	public boolean equals(String name) 
 	{
 		System.err.println("equals() should not be called on type " + this.getClass());
-		return name.equals("AnimalBook.bin");
+		return name.equals("Jewel.bin");
 	}
 	public void setData(byte[] data) 
 	{
@@ -83,29 +83,29 @@ public class AnimalManager implements OpenedFile
 	{
 		PCKGManager pack = new PCKGManager(getName());
 		byte[] nameBin = new byte[0];
-		for(AnimalEntry entry : Entries)
+		for(JewelEntry entry : Entries)
 		{
 			nameBin = Utils.mergeArrays(nameBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.name), (byte)0x00));
 		}
 		byte[] textBin = new byte[0];
-		for(AnimalEntry entry : Entries)
+		for(JewelEntry entry : Entries)
 		{
 			textBin = Utils.mergeArrays(textBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.text), (byte)0x00));
 		}
 		byte[] imageBin = new byte[0];
-		for(AnimalEntry entry : Entries)
+		for(JewelEntry entry : Entries)
 		{
 			imageBin = Utils.mergeArrays(imageBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.image), (byte)0x00));
 		}
 		byte[] detailBin = new byte[0];
-		for(AnimalEntry entry : Entries)
+		for(JewelEntry entry : Entries)
 		{
 			detailBin = Utils.mergeArrays(detailBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.debugText), (byte)0x00));
 		}
 		pack.addFile("Name", nameBin);
 		pack.addFile("Text", textBin);
 		pack.addFile("Image", imageBin);
-		pack.addFile("Detail", detailBin);
+		pack.addFile("GourmetImage", detailBin);
 		return pack.toBytes();
 	}
 	public void setName(String name) 
@@ -114,30 +114,30 @@ public class AnimalManager implements OpenedFile
 	}
 	public String getName() 
 	{
-		return "AnimalBook.bin";
+		return "Jewel.bin";
 	}
 	public int getSize() 
 	{
 		return toBytes().length;
 	}
-	public static class AnimalEntry implements Data
+	public static class JewelEntry implements Data
 	{
-		String name = "New Animal Entry";
-		String text = "New Animal Description";
-		String image = "animal_panda";
-		String debugText = "Detail Text (Unused)";
-		public AnimalEntry(String name, String text, String image, String debugText)
+		String name = "New Jewel Entry";
+		String text = "New Jewel Description";
+		String image = "jewel1";
+		String debugText = "tabemono1";
+		public JewelEntry(String name, String text, String image, String debugText)
 		{
 			this.name = name;
 			this.text = text;
 			this.image = image;
 			this.debugText = debugText;
 		}
-		public AnimalEntry(String line)
+		public JewelEntry(String line)
 		{
 			this.name = Utils.formatString(line);
 		}
-		public AnimalEntry() 
+		public JewelEntry() 
 		{
 			// Use Defaults
 		}
@@ -158,10 +158,10 @@ public class AnimalManager implements OpenedFile
 		}
 		public String toString()
 		{
-			String ret = "<<Animal Name>> \"" + Utils.toFormatedString(name) + "\"\n";
+			String ret = "<<Jewel Name>> \"" + Utils.toFormatedString(name) + "\"\n";
 			ret += "\t<<Description>> \"" + Utils.toFormatedString(text) + "\"\n";
 			ret += "\t<<Image>> \"" + Utils.toFormatedString(image) + "\"\n";
-			ret += "\t<<Debug Description>> \"" + Utils.toFormatedString(debugText) + "\"\n";
+			ret += "\t<<Gourmet Image>> \"" + Utils.toFormatedString(debugText) + "\"\n";
 			return ret;
 		}
 		public boolean equals(String name) 
@@ -213,7 +213,7 @@ public class AnimalManager implements OpenedFile
 			return Utils.toFormatedString(debugText);
 		}
 	}
-	public ArrayList<AnimalEntry> getEntries() 
+	public ArrayList<JewelEntry> getEntries() 
 	{
 		return Entries;
 	}
@@ -222,13 +222,13 @@ public class AnimalManager implements OpenedFile
 		Entries.removeAll(Entries);
 		initializeFromBytes(data);
 	}
-	public void replaceFromBAB(byte[] data)
+	public void replaceFromBJB(byte[] data)
 	{
 		List<String> lines = Utils.bytesToStrs(data);
 		Entries.removeAll(Entries);
 		initializeFromLines(lines);
 	}
-	public void importFromBAB(byte[] data)
+	public void importFromBJB(byte[] data)
 	{
 		List<String> lines = Utils.bytesToStrs(data);
 		initializeFromLines(lines);
