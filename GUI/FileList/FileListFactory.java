@@ -9,12 +9,14 @@ import GUI.FileList.SystemData.CockpitLogFileList;
 import GUI.FileList.SystemData.HummingBookFileList;
 import GUI.FileList.SystemData.JewelBookFileList;
 import GUI.FileList.SystemData.KingdomPlanFileList;
+import GUI.FileList.SystemData.MenuStringFileList;
 import GUI.FileList.SystemData.WonderSpotFileList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import ResourceManagers.MSDBManager.MSDBManager;
 import SystemDataManagers.MenuDB.CockpitLogManager;
+import SystemDataManagers.MenuDB.MenuStringManager;
 import SystemDataManagers.MenuDB.Books.AnimalManager;
 import SystemDataManagers.MenuDB.Books.HummingBookManager;
 import SystemDataManagers.MenuDB.Books.JewelBookManager;
@@ -77,6 +79,10 @@ public class FileListFactory
 		else if (file instanceof CockpitLogManager)
 		{
 			return new CockpitLogFileList((CockpitLogManager) file, padding);
+		}
+		else if (file instanceof MenuStringManager)
+		{
+			return new MenuStringFileList((MenuStringManager) file, padding);
 		}
 		else if(file instanceof MSDBManager)
 		{

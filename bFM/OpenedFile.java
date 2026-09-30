@@ -5,6 +5,7 @@ import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import ResourceManagers.MSDBManager.MSDBManager;
 import SystemDataManagers.MenuDB.CockpitLogManager;
+import SystemDataManagers.MenuDB.MenuStringManager;
 import SystemDataManagers.MenuDB.Books.AnimalManager;
 import SystemDataManagers.MenuDB.Books.HummingBookManager;
 import SystemDataManagers.MenuDB.Books.JewelBookManager;
@@ -163,7 +164,18 @@ public interface OpenedFile extends Data, Nameable
 				return new PCKGManager(file, name);
 			}
 		}
-		
+		else if (fileType.equals("MenuStringDB"))
+		{
+			try
+			{
+				return new MenuStringManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+			}
+		}
 		return new GenericFile(name, file);
 	}
 }

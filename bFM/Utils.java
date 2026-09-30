@@ -527,6 +527,10 @@ public class Utils
 		{
 			return "Virtual Machine Code";
 		}
+		else if(name.indexOf("MenuString.bin") != -1)
+		{
+			return "MenuStringDB";
+		}
 		return "Todo";
 	}
 	public static float[] formatCoords(String line) 

@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bFM.Data;
+import bFM.OpenedFile;
 import bFM.Utils;
 
-public class MenuStringManager implements Data
+public class MenuStringManager implements OpenedFile
 {
-	ArrayList<String> Messages = new ArrayList<String>();
+	ArrayList<MenuString> Messages = new ArrayList<MenuString>();
 	public MenuStringManager(byte[] data)
 	{
-		Messages = bFM.Utils.extractStrings(data);
+		for(String s : Utils.extractStrings(data))
+		{
+			Messages.add(new MenuString(s));
+		}
 	}
 	public MenuStringManager(List<String> lines)
 	{
@@ -19,7 +23,7 @@ public class MenuStringManager implements Data
 		{
 			if(lines.get(i).indexOf("<<String ")!=-1&&lines.get(i).indexOf(">>")!=-1)
 			{
-				Messages.add(bFM.Utils.formatString(lines.get(i)));
+				Messages.add(new MenuString(Utils.formatString(lines.get(i))));
 			}
 		}
 	}
@@ -28,7 +32,7 @@ public class MenuStringManager implements Data
 		byte[] messageBytes = new byte[0];
 		for(int i = 0; i<Messages.size(); i++)
 		{
-			messageBytes = bFM.Utils.mergeArrays(messageBytes,bFM.Utils.mergeArrays(Utils.encodeStringToBytes(Messages.get(i)),new byte[1]));
+			messageBytes = bFM.Utils.mergeArrays(messageBytes,bFM.Utils.mergeArrays(Messages.get(i).toBytes(),(byte)0x00));
 		}
 		return messageBytes;
 	}
@@ -47,7 +51,11 @@ public class MenuStringManager implements Data
 	}
 	public void setData(byte[] data) 
 	{
-		Messages = bFM.Utils.extractStrings(data);
+		Messages.removeAll(Messages);
+		for(String s : Utils.extractStrings(data))
+		{
+			Messages.add(new MenuString(s));
+		}
 	}
 	public void setName(String name) 
 	{
@@ -55,10 +63,43 @@ public class MenuStringManager implements Data
 	}
 	public String getName() 
 	{
-		throw new UnsupportedOperationException("getName() should not be called on type " + this.getClass());
+		return "MenuString.bin";
 	}
 	public int getSize() 
 	{
 		throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
+	}
+	public ArrayList<MenuString> getEntries()
+	{
+		return Messages;
+	}
+	public static class MenuString implements Data
+	{
+		String text = "";
+		public MenuString(String text)
+		{
+			this.text = text;
+		}
+		public String getText()
+		{
+			// TODO Auto-generated method stub
+			return text;
+		}
+		public void setText(String text)
+		{
+			this.text = text;
+		}
+		public void setData(byte[] data)
+		{
+			
+		}
+		public byte[] toBytes()
+		{
+			return Utils.encodeStringToBytes(Utils.formatStringChars(text));
+		}
+		public int getSize()
+		{
+			return toBytes().length;
+		}
 	}
 }

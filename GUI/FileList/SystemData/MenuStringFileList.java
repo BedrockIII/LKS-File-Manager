@@ -5,19 +5,20 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.MenuString.MenuStringInfo;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.CockpitLogManager;
-import SystemDataManagers.MenuDB.LogEntry;
+import SystemDataManagers.MenuDB.MenuStringManager;
+import SystemDataManagers.MenuDB.MenuStringManager.MenuString;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class CockpitLogFileList extends CollapseableFileList
+public class MenuStringFileList extends CollapseableFileList
 {
 	private int padding = 0;
-	private ArrayList<LogEntry> Entries = new ArrayList<LogEntry>();
-	CockpitLogManager manager;
-	public CockpitLogFileList(CockpitLogManager file, int padding) 
+	private ArrayList<MenuString> Entries = new ArrayList<MenuString>();
+	MenuStringManager manager;
+	public MenuStringFileList(MenuStringManager file, int padding) 
 	{
 		manager = file;
 		this.padding = padding;
@@ -26,13 +27,13 @@ public class CockpitLogFileList extends CollapseableFileList
 	}
 	protected void initializeAll(int padding) 
 	{
-		System.out.print("Opening Cockpit Log Binary File: █");
-		fileTypes = new FileNameExtensionFilter("Cockpit Log Binary File", "bin");
-		initializeListGUI(padding, "Cockpit Log Manager");
+		System.out.print("Opening Menu String Binary File: █");
+		fileTypes = new FileNameExtensionFilter("Menu String Binary File", "bin");
+		initializeListGUI(padding, "Menu String Manager");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
-		initializeInfoGUI();
+		//initializeInfoGUI();
 		System.out.print("█");
 		addActions();
 		System.out.print("█");
@@ -43,9 +44,9 @@ public class CockpitLogFileList extends CollapseableFileList
 	{
 		subEntries.removeAll(subEntries);
 		Entries = manager.getEntries();
-		for(LogEntry object : Entries)
+		for(MenuString object : Entries)
 		{
-			subEntries.add(new LogEntryGUI(object, padding + Settings.indentSize, this));
+			subEntries.add(new MenuStringListGUI(object, padding + Settings.indentSize, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -66,12 +67,12 @@ public class CockpitLogFileList extends CollapseableFileList
 	}
 	private void addZoneAction()
 	{
-		JMenuItem newZone = new JMenuItem("Create New Log Entry");
+		JMenuItem newZone = new JMenuItem("Create New Menu String");
 		newZone.addActionListener(e -> 
 		{
-			LogEntry entry = new LogEntry();
+			MenuString entry = new MenuString("New Menu String");
 			Entries.add(entry);
-			subEntries.add(new LogEntryGUI(entry, padding + Settings.indentSize, this));
+			subEntries.add(new MenuStringListGUI(entry, padding + Settings.indentSize, this));
 			reAddComponents();
 		});
 		//actions.add(newZone);
@@ -92,12 +93,12 @@ public class CockpitLogFileList extends CollapseableFileList
 	{
 		//actions.add(GUIUtils.createImportAction("Replace Entries from raw Humming.bin file", "Humming Book Database Binary File", "bin", manager::replaceFromData, this));
 	}
-	public class LogEntryGUI extends FileList
+	public class MenuStringListGUI extends FileList
 	{
-		LogEntry file;
+		MenuString file;
 		int padding;
-		CockpitLogFileList parent;
-		public LogEntryGUI(LogEntry entry, int padding, CockpitLogFileList parent)
+		MenuStringFileList parent;
+		public MenuStringListGUI(MenuString entry, int padding, MenuStringFileList parent)
 		{
 			this.padding = padding;
 			this.file = entry;
@@ -106,14 +107,13 @@ public class CockpitLogFileList extends CollapseableFileList
 		}
 		protected void initializeAll(int padding) 
 		{
-			initializeListGUI(padding, "Entry: \"" + file.getText() + "\"");
+			initializeListGUI(padding, "\""+ file.getText() + "\"");
 			initializeInfoGUI();
 			addActions();
 		}
 		protected void initializeInfoGUI() 
 		{
-			//TODO
-			//this.infoGUI = new HummingEntryInfoGUI(file);
+			this.infoGUI = new MenuStringInfo(file);
 		}
 		protected void addActions() 
 		{
@@ -122,7 +122,7 @@ public class CockpitLogFileList extends CollapseableFileList
 		}
 		public void update()
 		{
-			fileName.setText("Entry: \"" + file.getText() + "\"");
+			fileName.setText("\""+ file.getText() + "\"");
 			super.update();
 		}
 	}
