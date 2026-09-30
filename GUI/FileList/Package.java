@@ -30,7 +30,7 @@ public class Package extends CollapseableFileList
 	{
 		this.packageFile = packageFile;
 		this.file = packageFile;
-		initializeAll(padding);
+		initializeAll();
 	}
 	public Package(PCKGManager packageFile)
 	{
@@ -38,7 +38,7 @@ public class Package extends CollapseableFileList
 		this.file = packageFile;
 		initializeAll();
 	}
-	protected void initializeAll(int padding)
+	protected void initializeAll()
 	{
 		this.padding = padding;
 		fileTypes = new FileNameExtensionFilter("Package File", "pac", "pcha", "bin", "pac0");

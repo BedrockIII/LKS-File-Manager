@@ -26,13 +26,13 @@ public class JewelBookFileList extends CollapseableFileList
 		manager = file;
 		this.padding = padding;
 		this.file = file;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding) 
+	protected void initializeAll() 
 	{
 		System.out.print("Opening Jewel Book Binary File: █");
 		fileTypes = new FileNameExtensionFilter("Jewel Book Binary File", "bin");
-		initializeListGUI(padding, "Jewel Book Manager");
+		initializeListGUI("Jewel Book Manager");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
@@ -105,11 +105,11 @@ public class JewelBookFileList extends CollapseableFileList
 			this.padding = padding;
 			this.file = entry;
 			this.parent = parent;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
-			initializeListGUI(padding, "Entry: \"" + file.getName() + "\"");
+			initializeListGUI("Entry: \"" + file.getName() + "\"");
 			initializeInfoGUI();
 			addActions();
 		}

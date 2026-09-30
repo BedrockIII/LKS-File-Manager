@@ -12,11 +12,11 @@ public class EventListGUI extends FileList
 	{
 		vmc = file;
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding)
+	protected void initializeAll()
 	{
-		initializeListGUI(padding, vmc.getName());
+		initializeListGUI(vmc.getName());
 		addActions();
 	}
 	protected void initializeInfoGUI()

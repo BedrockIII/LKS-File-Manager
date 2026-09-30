@@ -50,7 +50,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 		this.file = file;
 		data = file;
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
 	public void initializeSubGUI() 
 	{
@@ -60,9 +60,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 		RandomPlaces = new RandomAreasListGUI(data.getAreaList(), padding + Settings.indentSize, this);
 		subEntries.add(RandomPlaces);
 	}
-	protected void initializeAll(int padding) 
+	protected void initializeAll() 
 	{
-		initializeListGUI(padding, "Mission Object Placements");
+		initializeListGUI("Mission Object Placements");
 		initializeSubGUI();
 		initializeInfoGUI();
 		addActions();
@@ -120,7 +120,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 			this.parent = parent;
 			data = file;
 			this.padding = padding;
-			initializeAll(padding);
+			initializeAll();
 		}
 		public void initializeSubGUI() 
 		{
@@ -129,9 +129,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 				subEntries.add(new RandomAreaListGUI(Area, padding + Settings.indentSize, this));
 			}
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
-			initializeListGUI(padding, "Random Spawning Areas");
+			initializeListGUI("Random Spawning Areas");
 			initializeSubGUI();
 			//initializeInfoGUI();
 			addActions();
@@ -168,7 +168,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 				this.parent = parent;
 				data = file;
 				this.padding = padding;
-				initializeAll(padding);
+				initializeAll();
 			}
 			public void initializeSubGUI() 
 			{
@@ -177,9 +177,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 					subEntries.add(new RandomPointListGUI(Point, padding + Settings.indentSize, this));
 				}
 			}
-			protected void initializeAll(int padding) 
+			protected void initializeAll() 
 			{
-				initializeListGUI(padding, "Random Area " + data.getCode());
+				initializeListGUI("Random Area " + data.getCode());
 				initializeSubGUI();
 				//initializeInfoGUI();
 				addActions();
@@ -227,11 +227,11 @@ public class MOPlacementListGUI extends CollapseableFileList
 					this.parent = parent;
 					data = file;
 					this.padding = padding;
-					initializeAll(padding);
+					initializeAll();
 				}
-				protected void initializeAll(int padding) 
+				protected void initializeAll() 
 				{
-					initializeListGUI(padding, "Random Point");
+					initializeListGUI("Random Point");
 					addActions();
 					reAddComponents();
 				}
@@ -287,7 +287,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 			this.parent = parent;
 			data = file;
 			this.padding = padding;
-			initializeAll(padding);
+			initializeAll();
 		}
 		public void initializeSubGUI() 
 		{
@@ -299,9 +299,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 			}
 			//System.out.println("\nFinished");
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
-			initializeListGUI(padding, "Mission Groups");
+			initializeListGUI("Mission Groups");
 			initializeSubGUI();
 			addActions();
 			reAddComponents();
@@ -345,14 +345,14 @@ public class MOPlacementListGUI extends CollapseableFileList
 				parent.data.getMobGroups().add(g);
 				data.add(g);
 				this.padding = padding;
-				initializeAll(padding);
+				initializeAll();
 			}
 			public GroupCategoryListGUI(ArrayList<MobGroup> file, int padding, GroupCategoriesListGUI parent) 
 			{
 				this.parent = parent;
 				data = file;
 				this.padding = padding;
-				initializeAll(padding);
+				initializeAll();
 			}
 			public void initializeSubGUI() 
 			{
@@ -364,9 +364,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 				}
 				//System.out.println("\nG2 Done");
 			}
-			protected void initializeAll(int padding) 
+			protected void initializeAll() 
 			{
-				initializeListGUI(padding, GroupCategoryManager.getCategory(data.get(0).getGroupCategoryID()).name().toString());
+				initializeListGUI(GroupCategoryManager.getCategory(data.get(0).getGroupCategoryID()).name().toString());
 				initializeSubGUI();
 				//initializeInfoGUI();
 				addActions();
@@ -459,7 +459,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 					data = file;
 					this.file = file;
 					this.padding = padding;
-					initializeAll(padding);
+					initializeAll();
 				}
 				public void initializeSubGUI() 
 				{
@@ -468,9 +468,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 						subEntries.add(new ObjectListGUI(Object, padding + Settings.indentSize, this));
 					}
 				}
-				protected void initializeAll(int padding) 
+				protected void initializeAll() 
 				{
-					initializeListGUI(padding, "Group " + data.getCode());
+					initializeListGUI("Group " + data.getCode());
 					initializeSubGUI();
 					//initializeInfoGUI();
 					addActions();
@@ -612,11 +612,11 @@ public class MOPlacementListGUI extends CollapseableFileList
 						data = file;
 						this.file = file;
 						this.padding = padding;
-						initializeAll(padding);
+						initializeAll();
 					}
-					protected void initializeAll(int padding) 
+					protected void initializeAll() 
 					{
-						initializeListGUI(padding, "Mission Object");
+						initializeListGUI("Mission Object");
 						addActions();
 						reAddComponents();
 					}

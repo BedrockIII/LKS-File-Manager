@@ -23,13 +23,13 @@ public class MenuStringFileList extends CollapseableFileList
 		manager = file;
 		this.padding = padding;
 		this.file = file;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding) 
+	protected void initializeAll() 
 	{
 		System.out.print("Opening Menu String Binary File: █");
 		fileTypes = new FileNameExtensionFilter("Menu String Binary File", "bin");
-		initializeListGUI(padding, "Menu String Manager");
+		initializeListGUI("Menu String Manager");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
@@ -103,11 +103,11 @@ public class MenuStringFileList extends CollapseableFileList
 			this.padding = padding;
 			this.file = entry;
 			this.parent = parent;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
-			initializeListGUI(padding, "\""+ file.getText() + "\"");
+			initializeListGUI("\""+ file.getText() + "\"");
 			initializeInfoGUI();
 			addActions();
 		}

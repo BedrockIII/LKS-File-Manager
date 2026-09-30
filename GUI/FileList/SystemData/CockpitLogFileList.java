@@ -22,13 +22,13 @@ public class CockpitLogFileList extends CollapseableFileList
 		manager = file;
 		this.padding = padding;
 		this.file = file;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding) 
+	protected void initializeAll() 
 	{
 		System.out.print("Opening Cockpit Log Binary File: █");
 		fileTypes = new FileNameExtensionFilter("Cockpit Log Binary File", "bin");
-		initializeListGUI(padding, "Cockpit Log Manager");
+		initializeListGUI("Cockpit Log Manager");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
@@ -102,11 +102,11 @@ public class CockpitLogFileList extends CollapseableFileList
 			this.padding = padding;
 			this.file = entry;
 			this.parent = parent;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
-			initializeListGUI(padding, "Entry: \"" + file.getText() + "\"");
+			initializeListGUI("Entry: \"" + file.getText() + "\"");
 			initializeInfoGUI();
 			addActions();
 		}

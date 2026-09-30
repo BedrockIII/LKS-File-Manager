@@ -26,13 +26,13 @@ public class WonderSpotFileList extends CollapseableFileList
 		manager = file;
 		this.padding = padding;
 		this.file = file;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding) 
+	protected void initializeAll() 
 	{
 		System.out.print("Opening Wonder Spot Binary File: █");
 		fileTypes = new FileNameExtensionFilter("Wonder Spot Binary File", "bin");
-		initializeListGUI(padding, "Wonder Spot Manager");
+		initializeListGUI("Wonder Spot Manager");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
@@ -105,11 +105,11 @@ public class WonderSpotFileList extends CollapseableFileList
 			this.padding = padding;
 			this.file = file;
 			this.parent = parent;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
-			initializeListGUI(padding, "Spot: \"" + file.getName() + "\"");
+			initializeListGUI("Spot: \"" + file.getName() + "\"");
 			initializeInfoGUI();
 			addActions();
 		}

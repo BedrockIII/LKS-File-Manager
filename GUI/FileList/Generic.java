@@ -22,32 +22,32 @@ public class Generic extends FileList
 	{
 		file = pac.getPackedFile(index);
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
 	public Generic(String name, byte[] data, int padding)
 	{
 		file = OpenedFile.makeFile(name, data);
-		initializeAll(padding);
+		initializeAll();
 	}
 	public Generic(OpenedFile file, int padding, CollapseableFileList parent)
 	{
 		this.file = file;
 		this.parent = parent;
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
 	public Generic(String name, int padding, CollapseableFileList parent) 
 	{
 		file = OpenedFile.makeFile(name, new byte[0]);
 		this.padding = padding;
 		this.parent = parent;
-		initializeAll(padding);
+		initializeAll();
 	}
 	protected void initializeAll()
 	{
-		initializeAll(0);
+		initializeAll();
 	}
-	protected void initializeAll(int padding)
+	protected void initializeAll()
 	{
 		this.padding = padding;
 		initializeListGUI();
@@ -57,7 +57,7 @@ public class Generic extends FileList
 	}
 	protected void initializeListGUI()
 	{
-		initializeListGUI(padding, ((Nameable) file).getName());
+		initializeListGUI(((Nameable) file).getName());
 	}
 	protected void initializeInfoGUI()
 	{

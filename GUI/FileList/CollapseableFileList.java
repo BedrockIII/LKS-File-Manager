@@ -32,9 +32,9 @@ public abstract class CollapseableFileList extends FileList
 	String filter = "";
 	protected void initializeListGUI(int padding)
 	{
-		initializeListGUI(padding, ((Nameable) file).getName());
+		initializeListGUI(((Nameable) file).getName());
 	}
-	protected void initializeListGUI(int padding, String name) 
+	protected void initializeListGUI(String name) 
 	{
 		setLayout(new GridBagLayout());
 		GridBagConstraints layout = new GridBagConstraints();

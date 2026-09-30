@@ -37,9 +37,9 @@ public class Collision extends CollapseableFileList
 	{
 		this.parent = parent;
 		this.file = file;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding)
+	protected void initializeAll()
 	{
 		this.padding = padding;
 		fileTypes = new FileNameExtensionFilter("LKS Collision File", "col");
@@ -120,9 +120,9 @@ public class Collision extends CollapseableFileList
 		{
 			file = object;
 			this.object = object;
-			this.initializeAll(padding);
+			this.initializeAll();
 		}
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
 			this.initializeListGUI(padding);
 			this.initializeInfoGUI();
@@ -211,7 +211,7 @@ public class Collision extends CollapseableFileList
 		}
 		protected void initializeListGUI(int padding) 
 		{
-			initializeListGUI(padding, object.getName());
+			initializeListGUI(object.getName());
 		}
 		protected void initializeInfoGUI() 
 		{

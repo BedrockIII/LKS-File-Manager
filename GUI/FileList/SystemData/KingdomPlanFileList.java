@@ -28,13 +28,13 @@ public class KingdomPlanFileList extends CollapseableFileList
 		this.file = file;
 		planManager = file;
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding)
+	protected void initializeAll()
 	{
 		System.out.print("Opening Kingdom Plan Binary File: █");
 		fileTypes = new FileNameExtensionFilter("Kingdom Plan Binary File", "bin");
-		initializeListGUI(padding, "Kingdom Plan Config");
+		initializeListGUI("Kingdom Plan Config");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
@@ -114,11 +114,11 @@ public class KingdomPlanFileList extends CollapseableFileList
 			this.parent = parent;
 			this.area = area;
 			this.padding = padding;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
-			initializeListGUI(padding, "Area: \"" + area.getName() + "\"");
+			initializeListGUI("Area: \"" + area.getName() + "\"");
 			//initializeInfoGUI();
 			initializeSubGUI();
 			addActions();
@@ -222,11 +222,11 @@ public class KingdomPlanFileList extends CollapseableFileList
 				this.parent = parent;
 				this.element = element;
 				this.padding = padding;
-				initializeAll(padding);
+				initializeAll();
 			}
-			protected void initializeAll(int padding) 
+			protected void initializeAll() 
 			{
-				initializeListGUI(padding, "Element: \"" + element.getName() + "\"");
+				initializeListGUI("Element: \"" + element.getName() + "\"");
 				//initializeInfoGUI();
 				addActions();
 				reAddComponents();

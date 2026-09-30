@@ -18,7 +18,6 @@ import WorldFileManager.FixedPointObject;
 @SuppressWarnings("serial")
 public class FixedPoint extends CollapseableFileList
 {
-	int padding = 0;
 	FixedPointManager data;
 	CollapseableFileList parent= null;
 	ArrayList<FixedPointObject> objects = new ArrayList<FixedPointObject>();
@@ -28,9 +27,9 @@ public class FixedPoint extends CollapseableFileList
 		data = (FixedPointManager) file;
 		this.padding = padding;
 		this.parent = parent;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding)
+	protected void initializeAll()
 	{
 		fileTypes = new FileNameExtensionFilter("LKS Fixed Placement File", "fp", "vfp", "sfp", "lfp", "plfp");
 		initializeListGUI(padding);
@@ -119,7 +118,6 @@ public class FixedPoint extends CollapseableFileList
 	}
 	public static class FixedPointObjectListGUI extends CollapseableFileList
 	{
-		int padding;
 		FixedPointObject object;
 		FixedPointManager data;
 		ArrayList<FixedPointObject> children;
@@ -129,11 +127,11 @@ public class FixedPoint extends CollapseableFileList
 			this.data = data;
 			this.padding = padding;
 			children = object.getChildren();
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
-			initializeListGUI(padding, object.getName());
+			initializeListGUI(object.getName());
 			initializeSubGUI();
 			addActions();
 			reAddComponents();

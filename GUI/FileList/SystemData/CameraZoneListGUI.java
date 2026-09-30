@@ -26,13 +26,13 @@ public class CameraZoneListGUI extends CollapseableFileList
 		manager = file;
 		this.padding = padding;
 		this.file = file;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding) 
+	protected void initializeAll() 
 	{
 		System.out.print("Opening Camera Zone Binary File: █");
 		fileTypes = new FileNameExtensionFilter("Camera Zone Binary File", "bin");
-		initializeListGUI(padding, "Camera Zone Manager");
+		initializeListGUI("Camera Zone Manager");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
@@ -105,11 +105,11 @@ public class CameraZoneListGUI extends CollapseableFileList
 			this.padding = padding;
 			this.file = file;
 			this.parent = parent;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
-			initializeListGUI(padding, file.getName());
+			initializeListGUI(file.getName());
 			initializeInfoGUI();
 			addActions();
 		}

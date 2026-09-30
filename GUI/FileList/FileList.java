@@ -25,35 +25,24 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public abstract class FileList extends JPanel
 {
+	protected int padding;
 	protected Data file = null;
 	protected GenericFileInfoGUI infoGUI = null;
 	protected JLabel fileName = new JLabel();
 	protected JPopupMenu actions = new JPopupMenu();
 	protected FileNameExtensionFilter fileTypes = null;
 	protected static GenericFileInfoGUI nullGUI = null;
-	protected void initializeAll()
-	{
-		initializeAll(0);
-	}
-	protected abstract void initializeAll(int padding);
-	protected void initializeListGUI(int padding, String name) 
+	protected abstract void initializeAll();
+	protected void initializeListGUI(String name) 
 	{
 		setLayout(new GridBagLayout());
 		GridBagConstraints layout = new GridBagConstraints();
 		layout = new GridBagConstraints();
 	    layout.weightx = 0.0;
 	    layout.anchor = GridBagConstraints.NORTHWEST;
-	    
-		//setBorder(BorderFactory.createLineBorder(Color.GREEN));
-	    
-		
 		setPreferredSize(new Dimension(Settings.rowWidth, getHeight()));
-		//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
 		setLayout(new GridBagLayout());
-		//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-		
 		add(Box.createHorizontalStrut(padding + 15), layout);
-		
 		layout.weightx = 1.0;
 		layout.weighty = 1.0;
 		fileName = new JLabel(name, SwingConstants.LEFT);

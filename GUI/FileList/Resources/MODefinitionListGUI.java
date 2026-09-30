@@ -29,7 +29,7 @@ public class MODefinitionListGUI extends CollapseableFileList
 		this.file = file;
 		Definitions = file;
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
 	@Override
 	public void initializeSubGUI()
@@ -44,9 +44,9 @@ public class MODefinitionListGUI extends CollapseableFileList
 		subEntries.add(Attacks);
 	}
 	@Override
-	protected void initializeAll(int padding)
+	protected void initializeAll()
 	{
-		initializeListGUI(padding, "Mission Object Definitions");
+		initializeListGUI("Mission Object Definitions");
 		initializeSubGUI();
 		addActions();
 		reAddComponents();
@@ -79,7 +79,7 @@ public class MODefinitionListGUI extends CollapseableFileList
 			this.file = file;
 			Attacks = file;
 			this.padding = padding;
-			initializeAll(padding);
+			initializeAll();
 		}
 		public void initializeSubGUI()
 		{
@@ -89,9 +89,9 @@ public class MODefinitionListGUI extends CollapseableFileList
 				//System.out.print(".");
 			}
 		}
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
-			initializeListGUI(padding, "Mission Object Attacks");
+			initializeListGUI("Mission Object Attacks");
 			initializeSubGUI();
 			addActions();
 			reAddComponents();
@@ -124,7 +124,7 @@ public class MODefinitionListGUI extends CollapseableFileList
 				this.file = file;
 				Attack = file;
 				this.padding = padding;
-				initializeAll(padding);
+				initializeAll();
 			}
 			public void initializeSubGUI()
 			{
@@ -134,9 +134,9 @@ public class MODefinitionListGUI extends CollapseableFileList
 					//System.out.print(".");
 				}
 			}
-			protected void initializeAll(int padding)
+			protected void initializeAll()
 			{
-				initializeListGUI(padding, "Attack: " + Attack.getName());
+				initializeListGUI("Attack: " + Attack.getName());
 				initializeSubGUI();
 				addActions();
 				reAddComponents();
@@ -166,11 +166,11 @@ public class MODefinitionListGUI extends CollapseableFileList
 					this.file = file;
 					Collision = file;
 					this.padding = padding;
-					initializeAll(padding);
+					initializeAll();
 				}
-				protected void initializeAll(int padding)
+				protected void initializeAll()
 				{
-					initializeListGUI(padding, "Bone: " + Collision.getName());
+					initializeListGUI("Bone: " + Collision.getName());
 					addActions();
 				}
 				protected void initializeInfoGUI()
