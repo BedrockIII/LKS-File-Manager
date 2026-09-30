@@ -511,6 +511,10 @@ public class Utils
 			{
 				return "CockpitLogDB";
 			}
+			else if(name.equals("ChairMessage.bin"))
+			{
+				return "ChairMessageDB";
+			}
 			//Check if special TODO
 			//else return "Package"
 			return "Package";

@@ -11,6 +11,7 @@ import GUI.FileList.SystemData.JewelBookFileList;
 import GUI.FileList.SystemData.KingdomPlanFileList;
 import GUI.FileList.SystemData.MenuStringFileList;
 import GUI.FileList.SystemData.WonderSpotFileList;
+import GUI.FileList.SystemData.ChairMessage.ThroneMessageFileList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
@@ -22,6 +23,7 @@ import SystemDataManagers.MenuDB.Books.HummingBookManager;
 import SystemDataManagers.MenuDB.Books.JewelBookManager;
 import SystemDataManagers.MenuDB.Books.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
+import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import VMC.VMCConverter;
 import WorldFileManager.FixedPointManager;
@@ -83,6 +85,10 @@ public class FileListFactory
 		else if (file instanceof MenuStringManager)
 		{
 			return new MenuStringFileList((MenuStringManager) file, padding);
+		}
+		else if (file instanceof ChairMessageManager)
+		{
+			return new ThroneMessageFileList((ChairMessageManager) file, padding);
 		}
 		else if(file instanceof MSDBManager)
 		{

@@ -3,31 +3,25 @@ package GUI.FileList.SystemData.ChairMessage;
 import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import GUI.FileInfo.MenuDB.MenuString.MenuStringInfo;
 import GUI.FileList.CollapseableFileList;
-import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.MenuStringManager;
-import SystemDataManagers.MenuDB.MenuStringManager.MenuString;
-import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
+import SystemDataManagers.MenuDB.ChairMessage.ChairMessage;
 import bFM.Settings;
 
-@SuppressWarnings("serial")g
+@SuppressWarnings("serial")
 public class ThroneSpeakerFileListGUI extends CollapseableFileList
 {
-	private ArrayList<MenuString> Entries = new ArrayList<MenuString>();
-	ChairMessageManager manager;
-	public ThroneSpeakerFileListGUI(ChairMessageManager file, int padding) 
+	String SpeakerName;
+	ArrayList<ChairMessage> Messages;
+	public ThroneSpeakerFileListGUI(ArrayList<ChairMessage> Messages, int padding, String SpeakerName)
 	{
-		manager = file;
+		this.Messages = Messages;
 		this.padding = padding;
-		this.file = file;
+		this.SpeakerName = SpeakerName;
 		initializeAll();
 	}
 	protected void initializeAll() 
 	{
-		initializeListGUI("Throne Message Manager");
+		initializeListGUI(SpeakerName + " Message Data");
 		initializeSubGUI();
 		addActions();
 		reAddComponents();
@@ -35,8 +29,7 @@ public class ThroneSpeakerFileListGUI extends CollapseableFileList
 	public void initializeSubGUI()
 	{
 		subEntries.removeAll(subEntries);
-		Entries = manager.getEntries();
-		for(MenuString object : Entries)
+		for(ChairMessage object : Messages)
 		{
 			subEntries.add(new ThroneMessageListGUI(object, padding + Settings.indentSize, this));
 		}
@@ -49,40 +42,20 @@ public class ThroneSpeakerFileListGUI extends CollapseableFileList
 	protected void addActions() 
 	{
 		addExportAction();
-		addReplaceRawAction();
-		addExportBJBAction();
-		addImportBJBAction();
-		addReplaceBJBAction();
-		addZoneAction();
+		addMessageAction();
 		add(actions);
 		addMouseListener();
 	}
-	private void addZoneAction()
+	private void addMessageAction()
 	{
-		JMenuItem newZone = new JMenuItem("Create New Menu String");
+		JMenuItem newZone = new JMenuItem("Create New Message");
 		newZone.addActionListener(e -> 
 		{
-			MenuString entry = new MenuString("New Menu String");
-			Entries.add(entry);
-			subEntries.add(new MenuStringListGUI(entry, padding + Settings.indentSize, this));
+			ChairMessage entry = new ChairMessage("New Throne Dialog", -1);
+			Messages.add(entry);
+			subEntries.add(new ThroneMessageListGUI(entry, padding + Settings.indentSize, this));
 			reAddComponents();
 		});
-		//actions.add(newZone);
-	}
-	private void addExportBJBAction()
-	{
-		//actions.add(GUIUtils.createExportAction("Export Entries as .bit text file", "HummingBook.bit", "Bedrock's Intermediate Text File", manager::toIntermediateText));
-	}
-	private void addImportBJBAction()
-	{
-		//actions.add(GUIUtils.createImportAction("Import Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::importFromIntermediateText, this));
-	}
-	private void addReplaceBJBAction()
-	{
-		//actions.add(GUIUtils.createImportAction("Replace Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::replaceFromIntermediateText, this));
-	}
-	private void addReplaceRawAction()
-	{
-		//actions.add(GUIUtils.createImportAction("Replace Entries from raw Humming.bin file", "Humming Book Database Binary File", "bin", manager::replaceFromData, this));
+		actions.add(newZone);
 	}
 }

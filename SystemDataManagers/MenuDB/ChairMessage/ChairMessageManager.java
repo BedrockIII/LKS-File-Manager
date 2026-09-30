@@ -1,7 +1,7 @@
 package SystemDataManagers.MenuDB.ChairMessage;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
@@ -36,7 +36,11 @@ public class ChairMessageManager implements OpenedFile
 	}
 	private void initializeFromBytes(ArrayList<ChairMessage> Entries, byte[] flagData, List<String> messageData)
 	{
-		
+		ByteBuffer data = ByteBuffer.wrap(flagData);
+		for(String message : messageData)
+		{
+			Entries.add(new ChairMessage(message, data.getInt()));
+		}
 	}
 	private void initializeFromLines(List<String> lines)
 	{
@@ -57,8 +61,8 @@ public class ChairMessageManager implements OpenedFile
 		pack.addFile("Verude", toStringBytes(VerdeEntries));
 		pack.addFile("Hauzar", toStringBytes(HowserEntries));
 		pack.addFile("Riamu", toStringBytes(LiamEntries));
-		pack.addFile("VerudeFlag", toFlagBytes(VerdeEntries));
 		pack.addFile("HauzarFlag", toFlagBytes(HowserEntries));
+		pack.addFile("VerudeFlag", toFlagBytes(VerdeEntries));
 		pack.addFile("RiamuFlag", toFlagBytes(LiamEntries));
 		return pack.getFile();
 	}
@@ -74,16 +78,11 @@ public class ChairMessageManager implements OpenedFile
 	}
 	private byte[] toFlagBytes(ArrayList<ChairMessage> entries)
 	{
-		byte[] ret = new byte[24];
-		Arrays.fill(ret, (byte)-1);
+		byte[] ret = new byte[0];
 		for(ChairMessage e : entries)
 		{
 			ret = Utils.mergeArrays(ret, Utils.toByteArr(e.getFlag(), 4));
 		}
-		
-		byte[] endPadding = new byte[16];
-		Arrays.fill(endPadding, (byte)-1);
-		ret = Utils.mergeArrays(ret, endPadding);
 		return ret;
 	}
 	public void setName(String name) 

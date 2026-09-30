@@ -11,6 +11,7 @@ import SystemDataManagers.MenuDB.Books.HummingBookManager;
 import SystemDataManagers.MenuDB.Books.JewelBookManager;
 import SystemDataManagers.MenuDB.Books.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
+import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import VMC.VMCConverter;
 import WorldFileManager.FixedPointManager;
@@ -144,6 +145,18 @@ public interface OpenedFile extends Data, Nameable
 			try
 			{
 				return new CockpitLogManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+		}else if (fileType.equals("ChairMessageDB"))
+		{
+			try
+			{
+				return new ChairMessageManager(file);
 			}
 			catch (Exception e)
 			{

@@ -76,7 +76,7 @@ public class CockpitLogManager implements OpenedFile
 	}
 	public int getSize() 
 	{
-		throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
+		return toBytes().length;
 	}
 	public ArrayList<LogEntry> getEntries()
 	{

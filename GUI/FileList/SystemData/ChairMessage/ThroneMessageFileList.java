@@ -1,22 +1,14 @@
 package GUI.FileList.SystemData.ChairMessage;
 
-import java.util.ArrayList;
-
-import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import GUI.FileInfo.MenuDB.MenuString.MenuStringInfo;
 import GUI.FileList.CollapseableFileList;
-import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.MenuStringManager;
-import SystemDataManagers.MenuDB.MenuStringManager.MenuString;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class ThroneMessageFileList extends CollapseableFileList
 {
-	private ArrayList<MenuString> Entries = new ArrayList<MenuString>();
 	ChairMessageManager manager;
 	public ThroneMessageFileList(ChairMessageManager file, int padding) 
 	{
@@ -56,24 +48,11 @@ public class ThroneMessageFileList extends CollapseableFileList
 	{
 		addExportAction();
 		addReplaceRawAction();
-		addExportBJBAction();
-		addImportBJBAction();
-		addReplaceBJBAction();
-		addZoneAction();
+		addExportBITAction();
+		addImportBITAction();
+		addReplaceBITAction();
 		add(actions);
 		addMouseListener();
-	}
-	private void addZoneAction()
-	{
-		JMenuItem newZone = new JMenuItem("Create New Menu String");
-		newZone.addActionListener(e -> 
-		{
-			MenuString entry = new MenuString("New Menu String");
-			Entries.add(entry);
-			subEntries.add(new MenuStringListGUI(entry, padding + Settings.indentSize, this));
-			reAddComponents();
-		});
-		//actions.add(newZone);
 	}
 	private void addExportBITAction()
 	{

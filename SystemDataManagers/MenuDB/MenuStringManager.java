@@ -67,7 +67,7 @@ public class MenuStringManager implements OpenedFile
 	}
 	public int getSize() 
 	{
-		throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
+		return toBytes().length;
 	}
 	public ArrayList<MenuString> getEntries()
 	{
