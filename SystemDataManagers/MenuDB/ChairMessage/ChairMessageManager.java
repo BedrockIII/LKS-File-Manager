@@ -1,6 +1,7 @@
 package SystemDataManagers.MenuDB.ChairMessage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
@@ -53,8 +54,37 @@ public class ChairMessageManager implements OpenedFile
 	public byte[] toBytes() 
 	{
 		PCKGManager pack = new PCKGManager(getName());
-		//TODO
-		return null;
+		pack.addFile("Verude", toStringBytes(VerdeEntries));
+		pack.addFile("Hauzar", toStringBytes(HowserEntries));
+		pack.addFile("Riamu", toStringBytes(LiamEntries));
+		pack.addFile("VerudeFlag", toFlagBytes(VerdeEntries));
+		pack.addFile("HauzarFlag", toFlagBytes(HowserEntries));
+		pack.addFile("RiamuFlag", toFlagBytes(LiamEntries));
+		return pack.getFile();
+	}
+	private byte[] toStringBytes(ArrayList<ChairMessage> entries)
+	{
+		byte[] ret = null;
+		for(ChairMessage e : entries)
+		{
+			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(Utils.formatStringChars(e.getText())));
+			ret = Utils.mergeArrays(ret, (byte)0x00);
+		}
+		return ret;
+	}
+	private byte[] toFlagBytes(ArrayList<ChairMessage> entries)
+	{
+		byte[] ret = new byte[24];
+		Arrays.fill(ret, (byte)-1);
+		for(ChairMessage e : entries)
+		{
+			ret = Utils.mergeArrays(ret, Utils.toByteArr(e.getFlag(), 4));
+		}
+		
+		byte[] endPadding = new byte[16];
+		Arrays.fill(endPadding, (byte)-1);
+		ret = Utils.mergeArrays(ret, endPadding);
+		return ret;
 	}
 	public void setName(String name) 
 	{

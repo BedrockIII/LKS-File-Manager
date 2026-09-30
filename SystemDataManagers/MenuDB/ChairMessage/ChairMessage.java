@@ -6,10 +6,11 @@ import bFM.Utils;
 public class ChairMessage implements Data
 	{
 		String message = "Throne Message";
-		public ChairMessage(String message, byte[] flags)
+		int flag;
+		public ChairMessage(String message, int flag)
 		{
 			this.message = message;
-			//TODO Figure out how flags work
+			this.flag = flag;
 		}
 		public ChairMessage(String line)
 		{
@@ -21,28 +22,32 @@ public class ChairMessage implements Data
 		}
 		public void addLine(String line)
 		{
-			//TODO
-			if(line.indexOf("<<Description>>") != -1)
+			if(line.indexOf("<<Flag>>") != -1)
 			{
-				
-			}
-			else if(line.indexOf("<<Image>>") != -1)
-			{
-				
-			}
-			else if(line.indexOf("<<Debug Description>>") != -1)
-			{
-				
+				flag = Utils.formatFlag(line);
 			}
 		}
 		public String toString()
 		{
 			String ret = "<<Throne Message>> \"" + Utils.toFormatedString(message) + "\"\n";
-			//TODO
-			//ret += "\t<<Description>> \"" + Utils.toFormatedString(text) + "\"\n";
-			//ret += "\t<<Image>> \"" + Utils.toFormatedString(image) + "\"\n";
-			//ret += "\t<<Debug Description>> \"" + Utils.toFormatedString(debugText) + "\"\n";
+			ret += "\t<<Flag>> " + flag + "\n";
 			return ret;
+		}
+		public int getFlag()
+		{
+			return flag;
+		}
+		public String getText()
+		{
+			return message;
+		}
+		public void setFlag(int flag)
+		{
+			this.flag = flag;
+		}
+		public void setText(String text)
+		{
+			this.message = text;
 		}
 		public boolean equals(String name) 
 		{
