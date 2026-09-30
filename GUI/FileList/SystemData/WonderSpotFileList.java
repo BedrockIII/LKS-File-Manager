@@ -18,7 +18,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class WonderSpotFileList extends CollapseableFileList
 {
-	private int padding = 0;
 	private ArrayList<WonderSpot> Spots = new ArrayList<WonderSpot>();
 	WonderSpotManager manager;
 	public WonderSpotFileList(WonderSpotManager file, int padding) 
@@ -98,7 +97,6 @@ public class WonderSpotFileList extends CollapseableFileList
 	public class WonderSpotGUI extends FileList
 	{
 		WonderSpot file;
-		int padding;
 		WonderSpotFileList parent;
 		public WonderSpotGUI(WonderSpot file, int padding, WonderSpotFileList parent)
 		{

@@ -12,7 +12,6 @@ public class MissionObjectDatabase extends CollapseableFileList
 {
 	public MSDBManager MonsterDataPack;
 	private MOPlacementListGUI placementGUI;
-	int padding;
 	public MissionObjectDatabase(MSDBManager file, int padding)
 	{
 		this.file = file;

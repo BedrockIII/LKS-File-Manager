@@ -42,8 +42,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 	//Things
 	RandomAreasListGUI RandomPlaces;
 	GroupCategoriesListGUI Groups;
-	
-	int padding = 0;
 	public MOPlacementListGUI(MissionObjectPlacementManager file, int padding, MissionObjectDatabase parent) 
 	{
 		this.parent = parent;
@@ -114,7 +112,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 	{
 		ArrayList<MobRandomArea> data;
 		MOPlacementListGUI parent;
-		int padding = 0;
 		public RandomAreasListGUI(ArrayList<MobRandomArea> file, int padding, MOPlacementListGUI parent) 
 		{
 			this.parent = parent;
@@ -162,7 +159,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 		{
 			MobRandomArea data;
 			RandomAreasListGUI parent;
-			int padding = 0;
 			public RandomAreaListGUI(MobRandomArea file, int padding, RandomAreasListGUI parent) 
 			{
 				this.parent = parent;
@@ -221,7 +217,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 			{
 				MobRandomPoint data;
 				RandomAreaListGUI parent;
-				int padding = 0;
 				public RandomPointListGUI(MobRandomPoint file, int padding, RandomAreaListGUI parent) 
 				{
 					this.parent = parent;
@@ -281,7 +276,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 	{
 		MissionObjectPlacementManager data;
 		public MOPlacementListGUI parent;
-		int padding = 0;
 		public GroupCategoriesListGUI(MissionObjectPlacementManager file, int padding, MOPlacementListGUI parent) 
 		{
 			this.parent = parent;
@@ -336,7 +330,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 		{
 			ArrayList<MobGroup> data;
 			public GroupCategoriesListGUI parent;
-			int padding = 0;
 			private GroupCategoryListGUI(int code, int padding, GroupCategoriesListGUI parent) 
 			{
 				this.parent = parent;
@@ -452,7 +445,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 				public GroupCategoryListGUI parent;
 				JMenuItem moveUp = null;
 				JMenuItem moveDown = null;
-				int padding = 0;
 				public GroupListGUI(MobGroup file, int padding, GroupCategoryListGUI parent) 
 				{
 					this.parent = parent;
@@ -605,7 +597,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 					GroupListGUI parent;
 					JMenuItem moveUp = null;
 					JMenuItem moveDown = null;
-					int padding = 0;
 					public ObjectListGUI(MobObject file, int padding, GroupListGUI parent) 
 					{
 						this.parent = parent;

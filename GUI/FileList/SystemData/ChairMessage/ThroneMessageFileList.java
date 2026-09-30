@@ -16,7 +16,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class ThroneMessageFileList extends CollapseableFileList
 {
-	private int padding = 0;
 	private ArrayList<MenuString> Entries = new ArrayList<MenuString>();
 	ChairMessageManager manager;
 	public ThroneMessageFileList(ChairMessageManager file, int padding) 
@@ -24,13 +23,13 @@ public class ThroneMessageFileList extends CollapseableFileList
 		manager = file;
 		this.padding = padding;
 		this.file = file;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding) 
+	protected void initializeAll() 
 	{
 		System.out.print("Opening Chair Message Binary File: █");
 		fileTypes = new FileNameExtensionFilter("Chair Message Binary File", "bin");
-		initializeListGUI(padding, "Throne Message Manager");
+		initializeListGUI("Throne Message Manager");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
@@ -44,11 +43,9 @@ public class ThroneMessageFileList extends CollapseableFileList
 	public void initializeSubGUI()
 	{
 		subEntries.removeAll(subEntries);
-		Entries = manager.getEntries();
-		for(MenuString object : Entries)
-		{
-			subEntries.add(new ThroneMessageListGUI(object, padding + Settings.indentSize, this));
-		}
+		subEntries.add(new ThroneSpeakerFileListGUI(manager.getHowserEntries(), padding + Settings.indentSize, "Howser"));
+		subEntries.add(new ThroneSpeakerFileListGUI(manager.getVerdeEntries(), padding + Settings.indentSize, "Verde"));
+		subEntries.add(new ThroneSpeakerFileListGUI(manager.getLiamEntries(), padding + Settings.indentSize, "Liam"));
 	}
 	protected void initializeInfoGUI()
 	{
@@ -78,15 +75,15 @@ public class ThroneMessageFileList extends CollapseableFileList
 		});
 		//actions.add(newZone);
 	}
-	private void addExportBJBAction()
+	private void addExportBITAction()
 	{
 		//actions.add(GUIUtils.createExportAction("Export Entries as .bit text file", "HummingBook.bit", "Bedrock's Intermediate Text File", manager::toIntermediateText));
 	}
-	private void addImportBJBAction()
+	private void addImportBITAction()
 	{
 		//actions.add(GUIUtils.createImportAction("Import Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::importFromIntermediateText, this));
 	}
-	private void addReplaceBJBAction()
+	private void addReplaceBITAction()
 	{
 		//actions.add(GUIUtils.createImportAction("Replace Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::replaceFromIntermediateText, this));
 	}

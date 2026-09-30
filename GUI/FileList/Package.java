@@ -23,7 +23,6 @@ import bFM.Settings;
 
 public class Package extends CollapseableFileList
 {
-	int padding = 0;
 	private static final long serialVersionUID = 1L;
 	PCKGManager packageFile;
 	public Package(PCKGManager packageFile, int padding)

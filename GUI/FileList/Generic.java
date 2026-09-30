@@ -14,7 +14,6 @@ import bFM.Settings;
 public class Generic extends FileList
 {
 	CollapseableFileList parent = null;
-	int padding = 0;
 	protected Generic()
 	{
 	}
@@ -45,11 +44,6 @@ public class Generic extends FileList
 	}
 	protected void initializeAll()
 	{
-		initializeAll();
-	}
-	protected void initializeAll()
-	{
-		this.padding = padding;
 		initializeListGUI();
 		initializeInfoGUI();
 		addActions();

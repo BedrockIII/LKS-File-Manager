@@ -15,7 +15,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class MenuStringFileList extends CollapseableFileList
 {
-	private int padding = 0;
 	private ArrayList<MenuString> Entries = new ArrayList<MenuString>();
 	MenuStringManager manager;
 	public MenuStringFileList(MenuStringManager file, int padding) 
@@ -96,7 +95,6 @@ public class MenuStringFileList extends CollapseableFileList
 	public class MenuStringListGUI extends FileList
 	{
 		MenuString file;
-		int padding;
 		MenuStringFileList parent;
 		public MenuStringListGUI(MenuString entry, int padding, MenuStringFileList parent)
 		{

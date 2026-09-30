@@ -22,7 +22,6 @@ public class MODefinitionListGUI extends CollapseableFileList
 	//Things
 	MobAttacksListGUI Attacks;
 	
-	int padding = 0;
 	public MODefinitionListGUI(MissionObjectDefinitionManager file, int padding, MissionObjectDatabase parent) 
 	{
 		this.parent = parent;
@@ -71,7 +70,6 @@ public class MODefinitionListGUI extends CollapseableFileList
 		private static final long serialVersionUID = 5033204471168833590L;
 		MODefinitionListGUI parent;
 		MobAttackList Attacks;
-		int padding = 0;
 		public MobAttacksListGUI(MobAttackList file, int padding,
 				MODefinitionListGUI parent)
 		{
@@ -114,7 +112,6 @@ public class MODefinitionListGUI extends CollapseableFileList
 			 */
 			private static final long serialVersionUID = -6230692718491981233L;
 			MobAttacksListGUI parent;
-			int padding = 0;
 			
 			MobAttack Attack;
 			
@@ -159,7 +156,6 @@ public class MODefinitionListGUI extends CollapseableFileList
 			{
 				MobAttackCol Collision;
 				MobAttackListGUI parent;
-				int padding = 0;
 				public MobAttackColListGUI(MobAttackCol file, int padding, MobAttackListGUI parent)
 				{
 					this.parent = parent;

@@ -30,7 +30,6 @@ import colReader.CollisionObject;
 @SuppressWarnings("serial")
 public class Collision extends CollapseableFileList
 {
-	private int padding = 0;
 	CollapseableFileList parent = null;
 	ArrayList<CollisionObject> objects = new ArrayList<CollisionObject>();
 	public Collision(OpenedFile file, int padding, CollapseableFileList parent) 

@@ -18,7 +18,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class CameraZoneListGUI extends CollapseableFileList
 {
-	private int padding = 0;
 	private ArrayList<CameraZone> cameraZones = new ArrayList<CameraZone>();
 	CameraZoneList manager;
 	public CameraZoneListGUI(CameraZoneList file, int padding) 
@@ -98,7 +97,6 @@ public class CameraZoneListGUI extends CollapseableFileList
 	public class CameraZoneGUI extends FileList
 	{
 		CameraZone file;
-		int padding;
 		CameraZoneListGUI parent;
 		public CameraZoneGUI(CameraZone file, int padding, CameraZoneListGUI parent) 
 		{

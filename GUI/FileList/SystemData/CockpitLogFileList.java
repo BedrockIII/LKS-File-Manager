@@ -14,7 +14,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class CockpitLogFileList extends CollapseableFileList
 {
-	private int padding = 0;
 	private ArrayList<LogEntry> Entries = new ArrayList<LogEntry>();
 	CockpitLogManager manager;
 	public CockpitLogFileList(CockpitLogManager file, int padding) 
@@ -95,7 +94,6 @@ public class CockpitLogFileList extends CollapseableFileList
 	public class LogEntryGUI extends FileList
 	{
 		LogEntry file;
-		int padding;
 		CockpitLogFileList parent;
 		public LogEntryGUI(LogEntry entry, int padding, CockpitLogFileList parent)
 		{

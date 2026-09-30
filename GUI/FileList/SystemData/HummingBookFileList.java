@@ -18,7 +18,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class HummingBookFileList extends CollapseableFileList
 {
-	private int padding = 0;
 	private ArrayList<HummingBookEntry> Entries = new ArrayList<HummingBookEntry>();
 	HummingBookManager manager;
 	public HummingBookFileList(HummingBookManager file, int padding) 
@@ -98,7 +97,6 @@ public class HummingBookFileList extends CollapseableFileList
 	public class HumGUI extends FileList
 	{
 		HummingBookEntry file;
-		int padding;
 		HummingBookFileList parent;
 		public HumGUI(HummingBookEntry entry, int padding, HummingBookFileList parent)
 		{

@@ -66,7 +66,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class CharacterDataBaseList extends CollapseableFileList
 {
-	private int padding;
 	private CharacterResourceAssignmentList chrList;
 	private CharacterIndexList chrIndex;
 	private CharacterJoinList chrJoin;
@@ -124,7 +123,6 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterResourceAssignmentList extends CollapseableFileList
 	{
-		int padding = 0;
 		ArrayList<CharacterBody> bodies = new ArrayList<CharacterBody>();
 		ArrayList<CharacterFace> faces = new ArrayList<CharacterFace>();
 		public CharacterResourceAssignmentList(CharacterResourceList file, int padding) 
@@ -322,7 +320,6 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterIndexList extends CollapseableFileList
 	{
-		int padding = 0;
 		ArrayList<ind> indicies = new ArrayList<ind>();
 		public CharacterIndexList(indBinList file, int padding) 
 		{
@@ -438,7 +435,6 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterJoinList extends CollapseableFileList
 	{
-		int padding = 0;
 		ArrayList<join> objects = new ArrayList<join>();
 		public CharacterJoinList(JoinBinList file, int padding) 
 		{
@@ -557,7 +553,6 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterSoundEffectList extends CollapseableFileList
 	{
-		int padding = 0;
 		ArrayList<SoundEffectCoordinate> objects = new ArrayList<SoundEffectCoordinate>();
 		public CharacterSoundEffectList(SoundEffectCoordinateList file, int padding) 
 		{
@@ -660,7 +655,6 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterJobPriceChangeList extends CollapseableFileList
 	{
-		int padding = 0;
 		ArrayList<JobPrices> objects = new ArrayList<JobPrices>();
 		CharacterDataBaseList parent;
 		public CharacterJobPriceChangeList(JobChangePriceList file, int padding, CharacterDataBaseList parent) 
@@ -790,7 +784,6 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterTextAnimationList extends CollapseableFileList
 	{
-		int padding = 0;
 		public CharacterTextAnimationList(TextAnimationList file, int padding) 
 		{
 			this.file = file;
@@ -824,7 +817,6 @@ public class CharacterDataBaseList extends CollapseableFileList
 		public class CharacterAnimationList extends CollapseableFileList
 		{
 			ArrayList<Animation> animations;
-			int padding = 0;
 			public CharacterAnimationList(AnimationList file, int padding) 
 			{
 				this.file = file;
@@ -862,7 +854,6 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			public class CharacterAnimationGUI extends CollapseableFileList
 			{
-				int padding = 0;
 				Part part;
 				public CharacterAnimationGUI(Animation file, int padding) 
 				{
@@ -903,7 +894,6 @@ public class CharacterDataBaseList extends CollapseableFileList
 				}
 				public class CharacterAnimationPartList extends CollapseableFileList
 				{
-					int padding = 0;
 					ArrayList<AnimationPattern> patterns = new ArrayList<AnimationPattern>();
 					public CharacterAnimationPartList(Part file, int padding) 
 					{

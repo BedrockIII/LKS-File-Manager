@@ -22,7 +22,6 @@ public class KingdomPlanFileList extends CollapseableFileList
 {
 	kingdomPlanManager planManager;
 	ArrayList<KingdomPlanArea> areas;
-	int padding;
 	public KingdomPlanFileList(kingdomPlanManager file, int padding)
 	{
 		this.file = file;
@@ -108,7 +107,6 @@ public class KingdomPlanFileList extends CollapseableFileList
 		ArrayList<KingdomPlanElement> elements;
 		JMenuItem moveUp = null;
 		JMenuItem moveDown = null;
-		int padding;
 		public AreaList(KingdomPlanArea area, int padding, KingdomPlanFileList parent) 
 		{
 			this.parent = parent;
@@ -216,7 +214,6 @@ public class KingdomPlanFileList extends CollapseableFileList
 			KingdomPlanElement element;
 			JMenuItem moveUp = null;
 			JMenuItem moveDown = null;
-			int padding;
 			public ElementList(KingdomPlanElement element, int padding, AreaList parent) 
 			{
 				this.parent = parent;

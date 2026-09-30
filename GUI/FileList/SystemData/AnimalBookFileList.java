@@ -18,7 +18,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class AnimalBookFileList extends CollapseableFileList
 {
-	private int padding = 0;
 	private ArrayList<AnimalEntry> Entries = new ArrayList<AnimalEntry>();
 	AnimalManager manager;
 	public AnimalBookFileList(AnimalManager file, int padding) 
@@ -98,7 +97,6 @@ public class AnimalBookFileList extends CollapseableFileList
 	public class AnimalGUI extends FileList
 	{
 		AnimalEntry file;
-		int padding;
 		AnimalBookFileList parent;
 		public AnimalGUI(AnimalEntry entry, int padding, AnimalBookFileList parent)
 		{

@@ -23,7 +23,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class ItemDatabaseList extends CollapseableFileList
 {
-	private int padding = 0;
 	private ArrayList<Item> items = new ArrayList<Item>();
 	public ItemDatabaseList(itemDatabaseManager file, int padding) 
 	{
@@ -114,7 +113,6 @@ public class ItemDatabaseList extends CollapseableFileList
 		private ItemDatabaseList parent;
 		private ItemWeaponDataList weaponData;
 		private ItemSoundEffectList seData;
-		private int padding;
 		public ItemList(Item item, int padding, ItemDatabaseList parent) 
 		{
 			file = item;
@@ -275,7 +273,6 @@ public class ItemDatabaseList extends CollapseableFileList
 		}
 		public class ItemWeaponDataList extends FileList
 		{
-			final int padding;
 			ItemList parent;
 			public ItemWeaponDataList(Item item, int padding, ItemList parent) 
 			{
@@ -306,7 +303,6 @@ public class ItemDatabaseList extends CollapseableFileList
 		}
 		public class ItemSoundEffectList extends FileList
 		{
-			final int padding;
 			ItemList parent;
 			public ItemSoundEffectList(Item item, int padding, ItemList parent) 
 			{
@@ -338,7 +334,6 @@ public class ItemDatabaseList extends CollapseableFileList
 		public class ItemPlacementDataList extends FileList
 		{
 			Placement placement;
-			final int padding;
 			ItemList parent;
 			public ItemPlacementDataList(Placement placement, int padding, ItemList parent) 
 			{

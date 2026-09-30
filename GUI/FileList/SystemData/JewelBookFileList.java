@@ -18,7 +18,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class JewelBookFileList extends CollapseableFileList
 {
-	private int padding = 0;
 	private ArrayList<JewelEntry> Entries = new ArrayList<JewelEntry>();
 	JewelBookManager manager;
 	public JewelBookFileList(JewelBookManager file, int padding) 
@@ -98,7 +97,6 @@ public class JewelBookFileList extends CollapseableFileList
 	public class JewelGUI extends FileList
 	{
 		JewelEntry file;
-		int padding;
 		JewelBookFileList parent;
 		public JewelGUI(JewelEntry entry, int padding, JewelBookFileList parent)
 		{

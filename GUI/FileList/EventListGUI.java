@@ -7,7 +7,6 @@ import VMC.VMCConverter;
 public class EventListGUI extends FileList
 {
 	VMCConverter vmc;
-	int padding;
 	public EventListGUI(VMCConverter file, int padding)
 	{
 		vmc = file;

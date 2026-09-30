@@ -13,7 +13,7 @@ import SystemDataManagers.MenuDB.MenuStringManager.MenuString;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import bFM.Settings;
 
-@SuppressWarnings("serial")
+@SuppressWarnings("serial")g
 public class ThroneSpeakerFileListGUI extends CollapseableFileList
 {
 	private ArrayList<MenuString> Entries = new ArrayList<MenuString>();
@@ -23,11 +23,11 @@ public class ThroneSpeakerFileListGUI extends CollapseableFileList
 		manager = file;
 		this.padding = padding;
 		this.file = file;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding) 
+	protected void initializeAll() 
 	{
-		initializeListGUI(padding, "Throne Message Manager");
+		initializeListGUI("Throne Message Manager");
 		initializeSubGUI();
 		addActions();
 		reAddComponents();
