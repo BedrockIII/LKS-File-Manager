@@ -9,7 +9,7 @@ public class MapDataManager implements OpenedFile
 	//ArrayList<MapData> level1 = new ArrayList<MapData>();
 	//ArrayList<MapData> level2 = new ArrayList<MapData>();
 	//ArrayList<MapData> level3 = new ArrayList<MapData>();
-	//ArrayList<MapAreaData> AreaData = new ArrayList<MapAreaData>();
+	MapAreaManager AreaData;
 	//ArrayList<MapQuestData> QuestData = new ArrayList<MapQuestData>();
 	//Map Level
 			//Title
@@ -17,13 +17,13 @@ public class MapDataManager implements OpenedFile
 			//Message
 			//Image
 			//Flag (5 -1 ints, 1 non -1 int)
-		//Area
-			//Name
-			//Image
-			//Value
-		//Quest(Unused???)
-			//Image(Unused???)
-			//Value(8 -1 int Flags, 2 non -1 int Flags)
+	//Area
+		//Name
+		//Image
+		//Value
+	//Quest(Unused???)
+		//Image(Unused???)
+		//Value(8 -1 int Flags, 2 non -1 int Flags)
 	public MapDataManager(byte[] data)
 	{
 		initializeFromBytes(data);
@@ -31,6 +31,7 @@ public class MapDataManager implements OpenedFile
 	private void initializeFromBytes(byte[] data)
 	{
 		PCKGManager mapdata = new PCKGManager(data);
+		AreaData = new MapAreaManager(mapdata.getFile("AreaName"), mapdata.getFile("AreaImage"), mapdata.getFile("AreaValue"));
 	}
 	public boolean equals(String name) 
 	{
@@ -45,6 +46,9 @@ public class MapDataManager implements OpenedFile
 	public byte[] toBytes() 
 	{
 		PCKGManager mapdata = new PCKGManager();
+		mapdata.addFile("AreaName", AreaData.toNameBytes());
+		mapdata.addFile("AreaImage", AreaData.toImageBytes());
+		mapdata.addFile("AreaValue", AreaData.toFlagBytes());
 		throw new UnsupportedOperationException("toBytes() should not be called on type " + this.getClass());
 	}
 	public void setName(String name) 
