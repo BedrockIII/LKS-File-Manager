@@ -12,6 +12,7 @@ import GUI.FileList.SystemData.KingdomPlanFileList;
 import GUI.FileList.SystemData.MenuStringFileList;
 import GUI.FileList.SystemData.WonderSpotFileList;
 import GUI.FileList.SystemData.ChairMessage.ThroneMessageFileList;
+import GUI.FileList.SystemData.MapData.MapDataManagerFileList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
@@ -25,6 +26,7 @@ import SystemDataManagers.MenuDB.Books.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
+import SystemDataManagers.MenuDB.MapData.MapDataManager;
 import VMC.VMCConverter;
 import WorldFileManager.FixedPointManager;
 import bFM.OpenedFile;
@@ -89,6 +91,10 @@ public class FileListFactory
 		else if (file instanceof ChairMessageManager)
 		{
 			return new ThroneMessageFileList((ChairMessageManager) file, padding);
+		}
+		else if (file instanceof MapDataManager)
+		{
+			return new MapDataManagerFileList((MapDataManager) file, padding);
 		}
 		else if(file instanceof MSDBManager)
 		{

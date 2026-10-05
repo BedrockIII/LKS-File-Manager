@@ -7,69 +7,63 @@ import java.util.List;
 import bFM.Data;
 import bFM.Utils;
 
-public class MapAreaManager implements Data
+public class MapQuestInfoManager implements Data
 {
-	ArrayList<MapArea> MapAreas = new ArrayList<MapArea>();
-	public MapAreaManager(byte[] NameData, byte[] ImageData, byte[] FlagData)
+	ArrayList<MapQuestInfo> MapQuests = new ArrayList<MapQuestInfo>();
+	public MapQuestInfoManager(byte[] NameData, byte[] FlagData)
 	{
 		List<String> Names = Utils.bytesToStrs(NameData);
-		List<String> Images = Utils.bytesToStrs(ImageData);
 		ByteBuffer Flags = ByteBuffer.wrap(FlagData);
 		String Name = "";
-		String Image = "";
 		int Flag1 = -1;
 		int Flag2 = -1;
 		int Flag3 = -1;
 		int Flag4 = -1;
 		int Flag5 = -1;
+		int Flag6 = -1;
+		int Flag7 = -1;
+		int Flag8 = -1;
+		int Flag9 = -1;
+		int Flag10 = -1;
 		for(int i = 0; i < Names.size(); i++)
 		{
 			Name = Names.get(i);
-			if(Images.size() > i)
-			{
-				Image = Images.get(i);
-			}
-			else
-			{
-				System.err.println(String.format("Map Area DB has too few Images. Has %d, Tried to get %d", Images.size(), i));
-				Image = "";
-			}
-			if(Flags.remaining()>=20)
+			if(Flags.remaining()>=40)
 			{
 				Flag1 = Flags.getInt();
 				Flag2 = Flags.getInt();
 				Flag3 = Flags.getInt();
 				Flag4 = Flags.getInt();
 				Flag5 = Flags.getInt();
+				Flag6 = Flags.getInt();
+				Flag7 = Flags.getInt();
+				Flag8 = Flags.getInt();
+				Flag9 = Flags.getInt();
+				Flag10 = Flags.getInt();
 			}
 			else
 			{
-				System.err.println(String.format("Map Area DB has too few Flags. Has %d, Tried to get %d", Flags.limit()/20, i));
+				System.err.println(String.format("Map Quest DB has too few Flags. Has %d, Tried to get %d", Flags.limit()/40, i));
 				Flag1 = -1;
 				Flag2 = -1;
 				Flag3 = -1;
 				Flag4 = -1;
 				Flag5 = -1;
 			}
-			MapAreas.add(new MapArea(Name, Image, Flag1, Flag2, Flag3, Flag4, Flag5));
+			MapQuests.add(new MapQuestInfo(Name, Flag1, Flag2, Flag3, Flag4, Flag5, 
+					Flag6, Flag7, Flag8, Flag9, Flag10));
 		}
 	}
 	public byte[] toNameBytes() 
 	{
 		byte[] ret = null;
-		for(MapArea m : MapAreas) ret = Utils.mergeArrays(ret, m.toNameBytes());
-		return ret;
-	}
-	public byte[] toImageBytes() 
-	{
-		byte[] ret = null;
-		for(MapArea m : MapAreas) ret = Utils.mergeArrays(ret, m.toImageBytes());
+		for(MapQuestInfo m : MapQuests) ret = Utils.mergeArrays(ret, m.toNameBytes());
 		return ret;
 	}
 	public byte[] toFlagBytes() 
 	{
 		byte[] ret = null;
-		for(MapArea m : MapAreas) ret = Utils.mergeArrays(ret, m.toFlagBytes());
+		for(MapQuestInfo m : MapQuests) ret = Utils.mergeArrays(ret, m.toFlagBytes());
 		return ret;
 	}
 	public void setData(byte[] data) 
@@ -84,8 +78,8 @@ public class MapAreaManager implements Data
 	{
 		throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
 	}
-	public ArrayList<MapArea> getAreas()
+	public ArrayList<MapQuestInfo> getQuests()
 	{
-		return MapAreas;
+		return MapQuests;
 	}
 }

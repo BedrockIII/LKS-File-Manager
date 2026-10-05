@@ -13,6 +13,7 @@ import SystemDataManagers.MenuDB.Books.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
+import SystemDataManagers.MenuDB.MapData.MapDataManager;
 import VMC.VMCConverter;
 import WorldFileManager.FixedPointManager;
 import colReader.ColReader;
@@ -114,8 +115,7 @@ public interface OpenedFile extends Data, Nameable
 				e.printStackTrace();
 				return new PCKGManager(file, name);
 			}
-		}
-		else if (fileType.equals("JewelBookDB"))
+		}else if (fileType.equals("JewelBookDB"))
 		{
 			try
 			{
@@ -127,8 +127,7 @@ public interface OpenedFile extends Data, Nameable
 				e.printStackTrace();
 				return new PCKGManager(file, name);
 			}
-		}
-		else if (fileType.equals("HummingBookDB"))
+		}else if (fileType.equals("HummingBookDB"))
 		{
 			try
 			{
@@ -164,6 +163,18 @@ public interface OpenedFile extends Data, Nameable
 				e.printStackTrace();
 				return new PCKGManager(file, name);
 			}
+		}else if (fileType.equals("MapDataDB"))
+		{
+			try
+			{
+				return new MapDataManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
 		}else if (fileType.equals("MissionDB"))
 		{
 			try
@@ -176,8 +187,7 @@ public interface OpenedFile extends Data, Nameable
 				e.printStackTrace();
 				return new PCKGManager(file, name);
 			}
-		}
-		else if (fileType.equals("MenuStringDB"))
+		}else if (fileType.equals("MenuStringDB"))
 		{
 			try
 			{

@@ -441,13 +441,13 @@ public class Utils
 		int k = 0;
 		for(int i = 0; i<data.length; i++)
 		{
-			if(data[i]==0x0a||data[i]==0x0d||data[i]==0x00)
+			if(data[i]==0x00)
 			{
 				String line = decodeBytesToString(temp);
 				int ending = line.indexOf(0x00);
 				if(ending == -1) ending = line.length();
 				line = line.substring(0, ending);
-				if(line.length()>0)Strings.add(line);
+				Strings.add(line);
 				
 				temp = new byte[temp.length];
 				k=0;
@@ -514,6 +514,10 @@ public class Utils
 			else if(name.equals("ChairMessage.bin"))
 			{
 				return "ChairMessageDB";
+			}
+			else if(name.equals("mapdata.bin"))
+			{
+				return "MapDataDB";
 			}
 			//Check if special TODO
 			//else return "Package"
