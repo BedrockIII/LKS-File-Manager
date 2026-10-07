@@ -147,7 +147,7 @@ public class RecordBookManager implements OpenedFile
 	}
 	public String getName() 
 	{
-		return "Humming.bin";
+		return "Record.bin";
 	}
 	public int getSize() 
 	{

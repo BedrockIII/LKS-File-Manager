@@ -434,6 +434,33 @@ public class Utils
 		}
 		return 0;
 	}
+	public static List<String> SplitStringBinaryByLines(byte[] data)
+	{
+		List<String> Strings = new ArrayList<String>();
+		byte[] temp = new byte[512];
+		int k = 0;
+		for(int i = 0; i<data.length; i++)
+		{
+			if(data[i]=='\n')
+			{
+				String line = decodeBytesToString(temp);
+				int ending = line.indexOf(0x00);
+				if(ending == -1) ending = line.length();
+				line = line.substring(0, ending);
+				Strings.add(line);
+				
+				temp = new byte[temp.length];
+				k=0;
+			
+			}
+			else
+			{
+				temp[k] = data[i];
+				k++;
+			}
+		}
+		return Strings;
+	}
 	public static List<String> bytesToStrs(byte[] data)
 	{
 		List<String> Strings = new ArrayList<String>();
