@@ -519,6 +519,10 @@ public class Utils
 			{
 				return "MapDataDB";
 			}
+			else if(name.equals("Record.bin"))
+			{
+				return "RecordBookDB";
+			}
 			//Check if special TODO
 			//else return "Package"
 			return "Package";

@@ -10,6 +10,7 @@ import SystemDataManagers.MenuDB.Books.AnimalManager;
 import SystemDataManagers.MenuDB.Books.HummingBookManager;
 import SystemDataManagers.MenuDB.Books.JewelBookManager;
 import SystemDataManagers.MenuDB.Books.WonderSpotManager;
+import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
@@ -168,6 +169,18 @@ public interface OpenedFile extends Data, Nameable
 			try
 			{
 				return new MapDataManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+		}else if (fileType.equals("RecordBookDB"))
+		{
+			try
+			{
+				return new RecordBookManager(file);
 			}
 			catch (Exception e)
 			{
