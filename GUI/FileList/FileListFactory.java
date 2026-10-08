@@ -11,6 +11,7 @@ import GUI.FileList.SystemData.JewelBookFileList;
 import GUI.FileList.SystemData.KingdomPlanFileList;
 import GUI.FileList.SystemData.MenuStringFileList;
 import GUI.FileList.SystemData.WonderSpotFileList;
+import GUI.FileList.SystemData.CastlePicture.CastlePictureManagerFileList;
 import GUI.FileList.SystemData.ChairMessage.ThroneMessageFileList;
 import GUI.FileList.SystemData.MapData.MapDataManagerFileList;
 import GUI.FileList.SystemData.RecordBook.RecordBookManagerFileList;
@@ -26,6 +27,7 @@ import SystemDataManagers.MenuDB.Books.JewelBookManager;
 import SystemDataManagers.MenuDB.Books.WonderSpotManager;
 import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
+import SystemDataManagers.MenuDB.CastlePicture.CastlePictureManager;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import SystemDataManagers.MenuDB.MapData.MapDataManager;
@@ -101,6 +103,10 @@ public class FileListFactory
 		else if (file instanceof RecordBookManager)
 		{
 			return new RecordBookManagerFileList((RecordBookManager) file, padding);
+		}
+		else if (file instanceof CastlePictureManager)
+		{
+			return new CastlePictureManagerFileList((CastlePictureManager) file, padding);
 		}
 		else if(file instanceof MSDBManager)
 		{

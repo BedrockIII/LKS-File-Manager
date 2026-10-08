@@ -20,7 +20,7 @@ public class CastlePictureManager implements OpenedFile
 		{
 			Entries.add(new CastlePicture(Messages.get(i), flagBuffer.getInt(i*24), flagBuffer.getInt(i*24 + 4), 
 					flagBuffer.getInt(i*24 + 8), flagBuffer.getInt(i*24 + 12), flagBuffer.getInt(i*24 + 16), 
-					flagBuffer.getInt(i*24 + 24)));
+					flagBuffer.getInt(i*24 + 20)));
 		}
 	}
 	public CastlePictureManager(List<String> lines)

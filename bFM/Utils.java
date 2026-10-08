@@ -490,7 +490,6 @@ public class Utils
 	}
 	public static String getFileType(String name, byte[] file) 
 	{
-		
 		if(PCKGManager.PCKGManager.isPAC(file))
 		{
 			if(name.equals("KingdomPlan.bin")||name.equals("Kingdom Plan Config"))
@@ -549,6 +548,10 @@ public class Utils
 			else if(name.equals("Record.bin"))
 			{
 				return "RecordBookDB";
+			}
+			else if(name.equals("CastlePicture.bin"))
+			{
+				return "CastlePictureDB";
 			}
 			//Check if special TODO
 			//else return "Package"

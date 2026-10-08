@@ -3,9 +3,7 @@ package GUI.FileList.SystemData.RecordBook;
 import javax.swing.JMenuItem;
 
 import GUI.GUI;
-import GUI.FileInfo.MenuDB.HummingBook.HummingEntryInfoGUI;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.Books.HummingBookEntry;
 import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookEntry;
 
 @SuppressWarnings("serial")

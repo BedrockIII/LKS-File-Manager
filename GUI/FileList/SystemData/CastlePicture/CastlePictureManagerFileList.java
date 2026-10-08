@@ -1,23 +1,24 @@
-package GUI.FileList.SystemData;
+package GUI.FileList.SystemData.CastlePicture;
 
 import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import GUI.FileInfo.MenuDB.MenuString.MenuStringInfo;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.MenuStringManager;
-import SystemDataManagers.MenuDB.MenuStringManager.MenuString;
+import SystemDataManagers.MenuDB.CockpitLogManager;
+import SystemDataManagers.MenuDB.LogEntry;
+import SystemDataManagers.MenuDB.CastlePicture.CastlePicture;
+import SystemDataManagers.MenuDB.CastlePicture.CastlePictureManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class MenuStringFileList extends CollapseableFileList
+public class CastlePictureManagerFileList extends CollapseableFileList
 {
-	private ArrayList<MenuString> Entries = new ArrayList<MenuString>();
-	MenuStringManager manager;
-	public MenuStringFileList(MenuStringManager file, int padding) 
+	private ArrayList<CastlePicture> Entries = new ArrayList<CastlePicture>();
+	CastlePictureManager manager;
+	public CastlePictureManagerFileList(CastlePictureManager file, int padding) 
 	{
 		manager = file;
 		this.padding = padding;
@@ -26,13 +27,13 @@ public class MenuStringFileList extends CollapseableFileList
 	}
 	protected void initializeAll() 
 	{
-		System.out.print("Opening Menu String Binary File: █");
-		fileTypes = new FileNameExtensionFilter("Menu String Binary File", "bin");
-		initializeListGUI("Menu String Manager");
+		System.out.print("Opening Castle Picture Binary File: █");
+		fileTypes = new FileNameExtensionFilter("Castle Picture Binary File", "bin");
+		initializeListGUI("Castle Picture Manager");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
-		//initializeInfoGUI();
+		initializeInfoGUI();
 		System.out.print("█");
 		addActions();
 		System.out.print("█");
@@ -43,9 +44,9 @@ public class MenuStringFileList extends CollapseableFileList
 	{
 		subEntries.removeAll(subEntries);
 		Entries = manager.getEntries();
-		for(MenuString object : Entries)
+		for(CastlePicture object : Entries)
 		{
-			subEntries.add(new MenuStringListGUI(object, padding + Settings.indentSize, this));
+			subEntries.add(new CastlePictureFileList(object, padding + Settings.indentSize, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -66,12 +67,12 @@ public class MenuStringFileList extends CollapseableFileList
 	}
 	private void addZoneAction()
 	{
-		JMenuItem newZone = new JMenuItem("Create New Menu String");
+		JMenuItem newZone = new JMenuItem("Create New Castle Picture");
 		newZone.addActionListener(e -> 
 		{
-			MenuString entry = new MenuString("New Menu String");
+			CastlePicture entry = new CastlePicture();
 			Entries.add(entry);
-			subEntries.add(new MenuStringListGUI(entry, padding + Settings.indentSize, this));
+			subEntries.add(new CastlePictureFileList(entry, padding + Settings.indentSize, this));
 			reAddComponents();
 		});
 		//actions.add(newZone);
@@ -91,37 +92,5 @@ public class MenuStringFileList extends CollapseableFileList
 	private void addReplaceRawAction()
 	{
 		//actions.add(GUIUtils.createImportAction("Replace Entries from raw Humming.bin file", "Humming Book Database Binary File", "bin", manager::replaceFromData, this));
-	}
-	public class MenuStringListGUI extends FileList
-	{
-		MenuString file;
-		MenuStringFileList parent;
-		public MenuStringListGUI(MenuString entry, int padding, MenuStringFileList parent)
-		{
-			this.padding = padding;
-			this.file = entry;
-			this.parent = parent;
-			initializeAll();
-		}
-		protected void initializeAll() 
-		{
-			initializeListGUI("\""+ file.getText() + "\"");
-			//initializeInfoGUI();
-			addActions();
-		}
-		protected void initializeInfoGUI() 
-		{
-			this.infoGUI = new MenuStringInfo(file);
-		}
-		protected void addActions() 
-		{
-			add(actions);
-			addMouseListener();
-		}
-		public void update()
-		{
-			fileName.setText("\""+ file.getText() + "\"");
-			super.update();
-		}
 	}
 }

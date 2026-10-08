@@ -37,12 +37,12 @@ public class KingdomPlanFileList extends CollapseableFileList
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
-		initializeInfoGUI();
-		//System.out.print("█");
+		//initializeInfoGUI();
+		System.out.print("█");
 		addActions();
 		System.out.print("█");
 		reAddComponents();
-		System.out.println("█ Complete!\n");
+		System.out.println("█ \nComplete!");
 	}
 	public void initializeSubGUI() 
 	{

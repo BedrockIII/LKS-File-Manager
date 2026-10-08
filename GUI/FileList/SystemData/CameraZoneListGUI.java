@@ -35,7 +35,7 @@ public class CameraZoneListGUI extends CollapseableFileList
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
-		initializeInfoGUI();
+		//initializeInfoGUI();
 		System.out.print("█");
 		addActions();
 		System.out.print("█");
@@ -108,7 +108,7 @@ public class CameraZoneListGUI extends CollapseableFileList
 		protected void initializeAll() 
 		{
 			initializeListGUI(file.getName());
-			initializeInfoGUI();
+			//initializeInfoGUI();
 			addActions();
 		}
 		protected void initializeInfoGUI() 
