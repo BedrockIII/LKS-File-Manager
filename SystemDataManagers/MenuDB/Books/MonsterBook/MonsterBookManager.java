@@ -22,8 +22,8 @@ public class MonsterBookManager implements OpenedFile
 	private void initializeFromBytes(byte[] data)
 	{
 		PCKGManager pack = new PCKGManager(data);
-		List<String> string1s = Utils.extractStringsNoFormatting(pack.getFile("String1"));
-		List<String> string2s = Utils.extractStringsNoFormatting(pack.getFile("String2"));
+		List<String> string1s = Utils.extractStringsNoFormatting(pack.getFile("Detail"));
+		List<String> string2s = Utils.extractStringsNoFormatting(pack.getFile("LogString1"));
 		List<String> names = Utils.extractStringsNoFormatting(pack.getFile("Name"));
 		List<String> texts = Utils.extractStringsNoFormatting(pack.getFile("Text"));
 		List<String> images = Utils.extractStringsNoFormatting(pack.getFile("Image"));
