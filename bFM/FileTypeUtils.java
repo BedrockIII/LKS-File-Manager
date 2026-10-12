@@ -19,6 +19,7 @@ import GUI.FileList.SystemData.KingdomPlanFileList;
 import GUI.FileList.SystemData.MenuStringFileList;
 import GUI.FileList.SystemData.WonderSpotFileList;
 import GUI.FileList.SystemData.CastlePicture.CastlePictureManagerFileList;
+import GUI.FileList.SystemData.ChairCamera.ChairCameraManagerFileList;
 import GUI.FileList.SystemData.ChairMessage.ThroneMessageFileList;
 import GUI.FileList.SystemData.Explanation.ExplanationManagerFileList;
 import GUI.FileList.SystemData.MapData.MapDataManagerFileList;
@@ -35,6 +36,7 @@ import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookManager;
 import SystemDataManagers.MenuDB.Books.WonderSpotBook.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
 import SystemDataManagers.MenuDB.CastlePicture.CastlePictureManager;
+import SystemDataManagers.MenuDB.ChairCamera.ChairCameraManager;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import SystemDataManagers.MenuDB.CockpitLog.CockpitLogManager;
 import SystemDataManagers.MenuDB.Explanation.ExplanationManager;
@@ -256,6 +258,18 @@ public class FileTypeUtils
 				e.printStackTrace();
 				return new PCKGManager(file, name);
 			}
+		}else if (fileType.equals("ChairCameraDB"))
+		{
+			try
+			{
+				return new ChairCameraManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
 		}else if (fileType.equals("MissionDB"))
 		{
 			try
@@ -356,6 +370,10 @@ public class FileTypeUtils
 			else if(name.equals(ExplanationManager.FileName))
 			{
 				return "ExplanationDB";
+			}
+			else if(name.equals(ChairCameraManager.FileName))
+			{
+				return "ChairCameraDB";
 			}
 			//Check if special TODO
 			//else return "Package"
@@ -458,6 +476,10 @@ public class FileTypeUtils
 		else if (file instanceof ExplanationManager)
 		{
 			return new ExplanationManagerFileList((ExplanationManager) file, padding);
+		}
+		else if (file instanceof ChairCameraManager)
+		{
+			return new ChairCameraManagerFileList((ChairCameraManager) file, padding);
 		}
 		else if(file instanceof MSDBManager)
 		{
