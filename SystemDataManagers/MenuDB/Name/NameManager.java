@@ -91,4 +91,40 @@ public class NameManager implements OpenedFile
 	{
 		throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
 	}
+	public NameList getFirstNames()
+	{
+		return AutoFirstName;
+	}
+	public NameList getLastNames()
+	{
+		return AutoLastName;
+	}
+	public NameList getNGName()
+	{
+		return AutoNGName;
+	}
+	public Language getJapanese()
+	{
+		return Japanese;
+	}
+	public Language getEnglish()
+	{
+		return English;
+	}
+	public Language getFrench()
+	{
+		return French;
+	}
+	public Language getGerman()
+	{
+		return German;
+	}
+	public Language getItalian()
+	{
+		return Italian;
+	}
+	public Language getSpanish()
+	{
+		return Spanish;
+	}
 }

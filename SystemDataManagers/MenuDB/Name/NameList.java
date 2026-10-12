@@ -11,9 +11,11 @@ public class NameList implements Data
 	NameList(byte[] data)
 	{
 		Names = Utils.extractStringsNoFormatting(data);
-		if(Names.remove(Names.size()-1).equals('/') == false)
+		if(Names.size() == 0) return;
+		String last = Names.remove(Names.size()-1);
+		if(last.equals("/") == false)
 		{
-			throw new IllegalArgumentException("Name List Doesn't End In Loop Char");
+			throw new IllegalArgumentException("Name List Doesn't End In Loop Char \n" + last);
 		}
 	}
 	public ArrayList<String> getNames()

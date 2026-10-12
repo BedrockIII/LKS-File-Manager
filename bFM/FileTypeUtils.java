@@ -24,6 +24,7 @@ import GUI.FileList.SystemData.ChairMessage.ThroneMessageFileList;
 import GUI.FileList.SystemData.Explanation.ExplanationManagerFileList;
 import GUI.FileList.SystemData.MapData.MapDataManagerFileList;
 import GUI.FileList.SystemData.MovieBook.MovieBookManagerFileList;
+import GUI.FileList.SystemData.Name.NameManagerFileList;
 import GUI.FileList.SystemData.PublicArt.PublicArtManagerFileList;
 import GUI.FileList.SystemData.RecordBook.RecordBookManagerFileList;
 import GUI.FileList.SystemData.Unused.Development.DevelopmentManagerFileList;
@@ -46,6 +47,7 @@ import SystemDataManagers.MenuDB.Explanation.ExplanationManager;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import SystemDataManagers.MenuDB.MapData.MapDataManager;
 import SystemDataManagers.MenuDB.MenuString.MenuStringManager;
+import SystemDataManagers.MenuDB.Name.NameManager;
 import SystemDataManagers.MenuDB.PublicArt.PublicArtManager;
 import SystemDataManagers.MenuDB.Unused.Development.DevelopmentManager;
 import VMC.VMCConverter;
@@ -298,6 +300,18 @@ public class FileTypeUtils
 				e.printStackTrace();
 				return new PCKGManager(file, name);
 			}
+		}else if (fileType.equals("NameDB"))
+		{
+			try
+			{
+				return new NameManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
 		}else if (fileType.equals("MissionDB"))
 		{
 			try
@@ -410,6 +424,10 @@ public class FileTypeUtils
 			else if(name.equals(DevelopmentManager.FileName))
 			{
 				return "DevelopmentDB";
+			}
+			else if(name.equals(NameManager.FileName))
+			{
+				return "NameDB";
 			}
 			//Check if special TODO
 			//else return "Package"
@@ -524,6 +542,10 @@ public class FileTypeUtils
 		else if (file instanceof DevelopmentManager)
 		{
 			return new DevelopmentManagerFileList((DevelopmentManager) file, padding);
+		}
+		else if (file instanceof NameManager)
+		{
+			return new NameManagerFileList((NameManager) file, padding);
 		}
 		else if(file instanceof MSDBManager)
 		{

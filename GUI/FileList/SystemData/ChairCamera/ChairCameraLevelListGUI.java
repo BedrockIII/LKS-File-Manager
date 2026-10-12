@@ -23,8 +23,6 @@ public class ChairCameraLevelListGUI extends CollapseableFileList
 	}
 	protected void initializeAll() 
 	{
-		System.out.print("Opening Public Art Binary File: █");
-		fileTypes = new FileNameExtensionFilter("Public Art Binary File", "bin");
 		initializeListGUI("Castle Level " + Level);
 		initializeSubGUI();
 		addActions();

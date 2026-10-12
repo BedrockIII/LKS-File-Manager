@@ -319,6 +319,12 @@ public class Utils
 			{
 				temp[k] = data[i];
 				k++;
+				if(i+1>=data.length)
+				{
+					Strings.add(decodeBytesToString(temp));
+					temp = new byte[temp.length];
+					k=0;
+				}
 			}
 		}
 		return Strings;

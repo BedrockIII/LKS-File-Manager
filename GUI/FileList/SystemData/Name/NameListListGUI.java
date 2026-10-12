@@ -1,8 +1,6 @@
 package GUI.FileList.SystemData.Name;
 
 import GUI.FileList.CollapseableFileList;
-import SystemDataManagers.MenuDB.MapData.MapArea;
-import SystemDataManagers.MenuDB.MapData.MapAreaManager;
 import SystemDataManagers.MenuDB.Name.NameList;
 import bFM.Settings;
 
@@ -13,7 +11,7 @@ public class NameListListGUI extends CollapseableFileList
 	NameList manager;
 	public NameListListGUI(NameList names, int padding, String name) 
 	{
-		this.fileName = name;
+		this.name = name;
 		manager = names;
 		this.padding = padding;
 		initializeAll();
@@ -28,9 +26,9 @@ public class NameListListGUI extends CollapseableFileList
 	public void initializeSubGUI()
 	{
 		subEntries.removeAll(subEntries);
-		for(MapArea a : manager.getAreas())
+		for(String a : manager.getNames())
 		{
-			subEntries.add(new MapAreaFileList(a, padding + Settings.indentSize, this));
+			subEntries.add(new AutoNameListGUI(a, padding + Settings.indentSize, this));
 		}
 		
 	}
@@ -41,28 +39,7 @@ public class NameListListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
-		addExportAction();
-		addReplaceRawAction();
-		addExportBITAction();
-		addImportBITAction();
-		addReplaceBITAction();
 		add(actions);
 		addMouseListener();
-	}
-	private void addExportBITAction()
-	{
-		//actions.add(GUIUtils.createExportAction("Export Entries as .bit text file", "HummingBook.bit", "Bedrock's Intermediate Text File", manager::toIntermediateText));
-	}
-	private void addImportBITAction()
-	{
-		//actions.add(GUIUtils.createImportAction("Import Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::importFromIntermediateText, this));
-	}
-	private void addReplaceBITAction()
-	{
-		//actions.add(GUIUtils.createImportAction("Replace Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::replaceFromIntermediateText, this));
-	}
-	private void addReplaceRawAction()
-	{
-		//actions.add(GUIUtils.createImportAction("Replace Entries from raw Humming.bin file", "Humming Book Database Binary File", "bin", manager::replaceFromData, this));
 	}
 }
