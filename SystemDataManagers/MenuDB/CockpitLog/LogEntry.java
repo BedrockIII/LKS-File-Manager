@@ -1,4 +1,4 @@
-package SystemDataManagers.MenuDB;
+package SystemDataManagers.MenuDB.CockpitLog;
 
 import bFM.Data;
 import bFM.Utils;

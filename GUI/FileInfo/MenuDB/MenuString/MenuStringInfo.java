@@ -6,7 +6,7 @@ import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.MenuDB.MenuStringManager.MenuString;
+import SystemDataManagers.MenuDB.MenuString.MenuString;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

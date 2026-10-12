@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.MenuDB.Books.HummingBookManager;
+import SystemDataManagers.MenuDB.Books.HummingBook.HummingBookManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

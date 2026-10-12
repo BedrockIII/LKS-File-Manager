@@ -137,7 +137,7 @@ public abstract class FileList extends JPanel
 	protected boolean filterFiles(String filter)
 	{
 		if(filter.length()<=0) return true;
-		String name = fileName.getText().toLowerCase();
+		String name = getSearchName().toLowerCase();
 		boolean ret = name.indexOf(filter.toLowerCase())!=-1;
 		return ret;
 	}
@@ -161,5 +161,9 @@ public abstract class FileList extends JPanel
 			return nullGUI;
 		}
 		return infoGUI;
+	}
+	public String getSearchName()
+	{
+		return fileName.getText();
 	}
 }

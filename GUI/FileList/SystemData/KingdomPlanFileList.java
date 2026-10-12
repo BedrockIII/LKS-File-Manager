@@ -6,8 +6,8 @@ import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
-import GUI.FileInfo.FileInfoFactory;
 import GUI.FileInfo.MenuDB.KingdomPlan.KingdomPlanAreaGUI;
+import GUI.FileInfo.MenuDB.KingdomPlan.KingdomPlanAreaSelectorGUI;
 import GUI.FileInfo.MenuDB.KingdomPlan.KingdomPlanElementGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
@@ -55,7 +55,7 @@ public class KingdomPlanFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI() 
 	{
-		infoGUI = FileInfoFactory.makeInfoGUI(file);
+		infoGUI = new KingdomPlanAreaSelectorGUI(planManager);
 	}
 	public void addActions()
 	{

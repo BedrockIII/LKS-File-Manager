@@ -673,6 +673,10 @@ public class MOPlacementListGUI extends CollapseableFileList
 						fileName.setText(parent.parent.parent.parent.parent.MonsterDataPack.getModCodeByName(this.data.getModCode()));
 						super.update();
 					}
+					public String getSearchName()
+					{
+						return super.getSearchName() + " " + data.getItemDrop();
+					}
 				}
 				public void removeObject(ObjectListGUI object)
 				{

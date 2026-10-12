@@ -64,7 +64,7 @@ public class FlagManager
 	}
 	public static void importBitFlags(byte[] data)
 	{
-		List<String> lines = Utils.SplitStringBinaryByLines(data);
+		List<String> lines = Utils.bytesToStrs(data);
 		for(String line : lines)
 		{
 			try

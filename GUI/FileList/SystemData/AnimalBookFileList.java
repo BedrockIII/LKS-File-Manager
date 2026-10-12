@@ -10,8 +10,8 @@ import GUI.FileInfo.MenuDB.AnimalBook.AnimalBookListInfoGUI;
 import GUI.FileInfo.MenuDB.AnimalBook.AnimalEntryInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.Books.AnimalManager;
-import SystemDataManagers.MenuDB.Books.AnimalManager.AnimalEntry;
+import SystemDataManagers.MenuDB.Books.AnimalBook.AnimalBookManager;
+import SystemDataManagers.MenuDB.Books.AnimalBook.AnimalEntry;
 import bFM.GUIUtils;
 import bFM.Settings;
 
@@ -19,8 +19,8 @@ import bFM.Settings;
 public class AnimalBookFileList extends CollapseableFileList
 {
 	private ArrayList<AnimalEntry> Entries = new ArrayList<AnimalEntry>();
-	AnimalManager manager;
-	public AnimalBookFileList(AnimalManager file, int padding) 
+	AnimalBookManager manager;
+	public AnimalBookFileList(AnimalBookManager file, int padding) 
 	{
 		manager = file;
 		this.padding = padding;

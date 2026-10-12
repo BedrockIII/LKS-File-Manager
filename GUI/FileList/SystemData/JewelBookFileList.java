@@ -10,8 +10,8 @@ import GUI.FileInfo.MenuDB.JewelBook.JewelBookListInfoGUI;
 import GUI.FileInfo.MenuDB.JewelBook.JewelEntryInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.Books.JewelBookManager;
-import SystemDataManagers.MenuDB.Books.JewelBookManager.JewelEntry;
+import SystemDataManagers.MenuDB.Books.JewelBook.JewelBookManager;
+import SystemDataManagers.MenuDB.Books.JewelBook.JewelEntry;
 import bFM.GUIUtils;
 import bFM.Settings;
 

@@ -1,4 +1,4 @@
-package SystemDataManagers.MenuDB;
+package SystemDataManagers.MenuDB.CockpitLog;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

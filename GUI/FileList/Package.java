@@ -14,8 +14,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
-import GUI.FileInfo.FileInfoFactory;
+import GUI.FileInfo.PackageInfoGUI;
 import PCKGManager.PCKGManager;
+import bFM.FileTypeUtils;
 import bFM.GUIUtils;
 import bFM.Nameable;
 import bFM.OpenedFile;
@@ -53,11 +54,10 @@ public class Package extends CollapseableFileList
 	}
 	public void initializeSubGUI()
 	{
-		infoGUI = FileInfoFactory.makeInfoGUI(file);
 		subEntries = new ArrayList<FileList>();		
 		for(int i =0; i<((PCKGManager)file).getFileAmount(); i++)
 		{
-			subEntries.add(FileListFactory.makeListGUI(((PCKGManager)file).getPackedFile(i), Settings.indentSize + padding, this));
+			subEntries.add(FileTypeUtils.makeListGUI(((PCKGManager)file).getPackedFile(i), Settings.indentSize + padding, this));
 		}
 	}
 	protected void addActions()
@@ -113,7 +113,7 @@ public class Package extends CollapseableFileList
 					((PCKGManager)file).addFile(name, data);
 					if(newFile)
 					{
-						subEntries.add(FileListFactory.makeListGUI(((PCKGManager)file).getPackedFile(((PCKGManager)file).getFileAmount()-1), padding + Settings.indentSize, this));
+						subEntries.add(FileTypeUtils.makeListGUI(((PCKGManager)file).getPackedFile(((PCKGManager)file).getFileAmount()-1), padding + Settings.indentSize, this));
 						reAddComponents();
 					}
 					infoGUI.update();
@@ -135,7 +135,7 @@ public class Package extends CollapseableFileList
 	private void addFile(OpenedFile newFile)
 	{
 		packageFile.addFile(newFile);
-		subEntries.add(FileListFactory.makeListGUI(newFile, padding + Settings.indentSize, this));
+		subEntries.add(FileTypeUtils.makeListGUI(newFile, padding + Settings.indentSize, this));
 		reAddComponents();
 	}
 	private void addExportAllButton()
@@ -208,6 +208,6 @@ public class Package extends CollapseableFileList
 	}
 	protected void initializeInfoGUI() 
 	{
-		infoGUI = FileInfoFactory.makeInfoGUI(file);
+		infoGUI = new PackageInfoGUI(packageFile);
 	}
 }

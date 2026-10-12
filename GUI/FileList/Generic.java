@@ -3,8 +3,9 @@ package GUI.FileList;
 import javax.swing.JMenuItem;
 
 import GUI.GUI;
-import GUI.FileInfo.FileInfoFactory;
+import GUI.FileInfo.GenericFileInfoGUI;
 import PCKGManager.PCKGManager;
+import bFM.FileTypeUtils;
 import bFM.GUIUtils;
 import bFM.Nameable;
 import bFM.OpenedFile;
@@ -25,7 +26,7 @@ public class Generic extends FileList
 	}
 	public Generic(String name, byte[] data, int padding)
 	{
-		file = OpenedFile.makeFile(name, data);
+		file = FileTypeUtils.makeFile(name, data);
 		initializeAll();
 	}
 	public Generic(OpenedFile file, int padding, CollapseableFileList parent)
@@ -37,7 +38,7 @@ public class Generic extends FileList
 	}
 	public Generic(String name, int padding, CollapseableFileList parent) 
 	{
-		file = OpenedFile.makeFile(name, new byte[0]);
+		file = FileTypeUtils.makeFile(name, new byte[0]);
 		this.padding = padding;
 		this.parent = parent;
 		initializeAll();
@@ -55,7 +56,7 @@ public class Generic extends FileList
 	}
 	protected void initializeInfoGUI()
 	{
-		infoGUI = FileInfoFactory.makeInfoGUI(file);
+		infoGUI = new GenericFileInfoGUI(file);
 	}
 	protected void addActions()
 	{

@@ -14,8 +14,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import VMC.VMCConverter;
-
 public class Utils 
 {
 	public final static int JAPANESE_LANGUAGE = 0;
@@ -434,33 +432,6 @@ public class Utils
 		}
 		return 0;
 	}
-	public static List<String> SplitStringBinaryByLines(byte[] data)
-	{
-		List<String> Strings = new ArrayList<String>();
-		byte[] temp = new byte[512];
-		int k = 0;
-		for(int i = 0; i<data.length; i++)
-		{
-			if(data[i]=='\n')
-			{
-				String line = decodeBytesToString(temp);
-				int ending = line.indexOf(0x00);
-				if(ending == -1) ending = line.length();
-				line = line.substring(0, ending);
-				Strings.add(line);
-				
-				temp = new byte[temp.length];
-				k=0;
-			
-			}
-			else
-			{
-				temp[k] = data[i];
-				k++;
-			}
-		}
-		return Strings;
-	}
 	public static List<String> bytesToStrs(byte[] data)
 	{
 		List<String> Strings = new ArrayList<String>();
@@ -468,7 +439,11 @@ public class Utils
 		int k = 0;
 		for(int i = 0; i<data.length; i++)
 		{
-			if(data[i]==0x00)
+			while(data[i]==0x0d && i<data.length)
+			{
+				i++;
+			}
+			if(data[i]==0x0a||data[i]==0x00)
 			{
 				String line = decodeBytesToString(temp);
 				int ending = line.indexOf(0x00);
@@ -487,93 +462,6 @@ public class Utils
 			}
 		}
 		return Strings;
-	}
-	public static String getFileType(String name, byte[] file) 
-	{
-		if(PCKGManager.PCKGManager.isPAC(file))
-		{
-			if(name.equals("KingdomPlan.bin")||name.equals("Kingdom Plan Config"))
-			{
-				return "KingdomPlanDB";
-			}
-			else if(name.indexOf("chrDB") != -1||name.equals("Character Data Base"))
-			{
-				return "CharacterDB";
-			}
-			else if(name.indexOf("itemDB") != -1||name.equals("Item Data Base"))
-			{
-				if(name.indexOf("itemDB") != -1 && name.length() > 8)
-				{
-					System.out.println("Setting Language to " + name.charAt(8));
-					Settings.LanguageCode = Integer.parseInt("" + name.charAt(8));
-				}
-				return "ItemDB";
-			}
-			else  if(name.indexOf("msDB") != -1||name.equals("Mission Object Data Base"))
-			{
-				return "MissionDB";
-			}
-			else if(name.equals("CameraData.bin")||name.equals("Camera Zone Config"))
-			{
-				return "CameraZoneDB";
-			}
-			else if(name.equals("Album.bin"))
-			{
-				return "WonderSpotDB";
-			}
-			else if(name.equals("AnimalBook.bin"))
-			{
-				return "AnimalBookDB";
-			}
-			else if(name.equals("Jewel.bin"))
-			{
-				return "JewelBookDB";
-			}
-			else if(name.equals("Humming.bin"))
-			{
-				return "HummingBookDB";
-			}
-			else if(name.equals("CockpitLog.bin"))
-			{
-				return "CockpitLogDB";
-			}
-			else if(name.equals("ChairMessage.bin"))
-			{
-				return "ChairMessageDB";
-			}
-			else if(name.equals("mapdata.bin"))
-			{
-				return "MapDataDB";
-			}
-			else if(name.equals("Record.bin"))
-			{
-				return "RecordBookDB";
-			}
-			else if(name.equals("CastlePicture.bin"))
-			{
-				return "CastlePictureDB";
-			}
-			//Check if special TODO
-			//else return "Package"
-			return "Package";
-		}
-		else if(colReader.ColReader.isCollisionFile(file))
-		{
-			return "Collision";
-		}
-		else if(WorldFileManager.FixedPointManager.isFixedPointFile(file))
-		{
-			return "Fixed Point";
-		}
-		else if(VMCConverter.isVMC(file))
-		{
-			return "Virtual Machine Code";
-		}
-		else if(name.indexOf("MenuString.bin") != -1)
-		{
-			return "MenuStringDB";
-		}
-		return "Todo";
 	}
 	public static float[] formatCoords(String line) 
 	{
@@ -679,13 +567,9 @@ public class Utils
 		if(ret == 65535) return -1;
 		return ret;
 	}
-	public static String getFileType(OpenedFile file) 
-	{
-		return getFileType(file.getName(), file.toBytes());
-	}
 	public static boolean isGenericPAC(byte[] fileContents, String name) 
 	{
-		return getFileType(name, fileContents).equals("Package");
+		return FileTypeUtils.getFileType(name, fileContents).equals("Package");
 	}
 	public static String getAsSetting(String settingName, boolean value) 
 	{

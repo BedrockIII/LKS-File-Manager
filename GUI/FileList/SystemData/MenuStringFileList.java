@@ -8,8 +8,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import GUI.FileInfo.MenuDB.MenuString.MenuStringInfo;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.MenuStringManager;
-import SystemDataManagers.MenuDB.MenuStringManager.MenuString;
+import SystemDataManagers.MenuDB.MenuString.MenuString;
+import SystemDataManagers.MenuDB.MenuString.MenuStringManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

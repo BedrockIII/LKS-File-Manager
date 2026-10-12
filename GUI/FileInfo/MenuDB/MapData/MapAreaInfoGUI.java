@@ -37,7 +37,7 @@ public class MapAreaInfoGUI extends GenericFileInfoGUI
 		add(new LabeledInputBox("Activation Flag 2: ", Flag3), layout);
 		add(new LabeledInputBox("Activation Flag 3: ", Flag4), layout);
 		layout.weighty = 1.0;
-		add(new LabeledInputBox("Unknown Area Data Number: ", Flag5), layout);
+		add(new LabeledInputBox("World Control Percent: ", Flag5), layout);
 	}
 	private void makeGUI()
 	{

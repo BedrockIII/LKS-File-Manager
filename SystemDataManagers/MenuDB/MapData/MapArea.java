@@ -13,7 +13,7 @@ public class MapArea implements Data
 	int ActivationFlag1 = -1;
 	int ActivationFlag2 = -1;
 	int ActivationFlag3 = -1;
-	int flag5 = -1;
+	int worldPercent = -1;
 	public MapArea(String name, String image, int flag1, int flag2, int flag3, int flag4, int flag5)
 	{
 		this.name = name;
@@ -22,7 +22,7 @@ public class MapArea implements Data
 		this.ActivationFlag1 = flag2;
 		this.ActivationFlag2 = flag3;
 		this.ActivationFlag3 = flag4;
-		this.flag5 = flag5;
+		this.worldPercent = flag5;
 	}
 	protected byte[] toNameBytes() 
 	{
@@ -39,7 +39,7 @@ public class MapArea implements Data
 		ret.putInt(ActivationFlag1);
 		ret.putInt(ActivationFlag2);
 		ret.putInt(ActivationFlag3);
-		ret.putInt(flag5);
+		ret.putInt(worldPercent);
 		return ret.array();
 	}
 	public void setData(byte[] data) 
@@ -89,10 +89,10 @@ public class MapArea implements Data
 		this.ActivationFlag3 = flag4;
 	}
 	public int getFlag5() {
-		return flag5;
+		return worldPercent;
 	}
 	public void setFlag5(int flag5) {
-		this.flag5 = flag5;
+		this.worldPercent = flag5;
 	}
 	public void setName(String name) {
 		this.name = name;

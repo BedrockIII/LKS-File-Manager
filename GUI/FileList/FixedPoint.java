@@ -6,7 +6,7 @@ import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
-import GUI.FileInfo.FileInfoFactory;
+import GUI.FileInfo.FixedPointInfoGUI;
 import GUI.FileInfo.FixedPointObjectInfoGUI;
 import WorldFileManager.FixedPointManager;
 import bFM.GUIUtils;
@@ -207,6 +207,6 @@ public class FixedPoint extends CollapseableFileList
 	}
 	protected void initializeInfoGUI() 
 	{
-		infoGUI = FileInfoFactory.makeInfoGUI(file);
+		infoGUI = new FixedPointInfoGUI(data);
 	}
 }

@@ -7,10 +7,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.CockpitLogManager;
-import SystemDataManagers.MenuDB.LogEntry;
 import SystemDataManagers.MenuDB.CastlePicture.CastlePicture;
 import SystemDataManagers.MenuDB.CastlePicture.CastlePictureManager;
+import SystemDataManagers.MenuDB.CockpitLog.CockpitLogManager;
+import SystemDataManagers.MenuDB.CockpitLog.LogEntry;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

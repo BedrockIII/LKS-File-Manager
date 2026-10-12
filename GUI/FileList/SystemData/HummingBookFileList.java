@@ -10,8 +10,8 @@ import GUI.FileInfo.MenuDB.HummingBook.HummingBookListInfoGUI;
 import GUI.FileInfo.MenuDB.HummingBook.HummingEntryInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.FileList;
-import SystemDataManagers.MenuDB.Books.HummingBookEntry;
-import SystemDataManagers.MenuDB.Books.HummingBookManager;
+import SystemDataManagers.MenuDB.Books.HummingBook.HummingBookEntry;
+import SystemDataManagers.MenuDB.Books.HummingBook.HummingBookManager;
 import bFM.GUIUtils;
 import bFM.Settings;
 

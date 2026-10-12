@@ -25,10 +25,10 @@ import WorldFileManager.FixedPointManager;
 import bFM.Data;
 import bFM.Settings;
 import bFM.Utils;
-import SystemDataManagers.MenuDB.CockpitLogManager;
-import SystemDataManagers.MenuDB.MenuStringManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
+import SystemDataManagers.MenuDB.CockpitLog.CockpitLogManager;
 import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
+import SystemDataManagers.MenuDB.MenuString.MenuStringManager;
 import SystemDataManagers.QuestDB.MailManager;
 import VMC.VMCConverter;
 @SuppressWarnings("unused")

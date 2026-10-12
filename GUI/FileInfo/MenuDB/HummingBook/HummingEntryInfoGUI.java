@@ -6,7 +6,7 @@ import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.MenuDB.Books.HummingBookEntry;
+import SystemDataManagers.MenuDB.Books.HummingBook.HummingBookEntry;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

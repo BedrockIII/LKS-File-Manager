@@ -17,7 +17,7 @@ public class MapPOIData implements Data
 	int ActivationFlag2 = -1;
 	int DeactivationFlag1 = -1;
 	int DeactivationFlag2 = -1;
-	int flag6 = -1;
+	int AreaCode = -1;
 	public MapPOIData(String name, String message, String image, short posX, short posY, int flag1, int flag2, int flag3, int flag4, int flag5, int flag6)
 	{
 		this.name = name;
@@ -30,7 +30,7 @@ public class MapPOIData implements Data
 		this.ActivationFlag2 = flag3;
 		this.DeactivationFlag1 = flag4;
 		this.DeactivationFlag2 = flag5;
-		this.flag6 = flag6;
+		this.AreaCode = flag6;
 	}
 	public byte[] toNameBytes() 
 	{
@@ -59,7 +59,7 @@ public class MapPOIData implements Data
 		ret.putInt(ActivationFlag2);
 		ret.putInt(DeactivationFlag1);
 		ret.putInt(DeactivationFlag2);
-		ret.putInt(flag6);
+		ret.putInt(AreaCode);
 		return ret.array();
 	}
 	public void setData(byte[] data) 
@@ -139,10 +139,10 @@ public class MapPOIData implements Data
 		this.DeactivationFlag2 = flag5;
 	}
 	public int getFlag6() {
-		return flag6;
+		return AreaCode;
 	}
 	public void setFlag6(int flag6) {
-		this.flag6 = flag6;
+		this.AreaCode = flag6;
 	}
 	public void setName(String name) {
 		this.name = name;

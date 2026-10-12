@@ -7,15 +7,15 @@ import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.MenuDB.Books.AnimalManager;
+import SystemDataManagers.MenuDB.Books.AnimalBook.AnimalBookManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class AnimalBookListInfoGUI extends GenericFileInfoGUI
 {
-	AnimalManager manager;
+	AnimalBookManager manager;
 	JLabel entryCount;
-	public AnimalBookListInfoGUI(AnimalManager manager)
+	public AnimalBookListInfoGUI(AnimalBookManager manager)
 	{
 		this.manager = manager;
 		makeGUI();

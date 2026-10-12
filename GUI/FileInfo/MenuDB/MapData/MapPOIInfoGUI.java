@@ -35,7 +35,7 @@ public class MapPOIInfoGUI extends GenericFileInfoGUI
 		GridBagConstraints layout = Settings.getDefaultConstraints();
 		removeAll();
 		add(new LabeledInputBox("Name: ", Name), layout);
-		add(new LabeledInputBox("Message: ", Image), layout);
+		add(new LabeledInputBox("Message: ", Message), layout);
 		add(new LabeledInputBox("Image: ", Image), layout);
 		add(new LabeledInputBox("X Position: ", PosX), layout);
 		add(new LabeledInputBox("Y Position: ", PosY), layout);
@@ -45,7 +45,7 @@ public class MapPOIInfoGUI extends GenericFileInfoGUI
 		add(new LabeledInputBox("Deactivation Flag 1: ", Flag4), layout);
 		add(new LabeledInputBox("Deactivation Flag 2: ", Flag5), layout);
 		layout.weighty = 1.0;
-		add(new LabeledInputBox("Unknown Map POI Number 2: ", Flag6), layout);
+		add(new LabeledInputBox("Area Code: ", Flag6), layout);
 	}
 	private void makeGUI()
 	{

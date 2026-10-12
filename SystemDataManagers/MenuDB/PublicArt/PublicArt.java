@@ -28,25 +28,30 @@ public class PublicArt implements Data
 		}
 		public void addLine(String line)
 		{
-			if(line.indexOf("<<Description>>") != -1)
+			if(line.indexOf("<<Text>>") != -1)
 			{
 				text = Utils.formatString(line);
+			}
+			if(line.indexOf("<<Description>>") != -1)
+			{
+				description = Utils.formatString(line);
 			}
 			else if(line.indexOf("<<Image>>") != -1)
 			{
 				image = Utils.formatString(line);
 			}
-			else if(line.indexOf("<<Humming Book Flag>>") != -1)
+			else if(line.indexOf("<<Activation Flag>>") != -1)
 			{
-				hummingBookFlag = Utils.formatInt(line);
+				activationFlag = Utils.formatInt(line);
 			}
 		}
 		public String toString()
 		{
-			String ret = "<<Humming Entry Name>> \"" + Utils.toFormatedString(name) + "\"\n";
-			ret += "\t<<Description>> \"" + Utils.toFormatedString(text) + "\"\n";
+			String ret = "<<Public Art Name>> \"" + Utils.toFormatedString(name) + "\"\n";
+			ret += "\t<<Text>> \"" + Utils.toFormatedString(text) + "\"\n";
+			ret += "\t<<Description>> \"" + Utils.toFormatedString(description) + "\"\n";
 			ret += "\t<<Image>> \"" + Utils.toFormatedString(image) + "\"\n";
-			ret += "\t<<Humming Book Flag>> \"" + hummingBookFlag + "\"\n";
+			ret += "\t<<Activation Flag>> \"" + activationFlag + "\"\n";
 			return ret;
 		}
 		public boolean equals(String name) 
@@ -89,12 +94,20 @@ public class PublicArt implements Data
 		{
 			return Utils.toFormatedString(image);
 		}
-		public void setHummingBookFlag(int hummingBookFlag) 
+		public void setActivationFlag(int activationFlag) 
 		{
-			this.hummingBookFlag = hummingBookFlag;
+			this.activationFlag = activationFlag;
 		}
-		public int getHummingBookFlag() 
+		public int getActivationFlag() 
 		{
-			return hummingBookFlag;
+			return activationFlag;
+		}
+		public String getDescription()
+		{
+			return description;
+		}
+		public void setDescription(String description) 
+		{
+			this.description = description;
 		}
 	}
