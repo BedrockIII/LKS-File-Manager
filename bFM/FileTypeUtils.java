@@ -23,8 +23,10 @@ import GUI.FileList.SystemData.ChairCamera.ChairCameraManagerFileList;
 import GUI.FileList.SystemData.ChairMessage.ThroneMessageFileList;
 import GUI.FileList.SystemData.Explanation.ExplanationManagerFileList;
 import GUI.FileList.SystemData.MapData.MapDataManagerFileList;
+import GUI.FileList.SystemData.MovieBook.MovieBookManagerFileList;
 import GUI.FileList.SystemData.PublicArt.PublicArtManagerFileList;
 import GUI.FileList.SystemData.RecordBook.RecordBookManagerFileList;
+import GUI.FileList.SystemData.Unused.Development.DevelopmentManagerFileList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
@@ -32,6 +34,7 @@ import ResourceManagers.MSDBManager.MSDBManager;
 import SystemDataManagers.MenuDB.Books.AnimalBook.AnimalBookManager;
 import SystemDataManagers.MenuDB.Books.HummingBook.HummingBookManager;
 import SystemDataManagers.MenuDB.Books.JewelBook.JewelBookManager;
+import SystemDataManagers.MenuDB.Books.MovieBook.MovieBookManager;
 import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookManager;
 import SystemDataManagers.MenuDB.Books.WonderSpotBook.WonderSpotManager;
 import SystemDataManagers.MenuDB.CameraData.CameraZoneList;
@@ -44,6 +47,7 @@ import SystemDataManagers.MenuDB.KingdomPlanManager.kingdomPlanManager;
 import SystemDataManagers.MenuDB.MapData.MapDataManager;
 import SystemDataManagers.MenuDB.MenuString.MenuStringManager;
 import SystemDataManagers.MenuDB.PublicArt.PublicArtManager;
+import SystemDataManagers.MenuDB.Unused.Development.DevelopmentManager;
 import VMC.VMCConverter;
 import WorldFileManager.FixedPointManager;
 import colReader.ColReader;
@@ -270,6 +274,30 @@ public class FileTypeUtils
 				e.printStackTrace();
 				return new PCKGManager(file, name);
 			}
+		}else if (fileType.equals("MovieBookDB"))
+		{
+			try
+			{
+				return new MovieBookManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+		}else if (fileType.equals("DevelopmentDB"))
+		{
+			try
+			{
+				return new DevelopmentManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
 		}else if (fileType.equals("MissionDB"))
 		{
 			try
@@ -374,6 +402,14 @@ public class FileTypeUtils
 			else if(name.equals(ChairCameraManager.FileName))
 			{
 				return "ChairCameraDB";
+			}
+			else if(name.equals(MovieBookManager.FileName))
+			{
+				return "MovieBookDB";
+			}
+			else if(name.equals(DevelopmentManager.FileName))
+			{
+				return "DevelopmentDB";
 			}
 			//Check if special TODO
 			//else return "Package"
@@ -480,6 +516,14 @@ public class FileTypeUtils
 		else if (file instanceof ChairCameraManager)
 		{
 			return new ChairCameraManagerFileList((ChairCameraManager) file, padding);
+		}
+		else if (file instanceof MovieBookManager)
+		{
+			return new MovieBookManagerFileList((MovieBookManager) file, padding);
+		}
+		else if (file instanceof DevelopmentManager)
+		{
+			return new DevelopmentManagerFileList((DevelopmentManager) file, padding);
 		}
 		else if(file instanceof MSDBManager)
 		{
