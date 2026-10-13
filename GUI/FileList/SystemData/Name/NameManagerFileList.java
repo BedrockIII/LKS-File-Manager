@@ -11,6 +11,7 @@ public class NameManagerFileList extends CollapseableFileList
 	public NameManagerFileList(NameManager names, int padding) 
 	{
 		manager = names;
+		file = names;
 		this.padding = padding;
 		initializeAll();
 	}

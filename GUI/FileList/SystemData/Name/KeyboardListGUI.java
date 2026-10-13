@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.Name;
 
+import GUI.FileInfo.MenuDB.Name.KeyboardInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Name.Keyboard;
 
@@ -22,7 +23,7 @@ public class KeyboardListGUI extends FileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
+		infoGUI = new KeyboardInfoGUI(keyboard);
 	}
 	protected void addActions()
 	{

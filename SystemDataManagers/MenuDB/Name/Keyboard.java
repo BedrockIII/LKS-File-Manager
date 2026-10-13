@@ -37,4 +37,16 @@ public class Keyboard implements Data
 	{
 		throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
 	}
+	public String getLetter(int index)
+	{
+		if(index < 0 || index > Characters.length)
+			return "";
+		return Characters[index];
+	}
+	public void setLetter(int index, String letter)
+	{
+		if(index < 0 || index > Characters.length)
+			return;
+		Characters[index] = letter;
+	}
 }

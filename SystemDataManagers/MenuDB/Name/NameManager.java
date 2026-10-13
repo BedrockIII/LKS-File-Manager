@@ -24,7 +24,7 @@ public class NameManager implements OpenedFile
 		PCKGManager file = new PCKGManager(data);
 		AutoFirstName = new NameList(file.getFile("AutoFirstNmae"));
 		AutoLastName = new NameList(file.getFile("AutoLastNmae"));
-		AutoNGName = new NameList(file.getFile("NGList"));
+		AutoNGName = new NameList(file.getFile("NGlist"));
 		Japanese = new Language(file.getFile("JapanInput0"), 
 				file.getFile("JapanInput1"), 
 				file.getFile("JapanInput2"));
@@ -66,7 +66,7 @@ public class NameManager implements OpenedFile
 		PCKGManager ret = new PCKGManager();
 		ret.addFile("AutoFirstNmae", AutoFirstName.toBytes());
 		ret.addFile("AutoLastNmae", AutoLastName.toBytes());
-		ret.addFile("NGList", AutoNGName.toBytes());
+		ret.addFile("NGlist", AutoNGName.toBytes());
 		ret.addFile("JapaneseInput0", Japanese.Capitals.toBytes());
 		ret.addFile("JapaneseInput1", Japanese.Lowercase.toBytes());
 		ret.addFile("JapaneseInput2", Japanese.Special.toBytes());
