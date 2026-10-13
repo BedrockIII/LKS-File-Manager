@@ -8,9 +8,11 @@ import bFM.Utils;
 
 public class NameList implements Data
 {
+	Charset encoding;
 	ArrayList<String> Names;
-	NameList(byte[] data)
+	NameList(byte[] data, Charset encoding)
 	{
+		this.encoding = encoding;
 		Names = Utils.extractStringsNoFormatting(data);
 		if(Names.size() == 0) return;
 		String last = Names.remove(Names.size()-1);
@@ -32,7 +34,13 @@ public class NameList implements Data
 		byte[] ret = new byte[0];
 		for(String Name : Names)
 		{
-			ret = Utils.mergeArrays(ret, Utils.mergeArrays(Utils.encodeStringToBytes(Name), (byte)0x00));
+			try
+			{
+				ret = Utils.mergeArrays(ret, Utils.mergeArrays(Utils.encodeStringToBytes(Name, encoding), (byte)0x00));
+			} catch (Exception e)
+			{
+				ret = Utils.mergeArrays(ret, Utils.mergeArrays(Name.getBytes(Charset.forName("Shift-JIS")), (byte)0x00));
+			}
 		}
 		return Utils.mergeArrays(ret, (byte)'/');
 	}

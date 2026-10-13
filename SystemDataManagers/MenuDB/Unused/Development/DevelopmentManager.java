@@ -42,12 +42,12 @@ public class DevelopmentManager implements OpenedFile
 		}
 		for(int i = 0; i < entryCount; i++)
 		{
-			if(i < pos.length/6 - 1)
+			if(i < pos.length/6)
 			{
 				Entries.add(new Development(icons.get(i), images.get(i), Utils.getShort(id, i*2), 
 						Utils.getShort(pos, i*6), Utils.getShort(pos, i*6 + 2), Utils.getShort(pos, i*6 + 4)));
 			}
-			else if(i < pos.length/6 - 1)
+			else
 			{
 				Entries.add(new Development(icons.get(i), images.get(i), Utils.getShort(id, i*2), 
 						-1, 0, 0));

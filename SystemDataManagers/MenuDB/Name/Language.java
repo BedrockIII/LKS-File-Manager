@@ -1,5 +1,7 @@
 package SystemDataManagers.MenuDB.Name;
 
+import java.nio.charset.Charset;
+
 import bFM.Data;
 
 public class Language implements Data
@@ -7,11 +9,11 @@ public class Language implements Data
 	Keyboard Capitals;
 	Keyboard Lowercase;
 	Keyboard Special;
-	Language(byte[] capitals, byte[] lowercase, byte[] special)
+	Language(byte[] capitals, byte[] lowercase, byte[] special, Charset encoding)
 	{
-		Capitals = new Keyboard(capitals);
-		Lowercase = new Keyboard(lowercase);
-		Special = new Keyboard(special);
+		Capitals = new Keyboard(capitals, encoding);
+		Lowercase = new Keyboard(lowercase, encoding);
+		Special = new Keyboard(special, encoding);
 	}
 	public void setData(byte[] data) 
 	{

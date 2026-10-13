@@ -1,5 +1,6 @@
 package SystemDataManagers.MenuDB.Name;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import bFM.Data;
@@ -7,9 +8,11 @@ import bFM.Utils;
 
 public class Keyboard implements Data
 {
+	Charset encoding;
 	String[] Characters = new String[80];
-	public Keyboard(byte[] lowercase)
+	public Keyboard(byte[] lowercase, Charset encoding)
 	{
+		this.encoding = encoding;
 		ArrayList<String> characters = Utils.extractStrings(lowercase);
 		if(characters.size() != 80)
 		{
@@ -29,7 +32,12 @@ public class Keyboard implements Data
 		byte[] ret = new byte[0];
 		for(String Letter : Characters)
 		{
-			ret = Utils.mergeArrays(ret, Utils.mergeArrays(Utils.encodeStringToBytes(Letter), (byte)0x00));
+			try {
+				ret = Utils.mergeArrays(ret, Utils.mergeArrays(Utils.encodeStringToBytes(Letter, encoding), (byte)0x00));
+			} catch (Exception e)
+			{
+				ret = Utils.mergeArrays(ret, Utils.mergeArrays(Letter.getBytes(Charset.forName("Shift-JIS")), (byte)0x00));
+			}
 		}
 		return ret;
 	}
