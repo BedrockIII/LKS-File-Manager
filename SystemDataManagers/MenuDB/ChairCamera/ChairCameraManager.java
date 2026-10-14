@@ -64,7 +64,7 @@ public class ChairCameraManager implements OpenedFile
 		}
 		pack.addFile("List1", level1);
 		pack.addFile("List2", level2);
-		pack.addFile("List2", level3);
+		pack.addFile("List3", level3);
 		return pack.toBytes();
 	}
 	public void setName(String name) 

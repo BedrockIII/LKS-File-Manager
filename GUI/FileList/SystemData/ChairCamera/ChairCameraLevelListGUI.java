@@ -3,8 +3,8 @@ package GUI.FileList.SystemData.ChairCamera;
 import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.ChairCamera.ChairCameraLevelInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.ChairCamera.ChairCamera;
 import bFM.Settings;
@@ -38,8 +38,7 @@ public class ChairCameraLevelListGUI extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new PublicArtManagerInfoGUI(manager);
+		infoGUI = new ChairCameraLevelInfoGUI(Entries);
 	}
 	protected void addActions() 
 	{

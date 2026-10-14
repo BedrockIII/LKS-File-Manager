@@ -3,6 +3,7 @@ package GUI.FileList.SystemData.ChairCamera;
 import javax.swing.JMenuItem;
 
 import GUI.GUI;
+import GUI.FileInfo.MenuDB.ChairCamera.ChairCameraInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.ChairCamera.ChairCamera;
 
@@ -26,12 +27,13 @@ public class ChairCameraListGUI extends FileList
 	}
 	protected void initializeInfoGUI() 
 	{
-		//TODO
-		//this.infoGUI = new PublicArtInfoGUI(file);
+		this.infoGUI = new ChairCameraInfoGUI(file);
 	}
 	protected void addActions() 
 	{
 		addDeleteAction();
+		addMoveUpAction(parent, parent.Entries);
+		addMoveDownAction(parent, parent.Entries);
 		add(actions);
 		addMouseListener();
 	}

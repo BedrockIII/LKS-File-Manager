@@ -2,6 +2,7 @@ package GUI.FileList.SystemData.ChairCamera;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.ChairCamera.ChairCameraManagerFileInfo;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.ChairCamera.ChairCameraManager;
 import bFM.GUIUtils;
@@ -48,8 +49,7 @@ public class ChairCameraManagerFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new PublicArtManagerInfoGUI(manager);
+		infoGUI = new ChairCameraManagerFileInfo(manager);
 	}
 	protected void addActions() 
 	{
