@@ -443,8 +443,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 			{
 				public MobGroup data;
 				public GroupCategoryListGUI parent;
-				JMenuItem moveUp = null;
-				JMenuItem moveDown = null;
 				public GroupListGUI(MobGroup file, int padding, GroupCategoryListGUI parent) 
 				{
 					this.parent = parent;
@@ -479,8 +477,8 @@ public class MOPlacementListGUI extends CollapseableFileList
 					addChangeCategoryAction();
 					addObjectAction();
 					addDeleteAction();
-					addMoveDownAction();
-					addMoveUpAction();
+					addMoveDownAction(parent, parent.data);
+					addMoveUpAction(parent, parent.data);
 					add(actions);
 					addMouseListener();
 				}
@@ -510,42 +508,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 						GUI.update();
 					});
 					actions.add(removeElem);
-				}
-				private void addMoveUpAction()
-				{
-					if(moveUp == null)
-					{
-						moveUp = new JMenuItem("Move Up");
-						moveUp.addActionListener(e -> {
-							parent.moveUp(this);
-							addMoveDownAction();
-							addMoveUpAction();
-							GUI.update();
-						});
-					}
-					if(!parent.isFirst(this))
-					{
-						actions.add(moveUp);
-					}
-					else actions.remove(moveUp);
-				}
-				private void addMoveDownAction()
-				{
-					if(moveDown == null)
-					{
-						moveDown = new JMenuItem("Move Down");
-						moveDown.addActionListener(e -> {
-							parent.moveDown(this);
-							addMoveDownAction();
-							addMoveUpAction();
-							GUI.update();
-						});
-					}
-					if(!parent.isLast(this))
-					{
-						actions.add(moveDown);
-					}
-					else actions.remove(moveDown);
 				}
 				JMenuItem addPlacement = null;
 				JMenuItem removePlacement = null;
@@ -617,8 +579,8 @@ public class MOPlacementListGUI extends CollapseableFileList
 					}
 					protected void addActions() 
 					{
-						addMoveDownAction();
-						addMoveUpAction();
+						addMoveDownAction(parent, parent.data.getObjects());
+						addMoveUpAction(parent, parent.data.getObjects());
 						addDeleteAction();
 						add(actions);
 						addMouseListener();
@@ -627,46 +589,10 @@ public class MOPlacementListGUI extends CollapseableFileList
 					{
 						JMenuItem removeElem = new JMenuItem("Delete Object");
 						removeElem.addActionListener(e -> {
-							parent.removeObject(this);
+							parent.removeChild(this, parent.data.getObjects());
 							GUI.update();
 						});
 						actions.add(removeElem);
-					}
-					private void addMoveUpAction()
-					{
-						if(moveUp == null)
-						{
-							moveUp = new JMenuItem("Move Up");
-							moveUp.addActionListener(e -> {
-								parent.moveUp(this);
-								addMoveDownAction();
-								addMoveUpAction();
-								GUI.update();
-							});
-						}
-						if(!parent.isFirst(this))
-						{
-							actions.add(moveUp, 0);
-						}
-						else actions.remove(moveUp);
-					}
-					private void addMoveDownAction()
-					{
-						if(moveDown == null)
-						{
-							moveDown = new JMenuItem("Move Down");
-							moveDown.addActionListener(e -> {
-								parent.moveDown(this);
-								addMoveDownAction();
-								addMoveUpAction();
-								GUI.update();
-							});
-						}
-						if(!parent.isLast(this))
-						{
-							actions.add(moveDown, 0);
-						}
-						else actions.remove(moveDown);
 					}
 					public void update()
 					{
@@ -677,46 +603,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 					{
 						return super.getSearchName() + " " + data.getItemDrop();
 					}
-				}
-				public void removeObject(ObjectListGUI object)
-				{
-					data.getObjects().remove(object.data);
-					subEntries.remove(object);
-					reAddComponents();
-				}
-				public boolean isLast(ObjectListGUI object) 
-				{
-					return data.getObjects().indexOf(object.data) == data.getObjects().size()-1;
-				}
-				public void moveDown(ObjectListGUI object) 
-				{
-					if(isLast(object)) return;
-					int index = subEntries.indexOf(object);
-					if(index == -1) this.removeObject(object);
-					subEntries.remove(object);
-					subEntries.add(index + 1, object);
-					index = data.getObjects().indexOf(object.data);
-					if(index == -1) this.removeObject(object);
-					data.getObjects().remove(object.data);
-					data.getObjects().add(index + 1, object.data);
-					reAddComponents();
-				}
-				public boolean isFirst(ObjectListGUI object) 
-				{
-					return data.getObjects().indexOf(object.data) == 0;
-				}
-				public void moveUp(ObjectListGUI object)
-				{
-					if(isFirst(object)) return;
-					int index = subEntries.indexOf(object);
-					if(index == -1) this.removeObject(object);
-					subEntries.remove(object);
-					subEntries.add(index - 1, object);
-					index = data.getObjects().indexOf(object.data);
-					if(index == -1) this.removeObject(object);
-					data.getObjects().remove(object.data);
-					data.getObjects().add(index - 1, object.data);
-					reAddComponents();
 				}
 				public void newObject(ObjectDefault objectType, int id) 
 				{
@@ -734,40 +620,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 			{
 				data.remove(object.data);
 				subEntries.remove(object);
-				reAddComponents();
-			}
-			public boolean isLast(GroupListGUI object) 
-			{
-				return data.indexOf(object.data) == data.size()-1;
-			}
-			public void moveDown(GroupListGUI object) 
-			{
-				if(isLast(object)) return;
-				int index = subEntries.indexOf(object);
-				if(index == -1) this.removeGroup(object);
-				subEntries.remove(object);
-				subEntries.add(index + 1, object);
-				index = data.indexOf(object.data);
-				if(index == -1) this.removeGroup(object);
-				data.remove(object.data);
-				data.add(index + 1, object.data);
-				reAddComponents();
-			}
-			public boolean isFirst(GroupListGUI object) 
-			{
-				return data.indexOf(object.data) == 0;
-			}
-			public void moveUp(GroupListGUI object)
-			{
-				if(isFirst(object)) return;
-				int index = subEntries.indexOf(object);
-				if(index == -1) this.removeGroup(object);
-				subEntries.remove(object);
-				subEntries.add(index - 1, object);
-				index = data.indexOf(object.data);
-				if(index == -1) this.removeGroup(object);
-				data.remove(object.data);
-				data.add(index - 1, object.data);
 				reAddComponents();
 			}
 			public int getGroupCategoryID()

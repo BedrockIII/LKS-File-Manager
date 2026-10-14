@@ -8,6 +8,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -251,5 +252,72 @@ public abstract class CollapseableFileList extends FileList
 			FileList c = subEntries.get(j);
 			c.filterAddFiles(filter);
 		}
+	}
+	<T> boolean isFirst(FileList child, List<T> children) 
+	{
+		return children.indexOf(child.file) == 0;
+	}
+	<T> boolean isLast(FileList child, List<T> children) 
+	{
+		return children.indexOf(child.file) == children.size()-1;
+	}
+	@SuppressWarnings("unchecked")
+	<T> void moveUp(FileList child, List<T> children)
+	{
+		if(children == null)throw new IllegalArgumentException("Passed List Is Null!");
+		if(children.size() <= 0)throw new IllegalArgumentException("Passed List Is Size 0!");
+		if(child.file == null) throw new IllegalArgumentException("Child's Data is Null.\nExpected: " + children.get(0).getClass());
+		if(!(children.get(0).getClass().isInstance(child.file))) throw new IllegalArgumentException("Child's Data is Wrong Type.\nExpected: " + children.get(0).getClass() + "\n is: " + child.file.getClass() + "\n");
+		if(isFirst(child, children)) return;
+		int index = subEntries.indexOf(child);
+		if(index == -1) 
+		{
+			removeChild(child, children);
+			return;
+		}
+		subEntries.remove(child);
+		subEntries.add(index - 1, child);
+		index = children.indexOf((T) child.file);
+		if(index == -1) 
+		{
+			removeChild(child, children);
+			return;
+		}
+		children.remove((T) child.file);
+		children.add(index - 1, (T) child.file);
+		reAddComponents();
+	}
+	@SuppressWarnings("unchecked")
+	public <T> void moveDown(FileList child, List<T> children) 
+	{
+		if(children == null)throw new IllegalArgumentException("Passed List Is Null!");
+		if(children.size() <= 0)throw new IllegalArgumentException("Passed List Is Size 0!");
+		if(child.file == null) throw new IllegalArgumentException("Child's Data is Null.\nExpected: " + children.get(0).getClass());
+		if(!(children.get(0).getClass().isInstance(child.file))) throw new IllegalArgumentException("Child's Data is Wrong Type.\nExpected: " + children.get(0).getClass() + "\n is: " + child.file.getClass() + "\n");
+		if(isLast(child, children)) return;
+		int index = subEntries.indexOf(child);
+		if(index == -1) 
+		{
+			removeChild(child, children);
+			return;
+		}
+		subEntries.remove(child);
+		subEntries.add(index + 1, child);
+		index = children.indexOf(child.file);
+		if(index == -1) 
+		{
+			removeChild(child, children);
+			return;
+		}
+		children.remove((T)child.file);
+		children.add(index + 1, (T) child.file);
+		reAddComponents();
+	}
+	public <T> void removeChild(FileList child, List<T> children)
+	{
+		children.remove(child.file);
+		remove(child);
+		subEntries.remove(child);
+		reAddComponents();
 	}
 }

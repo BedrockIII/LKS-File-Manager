@@ -14,6 +14,7 @@ public class MapAreaFileList extends FileList
 		this.parent = parent;
 		this.padding = padding;
 		this.Area = Area;
+		file = Area;
 		initializeAll();
 	}
 	protected void initializeAll()
@@ -28,6 +29,8 @@ public class MapAreaFileList extends FileList
 	protected void addActions()
 	{
 		// TODO Add Delete Action
+		addMoveUpAction(parent, parent.manager.getAreas());
+		addMoveDownAction(parent, parent.manager.getAreas());
 		add(actions);
 		addMouseListener();
 	}

@@ -23,6 +23,7 @@ import GUI.FileList.SystemData.ChairCamera.ChairCameraManagerFileList;
 import GUI.FileList.SystemData.ChairMessage.ThroneMessageFileList;
 import GUI.FileList.SystemData.Explanation.ExplanationManagerFileList;
 import GUI.FileList.SystemData.MapData.MapDataManagerFileList;
+import GUI.FileList.SystemData.MonsterBook.MonsterBookManagerFileList;
 import GUI.FileList.SystemData.MovieBook.MovieBookManagerFileList;
 import GUI.FileList.SystemData.Name.NameManagerFileList;
 import GUI.FileList.SystemData.PublicArt.PublicArtManagerFileList;
@@ -35,6 +36,7 @@ import ResourceManagers.MSDBManager.MSDBManager;
 import SystemDataManagers.MenuDB.Books.AnimalBook.AnimalBookManager;
 import SystemDataManagers.MenuDB.Books.HummingBook.HummingBookManager;
 import SystemDataManagers.MenuDB.Books.JewelBook.JewelBookManager;
+import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterBookManager;
 import SystemDataManagers.MenuDB.Books.MovieBook.MovieBookManager;
 import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookManager;
 import SystemDataManagers.MenuDB.Books.WonderSpotBook.WonderSpotManager;
@@ -312,6 +314,18 @@ public class FileTypeUtils
 				e.printStackTrace();
 				return new PCKGManager(file, name);
 			}
+		}else if (fileType.equals("MonsterBookDB"))
+		{
+			try
+			{
+				return new MonsterBookManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
 		}else if (fileType.equals("MissionDB"))
 		{
 			try
@@ -428,6 +442,10 @@ public class FileTypeUtils
 			else if(name.equals(NameManager.FileName))
 			{
 				return "NameDB";
+			}
+			else if(name.equals(MonsterBookManager.FileName))
+			{
+				return "MonsterBookDB";
 			}
 			//Check if special TODO
 			//else return "Package"
@@ -546,6 +564,10 @@ public class FileTypeUtils
 		else if (file instanceof NameManager)
 		{
 			return new NameManagerFileList((NameManager) file, padding);
+		}
+		else if (file instanceof MonsterBookManager)
+		{
+			return new MonsterBookManagerFileList((MonsterBookManager) file, padding);
 		}
 		else if(file instanceof MSDBManager)
 		{

@@ -1,5 +1,6 @@
 package SystemDataManagers.MenuDB.Books.MonsterBook;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,9 @@ import bFM.Utils;
 public class MonsterBookManager implements OpenedFile
 {
 	public final static String FileName = "MonsterBook.bin";
-	ArrayList<MovieBook> Entries = new ArrayList<MovieBook>();
+	ArrayList<MonsterMod> HpEntries = new ArrayList<MonsterMod>();
+	ArrayList<MonsterBook> BookEntries = new ArrayList<MonsterBook>();
+	ArrayList<MonsterLog> LogEntries = new ArrayList<MonsterLog>();
 	public MonsterBookManager(byte[] data)
 	{
 		initializeFromBytes(data);
@@ -22,55 +25,106 @@ public class MonsterBookManager implements OpenedFile
 	private void initializeFromBytes(byte[] data)
 	{
 		PCKGManager pack = new PCKGManager(data);
-		List<String> string1s = Utils.extractStringsNoFormatting(pack.getFile("Detail"));
-		List<String> string2s = Utils.extractStringsNoFormatting(pack.getFile("LogString1"));
-		List<String> names = Utils.extractStringsNoFormatting(pack.getFile("Name"));
-		List<String> texts = Utils.extractStringsNoFormatting(pack.getFile("Text"));
-		List<String> images = Utils.extractStringsNoFormatting(pack.getFile("Image"));
-		List<String> vals = Utils.extractStringsNoFormatting(pack.getFile("Val"));
-		int entryCount = names.size();
-		if(entryCount > texts.size() || entryCount > images.size() || entryCount > string1s.size() || entryCount > string2s.size()  || entryCount > vals.size())
+		List<String> detail = Utils.extractStringsNoFormatting(pack.getFile("Detail"));
+		List<String> string1s = Utils.extractStringsNoFormatting(pack.getFile("LogString1"));
+		List<String> names = Utils.extractStringsNoFormatting(pack.getFile("MonsterName"));
+		List<String> texts = Utils.extractStringsNoFormatting(pack.getFile("MonsterText"));
+		List<String> images = Utils.extractStringsNoFormatting(pack.getFile("MonsterImage"));
+		byte[] hps = pack.getFile("MonsterHp");
+		byte[] vals = pack.getFile("LogVal");
+		int entryCount = detail.size();
+		if(entryCount > texts.size() || entryCount > images.size() || entryCount > string1s.size())
 		{
-			throw new IllegalArgumentException("Movie Book Pack is incorrectly formatted. \n"
+			throw new IllegalArgumentException("Monster Book Pack is incorrectly formatted. \n"
 					+ "Name Count: " + entryCount + "\n"
-					+ "Text Count: " + texts.size() + "\n"
-					+ "Pre Description Count: " + string1s.size() + "\n"
-					+ "Post Description Count: " + string2s.size() + "\n"
-					+ "Image Count: " + images.size() + "\n"
-					+ "Movie File Count: " + vals.size() + "\n");
+					+ "Description Count: " + texts.size() + "\n"
+					+ "Image Count: " + images.size() + "\n");
 		}
-		else if(entryCount != texts.size() || entryCount != images.size() || entryCount != string1s.size() || entryCount != string2s.size() || entryCount != vals.size())
+		else if(entryCount != texts.size() || entryCount != images.size() || entryCount != string1s.size())
 		{
-			System.err.print("Movie Book Pack is incorrectly formatted. \n"
+			System.err.print("Monster Book Pack is incorrectly formatted. \n"
 					+ "Name Count: " + entryCount + "\n"
-					+ "Text Count: " + texts.size() + "\n"
-					+ "Pre Description Count: " + string1s.size() + "\n"
-					+ "Post Description Count: " + string2s.size() + "\n"
-					+ "Image Count: " + images.size() + "\n"
-					+ "Movie File Count: " + vals.size() + "\n");
+					+ "Description Count: " + texts.size() + "\n"
+					+ "Image Count: " + images.size() + "\n");
 		}
 		for(int i = 0; i < entryCount; i++)
 		{
-			Entries.add(new MovieBook(names.get(i), string1s.get(i), string2s.get(i), texts.get(i), images.get(i), vals.get(i)));
+			BookEntries.add(new MonsterBook(detail.get(i), texts.get(i), images.get(i)));
+		}
+		entryCount = names.size();
+		if(entryCount > hps.length/4)
+		{
+			throw new IllegalArgumentException("Monster Book Pack is incorrectly formatted. \n"
+					+ "Name Count: " + entryCount + "\n"
+					+ "Value Count: " + hps.length/4 + "\n");
+		}
+		else if(entryCount != hps.length/4)
+		{
+			System.err.print("Monster Book Pack is incorrectly formatted. \n"
+					+ "Name Count: " + entryCount + "\n"
+					+ "Value Count: " + hps.length/4 + "\n");
+		}
+		ByteBuffer hpData = ByteBuffer.wrap(hps);
+		for(int i = 0; i < names.size(); i++)
+		{
+			HpEntries.add(new MonsterMod(names.get(i), hpData.getInt()));
+		}
+		entryCount = string1s.size();
+		ByteBuffer valData = ByteBuffer.wrap(vals);
+		if(entryCount != vals.length/4)
+		{
+			System.err.print("Monster Book Pack is incorrectly formatted. \n"
+					+ "Log String Count: " + entryCount + "\n"
+					+ "Val Count: " + vals.length/4 + "\n");
+		}
+		for(int i = 0; i < entryCount; i++)
+		{
+			if(i>=vals.length/4) //Do nada
+			{
+				
+			}
+			else LogEntries.add(new MonsterLog(string1s.get(i), valData.getInt(i*4)));
 		}
 	}
 	private void initializeFromLines(List<String> lines)
 	{
-		MovieBook lastEntry = null;
+		MonsterMod lastModEntry = null;
+		MonsterBook lastBookEntry = null;
+		MonsterLog lastLogEntry = null;
 		for(String line : lines)
 		{
-			if(line.indexOf("<<Movie Name>>") != -1)
+			if(line.indexOf("<<Book Entry Name>>") != -1)
 			{
-				lastEntry = new MovieBook(line);
-				Entries.add(lastEntry);
+				lastBookEntry = new MonsterBook(line);
+				BookEntries.add(lastBookEntry);
 			}
-			else if(lastEntry != null) lastEntry.addLine(line);
+			else if(lastBookEntry != null && line.indexOf("<<Book") != -1) lastBookEntry.addLine(line);
+			else if(line.indexOf("<<Monster Log Text>>") != -1)
+			{
+				lastLogEntry = new MonsterLog(line);
+				LogEntries.add(lastLogEntry);
+			}
+			else if(lastLogEntry != null && line.indexOf("<<Log") != -1) lastLogEntry.addLine(line);
+			if(line.indexOf("<<Monster Mod Name>>") != -1)
+			{
+				lastModEntry = new MonsterMod(line);
+				HpEntries.add(lastModEntry);
+			}
+			else if(lastModEntry != null && line.indexOf("<<Mod") != -1) lastModEntry.addLine(line);
 		}
 	}
 	public String toString()
 	{
-		String ret = "Bedrock's Movies Book Intermediate File v1.0\n";
-		for(MovieBook entry : Entries)
+		String ret = "Bedrock's Monster Book Intermediate File v1.0\n";
+		for(MonsterBook entry : BookEntries)
+		{
+			ret += entry.toString();
+		}
+		for(MonsterLog entry : LogEntries)
+		{
+			ret += entry.toString();
+		}
+		for(MonsterMod entry : HpEntries)
 		{
 			ret += entry.toString();
 		}
@@ -88,42 +142,49 @@ public class MonsterBookManager implements OpenedFile
 	public byte[] toBytes() 
 	{
 		PCKGManager pack = new PCKGManager(getName());
-		byte[] nameBin = new byte[0];
-		for(MovieBook entry : Entries)
+		byte[] LogStringBin = new byte[0];
+		for(MonsterLog entry : LogEntries)
 		{
-			nameBin = Utils.mergeArrays(nameBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.name), (byte)0x00));
+			LogStringBin = Utils.mergeArrays(LogStringBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.name), (byte)0x00));
 		}
-		byte[] str1 = new byte[0];
-		for(MovieBook entry : Entries)
+		LogStringBin = Utils.mergeArrays(LogStringBin, (byte)0x00);
+		byte[] LogValBin = new byte[0];
+		for(MonsterLog entry : LogEntries)
 		{
-			str1 = Utils.mergeArrays(str1, Utils.mergeArrays(Utils.encodeStringToBytes(entry.preText), (byte)0x00));
+			LogValBin = Utils.mergeArrays(LogValBin, ByteBuffer.allocate(4).putInt(entry.val).array());
 		}
-		byte[] str2 = new byte[0];
-		for(MovieBook entry : Entries)
+		byte[] MonsterNameBin = new byte[0];
+		for(MonsterMod entry : HpEntries)
 		{
-			str2 = Utils.mergeArrays(str2, Utils.mergeArrays(Utils.encodeStringToBytes(entry.postText), (byte)0x00));
+			MonsterNameBin = Utils.mergeArrays(MonsterNameBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.name), (byte)0x00));
 		}
-		byte[] textBin = new byte[0];
-		for(MovieBook entry : Entries)
+		byte[] MonsterTextBin = new byte[0];
+		for(MonsterBook entry : BookEntries)
 		{
-			textBin = Utils.mergeArrays(textBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.description), (byte)0x00));
+			MonsterTextBin = Utils.mergeArrays(MonsterTextBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.description), (byte)0x00));
 		}
-		byte[] imageBin = new byte[0];
-		for(MovieBook entry : Entries)
+		ByteBuffer MonsterHPBin = ByteBuffer.allocate(HpEntries.size() * 4);
+		for(MonsterMod entry : HpEntries)
 		{
-			imageBin = Utils.mergeArrays(imageBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.image), (byte)0x00));
+			MonsterHPBin.putInt(entry.val);
 		}
-		byte[] valBin = new byte[0];
-		for(MovieBook entry : Entries)
+		byte[] MonsterImageBin = new byte[0];
+		for(MonsterBook entry : BookEntries)
 		{
-			valBin = Utils.mergeArrays(valBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.movie), (byte)0x00));
+			MonsterImageBin = Utils.mergeArrays(MonsterImageBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.image), (byte)0x00));
 		}
-		pack.addFile("String1", str1);
-		pack.addFile("String2", str2);
-		pack.addFile("Name", nameBin);
-		pack.addFile("Text", textBin);
-		pack.addFile("Image", imageBin);
-		pack.addFile("Val", valBin);
+		byte[] DetailBin = new byte[0];
+		for(MonsterBook entry : BookEntries)
+		{
+			DetailBin = Utils.mergeArrays(DetailBin, Utils.mergeArrays(Utils.encodeStringToBytes(entry.name), (byte)0x00));
+		}
+		pack.addFile("LogString1", LogStringBin);
+		pack.addFile("LogVal", LogValBin);
+		pack.addFile("MonsterName", MonsterNameBin);
+		pack.addFile("MonsterText", MonsterTextBin);
+		pack.addFile("MonsterHp", MonsterHPBin.array());
+		pack.addFile("MonsterImage", MonsterImageBin);
+		pack.addFile("Detail", DetailBin);
 		return pack.toBytes();
 	}
 	public void setName(String name) 
@@ -138,20 +199,31 @@ public class MonsterBookManager implements OpenedFile
 	{
 		return toBytes().length;
 	}
-	
-	public ArrayList<MovieBook> getEntries() 
+	public ArrayList<MonsterLog> getLogEntries() 
 	{
-		return Entries;
+		return LogEntries;
+	}
+	public ArrayList<MonsterMod> getHpEntries() 
+	{
+		return HpEntries;
+	}
+	public ArrayList<MonsterBook> getBookEntries() 
+	{
+		return BookEntries;
 	}
 	public void replaceFromData(byte[] data)
 	{
-		Entries.removeAll(Entries);
+		HpEntries.removeAll(HpEntries);
+		BookEntries.removeAll(BookEntries);
+		LogEntries.removeAll(LogEntries);
 		initializeFromBytes(data);
 	}
 	public void replaceFromIntermediateText(byte[] data)
 	{
 		List<String> lines = Utils.bytesToStrs(data);
-		Entries.removeAll(Entries);
+		HpEntries.removeAll(HpEntries);
+		BookEntries.removeAll(BookEntries);
+		LogEntries.removeAll(LogEntries);
 		initializeFromLines(lines);
 	}
 	public void importFromIntermediateText(byte[] data)

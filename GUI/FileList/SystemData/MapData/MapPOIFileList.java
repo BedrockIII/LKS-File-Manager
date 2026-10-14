@@ -14,6 +14,7 @@ public class MapPOIFileList extends FileList
 		this.parent = parent;
 		this.padding = padding;
 		this.Data = Data;
+		file = Data;
 		initializeAll();
 	}
 	protected void initializeAll()
@@ -28,6 +29,8 @@ public class MapPOIFileList extends FileList
 	protected void addActions()
 	{
 		// TODO Add Delete Action
+		addMoveUpAction(parent, parent.manager.getPOIs());
+		addMoveDownAction(parent, parent.manager.getPOIs());
 		add(actions);
 		addMouseListener();
 	}

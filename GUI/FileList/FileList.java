@@ -5,8 +5,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
@@ -25,6 +28,8 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public abstract class FileList extends JPanel
 {
+	protected JMenuItem moveUp = null;
+	protected JMenuItem moveDown = null;
 	protected int padding;
 	protected Data file = null;
 	protected GenericFileInfoGUI infoGUI = null;
@@ -165,5 +170,41 @@ public abstract class FileList extends JPanel
 	public String getSearchName()
 	{
 		return fileName.getText();
+	}
+	protected <T> void addMoveUpAction(CollapseableFileList parent, List<T> children)
+	{
+		if(moveUp == null)
+		{
+			moveUp = new JMenuItem("Move Up");
+			moveUp.addActionListener(e -> {
+				parent.moveUp(this, children);
+				addMoveDownAction(parent, children);
+				addMoveUpAction(parent, children);
+				GUI.update();
+			});
+		}
+		if(!parent.isFirst(this, children))
+		{
+			actions.add(moveUp);
+		}
+		else actions.remove(moveUp);
+	}
+	protected <T> void addMoveDownAction(CollapseableFileList parent, List<T> children)
+	{
+		if(moveDown == null)
+		{
+			moveDown = new JMenuItem("Move Down");
+			moveDown.addActionListener(e -> {
+				parent.moveDown(this, children);
+				addMoveDownAction(parent, children);
+				addMoveUpAction(parent, children);
+				GUI.update();
+			});
+		}
+		if(!parent.isLast(this, children))
+		{
+			actions.add(moveDown);
+		}
+		else actions.remove(moveDown);
 	}
 }

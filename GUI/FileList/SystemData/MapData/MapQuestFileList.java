@@ -14,6 +14,7 @@ public class MapQuestFileList extends FileList
 		this.parent = parent;
 		this.padding = padding;
 		this.Quest = Quest;
+		file = Quest;
 		initializeAll();
 	}
 	protected void initializeAll()
@@ -28,6 +29,8 @@ public class MapQuestFileList extends FileList
 	protected void addActions()
 	{
 		// TODO Add Delete Action
+		addMoveUpAction(parent, parent.manager.getQuests());
+		addMoveDownAction(parent, parent.manager.getQuests());
 		add(actions);
 		addMouseListener();
 	}

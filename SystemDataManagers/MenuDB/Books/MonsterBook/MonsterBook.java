@@ -1,64 +1,43 @@
-package SystemDataManagers.MenuDB.Books.MovieBook;
+package SystemDataManagers.MenuDB.Books.MonsterBook;
 
 import bFM.Data;
 import bFM.Utils;
 
-public class MovieBook implements Data
+public class MonsterBook implements Data
 	{
-		String name = "New Movie Entry";
-		String preText = "New Pre Movie Dialog";
-		String postText = "New Post Movie Dialog";
-		String description = "hanauta1";
-		String image = "mov_No01";
-		String movie = "Mov_05";
-		public MovieBook(String name, String preText, String postText, String description, String image, String movie)
+		String name = "New UMA Entry";
+		String description = "New UMA Description";
+		String image = "oni_normal";
+		public MonsterBook(String name, String description, String image)
 		{
 			this.name = name;
-			this.preText = preText;
-			this.postText = postText;
 			this.description = description;
 			this.image = image;
-			this.movie = movie;
 		}
-		public MovieBook(String line)
+		public MonsterBook(String line)
 		{
 			this.name = Utils.formatString(line);
 		}
-		public MovieBook() 
+		public MonsterBook() 
 		{
 			// Use Defaults
 		}
 		public void addLine(String line)
 		{
-			if(line.indexOf("<<Description>>") != -1)
+			if(line.indexOf("<<Book Description>>") != -1)
 			{
 				description = Utils.formatString(line);
 			}
-			else if(line.indexOf("<<Pre Watch Description>>") != -1)
-			{
-				preText = Utils.formatString(line);
-			}
-			else if(line.indexOf("<<Post Watch Description>>") != -1)
-			{
-				postText = Utils.formatString(line);
-			}
-			else if(line.indexOf("<<Image>>") != -1)
+			else if(line.indexOf("<<Book Image>>") != -1)
 			{
 				image = Utils.formatString(line);
-			}
-			else if(line.indexOf("<<Movie File Name>>") != -1)
-			{
-				movie = Utils.formatString(line);
 			}
 		}
 		public String toString()
 		{
-			String ret = "<<Movie Name>> \"" + Utils.toFormatedString(name) + "\"\n";
-			ret += "\t<<Description>> \"" + Utils.toFormatedString(description) + "\"\n";
-			ret += "\t<<Pre Watch Description>> \"" + Utils.toFormatedString(preText) + "\"\n";
-			ret += "\t<<Post Watch Description>> \"" + Utils.toFormatedString(postText) + "\"\n";
-			ret += "\t<<Image>> \"" + Utils.toFormatedString(image) + "\"\n";
-			ret += "\t<<Movie File Name>> \"" + movie + "\"\n";
+			String ret = "<<Book Entry Name>> \"" + Utils.toFormatedString(name) + "\"\n";
+			ret += "\t<<Book Description>> \"" + Utils.toFormatedString(description) + "\"\n";
+			ret += "\t<<Book Image>> \"" + Utils.toFormatedString(image) + "\"\n";
 			return ret;
 		}
 		public boolean equals(String name) 
