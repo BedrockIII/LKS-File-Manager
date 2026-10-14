@@ -2,6 +2,7 @@ package GUI.FileList.SystemData.MapData;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.MapData.MapDataManagerFileInfo;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.MapData.MapDataManager;
 import bFM.Settings;
@@ -44,8 +45,7 @@ public class MapDataManagerFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new MapDataManagerFileInfo(manager);
 	}
 	protected void addActions() 
 	{

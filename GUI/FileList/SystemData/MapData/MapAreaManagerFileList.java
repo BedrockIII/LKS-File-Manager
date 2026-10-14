@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.MapData;
 
+import GUI.FileInfo.MenuDB.MapData.MapAreaManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.MapData.MapArea;
 import SystemDataManagers.MenuDB.MapData.MapAreaManager;
@@ -34,8 +35,7 @@ public class MapAreaManagerFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new MapAreaManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

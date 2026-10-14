@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.MapData;
 
+import GUI.FileInfo.MenuDB.MapData.MapQuestManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.MapData.MapQuestInfo;
 import SystemDataManagers.MenuDB.MapData.MapQuestInfoManager;
@@ -34,8 +35,7 @@ public class MapQuestManagerFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new MapQuestManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{
