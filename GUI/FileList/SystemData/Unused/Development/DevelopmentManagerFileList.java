@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.Development.DevelopmentManagerFileInfo;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Unused.Development.Development;
 import SystemDataManagers.MenuDB.Unused.Development.DevelopmentManager;
@@ -49,8 +50,7 @@ public class DevelopmentManagerFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new PublicArtManagerInfoGUI(manager);
+		infoGUI = new DevelopmentManagerFileInfo(manager);
 	}
 	protected void addActions() 
 	{

@@ -1,5 +1,7 @@
 package GUI.FileList.SystemData.ChairMessage;
 
+
+import GUI.FileInfo.MenuDB.ChairMessage.ThroneMessageInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessage;
 
@@ -22,8 +24,7 @@ public class ThroneMessageListGUI extends FileList
 	}
 	protected void initializeInfoGUI()
 	{
-		// TODO Auto-generated method stub
-
+		infoGUI = new ThroneMessageInfoGUI(Message);
 	}
 	protected void addActions()
 	{

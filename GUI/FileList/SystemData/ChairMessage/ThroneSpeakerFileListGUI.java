@@ -3,6 +3,8 @@ package GUI.FileList.SystemData.ChairMessage;
 import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
+
+import GUI.FileInfo.MenuDB.ChairMessage.ThroneMessageSpeakerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessage;
 import bFM.Settings;
@@ -36,8 +38,7 @@ public class ThroneSpeakerFileListGUI extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new ThroneMessageSpeakerInfoGUI(Messages, SpeakerName);
 	}
 	protected void addActions() 
 	{

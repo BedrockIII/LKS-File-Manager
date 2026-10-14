@@ -9,6 +9,39 @@ public class Development implements Data
 		String icon = "Unused";
 		String image = "X8_Y8";
 		int buildingCode;//2byte
+		public String getImage() {
+			return image;
+		}
+		public void setImage(String image) {
+			this.image = image;
+		}
+		public int getBuildingCode() {
+			return buildingCode;
+		}
+		public void setBuildingCode(int buildingCode) {
+			this.buildingCode = buildingCode;
+		}
+		public int getId() {
+			return id;
+		}
+		public void setId(int id) {
+			this.id = id;
+		}
+		public int getxPos() {
+			return xPos;
+		}
+		public void setxPos(int xPos) {
+			this.xPos = xPos;
+		}
+		public int getyPos() {
+			return yPos;
+		}
+		public void setyPos(int yPos) {
+			this.yPos = yPos;
+		}
+		public void setIcon(String icon) {
+			this.icon = icon;
+		}
 		int id;//2byte
 		int xPos;//2byte
 		int yPos;//2byte

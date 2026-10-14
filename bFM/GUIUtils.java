@@ -13,6 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -398,5 +399,46 @@ public abstract class GUIUtils
 		
 		return field;
 	}
-
+	public static JTextArea createStringTextArea(String value, Consumer<String> setterFunction)
+	{
+		JTextArea field = new JTextArea("" + value);
+		
+		field.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void insertUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(field.getText());
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(field.getText());
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		field.setLineWrap(true);
+		return field;
+	}
+	public static JTextArea createNameTextArea(String value, Consumer<String> setterFunction)
+	{
+		JTextArea field = new JTextArea("" + value);
+		
+		field.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void insertUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(field.getText());
+				GUI.update();
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(field.getText());
+				GUI.update();
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		field.setLineWrap(true);
+		return field;
+	}
 }

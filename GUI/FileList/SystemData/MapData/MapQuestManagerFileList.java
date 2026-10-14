@@ -18,7 +18,7 @@ public class MapQuestManagerFileList extends CollapseableFileList
 	}
 	protected void initializeAll() 
 	{
-		initializeListGUI("Quest Data");
+		initializeListGUI("(Unused?) Quest Data");
 		initializeSubGUI();
 		addActions();
 		reAddComponents();

@@ -35,10 +35,10 @@ public class ChairCameraManagerFileInfo extends GenericFileInfoGUI
 		removeAll();
 		setLayout(new GridBagLayout());
 		GridBagConstraints layout = Settings.getDefaultConstraints();
-		layout.weighty = 1.0;
 		add(new LabeledInputBox("Total Camera Count: ", numCams), layout);
 		add(new LabeledInputBox("Castle 1 Camera Count: ", numCams1), layout);
 		add(new LabeledInputBox("Castle 2 Camera Count: ", numCams2), layout);
+		layout.weighty = 1.0;
 		add(new LabeledInputBox("Castle 3 Camera Count: ", numCams3), layout);
 	}
 	public void update() 

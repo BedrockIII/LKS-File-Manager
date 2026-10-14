@@ -2,6 +2,7 @@ package GUI.FileList.SystemData.ChairMessage;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.ChairMessage.ThroneMessageFileInfo;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import bFM.Settings;
@@ -41,8 +42,7 @@ public class ThroneMessageFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new ThroneMessageFileInfo(manager);
 	}
 	protected void addActions() 
 	{

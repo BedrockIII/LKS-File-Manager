@@ -3,6 +3,7 @@ package GUI.FileList.SystemData.Unused.Development;
 import javax.swing.JMenuItem;
 
 import GUI.GUI;
+import GUI.FileInfo.MenuDB.Development.DevelopmentInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Unused.Development.Development;
 
@@ -26,8 +27,7 @@ public class DevelopmentListGUI extends FileList
 	}
 	protected void initializeInfoGUI() 
 	{
-		//TODO
-		//this.infoGUI = new PublicArtInfoGUI(file);
+		this.infoGUI = new DevelopmentInfoGUI(file);
 	}
 	protected void addActions() 
 	{
