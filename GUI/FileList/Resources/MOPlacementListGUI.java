@@ -476,7 +476,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 					else removeConstantPlaceAction();
 					addChangeCategoryAction();
 					addObjectAction();
-					addDeleteAction();
+					addDeleteAction("Delete Group", parent, parent.data);
 					addMoveDownAction(parent, parent.data);
 					addMoveUpAction(parent, parent.data);
 					add(actions);
@@ -496,15 +496,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 					JMenuItem removeElem = new JMenuItem("Add Object");
 					removeElem.addActionListener(e -> {
 						new NewMobObjectWindow(this);
-						GUI.update();
-					});
-					actions.add(removeElem);
-				}
-				protected void addDeleteAction()
-				{
-					JMenuItem removeElem = new JMenuItem("Delete Group");
-					removeElem.addActionListener(e -> {
-						parent.removeGroup(this);
 						GUI.update();
 					});
 					actions.add(removeElem);
@@ -581,18 +572,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 					{
 						addMoveDownAction(parent, parent.data.getObjects());
 						addMoveUpAction(parent, parent.data.getObjects());
-						addDeleteAction();
+						addDeleteAction("Delete Object", parent, parent.data.getObjects());
 						add(actions);
 						addMouseListener();
-					}
-					protected void addDeleteAction()
-					{
-						JMenuItem removeElem = new JMenuItem("Delete Object");
-						removeElem.addActionListener(e -> {
-							parent.removeChild(this, parent.data.getObjects());
-							GUI.update();
-						});
-						actions.add(removeElem);
 					}
 					public void update()
 					{

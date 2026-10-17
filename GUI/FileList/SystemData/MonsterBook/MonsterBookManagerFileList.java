@@ -2,6 +2,7 @@ package GUI.FileList.SystemData.MonsterBook;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.MonsterBook.MonsterBookManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterBookManager;
 import bFM.Settings;
@@ -41,8 +42,7 @@ public class MonsterBookManagerFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new MonsterBookManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

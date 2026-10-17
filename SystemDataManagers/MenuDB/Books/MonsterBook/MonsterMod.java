@@ -7,6 +7,12 @@ public class MonsterMod implements Data
 {
 	String name = "";
 	int val = -1;
+	public int getVal() {
+		return val;
+	}
+	public void setVal(int val) {
+		this.val = val;
+	}
 	public MonsterMod(String name, int val)
 	{
 		this.name = name;

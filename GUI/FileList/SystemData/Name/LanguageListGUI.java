@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.Name;
 
+import GUI.FileInfo.MenuDB.Name.KeyboardManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Name.Language;
 import bFM.Settings;
@@ -41,8 +42,7 @@ public class LanguageListGUI extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new KeyboardManagerInfoGUI(name);
 	}
 	protected void addActions() 
 	{

@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.MonsterBook;
 
+import GUI.FileInfo.MenuDB.MonsterBook.MonsterHPInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterMod;
 
@@ -23,7 +24,7 @@ public class MonsterHPListGUI extends FileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//infoGUI = new MapAreaInfoGUI(hp);
+		infoGUI = new MonsterHPInfoGUI(hp);
 	}
 	protected void addActions()
 	{

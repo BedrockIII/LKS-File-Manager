@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.Name;
 
+import GUI.FileInfo.MenuDB.Name.NameMenuInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Name.NameManager;
 import bFM.Settings;
@@ -38,8 +39,7 @@ public class NameManagerFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new NameMenuInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

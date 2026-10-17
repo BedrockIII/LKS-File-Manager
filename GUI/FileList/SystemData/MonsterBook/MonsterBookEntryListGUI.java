@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.MonsterBook;
 
+import GUI.FileInfo.MenuDB.MonsterBook.MonsterBookEntryInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterBook;
 
@@ -23,7 +24,7 @@ public class MonsterBookEntryListGUI extends FileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//infoGUI = new MapAreaInfoGUI(hp);
+		infoGUI = new MonsterBookEntryInfoGUI(entry);
 	}
 	protected void addActions()
 	{

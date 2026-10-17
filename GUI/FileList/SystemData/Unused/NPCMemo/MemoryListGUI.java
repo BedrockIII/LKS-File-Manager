@@ -29,7 +29,7 @@ public class MemoryListGUI extends FileList
 	}
 	protected void addActions()
 	{
-		addDeleteAction(parent, parent.manager.getEntries(), "Delete Memory");
+		addDeleteAction("Delete Memory", parent, parent.manager.getEntries());
 		addMoveUpAction(parent, parent.manager.getEntries());
 		addMoveDownAction(parent, parent.manager.getEntries());
 		add(actions);

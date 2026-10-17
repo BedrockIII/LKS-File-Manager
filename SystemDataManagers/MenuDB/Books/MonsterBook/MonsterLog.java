@@ -7,6 +7,12 @@ public class MonsterLog implements Data
 	{
 		String name = "New Log Entry";
 		int val = 0;
+		public int getVal() {
+			return val;
+		}
+		public void setVal(int val) {
+			this.val = val;
+		}
 		public MonsterLog(String name, int val)
 		{
 			this.name = name;

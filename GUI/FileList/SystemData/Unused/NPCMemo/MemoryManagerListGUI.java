@@ -3,7 +3,6 @@ package GUI.FileList.SystemData.Unused.NPCMemo;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.MemoryMemo;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.MemoryMemoManager;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class MemoryManagerListGUI extends CollapseableFileList

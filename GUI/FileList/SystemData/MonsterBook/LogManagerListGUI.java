@@ -2,6 +2,7 @@ package GUI.FileList.SystemData.MonsterBook;
 
 import java.util.ArrayList;
 
+import GUI.FileInfo.MenuDB.MonsterBook.LogManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterLog;
 import bFM.Settings;
@@ -34,8 +35,7 @@ public class LogManagerListGUI extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new LogManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

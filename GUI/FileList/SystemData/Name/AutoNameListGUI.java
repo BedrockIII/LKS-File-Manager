@@ -1,27 +1,30 @@
 package GUI.FileList.SystemData.Name;
 
+import GUI.FileInfo.MenuDB.Name.NameInfoGUI;
 import GUI.FileList.FileList;
+import SystemDataManagers.MenuDB.Name.GeneratedName;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class AutoNameListGUI extends FileList
 {
-	String name;
+	GeneratedName name;
 	NameListListGUI parent;
-	public AutoNameListGUI(String name, int padding, NameListListGUI parent)
+	public AutoNameListGUI(GeneratedName name, NameListListGUI parent)
 	{
 		this.name = name;
-		this.padding = padding;
+		this.padding = parent.getPadding() + Settings.indentSize;
 		this.parent = parent;
 		initializeAll();
 	}
 	protected void initializeAll()
 	{
-		initializeListGUI(name);
+		initializeListGUI(name.getName());
 		addActions();
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
+		infoGUI = new NameInfoGUI(name);
 	}
 	protected void addActions()
 	{

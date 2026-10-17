@@ -3,6 +3,7 @@ package GUI.FileList.SystemData.MovieBook;
 import javax.swing.JMenuItem;
 
 import GUI.GUI;
+import GUI.FileInfo.MenuDB.MovieBook.MovieInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Books.MovieBook.MovieBook;
 
@@ -26,8 +27,7 @@ public class MovieBookListGUI extends FileList
 	}
 	protected void initializeInfoGUI() 
 	{
-		//TODO
-		//this.infoGUI = new PublicArtInfoGUI(file);
+		infoGUI = new MovieInfoGUI(file);
 	}
 	protected void addActions() 
 	{

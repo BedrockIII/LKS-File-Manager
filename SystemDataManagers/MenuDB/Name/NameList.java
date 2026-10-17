@@ -9,19 +9,21 @@ import bFM.Utils;
 public class NameList implements Data
 {
 	Charset encoding;
-	ArrayList<String> Names;
+	ArrayList<GeneratedName> Names = new ArrayList<GeneratedName>();
 	NameList(byte[] data, Charset encoding)
 	{
 		this.encoding = encoding;
-		Names = Utils.extractStringsNoFormatting(data);
+		ArrayList<String> Names = Utils.extractStringsNoFormatting(data);
 		if(Names.size() == 0) return;
 		String last = Names.remove(Names.size()-1);
 		if(last.equals("/") == false)
 		{
 			throw new IllegalArgumentException("Name List Doesn't End In Loop Char \n" + last);
 		}
+		for(String name : Names)
+			this.Names.add(new GeneratedName(name));
 	}
-	public ArrayList<String> getNames()
+	public ArrayList<GeneratedName> getNames()
 	{
 		return Names;
 	}
@@ -32,14 +34,14 @@ public class NameList implements Data
 	public byte[] toBytes() 
 	{
 		byte[] ret = new byte[0];
-		for(String Name : Names)
+		for(GeneratedName Name : Names)
 		{
 			try
 			{
-				ret = Utils.mergeArrays(ret, Utils.mergeArrays(Utils.encodeStringToBytes(Name, encoding), (byte)0x00));
+				ret = Utils.mergeArrays(ret, Utils.mergeArrays(Utils.encodeStringToBytes(Name.getName(), encoding), (byte)0x00));
 			} catch (Exception e)
 			{
-				ret = Utils.mergeArrays(ret, Utils.mergeArrays(Name.getBytes(Charset.forName("Shift-JIS")), (byte)0x00));
+				ret = Utils.mergeArrays(ret, Utils.mergeArrays(Name.getName().getBytes(Charset.forName("Shift-JIS")), (byte)0x00));
 			}
 		}
 		return Utils.mergeArrays(ret, (byte)'/');

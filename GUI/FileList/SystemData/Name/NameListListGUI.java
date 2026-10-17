@@ -1,8 +1,9 @@
 package GUI.FileList.SystemData.Name;
 
+import GUI.FileInfo.MenuDB.Name.GeneratedNameManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
+import SystemDataManagers.MenuDB.Name.GeneratedName;
 import SystemDataManagers.MenuDB.Name.NameList;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class NameListListGUI extends CollapseableFileList
@@ -26,16 +27,14 @@ public class NameListListGUI extends CollapseableFileList
 	public void initializeSubGUI()
 	{
 		subEntries.removeAll(subEntries);
-		for(String a : manager.getNames())
+		for(GeneratedName a : manager.getNames())
 		{
-			subEntries.add(new AutoNameListGUI(a, padding + Settings.indentSize, this));
+			subEntries.add(new AutoNameListGUI(a, this));
 		}
-		
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new GeneratedNameManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

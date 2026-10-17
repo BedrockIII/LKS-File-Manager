@@ -2,6 +2,7 @@ package GUI.FileList.SystemData.MonsterBook;
 
 import java.util.ArrayList;
 
+import GUI.FileInfo.MenuDB.MonsterBook.MonsterHPManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterMod;
 import bFM.Settings;
@@ -34,8 +35,7 @@ public class MonsterHPManagerListGUI extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new MonsterHPManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

@@ -85,4 +85,34 @@ public class MovieBook implements Data
 		{
 			throw new UnsupportedOperationException("getSize() should not be called on type " + this.getClass());
 		}
+		public String getPreText() {
+			return preText;
+		}
+		public void setPreText(String preText) {
+			this.preText = preText;
+		}
+		public String getPostText() {
+			return postText;
+		}
+		public void setPostText(String postText) {
+			this.postText = postText;
+		}
+		public String getDescription() {
+			return description;
+		}
+		public void setDescription(String description) {
+			this.description = description;
+		}
+		public String getImage() {
+			return image;
+		}
+		public void setImage(String image) {
+			this.image = image;
+		}
+		public String getMovie() {
+			return movie;
+		}
+		public void setMovie(String movie) {
+			this.movie = movie;
+		}
 	}

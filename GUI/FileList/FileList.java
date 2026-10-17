@@ -207,7 +207,7 @@ public abstract class FileList extends JPanel
 		}
 		else actions.remove(moveDown);
 	}
-	protected <T> void addDeleteAction(CollapseableFileList parent, List<T> children, String name)
+	protected <T> void addDeleteAction(String name, CollapseableFileList parent, List<T> children)
 	{
 		JMenuItem Delete = new JMenuItem(name);
 		Delete.addActionListener(e -> {
