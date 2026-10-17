@@ -9,6 +9,8 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -288,7 +290,7 @@ public abstract class CollapseableFileList extends FileList
 		reAddComponents();
 	}
 	@SuppressWarnings("unchecked")
-	public <T> void moveDown(FileList child, List<T> children) 
+	<T> void moveDown(FileList child, List<T> children) 
 	{
 		if(children == null)throw new IllegalArgumentException("Passed List Is Null!");
 		if(children.size() <= 0)throw new IllegalArgumentException("Passed List Is Size 0!");
@@ -313,11 +315,25 @@ public abstract class CollapseableFileList extends FileList
 		children.add(index + 1, (T) child.file);
 		reAddComponents();
 	}
-	public <T> void removeChild(FileList child, List<T> children)
+	<T> void removeChild(FileList child, List<T> children)
 	{
 		children.remove(child.file);
 		remove(child);
 		subEntries.remove(child);
 		reAddComponents();
+	}
+	@SuppressWarnings("unchecked")
+	protected <T, U> void addChildAction(String name, List<T> children, Supplier<T> childConstructor, BiFunction<T, U, FileList> guiConstructor)
+	{
+		JMenuItem NewChild = new JMenuItem(name);
+		NewChild.addActionListener(e ->
+		{
+			T child = childConstructor.get();
+			children.add(child);
+			subEntries.add(guiConstructor.apply(child, (U) this));
+			reAddComponents();
+			GUI.update();
+		});
+		actions.add(NewChild);
 	}
 }

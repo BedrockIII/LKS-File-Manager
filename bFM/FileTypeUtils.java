@@ -29,6 +29,7 @@ import GUI.FileList.SystemData.Name.NameManagerFileList;
 import GUI.FileList.SystemData.PublicArt.PublicArtManagerFileList;
 import GUI.FileList.SystemData.RecordBook.RecordBookManagerFileList;
 import GUI.FileList.SystemData.Unused.Development.DevelopmentManagerFileList;
+import GUI.FileList.SystemData.Unused.NPCMemo.NPCMemoManagerFileList;
 import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
@@ -52,6 +53,7 @@ import SystemDataManagers.MenuDB.MenuString.MenuStringManager;
 import SystemDataManagers.MenuDB.Name.NameManager;
 import SystemDataManagers.MenuDB.PublicArt.PublicArtManager;
 import SystemDataManagers.MenuDB.Unused.Development.DevelopmentManager;
+import SystemDataManagers.MenuDB.Unused.NPCMemo.NPCMemoManager;
 import VMC.VMCConverter;
 import WorldFileManager.FixedPointManager;
 import colReader.ColReader;
@@ -326,7 +328,20 @@ public class FileTypeUtils
 				e.printStackTrace();
 				return new PCKGManager(file, name);
 			}
-		}else if (fileType.equals("MissionDB"))
+		}else if (fileType.equals("NPCMemoDB"))
+		{
+			try
+			{
+				return new NPCMemoManager(file);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Could Not Parse " + fileType + " File. Is it the right Version?");
+				e.printStackTrace();
+				return new PCKGManager(file, name);
+			}
+		}
+		else if (fileType.equals("MissionDB"))
 		{
 			try
 			{
@@ -421,7 +436,7 @@ public class FileTypeUtils
 			}
 			else if(name.equals(PublicArtManager.FileName))
 			{
-				return "ExplanationDB";
+				return "PublicArtDB";
 			}
 			else if(name.equals(ExplanationManager.FileName))
 			{
@@ -446,6 +461,10 @@ public class FileTypeUtils
 			else if(name.equals(MonsterBookManager.FileName))
 			{
 				return "MonsterBookDB";
+			}
+			else if(name.equals(NPCMemoManager.FileName))
+			{
+				return "NPCMemoDB";
 			}
 			//Check if special TODO
 			//else return "Package"
@@ -568,6 +587,10 @@ public class FileTypeUtils
 		else if (file instanceof MonsterBookManager)
 		{
 			return new MonsterBookManagerFileList((MonsterBookManager) file, padding);
+		}
+		else if (file instanceof NPCMemoManager)
+		{
+			return new NPCMemoManagerFileList((NPCMemoManager) file, padding);
 		}
 		else if(file instanceof MSDBManager)
 		{
