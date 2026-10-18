@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.Explanation.ExplanationManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Explanation.Explanation;
 import SystemDataManagers.MenuDB.Explanation.ExplanationManager;
@@ -49,7 +50,7 @@ public class ExplanationManagerFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new ExplanationManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

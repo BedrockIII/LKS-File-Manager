@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.Unused.NPCMemo;
 
+import GUI.FileInfo.MenuDB.NPCMemo.MemoryManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.MemoryMemo;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.MemoryMemoManager;
@@ -35,8 +36,7 @@ public class MemoryManagerListGUI extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new MapAreaManagerInfoGUI(manager);
+		infoGUI = new MemoryManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

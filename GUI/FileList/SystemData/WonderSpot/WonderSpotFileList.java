@@ -1,15 +1,12 @@
-package GUI.FileList.SystemData;
+package GUI.FileList.SystemData.WonderSpot;
 
 import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import GUI.GUI;
-import GUI.FileInfo.MenuDB.WonderSpot.WonderSpotInfoGUI;
 import GUI.FileInfo.MenuDB.WonderSpot.WonderSpotListInfoGUI;
 import GUI.FileList.CollapseableFileList;
-import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Books.WonderSpotBook.WonderSpot;
 import SystemDataManagers.MenuDB.Books.WonderSpotBook.WonderSpotManager;
 import bFM.GUIUtils;
@@ -93,49 +90,6 @@ public class WonderSpotFileList extends CollapseableFileList
 	private void addReplaceRawAction()
 	{
 		actions.add(GUIUtils.createImportAction("Replace Spots from raw Album.bin file", "Wonder Spot Database Binary File", "bin", manager::replaceFromData, this));
-	}
-	public class WonderSpotGUI extends FileList
-	{
-		WonderSpot file;
-		WonderSpotFileList parent;
-		public WonderSpotGUI(WonderSpot file, int padding, WonderSpotFileList parent)
-		{
-			this.padding = padding;
-			this.file = file;
-			this.parent = parent;
-			initializeAll();
-		}
-		protected void initializeAll() 
-		{
-			initializeListGUI("Spot: \"" + file.getName() + "\"");
-			initializeInfoGUI();
-			addActions();
-		}
-		protected void initializeInfoGUI() 
-		{
-			this.infoGUI = new WonderSpotInfoGUI(file);
-		}
-		protected void addActions() 
-		{
-			addDeleteAction();
-			add(actions);
-			addMouseListener();
-		}
-		public void update()
-		{
-			fileName.setText("Spot: \"" + file.getName() + "\"");
-			super.update();
-		}
-		protected void addDeleteAction()
-		{
-			JMenuItem replace = new JMenuItem("Delete Wonder Spot");
-			replace.addActionListener(e -> 
-			{
-				parent.removeSpot(this);
-				GUI.update();
-			});
-			actions.add(replace);
-		}
 	}
 	public void removeSpot(WonderSpotGUI wonderSpotGUI) 
 	{

@@ -1,12 +1,12 @@
-package GUI.FileList.SystemData;
+package GUI.FileList.SystemData.CockpitLog;
 
 import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.CockpitLog.CockpitLogManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
-import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.CockpitLog.CockpitLogManager;
 import SystemDataManagers.MenuDB.CockpitLog.LogEntry;
 import bFM.Settings;
@@ -49,8 +49,7 @@ public class CockpitLogFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new CockpitLogManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{
@@ -90,38 +89,5 @@ public class CockpitLogFileList extends CollapseableFileList
 	private void addReplaceRawAction()
 	{
 		//actions.add(GUIUtils.createImportAction("Replace Entries from raw Humming.bin file", "Humming Book Database Binary File", "bin", manager::replaceFromData, this));
-	}
-	public class LogEntryGUI extends FileList
-	{
-		LogEntry file;
-		CockpitLogFileList parent;
-		public LogEntryGUI(LogEntry entry, int padding, CockpitLogFileList parent)
-		{
-			this.padding = padding;
-			this.file = entry;
-			this.parent = parent;
-			initializeAll();
-		}
-		protected void initializeAll() 
-		{
-			initializeListGUI("Entry: \"" + file.getText() + "\"");
-			//initializeInfoGUI();
-			addActions();
-		}
-		protected void initializeInfoGUI() 
-		{
-			//TODO
-			//this.infoGUI = new HummingEntryInfoGUI(file);
-		}
-		protected void addActions() 
-		{
-			add(actions);
-			addMouseListener();
-		}
-		public void update()
-		{
-			fileName.setText("Entry: \"" + file.getText() + "\"");
-			super.update();
-		}
 	}
 }

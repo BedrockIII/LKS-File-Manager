@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.CastlePicture;
 
+import GUI.FileInfo.MenuDB.CastlePicture.CastlePictureInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.CastlePicture.CastlePicture;
 
@@ -23,8 +24,7 @@ public class CastlePictureFileList extends FileList
 		}
 		protected void initializeInfoGUI() 
 		{
-			//TODO
-			//this.infoGUI = new HummingEntryInfoGUI(file);
+			infoGUI = new CastlePictureInfoGUI(file);
 		}
 		protected void addActions() 
 		{

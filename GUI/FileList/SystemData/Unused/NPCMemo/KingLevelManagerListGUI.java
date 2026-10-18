@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.Unused.NPCMemo;
 
+import GUI.FileInfo.MenuDB.NPCMemo.KingLevelManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.KingLevel;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.KingLevelManager;
@@ -34,8 +35,7 @@ public class KingLevelManagerListGUI extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new MapAreaManagerInfoGUI(manager);
+		infoGUI = new KingLevelManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

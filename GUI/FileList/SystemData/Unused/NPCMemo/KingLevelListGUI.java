@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.Unused.NPCMemo;
 
+import GUI.FileInfo.MenuDB.NPCMemo.KingLevelInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.KingLevel;
 
@@ -23,8 +24,7 @@ public class KingLevelListGUI extends FileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new MapAreaInfoGUI(Level);
+		infoGUI = new KingLevelInfoGUI(Level);
 	}
 	protected void addActions()
 	{

@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.Unused.NPCMemo;
 
+import GUI.FileInfo.MenuDB.NPCMemo.MemoryInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.MemoryMemo;
 import bFM.Settings;
@@ -24,8 +25,7 @@ public class MemoryListGUI extends FileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new MapAreaInfoGUI(Level);
+		infoGUI = new MemoryInfoGUI(Memory);
 	}
 	protected void addActions()
 	{

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.Record.RecordBookManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookEntry;
 import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookManager;
@@ -49,8 +50,7 @@ public class RecordBookManagerFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new HummingBookListInfoGUI(manager);
+		infoGUI = new RecordBookManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

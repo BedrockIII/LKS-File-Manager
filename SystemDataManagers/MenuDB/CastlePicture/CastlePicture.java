@@ -106,4 +106,40 @@ public class CastlePicture implements Data
 	{
 		this.text = text;
 	}
+	public int getFlag1() {
+		return flag1;
+	}
+	public void setFlag1(int flag1) {
+		this.flag1 = flag1;
+	}
+	public int getFlag2() {
+		return flag2;
+	}
+	public void setFlag2(int flag2) {
+		this.flag2 = flag2;
+	}
+	public int getFlag3() {
+		return flag3;
+	}
+	public void setFlag3(int flag3) {
+		this.flag3 = flag3;
+	}
+	public int getFlag4() {
+		return flag4;
+	}
+	public void setFlag4(int flag4) {
+		this.flag4 = flag4;
+	}
+	public int getFlag5() {
+		return flag5;
+	}
+	public void setFlag5(int flag5) {
+		this.flag5 = flag5;
+	}
+	public int getFlag6() {
+		return flag6;
+	}
+	public void setFlag6(int flag6) {
+		this.flag6 = flag6;
+	}
 }

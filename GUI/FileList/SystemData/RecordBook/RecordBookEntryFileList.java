@@ -3,6 +3,7 @@ package GUI.FileList.SystemData.RecordBook;
 import javax.swing.JMenuItem;
 
 import GUI.GUI;
+import GUI.FileInfo.MenuDB.Record.RecordBookEntryInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookEntry;
 
@@ -26,8 +27,7 @@ public class RecordBookEntryFileList extends FileList
 		}
 		protected void initializeInfoGUI() 
 		{
-			//TODO
-			//this.infoGUI = new HummingEntryInfoGUI(file);
+			infoGUI = new RecordBookEntryInfoGUI(file);
 		}
 		protected void addActions() 
 		{

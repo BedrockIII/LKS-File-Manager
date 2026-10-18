@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.Unused.NPCMemo;
 
+import GUI.FileInfo.MenuDB.NPCMemo.ActionManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.ActionMemo;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.ActionMemoManager;
@@ -36,8 +37,7 @@ public class ActionManagerListGUI extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new MapAreaManagerInfoGUI(manager);
+		infoGUI = new ActionManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{

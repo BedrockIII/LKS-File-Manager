@@ -1,5 +1,6 @@
 package GUI.FileList.SystemData.Unused.NPCMemo;
 
+import GUI.FileInfo.MenuDB.NPCMemo.ActionInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.ActionMemo;
 
@@ -23,8 +24,7 @@ public class ActionListGUI extends FileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//TODO
-		//infoGUI = new MapAreaInfoGUI(Level);
+		infoGUI = new ActionInfoGUI(Action);
 	}
 	protected void addActions()
 	{

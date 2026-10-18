@@ -56,4 +56,10 @@ public class LogEntry implements Data
 	{
 		this.text = text;
 	}
+	public int getFlag() {
+		return flag;
+	}
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
 }

@@ -2,6 +2,7 @@ package GUI.FileList.SystemData.Unused.NPCMemo;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import GUI.FileInfo.MenuDB.NPCMemo.NPCMemoManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.NPCMemoManager;
 import bFM.GUIUtils;
@@ -54,7 +55,7 @@ public class NPCMemoManagerFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI()
 	{
-		//infoGUI = new DevelopmentManagerFileInfo(manager);
+		infoGUI = new NPCMemoManagerInfoGUI(manager);
 	}
 	protected void addActions() 
 	{
