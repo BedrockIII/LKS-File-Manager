@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class AnimalBookManager implements OpenedFile
+public class AnimalBookManager implements OpenedFile, IntermediateFileFormat
 {
 	ArrayList<AnimalEntry> Entries = new ArrayList<AnimalEntry>();
 	public AnimalBookManager(byte[] data)
@@ -128,19 +129,22 @@ public class AnimalBookManager implements OpenedFile
 		Entries.removeAll(Entries);
 		initializeFromBytes(data);
 	}
-	public void replaceFromBAB(byte[] data)
+	public void initializeFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		Entries.removeAll(Entries);
 		initializeFromLines(lines);
 	}
-	public void importFromBAB(byte[] data)
+	public void importFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		initializeFromLines(lines);
 	}
-	public byte[] toBAB()
+	public byte[] toBIT()
 	{
 		return Utils.encodeStringToBytes(toString());
+	}
+	@Override
+	public String getBITName()
+	{
+		return "AnimalBook.bit";
 	}
 }

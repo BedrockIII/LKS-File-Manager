@@ -2,12 +2,9 @@ package GUI.FileList.SystemData.ChairCamera;
 
 import java.util.ArrayList;
 
-import javax.swing.JMenuItem;
-
 import GUI.FileInfo.MenuDB.ChairCamera.ChairCameraLevelInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.ChairCamera.ChairCamera;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class ChairCameraLevelListGUI extends CollapseableFileList
@@ -33,7 +30,7 @@ public class ChairCameraLevelListGUI extends CollapseableFileList
 		subEntries.removeAll(subEntries);
 		for(ChairCamera object : Entries)
 		{
-			subEntries.add(new ChairCameraListGUI(object, padding + Settings.indentSize, this));
+			subEntries.add(new ChairCameraListGUI(object, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -42,26 +39,9 @@ public class ChairCameraLevelListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
-		addZoneAction();
+		addExportAction();
+		addChildAction("Add Chair Camera", Entries, ChairCamera::new, ChairCameraListGUI::new);
 		add(actions);
 		addMouseListener();
-	}
-	private void addZoneAction()
-	{
-		JMenuItem newZone = new JMenuItem("Create New Camera");
-		newZone.addActionListener(e -> 
-		{
-			ChairCamera entry = new ChairCamera();
-			Entries.add(entry);
-			subEntries.add(new ChairCameraListGUI(entry, padding + Settings.indentSize, this));
-			reAddComponents();
-		});
-		actions.add(newZone);
-	}
-	public void removeEntry(ChairCameraListGUI gui) 
-	{
-		subEntries.remove(gui);
-		Entries.remove(gui.file);
-		reAddComponents();
 	}
 }

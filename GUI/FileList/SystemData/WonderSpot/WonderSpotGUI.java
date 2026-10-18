@@ -1,53 +1,43 @@
 package GUI.FileList.SystemData.WonderSpot;
 
-import javax.swing.JMenuItem;
-
-import GUI.GUI;
 import GUI.FileInfo.MenuDB.WonderSpot.WonderSpotInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Books.WonderSpotBook.WonderSpot;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class WonderSpotGUI extends FileList
 {
-	WonderSpot file;
+	WonderSpot entry;
 	WonderSpotFileList parent;
-	public WonderSpotGUI(WonderSpot file, int padding, WonderSpotFileList parent)
+	public WonderSpotGUI(WonderSpot file, WonderSpotFileList parent)
 	{
-		this.padding = padding;
+		this.padding = parent.getPadding() + Settings.indentSize;
 		this.file = file;
+		entry = file;
 		this.parent = parent;
 		initializeAll();
 	}
 	protected void initializeAll() 
 	{
-		initializeListGUI("Spot: \"" + file.getName() + "\"");
-		initializeInfoGUI();
+		initializeListGUI("Spot: \"" + entry.getName() + "\"");
 		addActions();
 	}
 	protected void initializeInfoGUI() 
 	{
-		this.infoGUI = new WonderSpotInfoGUI(file);
+		infoGUI = new WonderSpotInfoGUI(entry);
 	}
 	protected void addActions() 
 	{
-		addDeleteAction();
+		addDeleteAction("Delete Wonder Spot", parent, parent.manager.getSpots());
+		addMoveUpAction(parent, parent.manager.getSpots());
+		addMoveDownAction(parent, parent.manager.getSpots());
 		add(actions);
 		addMouseListener();
 	}
 	public void update()
 	{
-		fileName.setText("Spot: \"" + file.getName() + "\"");
+		fileName.setText("Spot: \"" + entry.getName() + "\"");
 		super.update();
-	}
-	protected void addDeleteAction()
-	{
-		JMenuItem replace = new JMenuItem("Delete Wonder Spot");
-		replace.addActionListener(e -> 
-		{
-			parent.removeSpot(this);
-			GUI.update();
-		});
-		actions.add(replace);
 	}
 }

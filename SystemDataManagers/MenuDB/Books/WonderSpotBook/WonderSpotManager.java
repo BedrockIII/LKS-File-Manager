@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class WonderSpotManager implements OpenedFile
+public class WonderSpotManager implements OpenedFile, IntermediateFileFormat
 {
 	ArrayList<WonderSpot> Spots = new ArrayList<WonderSpot>();
 	public WonderSpotManager(byte[] data)
@@ -128,19 +129,22 @@ public class WonderSpotManager implements OpenedFile
 		Spots.removeAll(Spots);
 		initializeFromBytes(data);
 	}
-	public void replaceFromBWS(byte[] data)
+	public void initializeFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		Spots.removeAll(Spots);
 		initializeFromLines(lines);
 	}
-	public void importFromBWS(byte[] data)
+	public void importFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		initializeFromLines(lines);
 	}
-	public byte[] toBWS()
+	public byte[] toBIT()
 	{
 		return Utils.encodeStringToBytes(toString());
+	}
+	@Override
+	public String getBITName()
+	{
+		return "WonderSpotBook.bit";
 	}
 }

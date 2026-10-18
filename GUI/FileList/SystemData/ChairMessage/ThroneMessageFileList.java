@@ -5,10 +5,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import GUI.FileInfo.MenuDB.ChairMessage.ThroneMessageFileInfo;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
+import bFM.BITFileList;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class ThroneMessageFileList extends CollapseableFileList
+public class ThroneMessageFileList extends CollapseableFileList implements BITFileList
 {
 	ChairMessageManager manager;
 	public ThroneMessageFileList(ChairMessageManager file, int padding) 
@@ -54,17 +55,17 @@ public class ThroneMessageFileList extends CollapseableFileList
 		add(actions);
 		addMouseListener();
 	}
-	private void addExportBITAction()
+	public void addExportBITAction()
 	{
-		//actions.add(GUIUtils.createExportAction("Export Entries as .bit text file", "HummingBook.bit", "Bedrock's Intermediate Text File", manager::toIntermediateText));
+		actions.add(createExportBITAction(manager));
 	}
-	private void addImportBITAction()
+	public void addImportBITAction()
 	{
-		//actions.add(GUIUtils.createImportAction("Import Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::importFromIntermediateText, this));
+		actions.add(createImportBITAction(manager, this));
 	}
-	private void addReplaceBITAction()
+	public void addReplaceBITAction()
 	{
-		//actions.add(GUIUtils.createImportAction("Replace Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::replaceFromIntermediateText, this));
+		actions.add(createReplaceBITAction(manager, this));
 	}
 	private void addReplaceRawAction()
 	{

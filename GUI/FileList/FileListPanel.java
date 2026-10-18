@@ -88,6 +88,7 @@ public class FileListPanel extends JScrollPane
 	}
 	public byte[] getFile() 
 	{
+		if(file == null) System.out.println("File is Null in Class: " + this.getClass());
 		return file.getBytes();
 	}
 }

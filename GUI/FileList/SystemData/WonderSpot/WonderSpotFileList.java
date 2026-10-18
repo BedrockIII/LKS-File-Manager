@@ -2,18 +2,17 @@ package GUI.FileList.SystemData.WonderSpot;
 
 import java.util.ArrayList;
 
-import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.FileInfo.MenuDB.WonderSpot.WonderSpotListInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Books.WonderSpotBook.WonderSpot;
 import SystemDataManagers.MenuDB.Books.WonderSpotBook.WonderSpotManager;
+import bFM.BITFileList;
 import bFM.GUIUtils;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class WonderSpotFileList extends CollapseableFileList
+public class WonderSpotFileList extends CollapseableFileList implements BITFileList
 {
 	private ArrayList<WonderSpot> Spots = new ArrayList<WonderSpot>();
 	WonderSpotManager manager;
@@ -32,7 +31,7 @@ public class WonderSpotFileList extends CollapseableFileList
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
-		initializeInfoGUI();
+		//initializeInfoGUI();
 		System.out.print("█");
 		addActions();
 		System.out.print("█");
@@ -45,7 +44,7 @@ public class WonderSpotFileList extends CollapseableFileList
 		Spots = manager.getSpots();
 		for(WonderSpot object : Spots)
 		{
-			subEntries.add(new WonderSpotGUI(object, padding + Settings.indentSize, this));
+			subEntries.add(new WonderSpotGUI(object, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -55,46 +54,28 @@ public class WonderSpotFileList extends CollapseableFileList
 	protected void addActions() 
 	{
 		addExportAction();
+		addChildAction("Add Wonder Spot", manager.getSpots(), WonderSpot::new, WonderSpotGUI::new);
 		addReplaceRawAction();
-		addExportBWSAction();
-		addImportBWSAction();
-		addReplaceBWSAction();
-		addZoneAction();
+		addExportBITAction();
+		addImportBITAction();
+		addReplaceBITAction();
 		add(actions);
 		addMouseListener();
-	}
-	private void addZoneAction()
-	{
-		JMenuItem newZone = new JMenuItem("Create New Wonder Spot");
-		newZone.addActionListener(e -> 
-		{
-			WonderSpot spot = new WonderSpot();
-			Spots.add(spot);
-			subEntries.add(new WonderSpotGUI(spot, padding + Settings.indentSize, this));
-			reAddComponents();
-		});
-		actions.add(newZone);
-	}
-	private void addExportBWSAction()
-	{
-		actions.add(GUIUtils.createExportAction("Export Spots as .bws text file", "WonderSpot.bws", "Bedrock's Wonder Spot Text File", manager::toBWS));
-	}
-	private void addImportBWSAction()
-	{
-		actions.add(GUIUtils.createImportAction("Import Spots from .bws text file", "Bedrock's Wonder Spot Text File", "bws", manager::importFromBWS, this));
-	}
-	private void addReplaceBWSAction()
-	{
-		actions.add(GUIUtils.createImportAction("Replace Spots from .bws text file", "Bedrock's Wonder Spot Text File", "bws", manager::replaceFromBWS, this));
 	}
 	private void addReplaceRawAction()
 	{
 		actions.add(GUIUtils.createImportAction("Replace Spots from raw Album.bin file", "Wonder Spot Database Binary File", "bin", manager::replaceFromData, this));
 	}
-	public void removeSpot(WonderSpotGUI wonderSpotGUI) 
+	public void addExportBITAction()
 	{
-		subEntries.remove(wonderSpotGUI);
-		Spots.remove(wonderSpotGUI.file);
-		reAddComponents();
+		actions.add(createExportBITAction(manager));
+	}
+	public void addImportBITAction()
+	{
+		actions.add(createImportBITAction(manager, this));
+	}
+	public void addReplaceBITAction()
+	{
+		actions.add(createReplaceBITAction(manager, this));
 	}
 }

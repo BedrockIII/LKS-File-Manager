@@ -373,7 +373,8 @@ public class Utils
 			{
 				finalLine += "\r";
 				i++;
-			} else if(ret.charAt(i)=='\\'&&ret.charAt(i+1)=='t')
+			} 
+			else if(ret.charAt(i)=='\\'&&ret.charAt(i+1)=='t')
 			{
 				finalLine += "\t";
 				i++;
@@ -402,7 +403,8 @@ public class Utils
 			else if(ret.charAt(i)=='\r')
 			{
 				finalLine += "\\r";
-			} else if(ret.charAt(i)=='\t')
+			}
+			else if(ret.charAt(i)=='\t')
 			{
 				finalLine += "\\t";
 			}
