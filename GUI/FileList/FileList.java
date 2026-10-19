@@ -173,39 +173,43 @@ public abstract class FileList extends JPanel
 	}
 	protected <T> void addMoveUpAction(CollapseableFileList parent, List<T> children)
 	{
-		if(moveUp == null)
+		moveUp = new JMenuItem("Move Up");
+		moveUp.addActionListener(e -> {
+			parent.moveUp(this, children);
+			updateMoveActions(parent, children);
+			GUI.update();
+		});
+		if(!parent.isFirst(this, children))
 		{
-			moveUp = new JMenuItem("Move Up");
-			moveUp.addActionListener(e -> {
-				parent.moveUp(this, children);
-				addMoveDownAction(parent, children);
-				addMoveUpAction(parent, children);
-				GUI.update();
-			});
+			actions.add(moveUp);
 		}
+	}
+	protected <T> void updateMoveActions(CollapseableFileList parent, List<T> children)
+	{
 		if(!parent.isFirst(this, children))
 		{
 			actions.add(moveUp);
 		}
 		else actions.remove(moveUp);
-	}
-	protected <T> void addMoveDownAction(CollapseableFileList parent, List<T> children)
-	{
-		if(moveDown == null)
-		{
-			moveDown = new JMenuItem("Move Down");
-			moveDown.addActionListener(e -> {
-				parent.moveDown(this, children);
-				addMoveDownAction(parent, children);
-				addMoveUpAction(parent, children);
-				GUI.update();
-			});
-		}
+		
 		if(!parent.isLast(this, children))
 		{
 			actions.add(moveDown);
 		}
 		else actions.remove(moveDown);
+	}
+	protected <T> void addMoveDownAction(CollapseableFileList parent, List<T> children)
+	{
+		moveDown = new JMenuItem("Move Down");
+		moveDown.addActionListener(e -> {
+			parent.moveDown(this, children);
+			updateMoveActions(parent, children);
+			GUI.update();
+		});
+		if(!parent.isLast(this, children))
+		{
+			actions.add(moveDown);
+		}
 	}
 	protected <T> void addDeleteAction(String name, CollapseableFileList parent, List<T> children)
 	{

@@ -287,6 +287,11 @@ public abstract class CollapseableFileList extends FileList
 		}
 		children.remove((T) child.file);
 		children.add(index - 1, (T) child.file);
+		
+		//Update the Move Up/Down of the affected children
+		((FileList)subEntries.get(index)).updateMoveActions(this, children);
+		((FileList)child).updateMoveActions(this, children);
+		
 		reAddComponents();
 	}
 	@SuppressWarnings("unchecked")
@@ -313,13 +318,29 @@ public abstract class CollapseableFileList extends FileList
 		}
 		children.remove((T)child.file);
 		children.add(index + 1, (T) child.file);
+		
+		//Update the Move Up/Down of the affected children
+		((FileList)subEntries.get(index)).updateMoveActions(this, children);
+		((FileList)child).updateMoveActions(this, children);
+		
 		reAddComponents();
 	}
 	<T> void removeChild(FileList child, List<T> children)
 	{
+		int index = subEntries.indexOf(child);
 		children.remove(child.file);
 		remove(child);
 		subEntries.remove(child);
+		
+		//Update Movement Options of Neighbors
+		if(index > 0)
+		{
+			(subEntries.get(index-1)).updateMoveActions(this, children);
+		}
+		if(index < subEntries.size())//No Plus 1 Cause Child was deleted
+		{
+			(subEntries.get(index)).updateMoveActions(this, children);
+		}
 		reAddComponents();
 	}
 	@SuppressWarnings("unchecked")
@@ -331,6 +352,8 @@ public abstract class CollapseableFileList extends FileList
 			T child = childConstructor.get();
 			children.add(child);
 			subEntries.add(guiConstructor.apply(child, (U) this));
+			//Add Move Down For the former last entry one
+			(subEntries.get(subEntries.size()-2)).updateMoveActions(this, children);
 			reAddComponents();
 			GUI.update();
 		});

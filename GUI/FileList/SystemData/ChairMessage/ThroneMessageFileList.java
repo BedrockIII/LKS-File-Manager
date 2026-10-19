@@ -57,15 +57,15 @@ public class ThroneMessageFileList extends CollapseableFileList implements BITFi
 	}
 	public void addExportBITAction()
 	{
-		actions.add(createExportBITAction(manager));
+		//actions.add(createExportBITAction(manager));
 	}
 	public void addImportBITAction()
 	{
-		actions.add(createImportBITAction(manager, this));
+		//actions.add(createImportBITAction(manager, this));
 	}
 	public void addReplaceBITAction()
 	{
-		actions.add(createReplaceBITAction(manager, this));
+		//actions.add(createReplaceBITAction(manager, this));
 	}
 	private void addReplaceRawAction()
 	{
