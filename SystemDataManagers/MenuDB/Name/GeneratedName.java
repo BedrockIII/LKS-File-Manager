@@ -5,6 +5,10 @@ import bFM.Data;
 public class GeneratedName implements Data
 {
 	String Name;
+	public GeneratedName()
+	{
+		Name = "New Name";
+	}
 	public GeneratedName(String Name)
 	{
 		this.Name = Name;

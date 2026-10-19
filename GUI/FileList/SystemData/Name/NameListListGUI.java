@@ -14,6 +14,7 @@ public class NameListListGUI extends CollapseableFileList
 	{
 		this.name = name;
 		manager = names;
+		file = names;
 		this.padding = padding;
 		initializeAll();
 	}
@@ -38,6 +39,7 @@ public class NameListListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
+		addChildAction("Add New Name", manager.getNames(), GeneratedName::new, AutoNameListGUI::new);
 		add(actions);
 		addMouseListener();
 	}

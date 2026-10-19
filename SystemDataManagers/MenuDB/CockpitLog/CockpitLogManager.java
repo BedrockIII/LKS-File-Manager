@@ -13,6 +13,10 @@ public class CockpitLogManager implements OpenedFile
 	ArrayList<LogEntry> Entries = new ArrayList<LogEntry>();
 	public CockpitLogManager(byte[] data)
 	{
+		initializeFromBytes(data);
+	}
+	private void initializeFromBytes(byte[] data)
+	{
 		PCKGManager CockpitLog = new PCKGManager(data);
 		ArrayList<String> Messages = bFM.Utils.extractStrings(CockpitLog.getFile("CockpitLog"));
 		ByteBuffer flagBuffer = ByteBuffer.wrap(CockpitLog.getFile("Val"));
@@ -94,5 +98,9 @@ public class CockpitLogManager implements OpenedFile
 	{
 		throw new UnsupportedOperationException("equals(String name) should not be called on type " + this.getClass());
 	}
-
+	public void replaceFromData(byte[] data)
+	{
+		Entries.removeAll(Entries);
+		initializeFromBytes(data);
+	}
 }

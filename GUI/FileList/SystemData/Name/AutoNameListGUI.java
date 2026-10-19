@@ -13,6 +13,7 @@ public class AutoNameListGUI extends FileList
 	public AutoNameListGUI(GeneratedName name, NameListListGUI parent)
 	{
 		this.name = name;
+		file = name;
 		this.padding = parent.getPadding() + Settings.indentSize;
 		this.parent = parent;
 		initializeAll();
@@ -28,7 +29,15 @@ public class AutoNameListGUI extends FileList
 	}
 	protected void addActions()
 	{
+		addDeleteAction("Delete Generated Name", parent, parent.manager.getNames());
+		addMoveUpAction(parent, parent.manager.getNames());
+		addMoveDownAction(parent, parent.manager.getNames());
 		add(actions);
 		addMouseListener();
+	}
+	public void update()
+	{
+		fileName.setText(name.getName());
+		super.update();
 	}
 }

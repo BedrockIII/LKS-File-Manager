@@ -60,6 +60,6 @@ public class ChairCameraManagerFileList extends CollapseableFileList
 	}
 	private void addReplaceRawAction()
 	{
-		actions.add(GUIUtils.createImportAction("Replace Entries from raw Humming.bin file", "Humming Book Database Binary File", "bin", manager::replaceFromData, this));
+		actions.add(GUIUtils.createImportAction("Replace Entries from raw ChairCamera.bin file", "Chair Camera Database Binary File", "bin", manager::replaceFromData, this));
 	}
 }

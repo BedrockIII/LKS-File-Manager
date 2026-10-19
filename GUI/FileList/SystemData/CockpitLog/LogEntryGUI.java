@@ -3,28 +3,30 @@ package GUI.FileList.SystemData.CockpitLog;
 import GUI.FileInfo.MenuDB.CockpitLog.CockpitLogInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.CockpitLog.LogEntry;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class LogEntryGUI extends FileList
 {
-	LogEntry file;
+	LogEntry entry;
 	CockpitLogFileList parent;
-	public LogEntryGUI(LogEntry entry, int padding, CockpitLogFileList parent)
+	public LogEntryGUI(LogEntry entry, CockpitLogFileList parent)
 	{
-		this.padding = padding;
+		this.padding = parent.getPadding() + Settings.indentSize;
+		this.entry = entry;
 		this.file = entry;
 		this.parent = parent;
 		initializeAll();
 	}
 	protected void initializeAll() 
 	{
-		initializeListGUI("Entry: \"" + file.getText() + "\"");
+		initializeListGUI("Entry: \"" + entry.getText() + "\"");
 		//initializeInfoGUI();
 		addActions();
 	}
 	protected void initializeInfoGUI() 
 	{
-		infoGUI = new CockpitLogInfoGUI(file);
+		infoGUI = new CockpitLogInfoGUI(entry);
 	}
 	protected void addActions() 
 	{
@@ -33,7 +35,7 @@ public class LogEntryGUI extends FileList
 	}
 	public void update()
 	{
-		fileName.setText("Entry: \"" + file.getText() + "\"");
+		fileName.setText("Entry: \"" + entry.getText() + "\"");
 		super.update();
 	}
 }

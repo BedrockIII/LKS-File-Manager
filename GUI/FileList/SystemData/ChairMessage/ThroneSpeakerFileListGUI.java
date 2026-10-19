@@ -2,12 +2,9 @@ package GUI.FileList.SystemData.ChairMessage;
 
 import java.util.ArrayList;
 
-import javax.swing.JMenuItem;
-
 import GUI.FileInfo.MenuDB.ChairMessage.ThroneMessageSpeakerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessage;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class ThroneSpeakerFileListGUI extends CollapseableFileList
@@ -33,7 +30,7 @@ public class ThroneSpeakerFileListGUI extends CollapseableFileList
 		subEntries.removeAll(subEntries);
 		for(ChairMessage object : Messages)
 		{
-			subEntries.add(new ThroneMessageListGUI(object, padding + Settings.indentSize, this));
+			subEntries.add(new ThroneMessageListGUI(object, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -42,21 +39,8 @@ public class ThroneSpeakerFileListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
-		addExportAction();
-		addMessageAction();
+		addChildAction("Add New Message", Messages, ChairMessage::new, ThroneMessageListGUI::new);
 		add(actions);
 		addMouseListener();
-	}
-	private void addMessageAction()
-	{
-		JMenuItem newZone = new JMenuItem("Create New Message");
-		newZone.addActionListener(e -> 
-		{
-			ChairMessage entry = new ChairMessage("New Throne Dialog", -1);
-			Messages.add(entry);
-			subEntries.add(new ThroneMessageListGUI(entry, padding + Settings.indentSize, this));
-			reAddComponents();
-		});
-		actions.add(newZone);
 	}
 }

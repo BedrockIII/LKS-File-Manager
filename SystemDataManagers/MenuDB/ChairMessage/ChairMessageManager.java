@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class ChairMessageManager implements OpenedFile
+public class ChairMessageManager implements OpenedFile, IntermediateFileFormat
 {
 	ArrayList<ChairMessage> VerdeEntries = new ArrayList<ChairMessage>();
 	ArrayList<ChairMessage> HowserEntries = new ArrayList<ChairMessage>();
@@ -68,7 +69,7 @@ public class ChairMessageManager implements OpenedFile
 	}
 	private byte[] toStringBytes(ArrayList<ChairMessage> entries)
 	{
-		byte[] ret = null;
+		byte[] ret = new byte[0];
 		for(ChairMessage e : entries)
 		{
 			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(Utils.formatStringChars(e.getText())));
@@ -116,26 +117,27 @@ public class ChairMessageManager implements OpenedFile
 		LiamEntries.removeAll(LiamEntries);
 		initializeFromBytes(data);
 	}
-	public void replaceFromIntermediateText(byte[] data)
+	public boolean equals(String name)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
+		throw new UnsupportedOperationException("equals(String name) should not be called on type " + this.getClass());
+	}
+	public void initializeFromBIT(List<String> lines)
+	{
 		VerdeEntries.removeAll(VerdeEntries);
 		HowserEntries.removeAll(HowserEntries);
 		LiamEntries.removeAll(LiamEntries);
 		initializeFromLines(lines);
 	}
-	public void importFromIntermediateText(byte[] data)
+	public void importFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		initializeFromLines(lines);
 	}
-	public byte[] toIntermediateText()
+	public byte[] toBIT()
 	{
 		return Utils.encodeStringToBytes(toString());
 	}
-	@Override
-	public boolean equals(String name)
+	public String getBITName()
 	{
-		throw new UnsupportedOperationException("equals(String name) should not be called on type " + this.getClass());
+		return "ChairMessage.bit";
 	}
 }

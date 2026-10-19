@@ -2,17 +2,17 @@ package GUI.FileList.SystemData.CockpitLog;
 
 import java.util.ArrayList;
 
-import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.FileInfo.MenuDB.CockpitLog.CockpitLogManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.CockpitLog.CockpitLogManager;
 import SystemDataManagers.MenuDB.CockpitLog.LogEntry;
-import bFM.Settings;
+import bFM.BITFileList;
+import bFM.GUIUtils;
 
 @SuppressWarnings("serial")
-public class CockpitLogFileList extends CollapseableFileList
+public class CockpitLogFileList extends CollapseableFileList implements BITFileList
 {
 	private ArrayList<LogEntry> Entries = new ArrayList<LogEntry>();
 	CockpitLogManager manager;
@@ -44,7 +44,7 @@ public class CockpitLogFileList extends CollapseableFileList
 		Entries = manager.getEntries();
 		for(LogEntry object : Entries)
 		{
-			subEntries.add(new LogEntryGUI(object, padding + Settings.indentSize, this));
+			subEntries.add(new LogEntryGUI(object, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -55,39 +55,30 @@ public class CockpitLogFileList extends CollapseableFileList
 	{
 		addExportAction();
 		addReplaceRawAction();
-		addExportBJBAction();
-		addImportBJBAction();
-		addReplaceBJBAction();
-		addZoneAction();
+		addExportBITAction();
+		addImportBITAction();
+		addReplaceBITAction();
+		addChildAction("Add New Log", Entries, LogEntry::new, LogEntryGUI::new);
 		add(actions);
 		addMouseListener();
 	}
-	private void addZoneAction()
-	{
-		JMenuItem newZone = new JMenuItem("Create New Log Entry");
-		newZone.addActionListener(e -> 
-		{
-			LogEntry entry = new LogEntry();
-			Entries.add(entry);
-			subEntries.add(new LogEntryGUI(entry, padding + Settings.indentSize, this));
-			reAddComponents();
-		});
-		//actions.add(newZone);
-	}
-	private void addExportBJBAction()
-	{
-		//actions.add(GUIUtils.createExportAction("Export Entries as .bit text file", "HummingBook.bit", "Bedrock's Intermediate Text File", manager::toIntermediateText));
-	}
-	private void addImportBJBAction()
-	{
-		//actions.add(GUIUtils.createImportAction("Import Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::importFromIntermediateText, this));
-	}
-	private void addReplaceBJBAction()
-	{
-		//actions.add(GUIUtils.createImportAction("Replace Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::replaceFromIntermediateText, this));
-	}
 	private void addReplaceRawAction()
 	{
-		//actions.add(GUIUtils.createImportAction("Replace Entries from raw Humming.bin file", "Humming Book Database Binary File", "bin", manager::replaceFromData, this));
+		actions.add(GUIUtils.createImportAction("Replace Entries from raw CockpitLog.bin file", "Cockpit Log Database Binary File", "bin", manager::replaceFromData, this));
+	}
+	@Override
+	public void addExportBITAction() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void addImportBITAction() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void addReplaceBITAction() {
+		// TODO Auto-generated method stub
+		
 	}
 }

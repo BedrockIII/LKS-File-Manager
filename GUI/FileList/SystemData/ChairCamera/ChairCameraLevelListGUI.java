@@ -39,7 +39,6 @@ public class ChairCameraLevelListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
-		addExportAction();
 		addChildAction("Add Chair Camera", Entries, ChairCamera::new, ChairCameraListGUI::new);
 		add(actions);
 		addMouseListener();

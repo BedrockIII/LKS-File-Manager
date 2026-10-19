@@ -6,6 +6,7 @@ import GUI.FileInfo.MenuDB.ChairMessage.ThroneMessageFileInfo;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
 import bFM.BITFileList;
+import bFM.GUIUtils;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
@@ -69,6 +70,6 @@ public class ThroneMessageFileList extends CollapseableFileList implements BITFi
 	}
 	private void addReplaceRawAction()
 	{
-		//actions.add(GUIUtils.createImportAction("Replace Entries from raw Humming.bin file", "Humming Book Database Binary File", "bin", manager::replaceFromData, this));
+		actions.add(GUIUtils.createImportAction("Replace Entries from raw ChairMessage.bin file", "Throne Message Database Binary File", "bin", manager::replaceFromData, this));
 	}
 }
