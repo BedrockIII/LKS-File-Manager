@@ -10,7 +10,7 @@ public class RecordBookEntry implements Data
 		String level1 = "New Record Description 1";
 		String level2 = "New Record Description 2";
 		String level3 = "New Record Description 3";
-		String image = "hanauta1";
+		String image = "kiroku1";
 		int level1Count = -1;
 		int level2Count = -1;
 		int level3Count = -1;

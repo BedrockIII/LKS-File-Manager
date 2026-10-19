@@ -3,16 +3,17 @@ package GUI.FileList.SystemData.MapData;
 import GUI.FileInfo.MenuDB.MapData.MapQuestInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.MapData.MapQuestInfo;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class MapQuestFileList extends FileList
 {
 	MapQuestManagerFileList parent;
 	MapQuestInfo Quest;
-	public MapQuestFileList(MapQuestInfo Quest, int padding, MapQuestManagerFileList parent)
+	public MapQuestFileList(MapQuestInfo Quest, MapQuestManagerFileList parent)
 	{
 		this.parent = parent;
-		this.padding = padding;
+		padding = parent.getPadding() + Settings.indentSize;
 		this.Quest = Quest;
 		file = Quest;
 		initializeAll();
@@ -28,7 +29,7 @@ public class MapQuestFileList extends FileList
 	}
 	protected void addActions()
 	{
-		// TODO Add Delete Action
+		addDeleteAction("Delete Quest", parent, parent.manager.getQuests());
 		addMoveUpAction(parent, parent.manager.getQuests());
 		addMoveDownAction(parent, parent.manager.getQuests());
 		add(actions);

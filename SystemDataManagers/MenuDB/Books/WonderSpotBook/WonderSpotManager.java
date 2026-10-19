@@ -142,7 +142,6 @@ public class WonderSpotManager implements OpenedFile, IntermediateFileFormat
 	{
 		return Utils.encodeStringToBytes(toString());
 	}
-	@Override
 	public String getBITName()
 	{
 		return "WonderSpotBook.bit";

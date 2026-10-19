@@ -3,16 +3,17 @@ package GUI.FileList.SystemData.MapData;
 import GUI.FileInfo.MenuDB.MapData.MapPOIInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.MapData.MapPOIData;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class MapPOIFileList extends FileList
 {
 	MapPOIManagerFileList parent;
 	MapPOIData Data;
-	public MapPOIFileList(MapPOIData Data, int padding, MapPOIManagerFileList parent)
+	public MapPOIFileList(MapPOIData Data, MapPOIManagerFileList parent)
 	{
 		this.parent = parent;
-		this.padding = padding;
+		padding = parent.getPadding() + Settings.indentSize;
 		this.Data = Data;
 		file = Data;
 		initializeAll();
@@ -28,7 +29,7 @@ public class MapPOIFileList extends FileList
 	}
 	protected void addActions()
 	{
-		// TODO Add Delete Action
+		addDeleteAction("Delete POI", parent, parent.manager.getPOIs());
 		addMoveUpAction(parent, parent.manager.getPOIs());
 		addMoveDownAction(parent, parent.manager.getPOIs());
 		add(actions);

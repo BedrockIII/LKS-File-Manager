@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class RecordBookManager implements OpenedFile
+public class RecordBookManager implements OpenedFile, IntermediateFileFormat
 {
 	ArrayList<RecordBookEntry> Entries = new ArrayList<RecordBookEntry>();
 	public RecordBookManager(byte[] data)
@@ -177,5 +178,22 @@ public class RecordBookManager implements OpenedFile
 	public byte[] toIntermediateText()
 	{
 		return Utils.encodeStringToBytes(toString());
+	}
+	public void initializeFromBIT(List<String> lines)
+	{
+		Entries.removeAll(Entries);
+		initializeFromLines(lines);
+	}
+	public void importFromBIT(List<String> lines)
+	{
+		initializeFromLines(lines);
+	}
+	public byte[] toBIT()
+	{
+		return Utils.encodeStringToBytes(toString());
+	}
+	public String getBITName()
+	{
+		return "RecordBook.bit";
 	}
 }

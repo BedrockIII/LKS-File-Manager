@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class ExplanationManager implements OpenedFile
+public class ExplanationManager implements OpenedFile, IntermediateFileFormat
 {
 	public final static String FileName = "Explanation.bin";
 	ArrayList<Explanation> Entries = new ArrayList<Explanation>();
@@ -156,5 +157,22 @@ public class ExplanationManager implements OpenedFile
 	public byte[] toIntermediateText()
 	{
 		return Utils.encodeStringToBytes(toString());
+	}
+	public void initializeFromBIT(List<String> lines)
+	{
+		Entries.removeAll(Entries);
+		initializeFromLines(lines);
+	}
+	public void importFromBIT(List<String> lines)
+	{
+		initializeFromLines(lines);
+	}
+	public byte[] toBIT()
+	{
+		return Utils.encodeStringToBytes(toString());
+	}
+	public String getBITName()
+	{
+		return "Explanation.bit";
 	}
 }

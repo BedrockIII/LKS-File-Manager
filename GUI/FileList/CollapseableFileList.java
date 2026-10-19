@@ -271,6 +271,8 @@ public abstract class CollapseableFileList extends FileList
 		if(child.file == null) throw new IllegalArgumentException("Child's Data is Null.\nExpected: " + children.get(0).getClass());
 		if(!(children.get(0).getClass().isInstance(child.file))) throw new IllegalArgumentException("Child's Data is Wrong Type.\nExpected: " + children.get(0).getClass() + "\n is: " + child.file.getClass() + "\n");
 		if(isFirst(child, children)) return;
+
+		//If it is not in the GUI List it shouldn't Exist. Kill It.
 		int index = subEntries.indexOf(child);
 		if(index == -1) 
 		{
@@ -280,6 +282,8 @@ public abstract class CollapseableFileList extends FileList
 		subEntries.remove(child);
 		subEntries.add(index - 1, child);
 		index = children.indexOf((T) child.file);
+
+		//If it is not in the File Children List it shouldn't Exist. Kill It.
 		if(index == -1) 
 		{
 			removeChild(child, children);
@@ -289,8 +293,8 @@ public abstract class CollapseableFileList extends FileList
 		children.add(index - 1, (T) child.file);
 		
 		//Update the Move Up/Down of the affected children
-		((FileList)subEntries.get(index)).updateMoveActions(this, children);
-		((FileList)child).updateMoveActions(this, children);
+		subEntries.get(index).updateMoveActions(this, children);
+		child.updateMoveActions(this, children);
 		
 		reAddComponents();
 	}
@@ -302,6 +306,8 @@ public abstract class CollapseableFileList extends FileList
 		if(child.file == null) throw new IllegalArgumentException("Child's Data is Null.\nExpected: " + children.get(0).getClass());
 		if(!(children.get(0).getClass().isInstance(child.file))) throw new IllegalArgumentException("Child's Data is Wrong Type.\nExpected: " + children.get(0).getClass() + "\n is: " + child.file.getClass() + "\n");
 		if(isLast(child, children)) return;
+		
+		//If it is not in the GUI List it shouldn't Exist. Kill It.
 		int index = subEntries.indexOf(child);
 		if(index == -1) 
 		{
@@ -310,6 +316,8 @@ public abstract class CollapseableFileList extends FileList
 		}
 		subEntries.remove(child);
 		subEntries.add(index + 1, child);
+		
+		//If it is not in the File Children List it shouldn't Exist. Kill It.
 		index = children.indexOf(child.file);
 		if(index == -1) 
 		{
@@ -320,8 +328,8 @@ public abstract class CollapseableFileList extends FileList
 		children.add(index + 1, (T) child.file);
 		
 		//Update the Move Up/Down of the affected children
-		((FileList)subEntries.get(index)).updateMoveActions(this, children);
-		((FileList)child).updateMoveActions(this, children);
+		subEntries.get(index).updateMoveActions(this, children);
+		child.updateMoveActions(this, children);
 		
 		reAddComponents();
 	}
@@ -335,11 +343,11 @@ public abstract class CollapseableFileList extends FileList
 		//Update Movement Options of Neighbors
 		if(index > 0)
 		{
-			(subEntries.get(index-1)).updateMoveActions(this, children);
+			subEntries.get(index-1).updateMoveActions(this, children);
 		}
 		if(index < subEntries.size())//No Plus 1 Cause Child was deleted
 		{
-			(subEntries.get(index)).updateMoveActions(this, children);
+			subEntries.get(index).updateMoveActions(this, children);
 		}
 		reAddComponents();
 	}
@@ -353,7 +361,7 @@ public abstract class CollapseableFileList extends FileList
 			children.add(child);
 			subEntries.add(guiConstructor.apply(child, (U) this));
 			//Add Move Down For the former last entry one
-			(subEntries.get(subEntries.size()-2)).updateMoveActions(this, children);
+			if(subEntries.size()>1)subEntries.get(subEntries.size()-2).updateMoveActions(this, children);
 			reAddComponents();
 			GUI.update();
 		});

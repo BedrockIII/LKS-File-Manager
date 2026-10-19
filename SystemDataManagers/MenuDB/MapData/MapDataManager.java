@@ -11,13 +11,6 @@ public class MapDataManager implements OpenedFile
 	MapPOIDataManager Level3;
 	MapAreaManager AreaData;
 	MapQuestInfoManager QuestData;
-	//ArrayList<MapQuestData> QuestData = new ArrayList<MapQuestData>();
-	//Map Level
-			//Title
-			//Position short x, short y
-			//Message
-			//Image
-			//Flag (5 -1 ints, 1 non -1 int)
 	public MapDataManager(byte[] data)
 	{
 		initializeFromBytes(data);
@@ -117,5 +110,9 @@ public class MapDataManager implements OpenedFile
 	public MapQuestInfoManager getQuestData()
 	{
 		return QuestData;
+	}
+	public void replaceFromData(byte[] data)
+	{
+		initializeFromBytes(data);
 	}
 }

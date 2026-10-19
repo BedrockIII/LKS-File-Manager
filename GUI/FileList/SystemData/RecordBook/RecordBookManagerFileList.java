@@ -2,18 +2,17 @@ package GUI.FileList.SystemData.RecordBook;
 
 import java.util.ArrayList;
 
-import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.FileInfo.MenuDB.Record.RecordBookManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookEntry;
 import SystemDataManagers.MenuDB.Books.RecordBook.RecordBookManager;
+import bFM.BITFileList;
 import bFM.GUIUtils;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class RecordBookManagerFileList extends CollapseableFileList
+public class RecordBookManagerFileList extends CollapseableFileList implements BITFileList
 {
 	private ArrayList<RecordBookEntry> Entries = new ArrayList<RecordBookEntry>();
 	RecordBookManager manager;
@@ -45,7 +44,7 @@ public class RecordBookManagerFileList extends CollapseableFileList
 		Entries = manager.getEntries();
 		for(RecordBookEntry object : Entries)
 		{
-			subEntries.add(new RecordBookEntryFileList(object, padding + Settings.indentSize, this));
+			subEntries.add(new RecordBookEntryFileList(object, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -55,46 +54,28 @@ public class RecordBookManagerFileList extends CollapseableFileList
 	protected void addActions() 
 	{
 		addExportAction();
+		addChildAction("Add Record", manager.getEntries(), RecordBookEntry::new, RecordBookEntryFileList::new);
 		addReplaceRawAction();
-		addExportBJBAction();
-		addImportBJBAction();
-		addReplaceBJBAction();
-		addZoneAction();
+		addExportBITAction();
+		addImportBITAction();
+		addReplaceBITAction();
 		add(actions);
 		addMouseListener();
-	}
-	private void addZoneAction()
-	{
-		JMenuItem newZone = new JMenuItem("Create New Record");
-		newZone.addActionListener(e -> 
-		{
-			RecordBookEntry entry = new RecordBookEntry();
-			Entries.add(entry);
-			subEntries.add(new RecordBookEntryFileList(entry, padding + Settings.indentSize, this));
-			reAddComponents();
-		});
-		actions.add(newZone);
-	}
-	private void addExportBJBAction()
-	{
-		actions.add(GUIUtils.createExportAction("Export Entries as .bit text file", "RecordBook.bit", "Bedrock's Intermediate Text File", manager::toIntermediateText));
-	}
-	private void addImportBJBAction()
-	{
-		actions.add(GUIUtils.createImportAction("Import Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::importFromIntermediateText, this));
-	}
-	private void addReplaceBJBAction()
-	{
-		actions.add(GUIUtils.createImportAction("Replace Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::replaceFromIntermediateText, this));
 	}
 	private void addReplaceRawAction()
 	{
 		actions.add(GUIUtils.createImportAction("Replace Entries from raw Record.bin file", "Record Book Database Binary File", "bin", manager::replaceFromData, this));
 	}
-	public void removeEntry(RecordBookEntryFileList gui) 
+	public void addExportBITAction()
 	{
-		subEntries.remove(gui);
-		Entries.remove(gui.file);
-		reAddComponents();
+		actions.add(createExportBITAction(manager));
+	}
+	public void addImportBITAction()
+	{
+		actions.add(createImportBITAction(manager, this));
+	}
+	public void addReplaceBITAction()
+	{
+		actions.add(createReplaceBITAction(manager, this));
 	}
 }

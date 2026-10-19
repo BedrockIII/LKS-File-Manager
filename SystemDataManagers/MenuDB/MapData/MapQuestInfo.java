@@ -19,6 +19,10 @@ public class MapQuestInfo implements Data
 	int flag8 = -1;
 	int flag9 = -1;
 	int flag10 = -1;
+	public MapQuestInfo()
+	{
+		name = "New Quest Data";
+	}
 	public MapQuestInfo(String name, int flag1, int flag2, int flag3, int flag4, int flag5, int flag6, int flag7, int flag8, int flag9, int flag10)
 	{
 		this.name = name;

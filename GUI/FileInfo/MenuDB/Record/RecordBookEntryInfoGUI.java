@@ -38,8 +38,8 @@ public class RecordBookEntryInfoGUI extends GenericFileInfoGUI
 		add(new LabeledInputBox("Level 1 Text: ", Description1), layout);
 		add(new LabeledInputBox("Level 2 Unlock Amount: ", Description2Count), layout);
 		add(new LabeledInputBox("Level 2 Text: ", Description2), layout);
-		add(new LabeledInputBox("Level 2 Unlock Amount: ", Description3Count), layout);
-		add(new LabeledInputBox("Level 2 Text: ", Description3), layout);
+		add(new LabeledInputBox("Level 3 Unlock Amount: ", Description3Count), layout);
+		add(new LabeledInputBox("Level 3 Text: ", Description3), layout);
 		layout.weighty = 1.0;
 		add(new LabeledInputBox("Image: ", Image), layout);
 	}

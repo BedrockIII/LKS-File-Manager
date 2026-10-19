@@ -3,16 +3,17 @@ package GUI.FileList.SystemData.MapData;
 import GUI.FileInfo.MenuDB.MapData.MapAreaInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.MapData.MapArea;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class MapAreaFileList extends FileList
 {
 	MapAreaManagerFileList parent;
 	MapArea Area;
-	public MapAreaFileList(MapArea Area, int padding, MapAreaManagerFileList parent)
+	public MapAreaFileList(MapArea Area, MapAreaManagerFileList parent)
 	{
 		this.parent = parent;
-		this.padding = padding;
+		padding = parent.getPadding() + Settings.indentSize;
 		this.Area = Area;
 		file = Area;
 		initializeAll();
@@ -28,7 +29,7 @@ public class MapAreaFileList extends FileList
 	}
 	protected void addActions()
 	{
-		// TODO Add Delete Action
+		addDeleteAction("Delete Area", parent, parent.manager.getAreas());
 		addMoveUpAction(parent, parent.manager.getAreas());
 		addMoveDownAction(parent, parent.manager.getAreas());
 		add(actions);

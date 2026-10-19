@@ -14,6 +14,12 @@ public class MapArea implements Data
 	int ActivationFlag2 = -1;
 	int ActivationFlag3 = -1;
 	int worldPercent = -1;
+	public MapArea()
+	{
+		name = "New Map Area";
+		image = "AruP_lv0";
+		worldPercent = 0;
+	}
 	public MapArea(String name, String image, int flag1, int flag2, int flag3, int flag4, int flag5)
 	{
 		this.name = name;

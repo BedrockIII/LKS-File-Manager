@@ -2,18 +2,17 @@ package GUI.FileList.SystemData.Explanation;
 
 import java.util.ArrayList;
 
-import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.FileInfo.MenuDB.Explanation.ExplanationManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Explanation.Explanation;
 import SystemDataManagers.MenuDB.Explanation.ExplanationManager;
+import bFM.BITFileList;
 import bFM.GUIUtils;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class ExplanationManagerFileList extends CollapseableFileList
+public class ExplanationManagerFileList extends CollapseableFileList implements BITFileList
 {
 	private ArrayList<Explanation> Entries = new ArrayList<Explanation>();
 	ExplanationManager manager;
@@ -45,7 +44,7 @@ public class ExplanationManagerFileList extends CollapseableFileList
 		Entries = manager.getEntries();
 		for(Explanation object : Entries)
 		{
-			subEntries.add(new ExplanationListGUI(object, padding + Settings.indentSize, this));
+			subEntries.add(new ExplanationListGUI(object, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -55,46 +54,28 @@ public class ExplanationManagerFileList extends CollapseableFileList
 	protected void addActions() 
 	{
 		addExportAction();
+		addChildAction("Add Explanation", manager.getEntries(), Explanation::new, ExplanationListGUI::new);
 		addReplaceRawAction();
-		addExportBJBAction();
-		addImportBJBAction();
-		addReplaceBJBAction();
-		addZoneAction();
+		addExportBITAction();
+		addImportBITAction();
+		addReplaceBITAction();
 		add(actions);
 		addMouseListener();
 	}
-	private void addZoneAction()
+	public void addExportBITAction()
 	{
-		JMenuItem newZone = new JMenuItem("Create New Explanation");
-		newZone.addActionListener(e -> 
-		{
-			Explanation entry = new Explanation();
-			Entries.add(entry);
-			subEntries.add(new ExplanationListGUI(entry, padding + Settings.indentSize, this));
-			reAddComponents();
-		});
-		actions.add(newZone);
+		actions.add(createExportBITAction(manager));
 	}
-	private void addExportBJBAction()
+	public void addImportBITAction()
 	{
-		actions.add(GUIUtils.createExportAction("Export Entries as .bit text file", "Explanation.bit", "Bedrock's Intermediate Text File", manager::toIntermediateText));
+		actions.add(createImportBITAction(manager, this));
 	}
-	private void addImportBJBAction()
+	public void addReplaceBITAction()
 	{
-		actions.add(GUIUtils.createImportAction("Import Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::importFromIntermediateText, this));
-	}
-	private void addReplaceBJBAction()
-	{
-		actions.add(GUIUtils.createImportAction("Replace Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::replaceFromIntermediateText, this));
+		actions.add(createReplaceBITAction(manager, this));
 	}
 	private void addReplaceRawAction()
 	{
 		actions.add(GUIUtils.createImportAction("Replace Entries from raw Humming.bin file", "Explanation Database Binary File", "bin", manager::replaceFromData, this));
-	}
-	public void removeEntry(ExplanationListGUI gui) 
-	{
-		subEntries.remove(gui);
-		Entries.remove(gui.file);
-		reAddComponents();
 	}
 }

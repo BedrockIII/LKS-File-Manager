@@ -18,6 +18,14 @@ public class MapPOIData implements Data
 	int DeactivationFlag1 = -1;
 	int DeactivationFlag2 = -1;
 	int AreaCode = -1;
+	public MapPOIData()
+	{
+		name = "New POI";
+		image = "mag_R";
+		PosX = 0;
+		PosY = 0;
+		AreaCode = 0;
+	}
 	public MapPOIData(String name, String message, String image, short posX, short posY, int flag1, int flag2, int flag3, int flag4, int flag5, int flag6)
 	{
 		this.name = name;
