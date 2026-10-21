@@ -5,13 +5,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class CastlePictureManager implements OpenedFile
+public class CastlePictureManager implements OpenedFile, IntermediateFileFormat
 {
 	ArrayList<CastlePicture> Entries = new ArrayList<CastlePicture>();
 	public CastlePictureManager(byte[] data)
+	{
+		initializeFromBytes(data);
+	}
+	public CastlePictureManager(List<String> lines)
+	{
+		initializeFromLines(lines);
+	}
+	private void initializeFromBytes(byte[] data)
 	{
 		PCKGManager CockpitLog = new PCKGManager(data);
 		ArrayList<String> Messages = bFM.Utils.extractStrings(CockpitLog.getFile("Image"));
@@ -23,7 +32,7 @@ public class CastlePictureManager implements OpenedFile
 					flagBuffer.getInt(i*24 + 20)));
 		}
 	}
-	public CastlePictureManager(List<String> lines)
+	private void initializeFromLines(List<String> lines)
 	{
 		CastlePicture lastEntry = null;
 		for(int i = 0; i<lines.size(); i++)
@@ -75,7 +84,8 @@ public class CastlePictureManager implements OpenedFile
 	}
 	public void setData(byte[] data) 
 	{
-		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+		Entries.removeAll(Entries);
+		initializeFromBytes(data);
 	}
 	public int getSize() 
 	{
@@ -97,5 +107,21 @@ public class CastlePictureManager implements OpenedFile
 	{
 		throw new UnsupportedOperationException("equals(String name) should not be called on type " + this.getClass());
 	}
-
+	public void initializeFromBIT(List<String> lines)
+	{
+		Entries.removeAll(Entries);
+		initializeFromLines(lines);
+	}
+	public void importFromBIT(List<String> lines)
+	{
+		initializeFromLines(lines);
+	}
+	public byte[] toBIT()
+	{
+		return Utils.encodeStringToBytes(toString());
+	}
+	public String getBITName()
+	{
+		return "CastlePicture.bit";
+	}
 }

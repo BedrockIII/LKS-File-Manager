@@ -1,21 +1,17 @@
 package GUI.FileList.SystemData.MovieBook;
 
-import java.util.ArrayList;
-
-import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.FileInfo.MenuDB.MovieBook.MovieBookManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Books.MovieBook.MovieBook;
 import SystemDataManagers.MenuDB.Books.MovieBook.MovieBookManager;
+import bFM.BITFileList;
 import bFM.GUIUtils;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class MovieBookManagerFileList extends CollapseableFileList
+public class MovieBookManagerFileList extends CollapseableFileList implements BITFileList
 {
-	private ArrayList<MovieBook> Entries = new ArrayList<MovieBook>();
 	MovieBookManager manager;
 	public MovieBookManagerFileList(MovieBookManager file, int padding) 
 	{
@@ -42,10 +38,9 @@ public class MovieBookManagerFileList extends CollapseableFileList
 	public void initializeSubGUI()
 	{
 		subEntries.removeAll(subEntries);
-		Entries = manager.getEntries();
-		for(MovieBook object : Entries)
+		for(MovieBook object : manager.getEntries())
 		{
-			subEntries.add(new MovieBookListGUI(object, padding + Settings.indentSize, this));
+			subEntries.add(new MovieBookListGUI(object, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -55,46 +50,28 @@ public class MovieBookManagerFileList extends CollapseableFileList
 	protected void addActions() 
 	{
 		addExportAction();
+		addChildAction("Add Movie", manager.getEntries(), MovieBook::new, MovieBookListGUI::new);
 		addReplaceRawAction();
-		addExportBJBAction();
-		addImportBJBAction();
-		addReplaceBJBAction();
-		addZoneAction();
+		addExportBITAction();
+		addImportBITAction();
+		addReplaceBITAction();
 		add(actions);
 		addMouseListener();
-	}
-	private void addZoneAction()
-	{
-		JMenuItem newZone = new JMenuItem("Create New Movie");
-		newZone.addActionListener(e -> 
-		{
-			MovieBook entry = new MovieBook();
-			Entries.add(entry);
-			subEntries.add(new MovieBookListGUI(entry, padding + Settings.indentSize, this));
-			reAddComponents();
-		});
-		actions.add(newZone);
-	}
-	private void addExportBJBAction()
-	{
-		actions.add(GUIUtils.createExportAction("Export Entries as .bit text file", "MovieBook.bit", "Bedrock's Intermediate Text File", manager::toIntermediateText));
-	}
-	private void addImportBJBAction()
-	{
-		actions.add(GUIUtils.createImportAction("Import Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::importFromIntermediateText, this));
-	}
-	private void addReplaceBJBAction()
-	{
-		actions.add(GUIUtils.createImportAction("Replace Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::replaceFromIntermediateText, this));
 	}
 	private void addReplaceRawAction()
 	{
 		actions.add(GUIUtils.createImportAction("Replace Entries from raw Movie.bin file", "Movie Book Database Binary File", "bin", manager::replaceFromData, this));
 	}
-	public void removeEntry(MovieBookListGUI gui) 
+	public void addExportBITAction()
 	{
-		subEntries.remove(gui);
-		Entries.remove(gui.file);
-		reAddComponents();
+		actions.add(createExportBITAction(manager));
+	}
+	public void addImportBITAction()
+	{
+		actions.add(createImportBITAction(manager, this));
+	}
+	public void addReplaceBITAction()
+	{
+		actions.add(createReplaceBITAction(manager, this));
 	}
 }

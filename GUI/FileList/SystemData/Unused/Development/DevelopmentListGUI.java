@@ -1,28 +1,27 @@
 package GUI.FileList.SystemData.Unused.Development;
 
-import javax.swing.JMenuItem;
-
-import GUI.GUI;
 import GUI.FileInfo.MenuDB.Development.DevelopmentInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Unused.Development.Development;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class DevelopmentListGUI extends FileList
 {
 	Development file;
 	DevelopmentManagerFileList parent;
-	public DevelopmentListGUI(Development entry, int padding, DevelopmentManagerFileList parent)
+	public DevelopmentListGUI(Development entry, DevelopmentManagerFileList parent)
 	{
-		this.padding = padding;
+		padding = parent.getPadding() + Settings.indentSize;
 		this.file = entry;
+		super.file = entry;
 		this.parent = parent;
 		initializeAll();
 	}
 	protected void initializeAll() 
 	{
 		initializeListGUI("Development: \"" + file.getIcon() + "\"");
-		initializeInfoGUI();
+		//initializeInfoGUI();
 		addActions();
 	}
 	protected void initializeInfoGUI() 
@@ -31,7 +30,9 @@ public class DevelopmentListGUI extends FileList
 	}
 	protected void addActions() 
 	{
-		addDeleteAction();
+		addDeleteAction("Delete Development", parent, parent.manager.getEntries());
+		addMoveUpAction(parent, parent.manager.getEntries());
+		addMoveDownAction(parent, parent.manager.getEntries());
 		add(actions);
 		addMouseListener();
 	}
@@ -39,15 +40,5 @@ public class DevelopmentListGUI extends FileList
 	{
 		fileName.setText("Development: \"" + file.getIcon() + "\"");
 		super.update();
-	}
-	protected void addDeleteAction()
-	{
-		JMenuItem replace = new JMenuItem("Delete Development");
-		replace.addActionListener(e -> 
-		{
-			parent.removeEntry(this);
-			GUI.update();
-		});
-		actions.add(replace);
 	}
 }

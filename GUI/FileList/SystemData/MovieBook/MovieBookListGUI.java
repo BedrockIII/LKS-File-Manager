@@ -1,28 +1,26 @@
 package GUI.FileList.SystemData.MovieBook;
 
-import javax.swing.JMenuItem;
-
-import GUI.GUI;
 import GUI.FileInfo.MenuDB.MovieBook.MovieInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Books.MovieBook.MovieBook;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class MovieBookListGUI extends FileList
 {
 	MovieBook file;
 	MovieBookManagerFileList parent;
-	public MovieBookListGUI(MovieBook entry, int padding, MovieBookManagerFileList parent)
+	public MovieBookListGUI(MovieBook entry, MovieBookManagerFileList parent)
 	{
-		this.padding = padding;
+		padding = parent.getPadding() + Settings.indentSize;
 		this.file = entry;
+		super.file = entry;
 		this.parent = parent;
 		initializeAll();
 	}
 	protected void initializeAll() 
 	{
 		initializeListGUI("Movie: \"" + file.getName() + "\"");
-		initializeInfoGUI();
 		addActions();
 	}
 	protected void initializeInfoGUI() 
@@ -31,7 +29,9 @@ public class MovieBookListGUI extends FileList
 	}
 	protected void addActions() 
 	{
-		addDeleteAction();
+		addDeleteAction("Delete Movie", parent, parent.manager.getEntries());
+		addMoveUpAction(parent, parent.manager.getEntries());
+		addMoveDownAction(parent, parent.manager.getEntries());
 		add(actions);
 		addMouseListener();
 	}
@@ -39,15 +39,5 @@ public class MovieBookListGUI extends FileList
 	{
 		fileName.setText("Movie: \"" + file.getName() + "\"");
 		super.update();
-	}
-	protected void addDeleteAction()
-	{
-		JMenuItem replace = new JMenuItem("Delete Movie Entry");
-		replace.addActionListener(e -> 
-		{
-			parent.removeEntry(this);
-			GUI.update();
-		});
-		actions.add(replace);
 	}
 }

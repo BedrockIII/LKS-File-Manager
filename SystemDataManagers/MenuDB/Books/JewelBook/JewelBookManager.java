@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class JewelBookManager implements OpenedFile
+public class JewelBookManager implements OpenedFile, IntermediateFileFormat
 {
 	ArrayList<JewelEntry> Entries = new ArrayList<JewelEntry>();
 	public JewelBookManager(byte[] data)
@@ -128,19 +129,21 @@ public class JewelBookManager implements OpenedFile
 		Entries.removeAll(Entries);
 		initializeFromBytes(data);
 	}
-	public void replaceFromBJB(byte[] data)
+	public void initializeFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		Entries.removeAll(Entries);
 		initializeFromLines(lines);
 	}
-	public void importFromBJB(byte[] data)
+	public void importFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		initializeFromLines(lines);
 	}
-	public byte[] toBAB()
+	public byte[] toBIT()
 	{
 		return Utils.encodeStringToBytes(toString());
+	}
+	public String getBITName()
+	{
+		return "JewelBook.bit";
 	}
 }

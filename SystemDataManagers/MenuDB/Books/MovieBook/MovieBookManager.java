@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class MovieBookManager implements OpenedFile
+public class MovieBookManager implements OpenedFile, IntermediateFileFormat
 {
 	public final static String FileName = "Movie.bin";
 	ArrayList<MovieBook> Entries = new ArrayList<MovieBook>();
@@ -148,19 +149,21 @@ public class MovieBookManager implements OpenedFile
 		Entries.removeAll(Entries);
 		initializeFromBytes(data);
 	}
-	public void replaceFromIntermediateText(byte[] data)
+	public void initializeFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		Entries.removeAll(Entries);
 		initializeFromLines(lines);
 	}
-	public void importFromIntermediateText(byte[] data)
+	public void importFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		initializeFromLines(lines);
 	}
-	public byte[] toIntermediateText()
+	public byte[] toBIT()
 	{
 		return Utils.encodeStringToBytes(toString());
+	}
+	public String getBITName()
+	{
+		return "MovieBook.bit";
 	}
 }

@@ -1,20 +1,17 @@
 package GUI.FileList.SystemData.CastlePicture;
 
-import java.util.ArrayList;
-
-import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.FileInfo.MenuDB.CastlePicture.CastlePictureManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.CastlePicture.CastlePicture;
 import SystemDataManagers.MenuDB.CastlePicture.CastlePictureManager;
-import bFM.Settings;
+import bFM.BITFileList;
+import bFM.GUIUtils;
 
 @SuppressWarnings("serial")
-public class CastlePictureManagerFileList extends CollapseableFileList
+public class CastlePictureManagerFileList extends CollapseableFileList implements BITFileList
 {
-	private ArrayList<CastlePicture> Entries = new ArrayList<CastlePicture>();
 	CastlePictureManager manager;
 	public CastlePictureManagerFileList(CastlePictureManager file, int padding) 
 	{
@@ -31,7 +28,7 @@ public class CastlePictureManagerFileList extends CollapseableFileList
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
-		initializeInfoGUI();
+		//initializeInfoGUI();
 		System.out.print("█");
 		addActions();
 		System.out.print("█");
@@ -41,10 +38,9 @@ public class CastlePictureManagerFileList extends CollapseableFileList
 	public void initializeSubGUI()
 	{
 		subEntries.removeAll(subEntries);
-		Entries = manager.getEntries();
-		for(CastlePicture object : Entries)
+		for(CastlePicture object : manager.getEntries())
 		{
-			subEntries.add(new CastlePictureFileList(object, padding + Settings.indentSize, this));
+			subEntries.add(new CastlePictureFileList(object, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -54,20 +50,28 @@ public class CastlePictureManagerFileList extends CollapseableFileList
 	protected void addActions() 
 	{
 		addExportAction();
-		addZoneAction();
+		addChildAction("Add Castle Picture", manager.getEntries(), CastlePicture::new, CastlePictureFileList::new);
+		addReplaceRawAction();
+		addExportBITAction();
+		addImportBITAction();
+		addReplaceBITAction();
 		add(actions);
 		addMouseListener();
 	}
-	private void addZoneAction()
+	private void addReplaceRawAction()
 	{
-		JMenuItem newZone = new JMenuItem("Create New Castle Picture");
-		newZone.addActionListener(e -> 
-		{
-			CastlePicture entry = new CastlePicture();
-			Entries.add(entry);
-			subEntries.add(new CastlePictureFileList(entry, padding + Settings.indentSize, this));
-			reAddComponents();
-		});
-		//actions.add(newZone);
+		actions.add(GUIUtils.createImportAction("Replace Art from raw CastlePicture.bin file", "Castle Picture Database Binary File", "bin", manager::setData, this));
+	}
+	public void addExportBITAction()
+	{
+		actions.add(createExportBITAction(manager));
+	}
+	public void addImportBITAction()
+	{
+		actions.add(createImportBITAction(manager, this));
+	}
+	public void addReplaceBITAction()
+	{
+		actions.add(createReplaceBITAction(manager, this));
 	}
 }

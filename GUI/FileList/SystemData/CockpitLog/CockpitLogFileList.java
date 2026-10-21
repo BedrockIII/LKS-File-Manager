@@ -66,19 +66,16 @@ public class CockpitLogFileList extends CollapseableFileList implements BITFileL
 	{
 		actions.add(GUIUtils.createImportAction("Replace Entries from raw CockpitLog.bin file", "Cockpit Log Database Binary File", "bin", manager::replaceFromData, this));
 	}
-	@Override
-	public void addExportBITAction() {
-		// TODO Auto-generated method stub
-		
+	public void addExportBITAction()
+	{
+		actions.add(createExportBITAction(manager));
 	}
-	@Override
-	public void addImportBITAction() {
-		// TODO Auto-generated method stub
-		
+	public void addImportBITAction()
+	{
+		actions.add(createImportBITAction(manager, this));
 	}
-	@Override
-	public void addReplaceBITAction() {
-		// TODO Auto-generated method stub
-		
+	public void addReplaceBITAction()
+	{
+		actions.add(createReplaceBITAction(manager, this));
 	}
 }

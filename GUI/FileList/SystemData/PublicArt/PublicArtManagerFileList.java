@@ -1,20 +1,17 @@
 package GUI.FileList.SystemData.PublicArt;
 
-import java.util.ArrayList;
-
-import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.FileInfo.MenuDB.PublicArt.PublicArtManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.PublicArt.PublicArt;
 import SystemDataManagers.MenuDB.PublicArt.PublicArtManager;
-import bFM.Settings;
+import bFM.BITFileList;
+import bFM.GUIUtils;
 
 @SuppressWarnings("serial")
-public class PublicArtManagerFileList extends CollapseableFileList
+public class PublicArtManagerFileList extends CollapseableFileList implements BITFileList
 {
-	private ArrayList<PublicArt> Entries = new ArrayList<PublicArt>();
 	PublicArtManager manager;
 	public PublicArtManagerFileList(PublicArtManager file, int padding) 
 	{
@@ -41,10 +38,9 @@ public class PublicArtManagerFileList extends CollapseableFileList
 	public void initializeSubGUI()
 	{
 		subEntries.removeAll(subEntries);
-		Entries = manager.getEntries();
-		for(PublicArt object : Entries)
+		for(PublicArt object : manager.getEntries())
 		{
-			subEntries.add(new PublicArtListGUI(object, padding + Settings.indentSize, this));
+			subEntries.add(new PublicArtListGUI(object, this));
 		}
 	}
 	protected void initializeInfoGUI()
@@ -54,26 +50,28 @@ public class PublicArtManagerFileList extends CollapseableFileList
 	protected void addActions() 
 	{
 		addExportAction();
-		addZoneAction();
+		addChildAction("Add Public Art", manager.getEntries(), PublicArt::new, PublicArtListGUI::new);
+		addReplaceRawAction();
+		addExportBITAction();
+		addImportBITAction();
+		addReplaceBITAction();
 		add(actions);
 		addMouseListener();
 	}
-	private void addZoneAction()
+	private void addReplaceRawAction()
 	{
-		JMenuItem newZone = new JMenuItem("Create New Art");
-		newZone.addActionListener(e -> 
-		{
-			PublicArt entry = new PublicArt();
-			Entries.add(entry);
-			subEntries.add(new PublicArtListGUI(entry, padding + Settings.indentSize, this));
-			reAddComponents();
-		});
-		actions.add(newZone);
+		actions.add(GUIUtils.createImportAction("Replace Art from raw PublicArt.bin file", "Public Art Database Binary File", "bin", manager::replaceFromData, this));
 	}
-	public void removeEntry(PublicArtListGUI gui) 
+	public void addExportBITAction()
 	{
-		subEntries.remove(gui);
-		Entries.remove(gui.file);
-		reAddComponents();
+		actions.add(createExportBITAction(manager));
+	}
+	public void addImportBITAction()
+	{
+		actions.add(createImportBITAction(manager, this));
+	}
+	public void addReplaceBITAction()
+	{
+		actions.add(createReplaceBITAction(manager, this));
 	}
 }

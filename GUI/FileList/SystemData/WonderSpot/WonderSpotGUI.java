@@ -12,7 +12,7 @@ public class WonderSpotGUI extends FileList
 	WonderSpotFileList parent;
 	public WonderSpotGUI(WonderSpot file, WonderSpotFileList parent)
 	{
-		this.padding = parent.getPadding() + Settings.indentSize;
+		padding = parent.getPadding() + Settings.indentSize;
 		this.file = file;
 		entry = file;
 		this.parent = parent;

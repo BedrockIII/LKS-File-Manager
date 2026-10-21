@@ -6,6 +6,10 @@ import bFM.Utils;
 public class MenuString implements Data
 {
 	String text = "";
+	public MenuString()
+	{
+		text = "New String";
+	}
 	public MenuString(String text)
 	{
 		this.text = text;

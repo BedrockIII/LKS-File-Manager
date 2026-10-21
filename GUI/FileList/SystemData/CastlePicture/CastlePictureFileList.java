@@ -3,23 +3,24 @@ package GUI.FileList.SystemData.CastlePicture;
 import GUI.FileInfo.MenuDB.CastlePicture.CastlePictureInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.CastlePicture.CastlePicture;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class CastlePictureFileList extends FileList
 	{
 	CastlePicture file;
 		CastlePictureManagerFileList parent;
-		public CastlePictureFileList(CastlePicture entry, int padding, CastlePictureManagerFileList parent)
+		public CastlePictureFileList(CastlePicture entry, CastlePictureManagerFileList parent)
 		{
-			this.padding = padding;
+			padding = parent.getPadding() + Settings.indentSize;
 			this.file = entry;
+			super.file = entry;
 			this.parent = parent;
 			initializeAll();
 		}
 		protected void initializeAll() 
 		{
 			initializeListGUI("Picture: \"" + file.getText() + "\"");
-			initializeInfoGUI();
 			addActions();
 		}
 		protected void initializeInfoGUI() 
@@ -28,6 +29,9 @@ public class CastlePictureFileList extends FileList
 		}
 		protected void addActions() 
 		{
+			addDeleteAction("Delete Castle Picture", parent, parent.manager.getEntries());
+			addMoveUpAction(parent, parent.manager.getEntries());
+			addMoveDownAction(parent, parent.manager.getEntries());
 			add(actions);
 			addMouseListener();
 		}

@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class CockpitLogManager implements OpenedFile
+public class CockpitLogManager implements OpenedFile, IntermediateFileFormat
 {
 	ArrayList<LogEntry> Entries = new ArrayList<LogEntry>();
 	public CockpitLogManager(byte[] data)
@@ -25,7 +26,7 @@ public class CockpitLogManager implements OpenedFile
 			Entries.add(new LogEntry(Messages.get(i), flagBuffer.getInt(i*4)));
 		}
 	}
-	public CockpitLogManager(List<String> lines)
+	private void initializeFromLines(List<String> lines)
 	{
 		LogEntry lastEntry = null;
 		for(int i = 0; i<lines.size(); i++)
@@ -47,6 +48,10 @@ public class CockpitLogManager implements OpenedFile
 				}
 			}
 		}
+	}
+	public CockpitLogManager(List<String> lines)
+	{
+		initializeFromLines(lines);
 	}
 	public byte[] toBytes()
 	{
@@ -102,5 +107,22 @@ public class CockpitLogManager implements OpenedFile
 	{
 		Entries.removeAll(Entries);
 		initializeFromBytes(data);
+	}
+	public void initializeFromBIT(List<String> lines)
+	{
+		Entries.removeAll(Entries);
+		initializeFromLines(lines);
+	}
+	public void importFromBIT(List<String> lines)
+	{
+		initializeFromLines(lines);
+	}
+	public byte[] toBIT()
+	{
+		return Utils.encodeStringToBytes(toString());
+	}
+	public String getBITName()
+	{
+		return "CockpitLog.bit";
 	}
 }

@@ -21,7 +21,6 @@ public class LogEntryGUI extends FileList
 	protected void initializeAll() 
 	{
 		initializeListGUI("Entry: \"" + entry.getText() + "\"");
-		//initializeInfoGUI();
 		addActions();
 	}
 	protected void initializeInfoGUI() 
@@ -30,6 +29,9 @@ public class LogEntryGUI extends FileList
 	}
 	protected void addActions() 
 	{
+		addDeleteAction("Delete Log Entry", parent, parent.manager.getEntries());
+		addMoveUpAction(parent, parent.manager.getEntries());
+		addMoveDownAction(parent, parent.manager.getEntries());
 		add(actions);
 		addMouseListener();
 	}

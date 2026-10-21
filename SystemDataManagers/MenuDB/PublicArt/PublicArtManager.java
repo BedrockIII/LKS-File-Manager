@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class PublicArtManager implements OpenedFile
+public class PublicArtManager implements OpenedFile, IntermediateFileFormat
 {
 	public static final String FileName = "PublicArt.bin";
 	ArrayList<PublicArt> Entries = new ArrayList<PublicArt>();
@@ -141,19 +142,21 @@ public class PublicArtManager implements OpenedFile
 		Entries.removeAll(Entries);
 		initializeFromBytes(data);
 	}
-	public void replaceFromIntermediateText(byte[] data)
+	public void initializeFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		Entries.removeAll(Entries);
 		initializeFromLines(lines);
 	}
-	public void importFromIntermediateText(byte[] data)
+	public void importFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		initializeFromLines(lines);
 	}
-	public byte[] toIntermediateText()
+	public byte[] toBIT()
 	{
 		return Utils.encodeStringToBytes(toString());
+	}
+	public String getBITName()
+	{
+		return "PublicArt.bit";
 	}
 }
