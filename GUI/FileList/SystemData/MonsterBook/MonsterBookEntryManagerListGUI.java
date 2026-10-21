@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import GUI.FileInfo.MenuDB.MonsterBook.MonsterBookEntryManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterBook;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class MonsterBookEntryManagerListGUI extends CollapseableFileList
@@ -29,7 +28,7 @@ public class MonsterBookEntryManagerListGUI extends CollapseableFileList
 		subEntries.removeAll(subEntries);
 		for(MonsterBook a : manager)
 		{
-			subEntries.add(new MonsterBookEntryListGUI(a, padding + Settings.indentSize, this));
+			subEntries.add(new MonsterBookEntryListGUI(a, this));
 		}
 		
 	}
@@ -39,7 +38,7 @@ public class MonsterBookEntryManagerListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
-		addExportAction();
+		addChildAction("Add Monster Book Entry", manager, MonsterBook::new, MonsterBookEntryListGUI::new);
 		add(actions);
 		addMouseListener();
 	}

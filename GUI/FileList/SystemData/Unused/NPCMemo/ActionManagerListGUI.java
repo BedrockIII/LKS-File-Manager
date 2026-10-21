@@ -4,7 +4,6 @@ import GUI.FileInfo.MenuDB.NPCMemo.ActionManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.ActionMemo;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.ActionMemoManager;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class ActionManagerListGUI extends CollapseableFileList
@@ -31,7 +30,7 @@ public class ActionManagerListGUI extends CollapseableFileList
 		subEntries.removeAll(subEntries);
 		for(ActionMemo a : manager.getEntries())
 		{
-			subEntries.add(new ActionListGUI(a, padding + Settings.indentSize, this));
+			subEntries.add(new ActionListGUI(a, this));
 		}
 		
 	}
@@ -41,6 +40,7 @@ public class ActionManagerListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
+		addChildAction("Add NPC Action", manager.getEntries(), ActionMemo::new, ActionListGUI::new);
 		add(actions);
 		addMouseListener();
 	}

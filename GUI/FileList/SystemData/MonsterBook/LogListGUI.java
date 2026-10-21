@@ -3,18 +3,19 @@ package GUI.FileList.SystemData.MonsterBook;
 import GUI.FileInfo.MenuDB.MonsterBook.LogInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterLog;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class LogListGUI extends FileList
 {
 	LogManagerListGUI parent;
 	MonsterLog entry;
-	public LogListGUI(MonsterLog entry, int padding, LogManagerListGUI parent)
+	public LogListGUI(MonsterLog entry, LogManagerListGUI parent)
 	{
-		this.parent = parent;
-		this.padding = padding;
+		padding = parent.getPadding() + Settings.indentSize;
 		this.entry = entry;
-		file = entry;
+		super.file = entry;
+		this.parent = parent;
 		initializeAll();
 	}
 	protected void initializeAll()
@@ -28,7 +29,9 @@ public class LogListGUI extends FileList
 	}
 	protected void addActions()
 	{
-		// TODO Add Delete Action
+		addDeleteAction("Delete Monster Log Entry", parent, parent.manager);
+		addMoveUpAction(parent, parent.manager);
+		addMoveDownAction(parent, parent.manager);
 		add(actions);
 		addMouseListener();
 	}

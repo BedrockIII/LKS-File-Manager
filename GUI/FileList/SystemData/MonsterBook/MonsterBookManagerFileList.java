@@ -48,23 +48,8 @@ public class MonsterBookManagerFileList extends CollapseableFileList
 	{
 		addExportAction();
 		addReplaceRawAction();
-		addExportBITAction();
-		addImportBITAction();
-		addReplaceBITAction();
 		add(actions);
 		addMouseListener();
-	}
-	private void addExportBITAction()
-	{
-		//actions.add(GUIUtils.createExportAction("Export Entries as .bit text file", "HummingBook.bit", "Bedrock's Intermediate Text File", manager::toIntermediateText));
-	}
-	private void addImportBITAction()
-	{
-		//actions.add(GUIUtils.createImportAction("Import Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::importFromIntermediateText, this));
-	}
-	private void addReplaceBITAction()
-	{
-		//actions.add(GUIUtils.createImportAction("Replace Entries from .bit text file", "Bedrock's Intermediate Text File", "bit", manager::replaceFromIntermediateText, this));
 	}
 	private void addReplaceRawAction()
 	{

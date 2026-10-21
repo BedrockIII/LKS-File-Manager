@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import GUI.FileInfo.MenuDB.MonsterBook.LogManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterLog;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class LogManagerListGUI extends CollapseableFileList
@@ -29,7 +28,7 @@ public class LogManagerListGUI extends CollapseableFileList
 		subEntries.removeAll(subEntries);
 		for(MonsterLog a : manager)
 		{
-			subEntries.add(new LogListGUI(a, padding + Settings.indentSize, this));
+			subEntries.add(new LogListGUI(a, this));
 		}
 		
 	}
@@ -39,7 +38,7 @@ public class LogManagerListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
-		addExportAction();
+		addChildAction("Add Monster Log", manager, MonsterLog::new, LogListGUI::new);
 		add(actions);
 		addMouseListener();
 	}

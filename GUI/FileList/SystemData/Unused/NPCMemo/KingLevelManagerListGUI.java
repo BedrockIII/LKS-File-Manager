@@ -4,7 +4,6 @@ import GUI.FileInfo.MenuDB.NPCMemo.KingLevelManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.KingLevel;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.KingLevelManager;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class KingLevelManagerListGUI extends CollapseableFileList
@@ -29,7 +28,7 @@ public class KingLevelManagerListGUI extends CollapseableFileList
 		subEntries.removeAll(subEntries);
 		for(KingLevel a : manager.getEntries())
 		{
-			subEntries.add(new KingLevelListGUI(a, padding + Settings.indentSize, this));
+			subEntries.add(new KingLevelListGUI(a, this));
 		}
 		
 	}
@@ -39,6 +38,7 @@ public class KingLevelManagerListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
+		addChildAction("Add King Level", manager.getEntries(), KingLevel::new, KingLevelListGUI::new);
 		add(actions);
 		addMouseListener();
 	}

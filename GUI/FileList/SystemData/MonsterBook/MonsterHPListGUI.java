@@ -3,18 +3,19 @@ package GUI.FileList.SystemData.MonsterBook;
 import GUI.FileInfo.MenuDB.MonsterBook.MonsterHPInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterMod;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class MonsterHPListGUI extends FileList
 {
 	MonsterHPManagerListGUI parent;
 	MonsterMod hp;
-	public MonsterHPListGUI(MonsterMod hp, int padding, MonsterHPManagerListGUI parent)
+	public MonsterHPListGUI(MonsterMod hp, MonsterHPManagerListGUI parent)
 	{
-		this.parent = parent;
-		this.padding = padding;
+		padding = parent.getPadding() + Settings.indentSize;
 		this.hp = hp;
-		file = hp;
+		super.file = hp;
+		this.parent = parent;
 		initializeAll();
 	}
 	protected void initializeAll()
@@ -28,7 +29,9 @@ public class MonsterHPListGUI extends FileList
 	}
 	protected void addActions()
 	{
-		// TODO Add Delete Action
+		addDeleteAction("Delete Monster Mod Log Name", parent, parent.manager);
+		addMoveUpAction(parent, parent.manager);
+		addMoveDownAction(parent, parent.manager);
 		add(actions);
 		addMouseListener();
 	}

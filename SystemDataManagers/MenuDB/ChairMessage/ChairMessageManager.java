@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
-import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class ChairMessageManager implements OpenedFile, IntermediateFileFormat
+public class ChairMessageManager implements OpenedFile
 {
 	ArrayList<ChairMessage> VerdeEntries = new ArrayList<ChairMessage>();
 	ArrayList<ChairMessage> HowserEntries = new ArrayList<ChairMessage>();
@@ -17,10 +16,6 @@ public class ChairMessageManager implements OpenedFile, IntermediateFileFormat
 	public ChairMessageManager(byte[] data)
 	{
 		initializeFromBytes(data);
-	}
-	public ChairMessageManager(List<String> lines)
-	{
-		initializeFromLines(lines);
 	}
 	private void initializeFromBytes(byte[] data)
 	{
@@ -42,19 +37,6 @@ public class ChairMessageManager implements OpenedFile, IntermediateFileFormat
 		{
 			Entries.add(new ChairMessage(message, data.getInt()));
 		}
-	}
-	private void initializeFromLines(List<String> lines)
-	{
-		//TODO
-	}
-	public String toString()
-	{
-		//TODO
-		return "Error Message";
-	}
-	public void setData(byte[] data) 
-	{
-		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
 	}
 	public byte[] toBytes() 
 	{
@@ -110,7 +92,7 @@ public class ChairMessageManager implements OpenedFile, IntermediateFileFormat
 	{
 		return LiamEntries;
 	}
-	public void replaceFromData(byte[] data)
+	public void setData(byte[] data)
 	{
 		VerdeEntries.removeAll(VerdeEntries);
 		HowserEntries.removeAll(HowserEntries);
@@ -120,24 +102,5 @@ public class ChairMessageManager implements OpenedFile, IntermediateFileFormat
 	public boolean equals(String name)
 	{
 		throw new UnsupportedOperationException("equals(String name) should not be called on type " + this.getClass());
-	}
-	public void initializeFromBIT(List<String> lines)
-	{
-		VerdeEntries.removeAll(VerdeEntries);
-		HowserEntries.removeAll(HowserEntries);
-		LiamEntries.removeAll(LiamEntries);
-		initializeFromLines(lines);
-	}
-	public void importFromBIT(List<String> lines)
-	{
-		initializeFromLines(lines);
-	}
-	public byte[] toBIT()
-	{
-		return Utils.encodeStringToBytes(toString());
-	}
-	public String getBITName()
-	{
-		return "ChairMessage.bit";
 	}
 }

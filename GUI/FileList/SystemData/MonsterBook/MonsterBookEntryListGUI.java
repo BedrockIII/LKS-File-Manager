@@ -3,18 +3,19 @@ package GUI.FileList.SystemData.MonsterBook;
 import GUI.FileInfo.MenuDB.MonsterBook.MonsterBookEntryInfoGUI;
 import GUI.FileList.FileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterBook;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class MonsterBookEntryListGUI extends FileList
 {
 	MonsterBookEntryManagerListGUI parent;
 	MonsterBook entry;
-	public MonsterBookEntryListGUI(MonsterBook entry, int padding, MonsterBookEntryManagerListGUI parent)
+	public MonsterBookEntryListGUI(MonsterBook entry, MonsterBookEntryManagerListGUI parent)
 	{
-		this.parent = parent;
-		this.padding = padding;
+		padding = parent.getPadding() + Settings.indentSize;
 		this.entry = entry;
-		file = entry;
+		super.file = entry;
+		this.parent = parent;
 		initializeAll();
 	}
 	protected void initializeAll()
@@ -28,7 +29,9 @@ public class MonsterBookEntryListGUI extends FileList
 	}
 	protected void addActions()
 	{
-		// TODO Add Delete Action
+		addDeleteAction("Delete Monster Book Entry", parent, parent.manager);
+		addMoveUpAction(parent, parent.manager);
+		addMoveDownAction(parent, parent.manager);
 		add(actions);
 		addMouseListener();
 	}

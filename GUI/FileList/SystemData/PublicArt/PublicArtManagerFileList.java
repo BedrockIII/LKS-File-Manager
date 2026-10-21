@@ -28,7 +28,7 @@ public class PublicArtManagerFileList extends CollapseableFileList implements BI
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
-		initializeInfoGUI();
+		//initializeInfoGUI();
 		System.out.print("█");
 		addActions();
 		System.out.print("█");

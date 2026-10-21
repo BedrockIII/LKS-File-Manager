@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import GUI.FileInfo.MenuDB.MonsterBook.MonsterHPManagerInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.Books.MonsterBook.MonsterMod;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class MonsterHPManagerListGUI extends CollapseableFileList
@@ -19,7 +18,7 @@ public class MonsterHPManagerListGUI extends CollapseableFileList
 	}
 	protected void initializeAll() 
 	{
-		initializeListGUI("(Unused) HP Data");
+		initializeListGUI("Monster Mod Log Data");
 		initializeSubGUI();
 		addActions();
 		reAddComponents();
@@ -29,7 +28,7 @@ public class MonsterHPManagerListGUI extends CollapseableFileList
 		subEntries.removeAll(subEntries);
 		for(MonsterMod a : manager)
 		{
-			subEntries.add(new MonsterHPListGUI(a, padding + Settings.indentSize, this));
+			subEntries.add(new MonsterHPListGUI(a, this));
 		}
 		
 	}
@@ -39,7 +38,7 @@ public class MonsterHPManagerListGUI extends CollapseableFileList
 	}
 	protected void addActions() 
 	{
-		addExportAction();
+		addChildAction("Add Monster Mod Log Name", manager, MonsterMod::new, MonsterHPListGUI::new);
 		add(actions);
 		addMouseListener();
 	}

@@ -5,12 +5,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import GUI.FileInfo.MenuDB.ChairMessage.ThroneMessageFileInfo;
 import GUI.FileList.CollapseableFileList;
 import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
-import bFM.BITFileList;
 import bFM.GUIUtils;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
-public class ThroneMessageFileList extends CollapseableFileList implements BITFileList
+public class ThroneMessageFileList extends CollapseableFileList 
 {
 	ChairMessageManager manager;
 	public ThroneMessageFileList(ChairMessageManager file, int padding) 
@@ -50,26 +49,11 @@ public class ThroneMessageFileList extends CollapseableFileList implements BITFi
 	{
 		addExportAction();
 		addReplaceRawAction();
-		addExportBITAction();
-		addImportBITAction();
-		addReplaceBITAction();
 		add(actions);
 		addMouseListener();
 	}
-	public void addExportBITAction()
-	{
-		//actions.add(createExportBITAction(manager));
-	}
-	public void addImportBITAction()
-	{
-		//actions.add(createImportBITAction(manager, this));
-	}
-	public void addReplaceBITAction()
-	{
-		//actions.add(createReplaceBITAction(manager, this));
-	}
 	private void addReplaceRawAction()
 	{
-		actions.add(GUIUtils.createImportAction("Replace Entries from raw ChairMessage.bin file", "Throne Message Database Binary File", "bin", manager::replaceFromData, this));
+		actions.add(GUIUtils.createImportAction("Replace Entries from raw ChairMessage.bin file", "Throne Message Database Binary File", "bin", manager::setData, this));
 	}
 }
