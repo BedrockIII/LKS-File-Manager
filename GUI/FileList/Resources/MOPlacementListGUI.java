@@ -42,15 +42,13 @@ public class MOPlacementListGUI extends CollapseableFileList
 	//Things
 	RandomAreasListGUI RandomPlaces;
 	GroupCategoriesListGUI Groups;
-	
-	int padding = 0;
 	public MOPlacementListGUI(MissionObjectPlacementManager file, int padding, MissionObjectDatabase parent) 
 	{
 		this.parent = parent;
 		this.file = file;
 		data = file;
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
 	public void initializeSubGUI() 
 	{
@@ -60,9 +58,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 		RandomPlaces = new RandomAreasListGUI(data.getAreaList(), padding + Settings.indentSize, this);
 		subEntries.add(RandomPlaces);
 	}
-	protected void initializeAll(int padding) 
+	protected void initializeAll() 
 	{
-		initializeListGUI(padding, "Mission Object Placements");
+		initializeListGUI("Mission Object Placements");
 		initializeSubGUI();
 		initializeInfoGUI();
 		addActions();
@@ -114,13 +112,12 @@ public class MOPlacementListGUI extends CollapseableFileList
 	{
 		ArrayList<MobRandomArea> data;
 		MOPlacementListGUI parent;
-		int padding = 0;
 		public RandomAreasListGUI(ArrayList<MobRandomArea> file, int padding, MOPlacementListGUI parent) 
 		{
 			this.parent = parent;
 			data = file;
 			this.padding = padding;
-			initializeAll(padding);
+			initializeAll();
 		}
 		public void initializeSubGUI() 
 		{
@@ -129,9 +126,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 				subEntries.add(new RandomAreaListGUI(Area, padding + Settings.indentSize, this));
 			}
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
-			initializeListGUI(padding, "Random Spawning Areas");
+			initializeListGUI("Random Spawning Areas");
 			initializeSubGUI();
 			//initializeInfoGUI();
 			addActions();
@@ -162,13 +159,12 @@ public class MOPlacementListGUI extends CollapseableFileList
 		{
 			MobRandomArea data;
 			RandomAreasListGUI parent;
-			int padding = 0;
 			public RandomAreaListGUI(MobRandomArea file, int padding, RandomAreasListGUI parent) 
 			{
 				this.parent = parent;
 				data = file;
 				this.padding = padding;
-				initializeAll(padding);
+				initializeAll();
 			}
 			public void initializeSubGUI() 
 			{
@@ -177,9 +173,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 					subEntries.add(new RandomPointListGUI(Point, padding + Settings.indentSize, this));
 				}
 			}
-			protected void initializeAll(int padding) 
+			protected void initializeAll() 
 			{
-				initializeListGUI(padding, "Random Area " + data.getCode());
+				initializeListGUI("Random Area " + data.getCode());
 				initializeSubGUI();
 				//initializeInfoGUI();
 				addActions();
@@ -221,17 +217,16 @@ public class MOPlacementListGUI extends CollapseableFileList
 			{
 				MobRandomPoint data;
 				RandomAreaListGUI parent;
-				int padding = 0;
 				public RandomPointListGUI(MobRandomPoint file, int padding, RandomAreaListGUI parent) 
 				{
 					this.parent = parent;
 					data = file;
 					this.padding = padding;
-					initializeAll(padding);
+					initializeAll();
 				}
-				protected void initializeAll(int padding) 
+				protected void initializeAll() 
 				{
-					initializeListGUI(padding, "Random Point");
+					initializeListGUI("Random Point");
 					addActions();
 					reAddComponents();
 				}
@@ -281,13 +276,12 @@ public class MOPlacementListGUI extends CollapseableFileList
 	{
 		MissionObjectPlacementManager data;
 		public MOPlacementListGUI parent;
-		int padding = 0;
 		public GroupCategoriesListGUI(MissionObjectPlacementManager file, int padding, MOPlacementListGUI parent) 
 		{
 			this.parent = parent;
 			data = file;
 			this.padding = padding;
-			initializeAll(padding);
+			initializeAll();
 		}
 		public void initializeSubGUI() 
 		{
@@ -299,9 +293,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 			}
 			//System.out.println("\nFinished");
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
-			initializeListGUI(padding, "Mission Groups");
+			initializeListGUI("Mission Groups");
 			initializeSubGUI();
 			addActions();
 			reAddComponents();
@@ -336,7 +330,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 		{
 			ArrayList<MobGroup> data;
 			public GroupCategoriesListGUI parent;
-			int padding = 0;
 			private GroupCategoryListGUI(int code, int padding, GroupCategoriesListGUI parent) 
 			{
 				this.parent = parent;
@@ -345,14 +338,14 @@ public class MOPlacementListGUI extends CollapseableFileList
 				parent.data.getMobGroups().add(g);
 				data.add(g);
 				this.padding = padding;
-				initializeAll(padding);
+				initializeAll();
 			}
 			public GroupCategoryListGUI(ArrayList<MobGroup> file, int padding, GroupCategoriesListGUI parent) 
 			{
 				this.parent = parent;
 				data = file;
 				this.padding = padding;
-				initializeAll(padding);
+				initializeAll();
 			}
 			public void initializeSubGUI() 
 			{
@@ -364,9 +357,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 				}
 				//System.out.println("\nG2 Done");
 			}
-			protected void initializeAll(int padding) 
+			protected void initializeAll() 
 			{
-				initializeListGUI(padding, GroupCategoryManager.getCategory(data.get(0).getGroupCategoryID()).name().toString());
+				initializeListGUI(GroupCategoryManager.getCategory(data.get(0).getGroupCategoryID()).name().toString());
 				initializeSubGUI();
 				//initializeInfoGUI();
 				addActions();
@@ -450,16 +443,13 @@ public class MOPlacementListGUI extends CollapseableFileList
 			{
 				public MobGroup data;
 				public GroupCategoryListGUI parent;
-				JMenuItem moveUp = null;
-				JMenuItem moveDown = null;
-				int padding = 0;
 				public GroupListGUI(MobGroup file, int padding, GroupCategoryListGUI parent) 
 				{
 					this.parent = parent;
 					data = file;
 					this.file = file;
 					this.padding = padding;
-					initializeAll(padding);
+					initializeAll();
 				}
 				public void initializeSubGUI() 
 				{
@@ -468,9 +458,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 						subEntries.add(new ObjectListGUI(Object, padding + Settings.indentSize, this));
 					}
 				}
-				protected void initializeAll(int padding) 
+				protected void initializeAll() 
 				{
-					initializeListGUI(padding, "Group " + data.getCode());
+					initializeListGUI("Group " + data.getCode());
 					initializeSubGUI();
 					//initializeInfoGUI();
 					addActions();
@@ -486,9 +476,9 @@ public class MOPlacementListGUI extends CollapseableFileList
 					else removeConstantPlaceAction();
 					addChangeCategoryAction();
 					addObjectAction();
-					addDeleteAction();
-					addMoveDownAction();
-					addMoveUpAction();
+					addDeleteAction("Delete Group", parent, parent.data);
+					addMoveDownAction(parent, parent.data);
+					addMoveUpAction(parent, parent.data);
 					add(actions);
 					addMouseListener();
 				}
@@ -509,51 +499,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 						GUI.update();
 					});
 					actions.add(removeElem);
-				}
-				protected void addDeleteAction()
-				{
-					JMenuItem removeElem = new JMenuItem("Delete Group");
-					removeElem.addActionListener(e -> {
-						parent.removeGroup(this);
-						GUI.update();
-					});
-					actions.add(removeElem);
-				}
-				private void addMoveUpAction()
-				{
-					if(moveUp == null)
-					{
-						moveUp = new JMenuItem("Move Up");
-						moveUp.addActionListener(e -> {
-							parent.moveUp(this);
-							addMoveDownAction();
-							addMoveUpAction();
-							GUI.update();
-						});
-					}
-					if(!parent.isFirst(this))
-					{
-						actions.add(moveUp);
-					}
-					else actions.remove(moveUp);
-				}
-				private void addMoveDownAction()
-				{
-					if(moveDown == null)
-					{
-						moveDown = new JMenuItem("Move Down");
-						moveDown.addActionListener(e -> {
-							parent.moveDown(this);
-							addMoveDownAction();
-							addMoveUpAction();
-							GUI.update();
-						});
-					}
-					if(!parent.isLast(this))
-					{
-						actions.add(moveDown);
-					}
-					else actions.remove(moveDown);
 				}
 				JMenuItem addPlacement = null;
 				JMenuItem removePlacement = null;
@@ -605,18 +550,17 @@ public class MOPlacementListGUI extends CollapseableFileList
 					GroupListGUI parent;
 					JMenuItem moveUp = null;
 					JMenuItem moveDown = null;
-					int padding = 0;
 					public ObjectListGUI(MobObject file, int padding, GroupListGUI parent) 
 					{
 						this.parent = parent;
 						data = file;
 						this.file = file;
 						this.padding = padding;
-						initializeAll(padding);
+						initializeAll();
 					}
-					protected void initializeAll(int padding) 
+					protected void initializeAll() 
 					{
-						initializeListGUI(padding, "Mission Object");
+						initializeListGUI("Mission Object");
 						addActions();
 						reAddComponents();
 					}
@@ -626,102 +570,21 @@ public class MOPlacementListGUI extends CollapseableFileList
 					}
 					protected void addActions() 
 					{
-						addMoveDownAction();
-						addMoveUpAction();
-						addDeleteAction();
+						addMoveDownAction(parent, parent.data.getObjects());
+						addMoveUpAction(parent, parent.data.getObjects());
+						addDeleteAction("Delete Object", parent, parent.data.getObjects());
 						add(actions);
 						addMouseListener();
-					}
-					protected void addDeleteAction()
-					{
-						JMenuItem removeElem = new JMenuItem("Delete Object");
-						removeElem.addActionListener(e -> {
-							parent.removeObject(this);
-							GUI.update();
-						});
-						actions.add(removeElem);
-					}
-					private void addMoveUpAction()
-					{
-						if(moveUp == null)
-						{
-							moveUp = new JMenuItem("Move Up");
-							moveUp.addActionListener(e -> {
-								parent.moveUp(this);
-								addMoveDownAction();
-								addMoveUpAction();
-								GUI.update();
-							});
-						}
-						if(!parent.isFirst(this))
-						{
-							actions.add(moveUp, 0);
-						}
-						else actions.remove(moveUp);
-					}
-					private void addMoveDownAction()
-					{
-						if(moveDown == null)
-						{
-							moveDown = new JMenuItem("Move Down");
-							moveDown.addActionListener(e -> {
-								parent.moveDown(this);
-								addMoveDownAction();
-								addMoveUpAction();
-								GUI.update();
-							});
-						}
-						if(!parent.isLast(this))
-						{
-							actions.add(moveDown, 0);
-						}
-						else actions.remove(moveDown);
 					}
 					public void update()
 					{
 						fileName.setText(parent.parent.parent.parent.parent.MonsterDataPack.getModCodeByName(this.data.getModCode()));
 						super.update();
 					}
-				}
-				public void removeObject(ObjectListGUI object)
-				{
-					data.getObjects().remove(object.data);
-					subEntries.remove(object);
-					reAddComponents();
-				}
-				public boolean isLast(ObjectListGUI object) 
-				{
-					return data.getObjects().indexOf(object.data) == data.getObjects().size()-1;
-				}
-				public void moveDown(ObjectListGUI object) 
-				{
-					if(isLast(object)) return;
-					int index = subEntries.indexOf(object);
-					if(index == -1) this.removeObject(object);
-					subEntries.remove(object);
-					subEntries.add(index + 1, object);
-					index = data.getObjects().indexOf(object.data);
-					if(index == -1) this.removeObject(object);
-					data.getObjects().remove(object.data);
-					data.getObjects().add(index + 1, object.data);
-					reAddComponents();
-				}
-				public boolean isFirst(ObjectListGUI object) 
-				{
-					return data.getObjects().indexOf(object.data) == 0;
-				}
-				public void moveUp(ObjectListGUI object)
-				{
-					if(isFirst(object)) return;
-					int index = subEntries.indexOf(object);
-					if(index == -1) this.removeObject(object);
-					subEntries.remove(object);
-					subEntries.add(index - 1, object);
-					index = data.getObjects().indexOf(object.data);
-					if(index == -1) this.removeObject(object);
-					data.getObjects().remove(object.data);
-					data.getObjects().add(index - 1, object.data);
-					reAddComponents();
+					public String getSearchName()
+					{
+						return super.getSearchName() + " " + data.getItemDrop();
+					}
 				}
 				public void newObject(ObjectDefault objectType, int id) 
 				{
@@ -739,40 +602,6 @@ public class MOPlacementListGUI extends CollapseableFileList
 			{
 				data.remove(object.data);
 				subEntries.remove(object);
-				reAddComponents();
-			}
-			public boolean isLast(GroupListGUI object) 
-			{
-				return data.indexOf(object.data) == data.size()-1;
-			}
-			public void moveDown(GroupListGUI object) 
-			{
-				if(isLast(object)) return;
-				int index = subEntries.indexOf(object);
-				if(index == -1) this.removeGroup(object);
-				subEntries.remove(object);
-				subEntries.add(index + 1, object);
-				index = data.indexOf(object.data);
-				if(index == -1) this.removeGroup(object);
-				data.remove(object.data);
-				data.add(index + 1, object.data);
-				reAddComponents();
-			}
-			public boolean isFirst(GroupListGUI object) 
-			{
-				return data.indexOf(object.data) == 0;
-			}
-			public void moveUp(GroupListGUI object)
-			{
-				if(isFirst(object)) return;
-				int index = subEntries.indexOf(object);
-				if(index == -1) this.removeGroup(object);
-				subEntries.remove(object);
-				subEntries.add(index - 1, object);
-				index = data.indexOf(object.data);
-				if(index == -1) this.removeGroup(object);
-				data.remove(object.data);
-				data.add(index - 1, object.data);
 				reAddComponents();
 			}
 			public int getGroupCategoryID()

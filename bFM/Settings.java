@@ -6,6 +6,8 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -238,5 +240,25 @@ public class Settings
 	{
 		//Return the name of the language based off number. default to english as i speak that
 		return Utils.getLanguage(LanguageCode);
+	}
+	public static Charset getCharset()
+	{
+		return getCharset(LanguageCode);
+	}
+	public static Charset getCharset(int LanguageCode)
+	{
+		//Return the charset of the languageCode
+		switch(LanguageCode)
+		{
+		case 0:
+			return Charset.forName("Shift-JIS");
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+			return StandardCharsets.UTF_8;
+		}
+		return Charset.forName("Shift-JIS");
 	}
 }

@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import bFM.FileTypeUtils;
 import bFM.GenericFile;
 import bFM.OpenedFile;
 import bFM.Utils;
@@ -124,7 +125,7 @@ public class PCKGManager extends GenericFile
 	protected void addPackedFile(String theNewName, byte[] fileContents)
 	{
 		if(!bFM.Utils.autoEditSubPackFile) files.add(new GenericFile(theNewName, fileContents));
-		else files.add(OpenedFile.makeFile(theNewName, fileContents));
+		else files.add(FileTypeUtils.makeFile(theNewName, fileContents));
 	}
 	public byte[] getFile(String name)
 	{ 
@@ -246,7 +247,7 @@ public class PCKGManager extends GenericFile
 		}
 		if(!bFM.Utils.autoEditSubPackFile) files.add(new GenericFile(name, bytes));
 		else if(isPAC(bytes))files.add(new PCKGManager(bytes, name));
-		else files.add(OpenedFile.makeFile(name, bytes));
+		else files.add(FileTypeUtils.makeFile(name, bytes));
 	}
 	public void writePac(String outputName) 
 	{

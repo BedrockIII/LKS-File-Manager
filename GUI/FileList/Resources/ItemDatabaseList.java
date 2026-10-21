@@ -23,19 +23,18 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class ItemDatabaseList extends CollapseableFileList
 {
-	private int padding = 0;
 	private ArrayList<Item> items = new ArrayList<Item>();
 	public ItemDatabaseList(itemDatabaseManager file, int padding) 
 	{
 		this.padding = padding;
 		this.file = file;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding) 
+	protected void initializeAll() 
 	{
 		System.out.print("Opening Item DB Package File: █");
 		fileTypes = new FileNameExtensionFilter("Item DB Package File", "pac");
-		initializeListGUI(padding, "Item Database Manager");
+		initializeListGUI("Item Database Manager");
 		System.out.print("█");
 		initializeSubGUI();
 		System.out.print("█");
@@ -114,16 +113,15 @@ public class ItemDatabaseList extends CollapseableFileList
 		private ItemDatabaseList parent;
 		private ItemWeaponDataList weaponData;
 		private ItemSoundEffectList seData;
-		private int padding;
 		public ItemList(Item item, int padding, ItemDatabaseList parent) 
 		{
 			file = item;
 			this.item = item;
 			this.padding = padding;
 			this.parent = parent;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding) 
+		protected void initializeAll() 
 		{
 			this.initializeListGUI(padding);
 			this.initializeSubGUI();
@@ -275,15 +273,14 @@ public class ItemDatabaseList extends CollapseableFileList
 		}
 		public class ItemWeaponDataList extends FileList
 		{
-			final int padding;
 			ItemList parent;
 			public ItemWeaponDataList(Item item, int padding, ItemList parent) 
 			{
 				this.padding = padding;
 				this.parent = parent;
-				initializeAll(padding);
+				initializeAll();
 			}
-			protected void initializeAll(int padding) 
+			protected void initializeAll() 
 			{
 				this.initializeListGUI(padding);
 				//this.initializeInfoGUI();
@@ -291,7 +288,7 @@ public class ItemDatabaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				initializeListGUI(padding, "Weapon Data");
+				initializeListGUI("Weapon Data");
 			}
 			protected void initializeInfoGUI() 
 			{
@@ -306,15 +303,14 @@ public class ItemDatabaseList extends CollapseableFileList
 		}
 		public class ItemSoundEffectList extends FileList
 		{
-			final int padding;
 			ItemList parent;
 			public ItemSoundEffectList(Item item, int padding, ItemList parent) 
 			{
 				this.padding = padding;
 				this.parent = parent;
-				initializeAll(padding);
+				initializeAll();
 			}
-			protected void initializeAll(int padding) 
+			protected void initializeAll() 
 			{
 				initializeListGUI(padding);
 				//this.initializeInfoGUI();
@@ -322,7 +318,7 @@ public class ItemDatabaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				initializeListGUI(padding, "Sound Effect Data");
+				initializeListGUI("Sound Effect Data");
 			}
 			protected void initializeInfoGUI() 
 			{
@@ -338,16 +334,15 @@ public class ItemDatabaseList extends CollapseableFileList
 		public class ItemPlacementDataList extends FileList
 		{
 			Placement placement;
-			final int padding;
 			ItemList parent;
 			public ItemPlacementDataList(Placement placement, int padding, ItemList parent) 
 			{
 				this.placement = placement;
 				this.padding = padding;
 				this.parent = parent;
-				initializeAll(padding);
+				initializeAll();
 			}
-			protected void initializeAll(int padding) 
+			protected void initializeAll() 
 			{
 				initializeListGUI(padding);
 				//initializeInfoGUI();
@@ -355,7 +350,7 @@ public class ItemDatabaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				initializeListGUI(padding, "Placement Data");
+				initializeListGUI("Placement Data");
 			}
 			protected void initializeInfoGUI() 
 			{

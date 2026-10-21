@@ -13,14 +13,6 @@ public interface Data
 	{
 		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
 	}
-	public void setData(byte[] data) 
-	{
-		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
-	}
-	public byte[] toBytes() 
-	{
-		throw new UnsupportedOperationException("toBytes() should not be called on type " + this.getClass());
-	}
 	public void setName(String name) 
 	{
 		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
@@ -28,6 +20,14 @@ public interface Data
 	public String getName() 
 	{
 		throw new UnsupportedOperationException("getName() should not be called on type " + this.getClass());
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public byte[] toBytes() 
+	{
+		throw new UnsupportedOperationException("toBytes() should not be called on type " + this.getClass());
 	}
 	public int getSize() 
 	{

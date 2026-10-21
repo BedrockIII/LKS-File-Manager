@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import PCKGManager.PCKGManager;
+import bFM.FileTypeUtils;
 import bFM.OpenedFile;
 import bFM.Utils;
 
@@ -52,7 +53,7 @@ public class LZ_PCKGManager extends PCKGManager
 			fileName = fileName.substring(0, fileName.indexOf("_LZ.bin")) + ".txt";
 		}
 		byte[] extractedData = LZ10Decompressor.decompress(fileContents);
-		files.add(OpenedFile.makeFile(fileName, extractedData));
+		files.add(FileTypeUtils.makeFile(fileName, extractedData));
 	}
 	protected byte[] getFileWithHeader(OpenedFile file, boolean isLast)
 	{

@@ -12,19 +12,18 @@ public class MissionObjectDatabase extends CollapseableFileList
 {
 	public MSDBManager MonsterDataPack;
 	private MOPlacementListGUI placementGUI;
-	int padding;
 	public MissionObjectDatabase(MSDBManager file, int padding)
 	{
 		this.file = file;
 		MonsterDataPack = file;
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding)
+	protected void initializeAll()
 	{
 		System.out.print("Opening Mission Object Database File: ");
 		fileTypes = new FileNameExtensionFilter("Mission Object Database File", "pac");
-		initializeListGUI(padding, "Mission Object Database");
+		initializeListGUI("Mission Object Database");
 		System.out.print("█\n");
 		initializeSubGUI();
 		//System.out.print("█");

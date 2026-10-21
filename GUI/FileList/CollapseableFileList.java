@@ -8,6 +8,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -32,9 +35,9 @@ public abstract class CollapseableFileList extends FileList
 	String filter = "";
 	protected void initializeListGUI(int padding)
 	{
-		initializeListGUI(padding, ((Nameable) file).getName());
+		initializeListGUI(((Nameable) file).getName());
 	}
-	protected void initializeListGUI(int padding, String name) 
+	protected void initializeListGUI(String name) 
 	{
 		setLayout(new GridBagLayout());
 		GridBagConstraints layout = new GridBagConstraints();
@@ -251,5 +254,117 @@ public abstract class CollapseableFileList extends FileList
 			FileList c = subEntries.get(j);
 			c.filterAddFiles(filter);
 		}
+	}
+	<T> boolean isFirst(FileList child, List<T> children) 
+	{
+		return children.indexOf(child.file) == 0;
+	}
+	<T> boolean isLast(FileList child, List<T> children) 
+	{
+		return children.indexOf(child.file) == children.size()-1;
+	}
+	@SuppressWarnings("unchecked")
+	<T> void moveUp(FileList child, List<T> children)
+	{
+		if(children == null)throw new IllegalArgumentException("Passed List Is Null!");
+		if(children.size() <= 0)throw new IllegalArgumentException("Passed List Is Size 0!");
+		if(child.file == null) throw new IllegalArgumentException("Child's Data is Null.\nExpected: " + children.get(0).getClass());
+		if(!(children.get(0).getClass().isInstance(child.file))) throw new IllegalArgumentException("Child's Data is Wrong Type.\nExpected: " + children.get(0).getClass() + "\n is: " + child.file.getClass() + "\n");
+		if(isFirst(child, children)) return;
+
+		//If it is not in the GUI List it shouldn't Exist. Kill It.
+		int index = subEntries.indexOf(child);
+		if(index == -1) 
+		{
+			removeChild(child, children);
+			return;
+		}
+		subEntries.remove(child);
+		subEntries.add(index - 1, child);
+		index = children.indexOf((T) child.file);
+
+		//If it is not in the File Children List it shouldn't Exist. Kill It.
+		if(index == -1) 
+		{
+			removeChild(child, children);
+			return;
+		}
+		children.remove((T) child.file);
+		children.add(index - 1, (T) child.file);
+		
+		//Update the Move Up/Down of the affected children
+		subEntries.get(index).updateMoveActions(this, children);
+		child.updateMoveActions(this, children);
+		
+		reAddComponents();
+	}
+	@SuppressWarnings("unchecked")
+	<T> void moveDown(FileList child, List<T> children) 
+	{
+		if(children == null)throw new IllegalArgumentException("Passed List Is Null!");
+		if(children.size() <= 0)throw new IllegalArgumentException("Passed List Is Size 0!");
+		if(child.file == null) throw new IllegalArgumentException("Child's Data is Null.\nExpected: " + children.get(0).getClass());
+		if(!(children.get(0).getClass().isInstance(child.file))) throw new IllegalArgumentException("Child's Data is Wrong Type.\nExpected: " + children.get(0).getClass() + "\n is: " + child.file.getClass() + "\n");
+		if(isLast(child, children)) return;
+		
+		//If it is not in the GUI List it shouldn't Exist. Kill It.
+		int index = subEntries.indexOf(child);
+		if(index == -1) 
+		{
+			removeChild(child, children);
+			return;
+		}
+		subEntries.remove(child);
+		subEntries.add(index + 1, child);
+		
+		//If it is not in the File Children List it shouldn't Exist. Kill It.
+		index = children.indexOf(child.file);
+		if(index == -1) 
+		{
+			removeChild(child, children);
+			return;
+		}
+		children.remove((T)child.file);
+		children.add(index + 1, (T) child.file);
+		
+		//Update the Move Up/Down of the affected children
+		subEntries.get(index).updateMoveActions(this, children);
+		child.updateMoveActions(this, children);
+		
+		reAddComponents();
+	}
+	<T> void removeChild(FileList child, List<T> children)
+	{
+		int index = subEntries.indexOf(child);
+		children.remove(child.file);
+		remove(child);
+		subEntries.remove(child);
+		
+		//Update Movement Options of Neighbors
+		if(index > 0)
+		{
+			subEntries.get(index-1).updateMoveActions(this, children);
+		}
+		if(index < subEntries.size())//No Plus 1 Cause Child was deleted
+		{
+			subEntries.get(index).updateMoveActions(this, children);
+		}
+		reAddComponents();
+	}
+	@SuppressWarnings("unchecked")
+	protected <T, U> void addChildAction(String name, List<T> children, Supplier<T> childConstructor, BiFunction<T, U, FileList> guiConstructor)
+	{
+		JMenuItem NewChild = new JMenuItem(name);
+		NewChild.addActionListener(e ->
+		{
+			T child = childConstructor.get();
+			children.add(child);
+			subEntries.add(guiConstructor.apply(child, (U) this));
+			//Add Move Down For the former last entry one
+			if(subEntries.size()>1)subEntries.get(subEntries.size()-2).updateMoveActions(this, children);
+			reAddComponents();
+			GUI.update();
+		});
+		actions.add(NewChild);
 	}
 }

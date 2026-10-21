@@ -1,0 +1,128 @@
+package SystemDataManagers.MenuDB.CockpitLog;
+
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
+import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
+import bFM.OpenedFile;
+import bFM.Utils;
+
+public class CockpitLogManager implements OpenedFile, IntermediateFileFormat
+{
+	ArrayList<LogEntry> Entries = new ArrayList<LogEntry>();
+	public CockpitLogManager(byte[] data)
+	{
+		initializeFromBytes(data);
+	}
+	private void initializeFromBytes(byte[] data)
+	{
+		PCKGManager CockpitLog = new PCKGManager(data);
+		ArrayList<String> Messages = bFM.Utils.extractStrings(CockpitLog.getFile("CockpitLog"));
+		ByteBuffer flagBuffer = ByteBuffer.wrap(CockpitLog.getFile("Val"));
+		for(int i = 0; i < Messages.size(); i++)
+		{
+			Entries.add(new LogEntry(Messages.get(i), flagBuffer.getInt(i*4)));
+		}
+	}
+	private void initializeFromLines(List<String> lines)
+	{
+		LogEntry lastEntry = null;
+		for(int i = 0; i<lines.size(); i++)
+		{
+			if(lines.get(i).indexOf("<<Log Entry>>")!=-1)
+			{
+				lastEntry = new LogEntry(lines.get(i));
+				Entries.add(lastEntry);
+			}
+			if(lines.get(i).indexOf("<<Flag>>")!=-1)
+			{
+				if(lastEntry == null)
+				{
+					throw new IllegalArgumentException("Error Importing from Text. A Flag is Defined Before a Log (line " + i + ")");
+				}
+				else
+				{
+					lastEntry.addLine(lines.get(i));
+				}
+			}
+		}
+	}
+	public CockpitLogManager(List<String> lines)
+	{
+		initializeFromLines(lines);
+	}
+	public byte[] toBytes()
+	{
+		PCKGManager CockpitLog = new PCKGManager();
+		byte[] messageBytes = new byte[0];
+		for(int i = 0; i<Entries.size(); i++)
+		{
+			messageBytes = Utils.mergeArrays(messageBytes, Utils.mergeArrays(Utils.encodeStringToBytes(Entries.get(i).text), (byte)0x00));
+		}
+		byte[] valBin = new byte[0];
+		for(int i = 0; i<Entries.size(); i++)
+		{
+			valBin = Utils.mergeArrays(valBin, ByteBuffer.allocate(4).putInt(Entries.get(i).flag).array());
+		}
+		CockpitLog.addFile("Val", valBin);
+		CockpitLog.addFile("CockpitLog", messageBytes);
+		return CockpitLog.getFile();
+	}
+	public String toString()
+	{
+		String ret = "";
+		for(int i = 0; i<Entries.size(); i++)
+		{
+			ret += Entries.get(i).toBit();
+		}
+		return ret;
+	}
+	public void setData(byte[] data) 
+	{
+		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
+	}
+	public int getSize() 
+	{
+		return toBytes().length;
+	}
+	public ArrayList<LogEntry> getEntries()
+	{
+		return Entries;
+	}
+	public void setName(String name) 
+	{
+		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+	}
+	public String getName() 
+	{
+		return "CockpitLog.bin";
+	}
+	public boolean equals(String name)
+	{
+		throw new UnsupportedOperationException("equals(String name) should not be called on type " + this.getClass());
+	}
+	public void replaceFromData(byte[] data)
+	{
+		Entries.removeAll(Entries);
+		initializeFromBytes(data);
+	}
+	public void initializeFromBIT(List<String> lines)
+	{
+		Entries.removeAll(Entries);
+		initializeFromLines(lines);
+	}
+	public void importFromBIT(List<String> lines)
+	{
+		initializeFromLines(lines);
+	}
+	public byte[] toBIT()
+	{
+		return Utils.encodeStringToBytes(toString());
+	}
+	public String getBITName()
+	{
+		return "CockpitLog.bit";
+	}
+}

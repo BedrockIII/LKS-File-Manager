@@ -5,8 +5,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
+
 import javax.swing.Box;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
@@ -25,35 +28,26 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public abstract class FileList extends JPanel
 {
+	protected JMenuItem moveUp = null;
+	protected JMenuItem moveDown = null;
+	protected int padding;
 	protected Data file = null;
 	protected GenericFileInfoGUI infoGUI = null;
 	protected JLabel fileName = new JLabel();
 	protected JPopupMenu actions = new JPopupMenu();
 	protected FileNameExtensionFilter fileTypes = null;
 	protected static GenericFileInfoGUI nullGUI = null;
-	protected void initializeAll()
-	{
-		initializeAll(0);
-	}
-	protected abstract void initializeAll(int padding);
-	protected void initializeListGUI(int padding, String name) 
+	protected abstract void initializeAll();
+	protected void initializeListGUI(String name) 
 	{
 		setLayout(new GridBagLayout());
 		GridBagConstraints layout = new GridBagConstraints();
 		layout = new GridBagConstraints();
 	    layout.weightx = 0.0;
 	    layout.anchor = GridBagConstraints.NORTHWEST;
-	    
-		//setBorder(BorderFactory.createLineBorder(Color.GREEN));
-	    
-		
 		setPreferredSize(new Dimension(Settings.rowWidth, getHeight()));
-		//setBounds(40+parentX,GUI.assetHeight+parentY,GUI.rowWidth,GUI.assetHeight);
 		setLayout(new GridBagLayout());
-		//setMaximumSize(new Dimension(100000,GUI.assetHeight));
-		
 		add(Box.createHorizontalStrut(padding + 15), layout);
-		
 		layout.weightx = 1.0;
 		layout.weighty = 1.0;
 		fileName = new JLabel(name, SwingConstants.LEFT);
@@ -148,7 +142,7 @@ public abstract class FileList extends JPanel
 	protected boolean filterFiles(String filter)
 	{
 		if(filter.length()<=0) return true;
-		String name = fileName.getText().toLowerCase();
+		String name = getSearchName().toLowerCase();
 		boolean ret = name.indexOf(filter.toLowerCase())!=-1;
 		return ret;
 	}
@@ -172,5 +166,62 @@ public abstract class FileList extends JPanel
 			return nullGUI;
 		}
 		return infoGUI;
+	}
+	public String getSearchName()
+	{
+		return fileName.getText();
+	}
+	protected <T> void addMoveUpAction(CollapseableFileList parent, List<T> children)
+	{
+		moveUp = new JMenuItem("Move Up");
+		moveUp.addActionListener(e -> {
+			parent.moveUp(this, children);
+			updateMoveActions(parent, children);
+			GUI.update();
+		});
+		if(!parent.isFirst(this, children))
+		{
+			actions.add(moveUp);
+		}
+	}
+	protected <T> void updateMoveActions(CollapseableFileList parent, List<T> children)
+	{
+		if(!parent.isFirst(this, children))
+		{
+			actions.add(moveUp);
+		}
+		else actions.remove(moveUp);
+		
+		if(!parent.isLast(this, children))
+		{
+			actions.add(moveDown);
+		}
+		else actions.remove(moveDown);
+	}
+	protected <T> void addMoveDownAction(CollapseableFileList parent, List<T> children)
+	{
+		moveDown = new JMenuItem("Move Down");
+		moveDown.addActionListener(e -> {
+			parent.moveDown(this, children);
+			updateMoveActions(parent, children);
+			GUI.update();
+		});
+		if(!parent.isLast(this, children))
+		{
+			actions.add(moveDown);
+		}
+	}
+	protected <T> void addDeleteAction(String name, CollapseableFileList parent, List<T> children)
+	{
+		JMenuItem Delete = new JMenuItem(name);
+		Delete.addActionListener(e -> {
+			parent.removeChild(this, children);
+			GUI.update();
+		});
+		actions.add(Delete);
+	}
+	public int getPadding()
+	{
+		return padding;
 	}
 }

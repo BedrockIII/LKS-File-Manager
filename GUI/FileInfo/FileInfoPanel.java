@@ -1,5 +1,6 @@
 package GUI.FileInfo;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import javax.swing.JScrollPane;
@@ -25,9 +26,12 @@ public class FileInfoPanel extends JScrollPane
 		panel.scrollRectToVisible(topRect);
 		//panel.setBackground(Settings.bgColor);
 	}
-	public void setFile(FileInfoPanel panel) 
+	public void setFile(GenericFileInfoGUI panel) 
 	{
 		setViewportView(panel);
+		panel.setMaximumSize(new Dimension(getWidth(), panel.getMaximumSize().height));
+		panel.setPreferredSize(new Dimension(getWidth(), panel.getPreferredSize().height));
+		panel.update();
 		GUI.update();
 	}
 }

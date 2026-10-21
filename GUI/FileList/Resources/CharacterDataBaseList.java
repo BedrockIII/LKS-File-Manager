@@ -66,7 +66,6 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class CharacterDataBaseList extends CollapseableFileList
 {
-	private int padding;
 	private CharacterResourceAssignmentList chrList;
 	private CharacterIndexList chrIndex;
 	private CharacterJoinList chrJoin;
@@ -76,9 +75,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 	public CharacterDataBaseList(OpenedFile file, int padding) 
 	{
 		this.file = file;
-		initializeAll(padding);
+		initializeAll();
 	}
-	protected void initializeAll(int padding)
+	protected void initializeAll()
 	{
 		System.out.print("Opening Character DB Package File: ");
 		fileTypes = new FileNameExtensionFilter("Character DB Package File", "pac");
@@ -124,16 +123,15 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterResourceAssignmentList extends CollapseableFileList
 	{
-		int padding = 0;
 		ArrayList<CharacterBody> bodies = new ArrayList<CharacterBody>();
 		ArrayList<CharacterFace> faces = new ArrayList<CharacterFace>();
 		public CharacterResourceAssignmentList(CharacterResourceList file, int padding) 
 		{
 			this.padding = padding;
 			this.file = file;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
@@ -195,9 +193,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 			{
 				this.parent = parent;
 				this.object = object;
-				this.initializeAll(padding);
+				this.initializeAll();
 			}
-			protected void initializeAll(int padding)
+			protected void initializeAll()
 			{
 				this.initializeListGUI(padding);
 				//this.initializeInfoGUI();
@@ -205,7 +203,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				initializeListGUI(padding, object.getName());
+				initializeListGUI(object.getName());
 			}
 			protected void initializeInfoGUI() 
 			{
@@ -249,9 +247,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 			{
 				this.parent = parent;
 				this.object = object;
-				this.initializeAll(padding);
+				this.initializeAll();
 			}
-			protected void initializeAll(int padding)
+			protected void initializeAll()
 			{
 				this.initializeListGUI(padding);
 				//this.initializeInfoGUI();
@@ -259,7 +257,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				initializeListGUI(padding, object.getName());
+				initializeListGUI(object.getName());
 			}
 			protected void initializeInfoGUI() 
 			{
@@ -322,15 +320,14 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterIndexList extends CollapseableFileList
 	{
-		int padding = 0;
 		ArrayList<ind> indicies = new ArrayList<ind>();
 		public CharacterIndexList(indBinList file, int padding) 
 		{
 			this.padding = padding;
 			this.file = file;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
@@ -376,9 +373,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 			{
 				this.parent = parent;
 				this.object = object;
-				this.initializeAll(padding);
+				this.initializeAll();
 			}
-			protected void initializeAll(int padding)
+			protected void initializeAll()
 			{
 				this.initializeListGUI(padding);
 				//this.initializeInfoGUI();
@@ -397,7 +394,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				initializeListGUI(padding, object.getName());
+				initializeListGUI(object.getName());
 			}
 			protected void initializeInfoGUI() 
 			{
@@ -438,15 +435,14 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterJoinList extends CollapseableFileList
 	{
-		int padding = 0;
 		ArrayList<join> objects = new ArrayList<join>();
 		public CharacterJoinList(JoinBinList file, int padding) 
 		{
 			this.padding = padding;
 			this.file = file;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
@@ -492,9 +488,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 			{
 				this.parent = parent;
 				this.object = object;
-				this.initializeAll(padding);
+				this.initializeAll();
 			}
-			protected void initializeAll(int padding)
+			protected void initializeAll()
 			{
 				this.initializeListGUI(padding);
 				//this.initializeInfoGUI();
@@ -502,7 +498,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				initializeListGUI(padding, object.getName());
+				initializeListGUI(object.getName());
 			}
 			protected void initializeInfoGUI() 
 			{
@@ -557,16 +553,15 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterSoundEffectList extends CollapseableFileList
 	{
-		int padding = 0;
 		ArrayList<SoundEffectCoordinate> objects = new ArrayList<SoundEffectCoordinate>();
 		public CharacterSoundEffectList(SoundEffectCoordinateList file, int padding) 
 		{
 			this.padding = padding;
 			this.file = file;
-			initializeAll(padding);
+			initializeAll();
 		}
 		
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
 			initializeListGUI(padding);
@@ -619,9 +614,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 			public SoundEffectListGUI(SoundEffectCoordinate object, int padding) 
 			{
 				this.object = object;
-				this.initializeAll(padding);
+				this.initializeAll();
 			}
-			protected void initializeAll(int padding)
+			protected void initializeAll()
 			{
 				this.initializeListGUI(padding);
 				//this.initializeInfoGUI();
@@ -629,7 +624,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				initializeListGUI(padding, object.getName());
+				initializeListGUI(object.getName());
 			}
 			protected void initializeInfoGUI() 
 			{
@@ -660,16 +655,15 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterJobPriceChangeList extends CollapseableFileList
 	{
-		int padding = 0;
 		ArrayList<JobPrices> objects = new ArrayList<JobPrices>();
 		CharacterDataBaseList parent;
 		public CharacterJobPriceChangeList(JobChangePriceList file, int padding, CharacterDataBaseList parent) 
 		{
 			this.file = file;
 			this.parent = parent;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
 			this.padding = padding;
 			fileTypes = new FileNameExtensionFilter("List File", "lst");
@@ -720,9 +714,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 			public JobChangePriceListGUI(JobPrices object, int padding) 
 			{
 				this.object = object;
-				this.initializeAll(padding);
+				this.initializeAll();
 			}
-			protected void initializeAll(int padding)
+			protected void initializeAll()
 			{
 				this.initializeListGUI(padding);
 				//this.initializeInfoGUI();
@@ -734,7 +728,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding) 
 			{
-				initializeListGUI(padding, object.getName());
+				initializeListGUI(object.getName());
 			}
 			protected void initializeInfoGUI() 
 			{
@@ -790,13 +784,12 @@ public class CharacterDataBaseList extends CollapseableFileList
 	}
 	public class CharacterTextAnimationList extends CollapseableFileList
 	{
-		int padding = 0;
 		public CharacterTextAnimationList(TextAnimationList file, int padding) 
 		{
 			this.file = file;
-			initializeAll(padding);
+			initializeAll();
 		}
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
 			this.padding = padding;
 			fileTypes = new FileNameExtensionFilter("Character Texture Animation File", "bin");
@@ -824,13 +817,12 @@ public class CharacterDataBaseList extends CollapseableFileList
 		public class CharacterAnimationList extends CollapseableFileList
 		{
 			ArrayList<Animation> animations;
-			int padding = 0;
 			public CharacterAnimationList(AnimationList file, int padding) 
 			{
 				this.file = file;
-				initializeAll(padding);
+				initializeAll();
 			}
-			protected void initializeAll(int padding)
+			protected void initializeAll()
 			{
 				this.padding = padding;
 				initializeListGUI(padding);
@@ -841,7 +833,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding)
 			{
-				initializeListGUI(padding, "Animations List");
+				initializeListGUI("Animations List");
 			}
 			protected void initializeInfoGUI() 
 			{
@@ -862,14 +854,13 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			public class CharacterAnimationGUI extends CollapseableFileList
 			{
-				int padding = 0;
 				Part part;
 				public CharacterAnimationGUI(Animation file, int padding) 
 				{
 					this.file = file;
-					initializeAll(padding);
+					initializeAll();
 				}
-				protected void initializeAll(int padding)
+				protected void initializeAll()
 				{
 					this.padding = padding;
 					initializeListGUI(padding);
@@ -880,7 +871,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 				}
 				protected void initializeListGUI(int padding)
 				{
-					initializeListGUI(padding, "Animation: " + ((Nameable) file).getName());
+					initializeListGUI("Animation: " + ((Nameable) file).getName());
 				}
 				protected void initializeInfoGUI() 
 				{
@@ -903,14 +894,13 @@ public class CharacterDataBaseList extends CollapseableFileList
 				}
 				public class CharacterAnimationPartList extends CollapseableFileList
 				{
-					int padding = 0;
 					ArrayList<AnimationPattern> patterns = new ArrayList<AnimationPattern>();
 					public CharacterAnimationPartList(Part file, int padding) 
 					{
 						this.file = file;
-						initializeAll(padding);
+						initializeAll();
 					}
-					protected void initializeAll(int padding) 
+					protected void initializeAll() 
 					{
 						initializeListGUI(padding);
 						initializeSubGUI();
@@ -920,7 +910,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 					}
 					protected void initializeListGUI(int padding)
 					{
-						initializeListGUI(padding, "Part: " + ((Nameable) file).getName());
+						initializeListGUI("Part: " + ((Nameable) file).getName());
 					}
 					protected void initializeInfoGUI() 
 					{
@@ -949,9 +939,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 						public CharacterAnimationPatternGUI(AnimationPattern file, int padding) 
 						{
 							this.file = file;
-							initializeAll(padding);
+							initializeAll();
 						}
-						protected void initializeAll(int padding) 
+						protected void initializeAll() 
 						{
 							initializeListGUI(padding);
 							//initializeInfoGUI();
@@ -959,7 +949,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						}
 						protected void initializeListGUI(int padding) 
 						{
-							initializeListGUI(padding, "Pattern: " + ((Nameable) file).getName());
+							initializeListGUI("Pattern: " + ((Nameable) file).getName());
 						}
 						protected void initializeInfoGUI() 
 						{
@@ -984,9 +974,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 			public CharacterPatternList(PatternList file, int padding) 
 			{
 				this.file = file;
-				initializeAll(padding);
+				initializeAll();
 			}
-			protected void initializeAll(int padding) 
+			protected void initializeAll() 
 			{
 				initializeListGUI(padding);
 				//initializeInfoGUI();
@@ -996,7 +986,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 			}
 			protected void initializeListGUI(int padding)
 			{
-				initializeListGUI(padding, "Pattern List");
+				initializeListGUI("Pattern List");
 			}
 			protected void initializeInfoGUI() 
 			{
@@ -1021,11 +1011,11 @@ public class CharacterDataBaseList extends CollapseableFileList
 				public CharacterPatternGUI(PatternPart file, int padding) 
 				{
 					this.file = file;
-					initializeAll(padding);
+					initializeAll();
 				}
-				protected void initializeAll(int padding) 
+				protected void initializeAll() 
 				{
-					initializeListGUI(padding, "Pattern: " + ((Nameable) file).getName());
+					initializeListGUI("Pattern: " + ((Nameable) file).getName());
 					//initializeInfoGUI();
 					initializeSubGUI();
 					addActions();
@@ -1060,11 +1050,11 @@ public class CharacterDataBaseList extends CollapseableFileList
 					public CharacterPartGUI(Part2 file, int padding) 
 					{
 						this.file = file;
-						initializeAll(padding);
+						initializeAll();
 					}
-					protected void initializeAll(int padding) 
+					protected void initializeAll() 
 					{
-						initializeListGUI(padding, "Part: " + ((Nameable) file).getName());
+						initializeListGUI("Part: " + ((Nameable) file).getName());
 						//initializeInfoGUI();
 						initializeSubGUI();
 						addActions();
@@ -1099,9 +1089,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 						public CharacterMaterialGUI(Material file, int padding) 
 						{
 							this.file = file;
-							initializeAll(padding);
+							initializeAll();
 						}
-						protected void initializeAll(int padding) 
+						protected void initializeAll() 
 						{
 							initializeListGUI(padding);
 							//initializeInfoGUI();
@@ -1109,7 +1099,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						}
 						protected void initializeListGUI(int padding) 
 						{
-							initializeListGUI(padding, "Material: " + ((Nameable) file).getName());
+							initializeListGUI("Material: " + ((Nameable) file).getName());
 						}
 						protected void initializeInfoGUI() 
 						{
@@ -1131,9 +1121,9 @@ public class CharacterDataBaseList extends CollapseableFileList
 						public CharacterPatternDetailGUI(Pattern file, int padding) 
 						{
 							this.file = file;
-							initializeAll(padding);
+							initializeAll();
 						}
-						protected void initializeAll(int padding) 
+						protected void initializeAll() 
 						{
 							initializeListGUI(padding);
 							//initializeInfoGUI();
@@ -1141,7 +1131,7 @@ public class CharacterDataBaseList extends CollapseableFileList
 						}
 						protected void initializeListGUI(int padding) 
 						{
-							initializeListGUI(padding, "Pattern: " + ((Nameable) file).getName());
+							initializeListGUI("Pattern: " + ((Nameable) file).getName());
 						}
 						protected void initializeInfoGUI() 
 						{

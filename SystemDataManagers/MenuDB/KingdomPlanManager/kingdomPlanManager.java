@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class kingdomPlanManager implements OpenedFile
+public class kingdomPlanManager implements OpenedFile, IntermediateFileFormat
 {
 	ArrayList<KingdomPlanArea> Areas = new ArrayList<KingdomPlanArea>();
-	//PCKGManager KingdomPlan = new PCKGManager("");
 	public kingdomPlanManager(byte[] data)
 	{
 		decodeData(data);
@@ -229,8 +229,21 @@ public class kingdomPlanManager implements OpenedFile
 	{
 		return Utils.encodeStringToBytes(toString());
 	}
-	public void importFromText(byte[] data)
+	public void initializeFromBIT(List<String> lines)
 	{
-		replaceFromLines(Utils.bytesToStrs(data));
+		Areas.removeAll(Areas);
+		initializeFromLines(lines);
+	}
+	public void importFromBIT(List<String> lines)
+	{
+		initializeFromLines(lines);
+	}
+	public byte[] toBIT()
+	{
+		return Utils.encodeStringToBytes(toString());
+	}
+	public String getBITName()
+	{
+		return "Kingdom Plan.bit";
 	}
 }

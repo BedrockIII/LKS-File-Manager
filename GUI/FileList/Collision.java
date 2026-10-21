@@ -18,8 +18,8 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.GUI;
+import GUI.FileInfo.CollisionInfoGUI;
 import GUI.FileInfo.CollisionObjectInfoGUI;
-import GUI.FileInfo.FileInfoFactory;
 import bFM.GUIUtils;
 import bFM.Nameable;
 import bFM.OpenedFile;
@@ -30,18 +30,17 @@ import colReader.CollisionObject;
 @SuppressWarnings("serial")
 public class Collision extends CollapseableFileList
 {
-	private int padding = 0;
 	CollapseableFileList parent = null;
 	ArrayList<CollisionObject> objects = new ArrayList<CollisionObject>();
 	public Collision(OpenedFile file, int padding, CollapseableFileList parent) 
 	{
 		this.parent = parent;
 		this.file = file;
-		initializeAll(padding);
-	}
-	protected void initializeAll(int padding)
-	{
 		this.padding = padding;
+		initializeAll();
+	}
+	protected void initializeAll()
+	{
 		fileTypes = new FileNameExtensionFilter("LKS Collision File", "col");
 		initializeListGUI(padding);
 		
@@ -119,13 +118,14 @@ public class Collision extends CollapseableFileList
 		public ColObjectListGUI(CollisionObject object, int padding) 
 		{
 			file = object;
+			this.padding = padding;
 			this.object = object;
-			this.initializeAll(padding);
+			this.initializeAll();
 		}
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
-			this.initializeListGUI(padding);
-			this.initializeInfoGUI();
+			initializeListGUI(object.getName());
+			initializeInfoGUI();
 			addActions();
 		}
 		private void addExportOBJAction() 
@@ -209,10 +209,6 @@ public class Collision extends CollapseableFileList
 			fileName.setText(name);
 			GUI.update();
 		}
-		protected void initializeListGUI(int padding) 
-		{
-			initializeListGUI(padding, object.getName());
-		}
 		protected void initializeInfoGUI() 
 		{
 			this.infoGUI = new CollisionObjectInfoGUI(object);
@@ -260,7 +256,7 @@ public class Collision extends CollapseableFileList
 	}
 	protected void initializeInfoGUI() 
 	{
-		infoGUI = FileInfoFactory.makeInfoGUI(file);
+		infoGUI = new CollisionInfoGUI((ColReader)file);
 	}
 	public void update()
 	{

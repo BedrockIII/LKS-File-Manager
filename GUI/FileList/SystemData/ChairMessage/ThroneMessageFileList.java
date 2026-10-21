@@ -1,0 +1,59 @@
+package GUI.FileList.SystemData.ChairMessage;
+
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import GUI.FileInfo.MenuDB.ChairMessage.ThroneMessageFileInfo;
+import GUI.FileList.CollapseableFileList;
+import SystemDataManagers.MenuDB.ChairMessage.ChairMessageManager;
+import bFM.GUIUtils;
+import bFM.Settings;
+
+@SuppressWarnings("serial")
+public class ThroneMessageFileList extends CollapseableFileList 
+{
+	ChairMessageManager manager;
+	public ThroneMessageFileList(ChairMessageManager file, int padding) 
+	{
+		manager = file;
+		this.padding = padding;
+		this.file = file;
+		initializeAll();
+	}
+	protected void initializeAll() 
+	{
+		System.out.print("Opening Chair Message Binary File: █");
+		fileTypes = new FileNameExtensionFilter("Chair Message Binary File", "bin");
+		initializeListGUI("Throne Message Manager");
+		System.out.print("█");
+		initializeSubGUI();
+		System.out.print("█");
+		//initializeInfoGUI();
+		System.out.print("█");
+		addActions();
+		System.out.print("█");
+		reAddComponents();
+		System.out.println("█\nComplete!");
+	}
+	public void initializeSubGUI()
+	{
+		subEntries.removeAll(subEntries);
+		subEntries.add(new ThroneSpeakerFileListGUI(manager.getHowserEntries(), padding + Settings.indentSize, "Howser"));
+		subEntries.add(new ThroneSpeakerFileListGUI(manager.getVerdeEntries(), padding + Settings.indentSize, "Verde"));
+		subEntries.add(new ThroneSpeakerFileListGUI(manager.getLiamEntries(), padding + Settings.indentSize, "Liam"));
+	}
+	protected void initializeInfoGUI()
+	{
+		infoGUI = new ThroneMessageFileInfo(manager);
+	}
+	protected void addActions() 
+	{
+		addExportAction();
+		addReplaceRawAction();
+		add(actions);
+		addMouseListener();
+	}
+	private void addReplaceRawAction()
+	{
+		actions.add(GUIUtils.createImportAction("Replace Entries from raw ChairMessage.bin file", "Throne Message Database Binary File", "bin", manager::setData, this));
+	}
+}

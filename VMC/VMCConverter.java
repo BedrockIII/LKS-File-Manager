@@ -288,6 +288,7 @@ public class VMCConverter implements OpenedFile
 	}
 	public static boolean isVMC(byte[] data)
 	{
+		if(data.length <= 4) return false;
 		return data[0] == 'V' && data[1] == 'M' && data[2] == 'C' && data[3] == ' ';
 		
 	}

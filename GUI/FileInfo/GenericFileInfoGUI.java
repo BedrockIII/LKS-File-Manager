@@ -16,7 +16,6 @@ import GUI.LabeledInputBox;
 import GUI.SplitPanel;
 import bFM.Data;
 import bFM.Settings;
-import bFM.Utils;
 
 @SuppressWarnings("serial")
 public class GenericFileInfoGUI extends JPanel
@@ -73,6 +72,10 @@ public class GenericFileInfoGUI extends JPanel
 		else fileSize.replaceComponent(new JLabel("" + file.toBytes().length));
 		for(Component c : this.getComponents())
 		{
+			if(c instanceof LabeledInputBox)
+			{
+				((LabeledInputBox) c).setWidth(getPreferredSize().width);
+			}
 			if(c instanceof SplitPanel)
 			{
 				((SplitPanel) c).update();

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import PCKGManager.PCKGManager;
+import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
 import bFM.Utils;
 
-public class CameraZoneList implements OpenedFile
+public class CameraZoneList implements OpenedFile, IntermediateFileFormat
 {
 	ArrayList<CameraZone> Zone = new ArrayList<CameraZone>();
 	public CameraZoneList(byte[] data, byte[] names)
@@ -124,19 +125,21 @@ public class CameraZoneList implements OpenedFile
 		Zone.removeAll(Zone);
 		initializeFromBytes(pac.getFile("List"), pac.getFile("Name"));
 	}
-	public void replaceFromBCZ(byte[] data) 
+	public void initializeFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		Zone.removeAll(Zone);
 		initializeFromLines(lines);
 	}
-	public void importFromBCZ(byte[] data) 
+	public void importFromBIT(List<String> lines)
 	{
-		List<String> lines = Utils.bytesToStrs(data);
 		initializeFromLines(lines);
 	}
-	public byte[] toBCZ()
+	public byte[] toBIT()
 	{
 		return Utils.encodeStringToBytes(toString());
+	}
+	public String getBITName()
+	{
+		return "Camera Zones.bit";
 	}
 }

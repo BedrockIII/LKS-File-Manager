@@ -18,9 +18,9 @@ import javax.swing.JSplitPane;
 import GUI.FileInfo.FileInfoPanel;
 import GUI.FileInfo.GenericFileInfoGUI;
 import GUI.FileList.FileList;
-import GUI.FileList.FileListFactory;
 import GUI.FileList.FileListPanel;
 import GUI.PopupWindows.ConsoleWindow;
+import bFM.FileTypeUtils;
 import bFM.OpenedFile;
 import bFM.Settings;
 
@@ -28,7 +28,7 @@ public class GUI
 {
 	private static FileListPanel openedFileList = new FileListPanel();
 	private static FileInfoPanel fileInfoPanel = new FileInfoPanel();
-	public static ConsoleWindow debugOutput = new ConsoleWindow();
+	//public static ConsoleWindow debugOutput = new ConsoleWindow();
 	private static GenericFileInfoGUI fileInfo = null;
 	static JSplitPane contents = new JSplitPane();
 	public static JFrame frame = new JFrame();
@@ -153,7 +153,7 @@ public class GUI
 		byte[] data;
 		try {
 			data = Files.readAllBytes(filePath);
-			OpenedFile file = OpenedFile.makeFile(filePath.getFileName().toString(), data);
+			OpenedFile file = FileTypeUtils.makeFile(filePath.getFileName().toString(), data);
 			setOpenFile(file);
 		} catch (IOException e) 
 		{
@@ -163,7 +163,7 @@ public class GUI
 	}
 	public void setOpenFile(OpenedFile file) 
 	{
-		GUI.setFileList(FileListFactory.makeListGUI(file, 0, null));
+		GUI.setFileList(FileTypeUtils.makeListGUI(file, 0, null));
 		update();
 	}
 	public static byte[] getFile() 

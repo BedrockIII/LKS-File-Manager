@@ -6,7 +6,7 @@ import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import SystemDataManagers.MenuDB.WonderSpotManager.WonderSpot;
+import SystemDataManagers.MenuDB.Books.WonderSpotBook.WonderSpot;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

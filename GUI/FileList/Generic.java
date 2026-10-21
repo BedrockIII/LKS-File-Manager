@@ -3,8 +3,9 @@ package GUI.FileList;
 import javax.swing.JMenuItem;
 
 import GUI.GUI;
-import GUI.FileInfo.FileInfoFactory;
+import GUI.FileInfo.GenericFileInfoGUI;
 import PCKGManager.PCKGManager;
+import bFM.FileTypeUtils;
 import bFM.GUIUtils;
 import bFM.Nameable;
 import bFM.OpenedFile;
@@ -14,7 +15,6 @@ import bFM.Settings;
 public class Generic extends FileList
 {
 	CollapseableFileList parent = null;
-	int padding = 0;
 	protected Generic()
 	{
 	}
@@ -22,34 +22,29 @@ public class Generic extends FileList
 	{
 		file = pac.getPackedFile(index);
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
 	public Generic(String name, byte[] data, int padding)
 	{
-		file = OpenedFile.makeFile(name, data);
-		initializeAll(padding);
+		file = FileTypeUtils.makeFile(name, data);
+		initializeAll();
 	}
 	public Generic(OpenedFile file, int padding, CollapseableFileList parent)
 	{
 		this.file = file;
 		this.parent = parent;
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
 	public Generic(String name, int padding, CollapseableFileList parent) 
 	{
-		file = OpenedFile.makeFile(name, new byte[0]);
+		file = FileTypeUtils.makeFile(name, new byte[0]);
 		this.padding = padding;
 		this.parent = parent;
-		initializeAll(padding);
+		initializeAll();
 	}
 	protected void initializeAll()
 	{
-		initializeAll(0);
-	}
-	protected void initializeAll(int padding)
-	{
-		this.padding = padding;
 		initializeListGUI();
 		initializeInfoGUI();
 		addActions();
@@ -57,11 +52,11 @@ public class Generic extends FileList
 	}
 	protected void initializeListGUI()
 	{
-		initializeListGUI(padding, ((Nameable) file).getName());
+		initializeListGUI(((Nameable) file).getName());
 	}
 	protected void initializeInfoGUI()
 	{
-		infoGUI = FileInfoFactory.makeInfoGUI(file);
+		infoGUI = new GenericFileInfoGUI(file);
 	}
 	protected void addActions()
 	{

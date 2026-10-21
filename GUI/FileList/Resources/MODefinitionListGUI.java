@@ -22,14 +22,13 @@ public class MODefinitionListGUI extends CollapseableFileList
 	//Things
 	MobAttacksListGUI Attacks;
 	
-	int padding = 0;
 	public MODefinitionListGUI(MissionObjectDefinitionManager file, int padding, MissionObjectDatabase parent) 
 	{
 		this.parent = parent;
 		this.file = file;
 		Definitions = file;
 		this.padding = padding;
-		initializeAll(padding);
+		initializeAll();
 	}
 	@Override
 	public void initializeSubGUI()
@@ -44,9 +43,9 @@ public class MODefinitionListGUI extends CollapseableFileList
 		subEntries.add(Attacks);
 	}
 	@Override
-	protected void initializeAll(int padding)
+	protected void initializeAll()
 	{
-		initializeListGUI(padding, "Mission Object Definitions");
+		initializeListGUI("Mission Object Definitions");
 		initializeSubGUI();
 		addActions();
 		reAddComponents();
@@ -71,7 +70,6 @@ public class MODefinitionListGUI extends CollapseableFileList
 		private static final long serialVersionUID = 5033204471168833590L;
 		MODefinitionListGUI parent;
 		MobAttackList Attacks;
-		int padding = 0;
 		public MobAttacksListGUI(MobAttackList file, int padding,
 				MODefinitionListGUI parent)
 		{
@@ -79,7 +77,7 @@ public class MODefinitionListGUI extends CollapseableFileList
 			this.file = file;
 			Attacks = file;
 			this.padding = padding;
-			initializeAll(padding);
+			initializeAll();
 		}
 		public void initializeSubGUI()
 		{
@@ -89,9 +87,9 @@ public class MODefinitionListGUI extends CollapseableFileList
 				//System.out.print(".");
 			}
 		}
-		protected void initializeAll(int padding)
+		protected void initializeAll()
 		{
-			initializeListGUI(padding, "Mission Object Attacks");
+			initializeListGUI("Mission Object Attacks");
 			initializeSubGUI();
 			addActions();
 			reAddComponents();
@@ -114,7 +112,6 @@ public class MODefinitionListGUI extends CollapseableFileList
 			 */
 			private static final long serialVersionUID = -6230692718491981233L;
 			MobAttacksListGUI parent;
-			int padding = 0;
 			
 			MobAttack Attack;
 			
@@ -124,7 +121,7 @@ public class MODefinitionListGUI extends CollapseableFileList
 				this.file = file;
 				Attack = file;
 				this.padding = padding;
-				initializeAll(padding);
+				initializeAll();
 			}
 			public void initializeSubGUI()
 			{
@@ -134,9 +131,9 @@ public class MODefinitionListGUI extends CollapseableFileList
 					//System.out.print(".");
 				}
 			}
-			protected void initializeAll(int padding)
+			protected void initializeAll()
 			{
-				initializeListGUI(padding, "Attack: " + Attack.getName());
+				initializeListGUI("Attack: " + Attack.getName());
 				initializeSubGUI();
 				addActions();
 				reAddComponents();
@@ -159,18 +156,17 @@ public class MODefinitionListGUI extends CollapseableFileList
 			{
 				MobAttackCol Collision;
 				MobAttackListGUI parent;
-				int padding = 0;
 				public MobAttackColListGUI(MobAttackCol file, int padding, MobAttackListGUI parent)
 				{
 					this.parent = parent;
 					this.file = file;
 					Collision = file;
 					this.padding = padding;
-					initializeAll(padding);
+					initializeAll();
 				}
-				protected void initializeAll(int padding)
+				protected void initializeAll()
 				{
-					initializeListGUI(padding, "Bone: " + Collision.getName());
+					initializeListGUI("Bone: " + Collision.getName());
 					addActions();
 				}
 				protected void initializeInfoGUI()

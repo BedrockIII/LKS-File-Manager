@@ -14,8 +14,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import bFM.FlagManager;
-import bFM.Settings;
 import bFM.FlagManager.Flag;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class BitFlagPanel extends JSplitPane

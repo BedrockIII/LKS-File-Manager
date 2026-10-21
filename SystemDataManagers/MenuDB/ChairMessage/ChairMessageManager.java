@@ -1,0 +1,106 @@
+package SystemDataManagers.MenuDB.ChairMessage;
+
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
+import PCKGManager.PCKGManager;
+import bFM.OpenedFile;
+import bFM.Utils;
+
+public class ChairMessageManager implements OpenedFile
+{
+	ArrayList<ChairMessage> VerdeEntries = new ArrayList<ChairMessage>();
+	ArrayList<ChairMessage> HowserEntries = new ArrayList<ChairMessage>();
+	ArrayList<ChairMessage> LiamEntries = new ArrayList<ChairMessage>();
+	public ChairMessageManager(byte[] data)
+	{
+		initializeFromBytes(data);
+	}
+	private void initializeFromBytes(byte[] data)
+	{
+		PCKGManager pack = new PCKGManager(data);
+		List<String> verdeMessages = Utils.extractStringsNoFormatting(pack.getFile("Verude"));
+		List<String> howserMessages = Utils.extractStringsNoFormatting(pack.getFile("Hauzar"));
+		List<String> liamMessages = Utils.extractStringsNoFormatting(pack.getFile("Riamu"));
+		byte[] verdeFlags = pack.getFile("VerudeFlag");
+		byte[] howserFlags = pack.getFile("HauzarFlag");
+		byte[] liamFlags = pack.getFile("RiamuFlag");
+		initializeFromBytes(VerdeEntries, verdeFlags, verdeMessages);
+		initializeFromBytes(HowserEntries, howserFlags, howserMessages);
+		initializeFromBytes(LiamEntries, liamFlags, liamMessages);
+	}
+	private void initializeFromBytes(ArrayList<ChairMessage> Entries, byte[] flagData, List<String> messageData)
+	{
+		ByteBuffer data = ByteBuffer.wrap(flagData);
+		for(String message : messageData)
+		{
+			Entries.add(new ChairMessage(message, data.getInt()));
+		}
+	}
+	public byte[] toBytes() 
+	{
+		PCKGManager pack = new PCKGManager(getName());
+		pack.addFile("Verude", toStringBytes(VerdeEntries));
+		pack.addFile("Hauzar", toStringBytes(HowserEntries));
+		pack.addFile("Riamu", toStringBytes(LiamEntries));
+		pack.addFile("HauzarFlag", toFlagBytes(HowserEntries));
+		pack.addFile("VerudeFlag", toFlagBytes(VerdeEntries));
+		pack.addFile("RiamuFlag", toFlagBytes(LiamEntries));
+		return pack.getFile();
+	}
+	private byte[] toStringBytes(ArrayList<ChairMessage> entries)
+	{
+		byte[] ret = new byte[0];
+		for(ChairMessage e : entries)
+		{
+			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(Utils.formatStringChars(e.getText())));
+			ret = Utils.mergeArrays(ret, (byte)0x00);
+		}
+		return ret;
+	}
+	private byte[] toFlagBytes(ArrayList<ChairMessage> entries)
+	{
+		byte[] ret = new byte[0];
+		for(ChairMessage e : entries)
+		{
+			ret = Utils.mergeArrays(ret, Utils.toByteArr(e.getFlag(), 4));
+		}
+		return ret;
+	}
+	public void setName(String name) 
+	{
+		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
+	}
+	public String getName() 
+	{
+		return "ChairMessage.bin";
+	}
+	public int getSize() 
+	{
+		return toBytes().length;
+	}
+	public ArrayList<ChairMessage> getVerdeEntries() 
+	{
+		return VerdeEntries;
+	}
+	public ArrayList<ChairMessage> getHowserEntries() 
+	{
+		return HowserEntries;
+	}
+	public ArrayList<ChairMessage> getLiamEntries() 
+	{
+		return LiamEntries;
+	}
+	public void setData(byte[] data)
+	{
+		VerdeEntries.removeAll(VerdeEntries);
+		HowserEntries.removeAll(HowserEntries);
+		LiamEntries.removeAll(LiamEntries);
+		initializeFromBytes(data);
+	}
+	public boolean equals(String name)
+	{
+		throw new UnsupportedOperationException("equals(String name) should not be called on type " + this.getClass());
+	}
+}
