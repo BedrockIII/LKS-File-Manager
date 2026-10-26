@@ -3,7 +3,6 @@ package ResourceManagers.CharacterDatabaseManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import ResourceManagers.CharacterDatabaseManager.indBinList.ind;
 import bFM.Data;
 import bFM.GenericFile;
 import bFM.Utils;

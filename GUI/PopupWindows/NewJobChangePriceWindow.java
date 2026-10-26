@@ -3,15 +3,15 @@ package GUI.PopupWindows;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
-import GUI.FileList.Resources.CharacterDataBaseList.CharacterJobPriceChangeList;
+import GUI.FileList.Resources.CharacterDB.JobPrices.JobPriceChangeFileList;
 
 @SuppressWarnings("serial")
 public class NewJobChangePriceWindow extends GenericPopupWindow
 {
-	CharacterJobPriceChangeList gui;
+	JobPriceChangeFileList gui;
 	JTextField newTitle;
 	JTextField newTitle2;
-	public NewJobChangePriceWindow(CharacterJobPriceChangeList gui)
+	public NewJobChangePriceWindow(JobPriceChangeFileList gui)
 	{
 		super("Create Job Prices");
 		this.gui = gui;

@@ -1,4 +1,4 @@
-package GUI.FileInfo;
+package GUI.FileInfo.CharacterDataBase;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -7,7 +7,9 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
+import GUI.FileInfo.GenericFileInfoGUI;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class CharacterDataBaseInfoGUI extends GenericFileInfoGUI 
@@ -29,8 +31,8 @@ public class CharacterDataBaseInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		BodyCount = new LabeledInputBox("Body Count", new JLabel("" + object.getCharacterResource().getAmountOfBodies()));
-		FaceCount = new LabeledInputBox("Face Count", new JLabel("" + object.getCharacterResource().getAmountOfFaces()));
+		BodyCount = new LabeledInputBox("Body Count", new JLabel("" + object.getCharacterResource().getBodies().size()));
+		FaceCount = new LabeledInputBox("Face Count", new JLabel("" + object.getCharacterResource().getFaces().size()));
 		JoinCount = new LabeledInputBox("Join Count", new JLabel("" + object.getCharacterJoin().getAmountOfJoins()));
 		IndexCount = new LabeledInputBox("Index Count", new JLabel("" + object.getCharacterIndex().getAmountOfIndicies()));
 		CoordinateCount = new LabeledInputBox("Coordinate Count", new JLabel("" + object.getCharacterSoundEffect().getAmountOfCoordinates()));
@@ -42,12 +44,7 @@ public class CharacterDataBaseInfoGUI extends GenericFileInfoGUI
 	{
 		removeAll();
 		setLayout(new GridBagLayout());
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
-		layout.fill = GridBagConstraints.HORIZONTAL;
-		layout.weighty = 0;
-		layout.weightx = 1.0;
+		GridBagConstraints layout = Settings.getDefaultConstraints();
 		add(BodyCount, layout);
 		add(FaceCount, layout);
 		add(JoinCount, layout);
@@ -61,8 +58,8 @@ public class CharacterDataBaseInfoGUI extends GenericFileInfoGUI
 	}
 	public void update()
 	{
-		BodyCount.replaceComponent(new JLabel("" + object.getCharacterResource().getAmountOfBodies()));
-		FaceCount.replaceComponent(new JLabel("" + object.getCharacterResource().getAmountOfFaces()));
+		BodyCount.replaceComponent(new JLabel("" + object.getCharacterResource().getBodies().size()));
+		FaceCount.replaceComponent(new JLabel("" + object.getCharacterResource().getFaces().size()));
 		JoinCount.replaceComponent(new JLabel("" + object.getCharacterJoin().getAmountOfJoins()));
 		IndexCount.replaceComponent(new JLabel("" + object.getCharacterIndex().getAmountOfIndicies()));
 		CoordinateCount.replaceComponent(new JLabel("" + object.getCharacterSoundEffect().getAmountOfCoordinates()));

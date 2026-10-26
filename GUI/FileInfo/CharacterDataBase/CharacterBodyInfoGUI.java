@@ -10,7 +10,7 @@ import javax.swing.event.DocumentListener;
 import GUI.GUI;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.CharacterResourceList.CharacterBody;
+import ResourceManagers.CharacterDatabaseManager.CharacterBody;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

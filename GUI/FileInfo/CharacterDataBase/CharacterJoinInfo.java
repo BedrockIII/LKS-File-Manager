@@ -10,7 +10,7 @@ import javax.swing.event.DocumentListener;
 import GUI.GUI;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.JoinBinList.join;
+import ResourceManagers.CharacterDatabaseManager.join;
 
 @SuppressWarnings("serial")
 public class CharacterJoinInfo extends GenericFileInfoGUI

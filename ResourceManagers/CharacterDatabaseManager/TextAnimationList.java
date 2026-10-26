@@ -118,10 +118,15 @@ public class TextAnimationList implements OpenedFile
 			return animations;
 		}
 	}
-	public class Animation implements Data, Nameable
+	public static class Animation implements Data, Nameable
 	{
 		String name = "";
 		Part part = null;
+		public Animation() 
+		{
+			name = "New Animation";
+			part = new Part();
+		}
 		public Animation(String line) 
 		{
 			name = line.substring(line.indexOf(' ') + 1);
@@ -172,13 +177,17 @@ public class TextAnimationList implements OpenedFile
 			return part;
 		}
 	}
-	public class Part implements Data, Nameable
+	public static class Part implements Data, Nameable
 	{
 		String name = "Part";
 		ArrayList<AnimationPattern> patterns = new ArrayList<AnimationPattern>();
 		public Part(String name) 
 		{
 			this.name = name;
+		}
+		public Part()
+		{
+			name = "New Part";
 		}
 		public void addPattern(String Pattern) 
 		{
@@ -225,11 +234,15 @@ public class TextAnimationList implements OpenedFile
 			return patterns;
 		}
 	}
-	public class AnimationPattern implements Data, Nameable
+	public static class AnimationPattern implements Data, Nameable
 	{
 		String name = "Ptn";
 		int num1 = 0;
 		int num2 = 0;
+		public AnimationPattern()
+		{
+			
+		}
 		private AnimationPattern(String data)
 		{
 			String[] vals = data.substring(data.indexOf("N ") + 2).split(" ");
@@ -356,11 +369,15 @@ public class TextAnimationList implements OpenedFile
 			return Patterns;
 		}
 	}
-	public class PatternPart implements Data, Nameable
+	public static class PatternPart implements Data, Nameable
 	{
 		ArrayList<Part2> Parts = new ArrayList<Part2>();
 		Part2 lastPart;
 		String name;
+		public PatternPart() 
+		{
+			name = "New Pattern";
+		}
 		public PatternPart(String line) 
 		{
 			name = line.substring(line.indexOf(' ') + 1);
@@ -419,11 +436,16 @@ public class TextAnimationList implements OpenedFile
 			return Parts;
 		}
 	}
-	public class Part2 implements Data, Nameable
+	public static class Part2 implements Data, Nameable
 	{
 		String name = "Part";
 		Material mat;
 		ArrayList<Pattern> patterns = new ArrayList<Pattern>();
+		public Part2() 
+		{
+			name = "New Part";
+			mat = new Material();
+		}
 		public Part2(String line) 
 		{
 			name = line.substring(line.indexOf("S ") + 2);
@@ -491,11 +513,15 @@ public class TextAnimationList implements OpenedFile
 			return patterns;
 		}
 	}
-	public class Material implements Data, Nameable
+	public static class Material implements Data, Nameable
 	{
 		String name = "Material";
 		int width = -1;
 		int height = -1;
+		public Material() 
+		{
+			name = "New Material";
+		}
 		public Material(String line) 
 		{
 			name = line.substring(line.indexOf("L ") + 2);
@@ -560,12 +586,18 @@ public class TextAnimationList implements OpenedFile
 			this.height = height;
 		}
 	}
-	public class Pattern implements Data, Nameable
+	public static class Pattern implements Data, Nameable
 	{
 		int index;
 		String name = "Pattern";
 		int num1;
 		int num2;
+		public Pattern() 
+		{
+			index = 0;
+			num1 = 0;
+			num2 = 0;
+		}
 		public Pattern(String line) 
 		{
 			String[] data = line.substring(line.indexOf("N ") + 2).split(" ");

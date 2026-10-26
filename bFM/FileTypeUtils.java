@@ -7,9 +7,9 @@ import GUI.FileList.FileList;
 import GUI.FileList.FixedPoint;
 import GUI.FileList.Generic;
 import GUI.FileList.Package;
-import GUI.FileList.Resources.CharacterDataBaseList;
 import GUI.FileList.Resources.ItemDatabaseList;
 import GUI.FileList.Resources.MissionObjectDatabase;
+import GUI.FileList.Resources.CharacterDB.CharacterDataBaseFileList;
 import GUI.FileList.SystemData.AnimalBook.AnimalBookFileList;
 import GUI.FileList.SystemData.CameraZone.CameraZoneListGUI;
 import GUI.FileList.SystemData.CastlePicture.CastlePictureManagerFileList;
@@ -510,7 +510,7 @@ public class FileTypeUtils
 		}
 		else if (file instanceof CharacterDataBaseManager)
 		{
-			return new CharacterDataBaseList(file, padding);
+			return new CharacterDataBaseFileList((CharacterDataBaseManager)file, padding);
 		}
 		else if (file instanceof itemDatabaseManager)
 		{

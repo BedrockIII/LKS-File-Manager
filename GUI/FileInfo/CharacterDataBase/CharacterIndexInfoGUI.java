@@ -10,7 +10,7 @@ import javax.swing.event.DocumentListener;
 import GUI.GUI;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.indBinList.ind;
+import ResourceManagers.CharacterDatabaseManager.ind;
 
 @SuppressWarnings("serial")
 public class CharacterIndexInfoGUI extends GenericFileInfoGUI

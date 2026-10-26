@@ -1,4 +1,4 @@
-package GUI.FileInfo.CharacterDataBase;
+package GUI.FileInfo.CharacterDataBase.TextAnimations;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

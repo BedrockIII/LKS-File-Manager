@@ -23,8 +23,8 @@ public class CharacterResourceListGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		BodyCount = new LabeledInputBox("Body Count", new JLabel("" + object.getAmountOfBodies()));
-		FaceCount = new LabeledInputBox("Face Count", new JLabel("" + object.getAmountOfFaces()));
+		BodyCount = new LabeledInputBox("Body Count", new JLabel("" + object.getBodies().size()));
+		FaceCount = new LabeledInputBox("Face Count", new JLabel("" + object.getFaces().size()));
 	}
 	private void addGUI()
 	{
@@ -43,8 +43,8 @@ public class CharacterResourceListGUI extends GenericFileInfoGUI
 	}
 	public void update() 
 	{
-		BodyCount.replaceComponent(new JLabel("" + object.getAmountOfBodies()));
-		FaceCount.replaceComponent(new JLabel("" + object.getAmountOfFaces()));
+		BodyCount.replaceComponent(new JLabel("" + object.getBodies().size()));
+		FaceCount.replaceComponent(new JLabel("" + object.getFaces().size()));
 		addGUI();
 	}
 }
