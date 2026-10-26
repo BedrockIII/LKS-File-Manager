@@ -8,91 +8,63 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import GUI.CollapseablePanel;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
+import ResourceManagers.CharacterDatabaseManager.JobChangePriceList;
 import ResourceManagers.CharacterDatabaseManager.JobChangePriceList.JobPrices;
+import bFM.GUIUtils;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class JobChangePriceListInfoGUI extends GenericFileInfoGUI
 {
+	JTextField index;
+	JobChangePriceList parent;
 	JobPrices object;
-	ArrayList<LabeledInputBox> prices = new ArrayList<LabeledInputBox>();
-	public JobChangePriceListInfoGUI(JobPrices object) 
+	CollapseablePanel pricesPanel;
+	ArrayList<Price> prices;
+	public JobChangePriceListInfoGUI(JobPrices object, JobChangePriceList parent) 
 	{
 		this.object = object;
+		this.parent = parent;
 		makeGUI();
 		addGUI();
 	}
 	private void makeGUI()
 	{
-		 prices = new ArrayList<LabeledInputBox>();
+		index = GUIUtils.createUpdatingIntTextField(object.getJobCode(), object::setJobCode);
+		pricesPanel = new CollapseablePanel("Prices");
+		makePanelGUI();
+	}
+	private void makePanelGUI()
+	{
+		pricesPanel.removeAll();
 		for(int i = 0; i < object.getPriceAmount(); i++)
 		{
-			PriceText text = new PriceText("" + object.getPrice(i));
-			text.index = i;
-			text.getDocument().addDocumentListener(new DocumentListener() 
-			{
-				public void insertUpdate(DocumentEvent e) 
-				{
-					object.setPrice(text.index, bFM.Utils.strToInt(text.getText()));
-				}
-				public void removeUpdate(DocumentEvent e) 
-				{
-					object.setPrice(text.index, bFM.Utils.strToInt(text.getText()));
-				}
-				public void changedUpdate(DocumentEvent e) {}
-			});
-			prices.add(new LabeledInputBox("Price to Become " + object.getNameByIndex(i),  text));
+			Price price = new Price(object.getPrice(i), object.getJobCode());
+			prices.add(price);
+			pricesPanel.add(new LabeledInputBox("Price to Become " + object.getNameByIndex(i), price.getLabel()));
 		}
 	}
 	private void addGUI()
 	{
 		removeAll();
 		setLayout(new GridBagLayout());
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
-		layout.fill = GridBagConstraints.HORIZONTAL;
-		layout.weightx = 1.0;
-		layout.weighty = 0.0;
-		layout.weightx = 1.0;
-		for(int i = 0; i < object.getPriceAmount()-1; i++)
-		{
-			add(prices.get(i), layout);
-		}
+		GridBagConstraints layout = Settings.getDefaultConstraints();
+		add(new LabeledInputBox("Job Code", index), layout);
 		layout.weighty = 1.0;
-		add(prices.get(object.getPriceAmount()-1), layout);
+		add(pricesPanel, layout);
 	}
 	public void update() 
 	{
-		if(object.getPriceAmount() != prices.size()) makeGUI();
-		for(int i = 0; i < object.getPriceAmount(); i++)
-		{
-			prices.get(i).replaceText("Price to Become " + object.getNameByIndex(i));
-			PriceText text = new PriceText("" + object.getPrice(i));
-			text.index = i;
-			text.getDocument().addDocumentListener(new DocumentListener() 
-			{
-				public void insertUpdate(DocumentEvent e) 
-				{
-					object.setPrice(text.index, bFM.Utils.strToInt(text.getText()));
-				}
-				public void removeUpdate(DocumentEvent e) 
-				{
-					object.setPrice(text.index, bFM.Utils.strToInt(text.getText()));
-				}
-				public void changedUpdate(DocumentEvent e) {}
-			});
-			prices.get(i).replaceComponent(text);
-		}
-		addGUI();
+		makePanelGUI();
 	}
-	private class PriceText extends JTextField
+	private record Price(int price, int jobCode)
 	{
-		public PriceText(String text) 
+		private LabeledInputBox getLabel()
 		{
-			super(text);
+			return null;
 		}
-		int index;
 	}
 }

@@ -1,7 +1,9 @@
-package bFM;
+package bFM.InfoManagers;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import bFM.Utils;
 
 public class GroupCategoryManager
 {

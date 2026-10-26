@@ -27,11 +27,11 @@ import ResourceManagers.MSDBManager.Placement.MobObject;
 import ResourceManagers.MSDBManager.Placement.MobObject.ObjectDefault;
 import ResourceManagers.MSDBManager.Placement.MobRandomArea;
 import ResourceManagers.MSDBManager.Placement.MobRandomPoint;
-import bFM.FlagManager;
 import bFM.GUIUtils;
-import bFM.GroupCategoryManager;
 import bFM.Settings;
 import bFM.Utils;
+import bFM.InfoManagers.FlagManager;
+import bFM.InfoManagers.GroupCategoryManager;
 
 @SuppressWarnings("serial")
 public class MOPlacementListGUI extends CollapseableFileList

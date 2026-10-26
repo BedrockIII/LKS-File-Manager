@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import GUI.GUI;
+import bFM.InfoManagers.FlagManager;
+import bFM.InfoManagers.GroupCategoryManager;
 import colReader.ColReader;
 
 public class Settings 

@@ -2,7 +2,6 @@ package GUI.FileList.Resources.CharacterDB.JobPrices;
 
 import javax.swing.JMenuItem;
 
-import GUI.GUI;
 import GUI.FileInfo.CharacterDataBase.JobChangePriceListInfoGUI;
 import GUI.FileList.FileList;
 import ResourceManagers.CharacterDatabaseManager.JobChangePriceList.JobPrices;
@@ -35,34 +34,27 @@ public class JobChangePriceListGUI extends FileList
 	}
 	protected void initializeInfoGUI() 
 	{
-		infoGUI = new JobChangePriceListInfoGUI((JobPrices) object);
+		infoGUI = new JobChangePriceListInfoGUI(object, parent.file);
 	}
 	protected void addActions()
 	{
-		//addChangeJobAction();
 		addDeleteAction();
 		addMouseListener();
 		add(actions);
-		update();
 	}
 	protected void addDeleteAction()
 	{
 		JMenuItem replace = new JMenuItem("Delete Job");
 		replace.addActionListener(e -> 
 		{
-			((JobPriceChangeFileList)getParent()).removeFile(this);
-			GUI.update();
+			parent.removeFile(this);
+			parent.update();
 		});
 		actions.add(replace);
 	}
-	public void setCode(int num) 
-	{
-		object.setCode(num);
-		//fileName.setText(((CharacterDataBaseManager)(parent.file)).getNameByCode(num) + " (" + num + ")");
-	}
 	public void update()
 	{
-		object.updateCode();
 		fileName.setText(((parent.parent.file)).getNameByCode(object.getJobCode()) + " (" + object.getJobCode() + ")");
+		if(infoGUI!= null)infoGUI.update();
 	}
 }

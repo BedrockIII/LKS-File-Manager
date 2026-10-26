@@ -1,8 +1,6 @@
 package GUI.FileList.Resources.CharacterDB.JobPrices;
 
 import javax.swing.JMenuItem;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import GUI.GUI;
 import GUI.FileInfo.CharacterDataBase.JopChangePriceInfoGUI;
 import GUI.FileList.CollapseableFileList;
@@ -29,9 +27,7 @@ public class JobPriceChangeFileList extends CollapseableFileList
 	}
 	protected void initializeAll()
 	{
-		fileTypes = new FileNameExtensionFilter("List File", "lst");
-		initializeListGUI(padding);
-		//initializeInfoGUI();
+		initializeListGUI("Job Price Manager");
 		initializeSubGUI();
 		addActions();
 		reAddComponents();
@@ -55,7 +51,7 @@ public class JobPriceChangeFileList extends CollapseableFileList
 	}
 	protected void initializeInfoGUI() 
 	{
-		this.infoGUI = new JopChangePriceInfoGUI((JobChangePriceList) file);
+		infoGUI = new JopChangePriceInfoGUI(file);
 	}
 	public void initializeSubGUI()  
 	{

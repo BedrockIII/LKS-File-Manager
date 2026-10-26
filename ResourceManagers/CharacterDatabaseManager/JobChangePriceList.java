@@ -213,10 +213,9 @@ public class JobChangePriceList extends GenericFile
 {
 			prices.remove(index);
 		}
-		public void setCode(int code) 
+		public void setJobCode(int code) 
 		{
 			jobCode = code;
-			index.setJobCode(code);
 		}
 		public void addPrice(int newPrice) 
 		{
