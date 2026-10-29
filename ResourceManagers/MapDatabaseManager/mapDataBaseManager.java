@@ -5,7 +5,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import PCKGManager.PCKGManager;
+import CommonFiles.PCKGManager.PCKGManager;
 import bFM.OpenedFile;
 import bFM.Utils;
 

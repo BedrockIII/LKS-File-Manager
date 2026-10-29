@@ -1,4 +1,4 @@
-package LZ10Convertor;
+package CommonFiles.LZ10Convertor;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

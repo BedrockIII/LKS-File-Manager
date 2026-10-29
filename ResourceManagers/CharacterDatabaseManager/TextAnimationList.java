@@ -2,7 +2,8 @@ package ResourceManagers.CharacterDatabaseManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import PCKGManager.PCKGManager;
+
+import CommonFiles.PCKGManager.PCKGManager;
 import bFM.Data;
 import bFM.Nameable;
 import bFM.OpenedFile;

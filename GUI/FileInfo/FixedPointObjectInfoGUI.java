@@ -5,10 +5,11 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import CommonFiles.FixedPlacement.FixedPointObject;
 import GUI.LabeledInputBox;
 import GUI.FileList.FileList;
 import GUI.FileList.FixedPoint.FixedPointObjectListGUI;
-import WorldFileManager.FixedPointObject;
 import bFM.GUIUtils;
 import bFM.Settings;
 

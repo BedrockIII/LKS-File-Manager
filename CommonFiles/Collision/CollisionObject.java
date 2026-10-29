@@ -1,53 +1,52 @@
- package colReader;
+ package CommonFiles.Collision;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import CommonFiles.Collision.ColReader.CollisionSize;
 import bFM.Data;
+import bFM.RotationMatrix;
 import bFM.Utils;
 
 public class CollisionObject implements Data
 {
-	String name;
-	ArrayList<CollisionMaterial> normalsList = new ArrayList<CollisionMaterial>();
-	CollisionHeader header = new CollisionHeader(-1);
-	int value;
-	int referenceValue;
-	int amountNormalObjects;
-	int normalObjectLocation;
-	float val1;//All of these can safely be 0
-	//skip empty bytes
-	float val2;
-	//skip empty bytes
-	float val3;
+	protected static enum CollisionOffsets
+	{
+		INDEX_POS(32),
+		PARENT_INDEX_POS(36),
+		COL_ATTRIBUTE_COUNT_POS(40),
+		COL_ATTRIBUTE_POINTER_POS(44),
+		TRANSFORMATION_MATRIX_POS(48),
+		VERTEX_COUNT_POS(112),
+		VERTEX_POINTER_POS(116),
+		HEADER_COUNT_POS(120),
+		HEADER_POINTER_POS(124),
+		VAL5_COUNT_POS(128),
+		VAL6_POINTER_POS(132),
+		X_MAX_POS(136),
+		Y_MAX_POS(140),
+		Z_MAX_POS(144),
+		X_MIN_POS(148),
+		Y_MIN_POS(152),
+		Z_MIN_POS(156);
+		protected final int ofs;
+		private CollisionOffsets(int ofs)
+		{
+			this.ofs = ofs;
+		}
+	}
 	
+	ColReader file;
+	
+	String name;
+	CollisionObject parent;
+	ArrayList<CollisionMaterial> Attributes = new ArrayList<CollisionMaterial>();
+	CollisionHeader Header = new CollisionHeader(-1);
+	ArrayList<CollisionVertex> Verticies;
+	RotationMatrix position;
 	int val5;
 	int val6;
-	float zPos;//east west
-	float xPos;//north south
-	float yPos;//up down
-	float wPos;
-	//int vertexAmount;
-	int VertexPos;
-	//int headerAmount;
-	int headerPos;
-	
-	float boundingBoxMaxX;
-	float boundingBoxMaxY;
-	float boundingBoxMaxZ;
-	float boundingBoxMinX;
-	float boundingBoxMinY;
-	float boundingBoxMinZ;
-	
-	
-	//LIST VARS
-	
-	//TREE VARS
-	int treePos;
-	//
-	CollisionTree tree;
-	ArrayList<CollisionVertex> VERTEX;
 	public CollisionObject(String name, int ref, int value)
 	{
 		this.name = name;
@@ -86,9 +85,11 @@ public class CollisionObject implements Data
 		//normalsList.add(new CollisionMaterial("37097291_0",0));
 		header = new CollisionHeader(referenceValue);
 	}
-	public CollisionObject(ByteBuffer data) 
+	public CollisionObject(ColReader file, ByteBuffer data, int offset) 
 	{
-		int StartPos = data.position();
+		this.file = file;
+		
+		data.position(offset);
 		byte chara = data.get();
 		name = "";
 		while(chara!=0)
@@ -96,75 +97,48 @@ public class CollisionObject implements Data
 			name += (char)chara;
 			chara = data.get();
 		}
-		bFM.Utils.DebugPrint("Collision Object: " + name);
-		value = data.getInt(StartPos + 32);
-		referenceValue = data.getInt(StartPos + 36);
-		amountNormalObjects = data.getInt(StartPos + 40);
-		normalObjectLocation = data.getInt(StartPos + 44);
-		val1 = data.getFloat(StartPos + 48);
-		val2 = data.getFloat(StartPos + 68);
-		val3 = data.getFloat(StartPos + 88);
-		zPos = data.getFloat(StartPos + 96);
-		yPos = data.getFloat(StartPos + 100);
-		xPos = data.getFloat(StartPos + 104);
-		wPos = data.getFloat(StartPos + 108);
-		int vertexAmount = data.getInt(StartPos + 112);
-		VertexPos = data.getInt(StartPos + 116);
-		//headerAmount = data.getInt(StartPos + 120);
-		headerPos = data.getInt(StartPos + 124);
-		val5 = data.getInt(StartPos + 128);
-		val6 = data.getInt(StartPos + 132);
-		boundingBoxMaxX = data.getFloat(StartPos + 136);
-		boundingBoxMaxY = data.getFloat(StartPos + 140);
-		boundingBoxMaxZ = data.getFloat(StartPos + 144);
-		boundingBoxMinX = data.getFloat(StartPos + 148);
-		boundingBoxMinY = data.getFloat(StartPos + 152);
-		boundingBoxMinZ = data.getFloat(StartPos + 156);
-		if(amountNormalObjects > 0 && normalObjectLocation >= 0) 
+		ColReader.DebugPrint("Collision Object: " + name);
+		
+		parent = file.getObjectFromIndex(data.getInt(offset + CollisionOffsets.PARENT_INDEX_POS.ofs));
+		
+		int AttributeCount = data.getInt(offset + CollisionOffsets.COL_ATTRIBUTE_COUNT_POS.ofs);
+		int AttributePointer = data.getInt(offset + CollisionOffsets.COL_ATTRIBUTE_POINTER_POS.ofs);
+		if(AttributeCount > 0)
 		{
-			bFM.Utils.DebugPrint("Material Amount: " + amountNormalObjects);
-			bFM.Utils.DebugPrint("Material Start Position: " + normalObjectLocation);
-			for(int i = normalObjectLocation; i<normalObjectLocation+amountNormalObjects*160; i+=160)
+			ColReader.DebugPrint("Attribute Count: " + AttributeCount);
+			ColReader.DebugPrint("Attribute Offset: " + AttributePointer);
+			for(int i = 0; i < AttributeCount; i++)
 			{
-				bFM.Utils.DebugPrint("Material Position: " + i);
-				data.position(i);
-				normalsList.add(new CollisionMaterial(data));
+				ColReader.DebugPrint("Attribute Position: " + i);
+				CollisionMaterial Attribute = new CollisionMaterial(file, data, AttributePointer + i * CollisionSize.COL_ATTRIBUTE.size);
+				Attributes.add(Attribute);
+				file.register(Attribute);
 			}
 		}
-		bFM.Utils.DebugPrint("Header Position: " + headerPos);
-		if(headerPos == 0) header = null;
-		else 
+		
+		data.position(offset + CollisionOffsets.TRANSFORMATION_MATRIX_POS.ofs);
+		position = new RotationMatrix();
+		position.initializeFromBytes(data);
+		
+		int VertexCount = data.getInt(offset + CollisionOffsets.VERTEX_COUNT_POS.ofs);
+		int VertexPointer = data.getInt(offset + CollisionOffsets.VERTEX_POINTER_POS.ofs);
+		if(VertexCount > 0)
 		{
-			header = new CollisionHeader(data, headerPos);
-			bFM.Utils.DebugPrint("List Exists: " + (header != null&&header.getListAmount() > 0));
-			if(header != null && header.getListAmount() > 0 && header.getListPos() > 0)
+			ColReader.DebugPrint("Vertex Count: " + VertexCount);
+			ColReader.DebugPrint("Vertex Offset: " + VertexPointer);
+			for(int i = 0; i < VertexCount; i++)
 			{
-				int listPos = header.getListPos();
-				bFM.Utils.DebugPrint("List Position: " + listPos);
-				treePos = data.getInt(listPos);
-				//bFM.Utils.DebugPrint("Tree Position Position: " + listPos);
-				if(treePos > 0)
-				{
-					bFM.Utils.DebugPrint("Tree Position: " + treePos);
-					if(treePos>0)
-					{
-						tree = new CollisionTree(data, treePos, 0);
-					}
-				}
+				ColReader.DebugPrint("Vertex Position: " + i);
+				CollisionVertex Vertex = new CollisionVertex(file, data, VertexPointer + i * CollisionSize.COL_VERTEX.size);
+				Verticies.add(Vertex);
+				file.register(Vertex);
 			}
 		}
-		VERTEX = new ArrayList<CollisionVertex>();
-		if(vertexAmount > 0 && VertexPos >= 0) 
-		{
-			bFM.Utils.DebugPrint("Vertex Amount: " + vertexAmount);
-			bFM.Utils.DebugPrint("Vertex Start Position: " + VertexPos);
-			for(int i = VertexPos; i<VertexPos+vertexAmount*16; i+=16)
-			{
-				bFM.Utils.DebugPrint("Vertex Position: " + i);
-				data.position(i);
-				VERTEX.add(new CollisionVertex(data));
-			}
-		}
+		
+		Header = new CollisionHeader(file, data, data.getInt(offset + CollisionOffsets.HEADER_POINTER_POS.ofs));
+		
+		val5 = data.getInt(offset + CollisionOffsets.VAL5_COUNT_POS.ofs);
+		val6 = data.getInt(offset + CollisionOffsets.VAL5_COUNT_POS.ofs);
 	}
 	public byte[] getObjects()
 	{
@@ -339,7 +313,7 @@ public class CollisionObject implements Data
 		}
 		return ret;
 	}
-	float getMinX(CollisionFace face)
+	float getMinX(CollisionIndex face)
 	{
 		float ret = Float.MAX_VALUE;
 		CollisionVertex v1 = VERTEX.get(face.v1);
@@ -347,7 +321,7 @@ public class CollisionObject implements Data
 		CollisionVertex v3 = VERTEX.get(face.v3);
 		return Math.min(Math.min(ret, v1.getX()), Math.min(v2.getX(), v3.getX()));
 	}
-	float getMaxX(CollisionFace face)
+	float getMaxX(CollisionIndex face)
 	{
 		float ret = -Float.MAX_VALUE;
 		CollisionVertex v1 = VERTEX.get(face.v1);
@@ -355,7 +329,7 @@ public class CollisionObject implements Data
 		CollisionVertex v3 = VERTEX.get(face.v3);
 		return Math.max(Math.max(ret, v1.getX()), Math.max(v2.getX(), v3.getX()));
 	}
-	float getMinY(CollisionFace face)
+	float getMinY(CollisionIndex face)
 	{
 		float ret = Float.MAX_VALUE;
 		CollisionVertex v1 = VERTEX.get(face.v1);
@@ -363,7 +337,7 @@ public class CollisionObject implements Data
 		CollisionVertex v3 = VERTEX.get(face.v3);
 		return Math.min(Math.min(ret, v1.getY()), Math.min(v2.getY(), v3.getY()));
 	}
-	float getMaxY(CollisionFace face)
+	float getMaxY(CollisionIndex face)
 	{
 		float ret = -Float.MAX_VALUE;
 		CollisionVertex v1 = VERTEX.get(face.v1);
@@ -371,7 +345,7 @@ public class CollisionObject implements Data
 		CollisionVertex v3 = VERTEX.get(face.v3);
 		return Math.max(Math.max(ret, v1.getY()), Math.max(v2.getY(), v3.getY()));
 	}
-	float getMinZ(CollisionFace face)
+	float getMinZ(CollisionIndex face)
 	{
 		float ret = Float.MAX_VALUE;
 		CollisionVertex v1 = VERTEX.get(face.v1);
@@ -379,7 +353,7 @@ public class CollisionObject implements Data
 		CollisionVertex v3 = VERTEX.get(face.v3);
 		return Math.min(Math.min(ret, v1.getZ()), Math.min(v2.getZ(), v3.getZ()));
 	}
-	float getMaxZ(CollisionFace face)
+	float getMaxZ(CollisionIndex face)
 	{
 		float ret = -Float.MAX_VALUE;
 		CollisionVertex v1 = VERTEX.get(face.v1);
@@ -497,73 +471,6 @@ public class CollisionObject implements Data
 		//Return the size of the Collision Object
 		return 160;
 	}
-	private class CollisionHeader implements Data
-	{
-		private int amount = -1;
-		private int pos = -1;
-		public CollisionHeader(ByteBuffer data, int headerPos) 
-		{
-			if (headerPos == 0)
-			{
-				amount = 0;
-				pos = 0;
-			}
-			amount = data.getInt(headerPos)/2;
-			pos = data.getInt(headerPos + 4);
-		}
-		public CollisionHeader(int referenceValue) 
-		{
-			if(referenceValue > 0)
-			{
-				amount = 1;
-				pos = 0;
-			}
-			else 
-			{
-				amount = 0;
-				pos = 0;
-			}
-		}
-		public boolean equals(String name) 
-		{
-			throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
-		}
-		public int getListAmount() 
-		{
-			return amount;
-		}
-		public void setListPos(int num) 
-		{
-			pos = num;
-		}
-		public int getListPos() 
-		{
-			return pos;
-		}
-		public void setData(byte[] data) 
-		{
-			throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
-		}
-		public byte[] toBytes()
-		{
-			ByteBuffer ret = ByteBuffer.allocate(32);
-			ret.putInt(0, amount * 2);
-			ret.putInt(4, pos);
-			return ret.array();
-		}
-		public void setName(String name) 
-		{
-			throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
-		}
-		public String getName() 
-		{
-			throw new UnsupportedOperationException("getName() should not be called on type " + this.getClass());
-		}
-		public int getSize() 
-		{
-			return 32;
-		}
-	}
 	public void setXOffset(float num) 
 	{
 		xPos = num;
@@ -601,7 +508,7 @@ public class CollisionObject implements Data
 	public void addFaceLine(String line, int vertexCount) 
 	{
 		bFM.Utils.DebugPrint("Adding Face: " + line);
-		CollisionFace face = tree.addFaceLine(line, vertexCount);
+		CollisionIndex face = tree.addFaceLine(line, vertexCount);
 		boundingBoxMinX = Math.min(boundingBoxMinX, getMinX(face));
 		boundingBoxMinY = Math.min(boundingBoxMinY, getMinY(face));
 		boundingBoxMinZ = Math.min(boundingBoxMinZ, getMinZ(face));

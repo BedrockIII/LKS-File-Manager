@@ -1,11 +1,11 @@
-package LZ10Convertor;
+package CommonFiles.LZ10Convertor;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import PCKGManager.PCKGManager;
+import CommonFiles.PCKGManager.PCKGManager;
 import bFM.FileTypeUtils;
 import bFM.OpenedFile;
 import bFM.Utils;

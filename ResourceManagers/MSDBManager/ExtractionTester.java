@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import PCKGManager.PCKGManager;
+import CommonFiles.PCKGManager.PCKGManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import ResourceManagers.MSDBManager.BetaManager.BetaConstPlace;
 import ResourceManagers.MSDBManager.BetaManager.BetaGroup;

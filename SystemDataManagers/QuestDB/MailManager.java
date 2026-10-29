@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import PCKGManager.PCKGManager;
+import CommonFiles.PCKGManager.PCKGManager;
 import bFM.Settings;
 
 public class MailManager 

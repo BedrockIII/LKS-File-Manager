@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import CommonFiles.FixedPlacement.FixedPointManager;
+import CommonFiles.FixedPlacement.FixedPointObject;
 import GUI.GUI;
 import GUI.FileInfo.FixedPointInfoGUI;
 import GUI.FileInfo.FixedPointObjectInfoGUI;
-import WorldFileManager.FixedPointManager;
 import bFM.GUIUtils;
 import bFM.Nameable;
 import bFM.OpenedFile;
 import bFM.Settings;
-import WorldFileManager.FixedPointObject;
 
 @SuppressWarnings("serial")
 public class FixedPoint extends CollapseableFileList

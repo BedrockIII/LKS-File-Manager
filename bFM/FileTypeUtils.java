@@ -1,5 +1,8 @@
 package bFM;
 
+import CommonFiles.Collision.ColReader;
+import CommonFiles.FixedPlacement.FixedPointManager;
+import CommonFiles.PCKGManager.PCKGManager;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.Collision;
 import GUI.FileList.EventListGUI;
@@ -30,7 +33,6 @@ import GUI.FileList.SystemData.RecordBook.RecordBookManagerFileList;
 import GUI.FileList.SystemData.Unused.Development.DevelopmentManagerFileList;
 import GUI.FileList.SystemData.Unused.NPCMemo.NPCMemoManagerFileList;
 import GUI.FileList.SystemData.WonderSpot.WonderSpotFileList;
-import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
 import ResourceManagers.MSDBManager.MSDBManager;
@@ -55,8 +57,6 @@ import SystemDataManagers.MenuDB.PublicArt.PublicArtManager;
 import SystemDataManagers.MenuDB.Unused.Development.DevelopmentManager;
 import SystemDataManagers.MenuDB.Unused.NPCMemo.NPCMemoManager;
 import VMC.VMCConverter;
-import WorldFileManager.FixedPointManager;
-import colReader.ColReader;
 
 public class FileTypeUtils
 {
@@ -470,11 +470,11 @@ public class FileTypeUtils
 			//else return "Package"
 			return "Package";
 		}
-		else if(colReader.ColReader.isCollisionFile(file))
+		else if(CommonFiles.Collision.ColReader.isCollisionFile(file))
 		{
 			return "Collision";
 		}
-		else if(WorldFileManager.FixedPointManager.isFixedPointFile(file))
+		else if(CommonFiles.FixedPlacement.FixedPointManager.isFixedPointFile(file))
 		{
 			return "Fixed Point";
 		}

@@ -2,7 +2,8 @@ package SystemDataManagers.MenuDB.ChairCamera;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import PCKGManager.PCKGManager;
+
+import CommonFiles.PCKGManager.PCKGManager;
 import bFM.OpenedFile;
 import bFM.Utils;
 

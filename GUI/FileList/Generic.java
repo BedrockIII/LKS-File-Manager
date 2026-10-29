@@ -2,9 +2,9 @@ package GUI.FileList;
 
 import javax.swing.JMenuItem;
 
+import CommonFiles.PCKGManager.PCKGManager;
 import GUI.GUI;
 import GUI.FileInfo.GenericFileInfoGUI;
-import PCKGManager.PCKGManager;
 import bFM.FileTypeUtils;
 import bFM.GUIUtils;
 import bFM.Nameable;

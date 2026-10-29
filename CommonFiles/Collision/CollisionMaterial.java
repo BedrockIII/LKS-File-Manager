@@ -1,10 +1,11 @@
-package colReader;
+package CommonFiles.Collision;
 
 import java.nio.ByteBuffer;
 import bFM.Data;
 
 class CollisionMaterial implements Data
 {
+	ColReader file;
 	//With the Debug Mode I have discovered the Use of these, they are for materials
 	String name;
 	float num1;
@@ -18,9 +19,10 @@ class CollisionMaterial implements Data
 	float num9;
 	float num10;
 	float num11;
-	public CollisionMaterial(ByteBuffer data)
+	public CollisionMaterial(ColReader file, ByteBuffer data, int offset)
 	{
-		int StartPos = data.position();
+		this.file = file;
+		data.position(offset);
 		byte chara = data.get();
 		name = "";
 		while(chara!=0)
@@ -28,17 +30,17 @@ class CollisionMaterial implements Data
 			name += (char)chara;
 			chara = data.get();
 		}
-		num1 = data.getFloat(StartPos + 76);
-		num2 = data.getFloat(StartPos + 80);
-		num3 = data.getFloat(StartPos + 84);
-		num4 = data.getFloat(StartPos + 88);
-		num5 = data.getFloat(StartPos + 92);
-		num6 = data.getFloat(StartPos + 96);
-		num7 = data.getFloat(StartPos + 100);
-		num8 = data.getFloat(StartPos + 104);
-		num9 = data.getFloat(StartPos + 108);
-		num10 = data.getFloat(StartPos + 124);
-		num11 = data.getFloat(StartPos + 128);
+		num1 = data.getFloat(offset + 76);
+		num2 = data.getFloat(offset + 80);
+		num3 = data.getFloat(offset + 84);
+		num4 = data.getFloat(offset + 88);
+		num5 = data.getFloat(offset + 92);
+		num6 = data.getFloat(offset + 96);
+		num7 = data.getFloat(offset + 100);
+		num8 = data.getFloat(offset + 104);
+		num9 = data.getFloat(offset + 108);
+		num10 = data.getFloat(offset + 124);
+		num11 = data.getFloat(offset + 128);
 	}
 	public CollisionMaterial(String name, int preset)
 	{

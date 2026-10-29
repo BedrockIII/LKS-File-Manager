@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import CommonFiles.Collision.ColReader;
+import CommonFiles.Collision.CollisionObject;
 import GUI.GUI;
 import GUI.FileInfo.CollisionInfoGUI;
 import GUI.FileInfo.CollisionObjectInfoGUI;
@@ -24,8 +26,6 @@ import bFM.GUIUtils;
 import bFM.Nameable;
 import bFM.OpenedFile;
 import bFM.Settings;
-import colReader.ColReader;
-import colReader.CollisionObject;
 
 @SuppressWarnings("serial")
 public class Collision extends CollapseableFileList

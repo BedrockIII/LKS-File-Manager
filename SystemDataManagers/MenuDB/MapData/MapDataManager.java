@@ -1,6 +1,6 @@
 package SystemDataManagers.MenuDB.MapData;
 
-import PCKGManager.PCKGManager;
+import CommonFiles.PCKGManager.PCKGManager;
 import bFM.OpenedFile;
 
 public class MapDataManager implements OpenedFile

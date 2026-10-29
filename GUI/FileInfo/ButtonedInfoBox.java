@@ -1,6 +1,5 @@
 package GUI.FileInfo;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,7 +43,7 @@ public class ButtonedInfoBox extends SplitPanel
 	{
 		actionButton.setEnabled(isClickable);
 	}
-	public Component getRightComponent()
+	public JComponent getRightComponent()
 	{
 		if(contents == null) return null;
 		return contents.getLeftComponent();

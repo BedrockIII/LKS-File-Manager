@@ -1,7 +1,5 @@
 package GUI;
 
-import java.awt.Dimension;
-
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -27,8 +25,6 @@ public class LabeledInputBox extends SplitPanel
 	{
 		this.comp = comp;
 		text = new JLabel(labelText);
-		text.setMinimumSize(new Dimension(text.getFontMetrics(text.getFont()).stringWidth(labelText), Settings.assetHeight + 3 ));
-		text.setPreferredSize(new Dimension(text.getFontMetrics(text.getFont()).stringWidth(labelText), Settings.assetHeight + 3));
 		addGUI();
 		update();
 		setTheme();
@@ -56,25 +52,9 @@ public class LabeledInputBox extends SplitPanel
 	{
 		if(text != null)
 		{
-			double weightedPreferredSizeText = text.getMinimumSize().width * 1/xWeight;
-			double weightedPreferredSizeComponent = comp.getPreferredSize().width * 1/(1-xWeight);
-			double preferredSize = Math.max(weightedPreferredSizeText, weightedPreferredSizeComponent);
-			if(MaxWidth!=-1)
-			{
-				text.setMaximumSize(new Dimension((int)(MaxWidth*xWeight), Settings.assetHeight));
-				setMaximumSize(new Dimension((int) Math.min(preferredSize, MaxWidth), Settings.assetHeight));
-				setPreferredSize(new Dimension((int)  Math.min(preferredSize, MaxWidth), Settings.assetHeight));
-				setMinimumSize(new Dimension((int) Math.min(preferredSize, MaxWidth), Settings.assetHeight));
-			}
-			else
-			{
-				setPreferredSize(new Dimension((int)preferredSize, Settings.assetHeight));
-				setMinimumSize(new Dimension((int)preferredSize, Settings.assetHeight));
-			}
 			text.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Settings.LighterColor, Settings.DarkerColor));
 		}
 		super.setTheme();
-		//comp.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Settings.LighterColor, Settings.DarkerColor));
 	}
 	protected void addGUI()
 	{

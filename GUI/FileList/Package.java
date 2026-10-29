@@ -13,9 +13,9 @@ import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import CommonFiles.PCKGManager.PCKGManager;
 import GUI.GUI;
 import GUI.FileInfo.PackageInfoGUI;
-import PCKGManager.PCKGManager;
 import bFM.FileTypeUtils;
 import bFM.GUIUtils;
 import bFM.Nameable;

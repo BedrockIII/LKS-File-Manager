@@ -1,6 +1,5 @@
 package GUI.FileInfo.MenuDB.Name;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JTextField;
@@ -9,7 +8,6 @@ import javax.swing.event.DocumentListener;
 
 import GUI.FileInfo.GenericFileInfoGUI;
 import SystemDataManagers.MenuDB.Name.Keyboard;
-import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class KeyboardInfoGUI extends GenericFileInfoGUI

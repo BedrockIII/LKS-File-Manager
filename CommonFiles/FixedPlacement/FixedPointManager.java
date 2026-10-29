@@ -1,4 +1,4 @@
-package WorldFileManager;
+package CommonFiles.FixedPlacement;
 
 import java.util.ArrayList;
 import java.util.Arrays;

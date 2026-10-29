@@ -2,7 +2,7 @@ package SystemDataManagers.MenuDB.Unused.NPCMemo;
 
 import java.util.List;
 
-import PCKGManager.PCKGManager;
+import CommonFiles.PCKGManager.PCKGManager;
 import bFM.OpenedFile;
 import bFM.Utils;
 

@@ -26,7 +26,7 @@ public class ToolDropDownBox extends JMenu
 			if(chooseFile.showDialog(null, "Choose Modding Directory")==JFileChooser.APPROVE_OPTION)
 			{
 				File newFile = chooseFile.getSelectedFile();
-				colReader.Main.createRiivolutionDirectory(newFile.getParent(), newFile.getName());
+				CommonFiles.Collision.Main.createRiivolutionDirectory(newFile.getParent(), newFile.getName());
 				Settings.importPath = newFile.toString() + "\\";
 			}
 		});
@@ -42,7 +42,7 @@ public class ToolDropDownBox extends JMenu
 			if(chooseFile.showDialog(null, "Choose Riivolution Mod Directory")==JFileChooser.APPROVE_OPTION)
 			{
 				File newFile = chooseFile.getSelectedFile();
-				colReader.Main.createRiivolutionDirectory(newFile.getParent(), newFile.getName());
+				CommonFiles.Collision.Main.createRiivolutionDirectory(newFile.getParent(), newFile.getName());
 				Settings.outputPath = newFile.toString() + "\\";
 			}
 		});

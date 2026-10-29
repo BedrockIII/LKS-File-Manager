@@ -1,4 +1,4 @@
-package LZ10Convertor;
+package CommonFiles.LZ10Convertor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

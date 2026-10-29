@@ -1,4 +1,4 @@
-package colReader;
+package CommonFiles.Collision;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -7,6 +7,7 @@ import bFM.Data;
 
 class CollisionVertex implements Data
 {
+	ColReader file;
 	float x;
 	float y;
 	float z;
@@ -39,11 +40,13 @@ class CollisionVertex implements Data
 		byte[] zArr = {bytes[8],bytes[9],bytes[10],bytes[11]};
 		z = ByteBuffer.wrap(zArr).order(ByteOrder.BIG_ENDIAN).getFloat();
 	}
-	public CollisionVertex(ByteBuffer data) 
+	public CollisionVertex(ColReader file, ByteBuffer data, int offset) 
 	{
-		x = data.getFloat();
-		y = data.getFloat();
-		z = data.getFloat();
+		this.file = file;
+		
+		x = data.getFloat(offset);
+		y = data.getFloat(offset + 4);
+		z = data.getFloat(offset + 8);
 	}
 	public String toString()
 	{

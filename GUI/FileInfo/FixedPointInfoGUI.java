@@ -6,8 +6,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import CommonFiles.FixedPlacement.FixedPointManager;
 import GUI.LabeledInputBox;
-import WorldFileManager.FixedPointManager;
 import bFM.GUIUtils;
 import bFM.Nameable;
 import bFM.Settings;

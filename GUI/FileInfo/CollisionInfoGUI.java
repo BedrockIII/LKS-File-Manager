@@ -6,11 +6,11 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import CommonFiles.Collision.ColReader;
 import GUI.LabeledInputBox;
 import bFM.GUIUtils;
 import bFM.Nameable;
 import bFM.Settings;
-import colReader.ColReader;
 
 @SuppressWarnings("serial")
 public class CollisionInfoGUI extends GenericFileInfoGUI 

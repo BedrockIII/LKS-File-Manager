@@ -1,27 +1,27 @@
-package colReader;
+package CommonFiles.Collision;
 
 import java.nio.ByteBuffer;
 import bFM.Data;
 
-class CollisionFace implements Data
+class CollisionIndex implements Data
 {
 	public short v1;
 	public short v2;
 	public short v3;
 	int offset;
-	public CollisionFace(short v1, short v2, short v3) 
+	public CollisionIndex(short v1, short v2, short v3) 
 	{
 		this.v1 = v1;
 		this.v2 = v2;
 		this.v3 = v3;
 	}
-	public CollisionFace(ByteBuffer data) 
+	public CollisionIndex(ByteBuffer data) 
 	{
 		v1 = data.getShort();
 		v2 = data.getShort();
 		v3 = data.getShort();
 	}
-	public CollisionFace(String line, int vertexOffset) 
+	public CollisionIndex(String line, int vertexOffset) 
 	{
 		offset = vertexOffset;
 		//System.out.println(vertexOffset);

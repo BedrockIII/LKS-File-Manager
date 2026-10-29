@@ -19,13 +19,13 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import CommonFiles.Collision.ColReader;
+import CommonFiles.FixedPlacement.FixedPointManager;
+import CommonFiles.PCKGManager.PCKGManager;
 import GUI.GUI;
 import GUI.FileList.CollapseableFileList;
-import PCKGManager.PCKGManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
-import WorldFileManager.FixedPointManager;
-import colReader.ColReader;
 
 public abstract class GUIUtils 
 {

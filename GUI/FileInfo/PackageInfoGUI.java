@@ -6,9 +6,10 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import CommonFiles.PCKGManager.PCKGManager;
 import GUI.LabeledInputBox;
-import PCKGManager.PCKGManager;
 import bFM.GUIUtils;
+import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class PackageInfoGUI extends GenericFileInfoGUI
@@ -34,16 +35,11 @@ public class PackageInfoGUI extends GenericFileInfoGUI
 	{
 		removeAll();
 		setLayout(new GridBagLayout());
-		GridBagConstraints layout = new GridBagConstraints();
-		layout.anchor = GridBagConstraints.NORTHWEST;
-		layout.gridwidth = GridBagConstraints.REMAINDER;
-		layout.fill = GridBagConstraints.HORIZONTAL;
-		layout.weightx = 1.0;
+		GridBagConstraints layout = Settings.getDefaultConstraints();
 		add(new LabeledInputBox("File Name: ",  name), layout);
 		add(new LabeledInputBox("File Size: ",  pacSize), layout);
 		layout.weighty = 1.0;
 		add(new LabeledInputBox("Packed File Count: ",  fileCount), layout);
-		layout.weighty = 0.0;
 	}
 	public void update()
 	{

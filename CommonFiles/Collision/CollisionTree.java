@@ -1,4 +1,4 @@
-package colReader;
+package CommonFiles.Collision;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ class CollisionTree implements Data
 	CollisionTree[] forest = new CollisionTree[4];
 	//int indexAmount;
 	int indexPos;
-	ArrayList<CollisionFace> faces = new ArrayList<CollisionFace>();
+	ArrayList<CollisionIndex> faces = new ArrayList<CollisionIndex>();
 	byte[] indexData;
 	int indexSize;
 	ArrayList<CollisionTree> trees = new ArrayList<CollisionTree>();
@@ -120,7 +120,7 @@ class CollisionTree implements Data
 		data.position(indexPos);
 		for(int i = 0; i<size; i++)
 		{
-			faces.add(new CollisionFace(data));
+			faces.add(new CollisionIndex(data));
 		}
 	}
 	public int getIndexDataSize()
@@ -266,13 +266,13 @@ class CollisionTree implements Data
 		}
 		return ret;
 	}
-	public CollisionFace addFaceLine(String line, int vertexCount) 
+	public CollisionIndex addFaceLine(String line, int vertexCount) 
 	{
 		if(parent == null) 
 		{
 			throw(new UnsupportedOperationException("This Shouldn't Happen, addFaceLine(String line, int vertexCount) " + getClass()));
 		}
-		CollisionFace face = new CollisionFace(line, vertexCount);
+		CollisionIndex face = new CollisionIndex(line, vertexCount);
 		faces.add(face);
 		boundingBoxXMin = Math.min(boundingBoxXMin, parent.getMinX(face));
 		boundingBoxZMin = Math.min(boundingBoxZMin, parent.getMinZ(face));

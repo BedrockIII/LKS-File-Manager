@@ -5,9 +5,10 @@ import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import CommonFiles.Collision.CollisionObject;
 import GUI.LabeledInputBox;
 import bFM.Settings;
-import colReader.CollisionObject;
 
 @SuppressWarnings("serial")
 public class CollisionObjectInfoGUI extends GenericFileInfoGUI 

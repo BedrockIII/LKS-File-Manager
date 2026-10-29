@@ -14,8 +14,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import CommonFiles.Collision.ColReader;
 import GUI.GUI;
-import colReader.ColReader;
 
 public class Settings 
 {

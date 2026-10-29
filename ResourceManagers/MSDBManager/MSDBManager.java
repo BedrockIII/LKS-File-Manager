@@ -1,6 +1,6 @@
 package ResourceManagers.MSDBManager;
 
-import PCKGManager.PCKGManager;
+import CommonFiles.PCKGManager.PCKGManager;
 import ResourceManagers.MSDBManager.CollisionRectangle.MissionObjectCollisionRectangles;
 import ResourceManagers.MSDBManager.Definition.MissionObjectDefinitionManager;
 import ResourceManagers.MSDBManager.MissionObjectBV.MissionObjectBV;
