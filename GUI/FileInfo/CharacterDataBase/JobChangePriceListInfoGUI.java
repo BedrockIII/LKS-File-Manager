@@ -30,6 +30,7 @@ public class JobChangePriceListInfoGUI extends GenericFileInfoGUI
 		index = GUIUtils.createUpdatingIntTextField(object.getJobCode(), object::setJobCode);
 		pricesPanel = new CollapseablePanel("Prices");
 		makePanelGUI();
+		pricesPanel.isExtended(true);
 	}
 	private void makePanelGUI()
 	{

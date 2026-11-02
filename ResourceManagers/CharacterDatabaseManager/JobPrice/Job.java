@@ -47,9 +47,9 @@ public class Job implements Data
 			//Create a blank job
 			this.parent = parent;
 			this.jobCode = jobCode;
-			for(int i = 0; i < jobCount; i++)
+			for(int i = 0; i < jobCount-1; i++)
 			{
-				prices.add(new Price(parent.jobs.get(i - 1), -1));
+				prices.add(new Price(parent.jobs.get(i), -1));
 			}
 		}
 		public void setPrice(int jobCode, int newPrice)

@@ -20,7 +20,7 @@ public class JopChangePriceInfoGUI extends GenericFileInfoGUI
 	}
 	private void makeGUI()
 	{
-		JobCount = new LabeledInputBox("Job Count", new JLabel("" + object.getAmountOfJobs()));
+		JobCount = new LabeledInputBox("Job Count", new JLabel("" + object.getJobs().size()));
 	}
 	private void addGUI()
 	{
@@ -36,7 +36,7 @@ public class JopChangePriceInfoGUI extends GenericFileInfoGUI
 	}
 	public void update() 
 	{
-		JobCount.replaceComponent(new JLabel("" + object.getAmountOfJobs()));
+		JobCount.replaceComponent(new JLabel("" + object.getJobs().size()));
 		addGUI();
 	}
 }

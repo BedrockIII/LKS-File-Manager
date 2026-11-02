@@ -88,11 +88,11 @@ public class JobChangePriceList implements OpenedFile
 	public void registerJob(Job newJob)
 	{
 		// Add New Job to list and add prices to all children
+		jobs.add(newJob);
 		for(Job job : jobs)
 		{
 			job.registerJob(newJob);
 		}
-		jobs.add(newJob);
 	}
 	public void unregisterJob(Job oldJob)
 	{
