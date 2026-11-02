@@ -5,7 +5,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.JobChangePriceList;
+import ResourceManagers.CharacterDatabaseManager.JobPrice.JobChangePriceList;
 
 @SuppressWarnings("serial")
 public class JopChangePriceInfoGUI extends GenericFileInfoGUI

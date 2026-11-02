@@ -5,9 +5,8 @@ import GUI.GUI;
 import GUI.FileInfo.CharacterDataBase.JopChangePriceInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.Resources.CharacterDB.CharacterDataBaseFileList;
-import GUI.PopupWindows.NewJobChangePriceWindow;
-import ResourceManagers.CharacterDatabaseManager.JobChangePriceList;
-import ResourceManagers.CharacterDatabaseManager.JobChangePriceList.JobPrices;
+import ResourceManagers.CharacterDatabaseManager.JobPrice.JobChangePriceList;
+import ResourceManagers.CharacterDatabaseManager.JobPrice.Job;
 
 public class JobPriceChangeFileList extends CollapseableFileList
 {
@@ -44,7 +43,10 @@ public class JobPriceChangeFileList extends CollapseableFileList
 		JMenuItem replace = new JMenuItem("Create New Job");
 		replace.addActionListener(e -> 
 		{
-			new NewJobChangePriceWindow(this);
+			Job job = new Job(file, -1, file.getJobs().size()+1);
+			file.registerJob(job);
+			subEntries.add(new JobChangePriceListGUI(job, this));
+			reAddComponents();
 			GUI.update();
 		});
 		actions.add(replace);
@@ -55,7 +57,7 @@ public class JobPriceChangeFileList extends CollapseableFileList
 	}
 	public void initializeSubGUI()  
 	{
-		for(JobPrices object : file.getObjects())
+		for(Job object : file.getJobs())
 		{
 			subEntries.add(new JobChangePriceListGUI(object, this));
 		}
@@ -64,14 +66,6 @@ public class JobPriceChangeFileList extends CollapseableFileList
 	{
 		remove(file);
 		subEntries.remove(file);
-		((JobChangePriceList)(this.file)).removePrice(file.getFile());
-	}
-	public void createJob(String code, String price) 
-	{
-		((JobChangePriceList)file).addPrice(bFM.Utils.strToInt(price));
-		((JobChangePriceList)file).addJob(bFM.Utils.strToInt(code));;
-		subEntries.add(new JobChangePriceListGUI(((JobChangePriceList)file).getLastObject(), this));
-		reAddComponents();
-		GUI.update();
+		this.file.unregisterJob(file.getFile());
 	}
 }

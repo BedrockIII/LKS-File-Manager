@@ -2,17 +2,12 @@ package GUI.FileInfo.CharacterDataBase;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
-
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import GUI.CollapseablePanel;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.JobChangePriceList;
-import ResourceManagers.CharacterDatabaseManager.JobChangePriceList.JobPrices;
+import ResourceManagers.CharacterDatabaseManager.JobPrice.JobChangePriceList;
+import ResourceManagers.CharacterDatabaseManager.JobPrice.Job;
 import bFM.GUIUtils;
 import bFM.Settings;
 
@@ -21,10 +16,9 @@ public class JobChangePriceListInfoGUI extends GenericFileInfoGUI
 {
 	JTextField index;
 	JobChangePriceList parent;
-	JobPrices object;
+	Job object;
 	CollapseablePanel pricesPanel;
-	ArrayList<Price> prices;
-	public JobChangePriceListInfoGUI(JobPrices object, JobChangePriceList parent) 
+	public JobChangePriceListInfoGUI(Job object, JobChangePriceList parent) 
 	{
 		this.object = object;
 		this.parent = parent;
@@ -40,11 +34,11 @@ public class JobChangePriceListInfoGUI extends GenericFileInfoGUI
 	private void makePanelGUI()
 	{
 		pricesPanel.removeAll();
-		for(int i = 0; i < object.getPriceAmount(); i++)
+		for(int i = 0; i < object.getPrices().size(); i++)
 		{
-			Price price = new Price(object.getPrice(i), object.getJobCode());
-			prices.add(price);
-			pricesPanel.add(new LabeledInputBox("Price to Become " + object.getNameByIndex(i), price.getLabel()));
+			pricesPanel.add(new LabeledInputBox("Price to Become " + parent.parent.getNameByCode(object.getPrices().get(i).getJob().getJobCode()), 
+					GUIUtils.createIntTextField(object.getPrices().get(i).getPrice(), 
+							object.getPrices().get(i)::setPrice)));
 		}
 	}
 	private void addGUI()
@@ -59,12 +53,6 @@ public class JobChangePriceListInfoGUI extends GenericFileInfoGUI
 	public void update() 
 	{
 		makePanelGUI();
-	}
-	private record Price(int price, int jobCode)
-	{
-		private LabeledInputBox getLabel()
-		{
-			return null;
-		}
+		super.update();
 	}
 }

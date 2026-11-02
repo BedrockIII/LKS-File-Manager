@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import PCKGManager.PCKGManager;
+import ResourceManagers.CharacterDatabaseManager.JobPrice.JobChangePriceList;
 import bFM.GenericFile;
 
 public class CharacterDataBaseManager extends GenericFile
