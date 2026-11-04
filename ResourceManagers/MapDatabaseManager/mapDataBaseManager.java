@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 import PCKGManager.PCKGManager;
 import ResourceManagers.MapDatabaseManager.GroundConfiguration.GroundMemoryAssignmentManager;
+import ResourceManagers.MapDatabaseManager.PlaceObject.PlacementObjectManager;
 import bFM.OpenedFile;
 import bFM.Utils;
 
@@ -16,6 +17,7 @@ public class mapDataBaseManager implements OpenedFile
 	BuildingResourceList buildingList = null;
 	exteriorPlaceList exteriorPlaces = null;
 	GroundMemoryAssignmentManager groundConfig = null;
+	PlacementObjectManager placeObj = null;
 	public mapDataBaseManager(byte[] data)
 	{
 		initializeFromBytes(data);
@@ -26,6 +28,7 @@ public class mapDataBaseManager implements OpenedFile
 		buildingList = new BuildingResourceList(Utils.bytesToStrs(MapDataBase.getFile("building0.lst")));
 		exteriorPlaces = new exteriorPlaceList(Utils.bytesToStrs(MapDataBase.getFile("extPlace1.lst")));
 		groundConfig = new GroundMemoryAssignmentManager(MapDataBase.getFile("grnd2.cfg"));
+		placeObj = new PlacementObjectManager(MapDataBase.getFile("placeObj3.bin"));
 	}
 	public mapDataBaseManager(String mapDBPath)
 	{
@@ -147,6 +150,10 @@ public class mapDataBaseManager implements OpenedFile
 	{
 		return groundConfig;
 	}
+	public PlacementObjectManager getPlacementObjects()
+	{
+		return placeObj;
+	}
 	public boolean equals(String name) 
 	{
 		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
@@ -159,7 +166,8 @@ public class mapDataBaseManager implements OpenedFile
 	{
 		MapDataBase.addFile("building0.lst", buildingList.toBytes());
 		MapDataBase.addFile("extPlace1.lst", exteriorPlaces.toBytes());
-		MapDataBase.addFile("grnd2.dfg", groundConfig.toBytes());
+		MapDataBase.addFile("grnd2.cfg", groundConfig.toBytes());
+		MapDataBase.addFile("placeObj3.bin", placeObj.toBytes());
 		return MapDataBase.getFile();
 	}
 	public void setName(String name) 
