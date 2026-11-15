@@ -36,7 +36,7 @@ public class CharacterDataBaseInfoGUI extends GenericFileInfoGUI
 		CoordinateCount = new LabeledInputBox("Coordinate Count", new JLabel("" + object.getCharacterSoundEffect().getAmountOfCoordinates()));
 		AnimationCount = new LabeledInputBox("Animations Count", new JLabel("" + object.getTextureAnimations().getAnimations().getAnimations().size()));
 		PatternCount = new LabeledInputBox("Patterns Count", new JLabel("" + object.getTextureAnimations().getPatterns().getPatterns().size()));
-		JobCount = new LabeledInputBox("Job Count", new JLabel("" + object.getJobChangePriceList().getAmountOfJobs()));
+		JobCount = new LabeledInputBox("Job Count", new JLabel("" + object.getJobChangePriceList().getJobs().size()));
 	}
 	private void addGUI()
 	{
@@ -68,7 +68,7 @@ public class CharacterDataBaseInfoGUI extends GenericFileInfoGUI
 		CoordinateCount.replaceComponent(new JLabel("" + object.getCharacterSoundEffect().getAmountOfCoordinates()));
 		AnimationCount.replaceComponent(new JLabel("" + object.getTextureAnimations().getAnimations().getAnimations().size()));
 		PatternCount.replaceComponent(new JLabel("" + object.getTextureAnimations().getPatterns().getPatterns().size()));
-		JobCount.replaceComponent(new JLabel("" + object.getJobChangePriceList().getAmountOfJobs()));
+		JobCount.replaceComponent(new JLabel("" + object.getJobChangePriceList().getJobs().size()));
 		addGUI();
 		for(Component c : this.getComponents())
 		{

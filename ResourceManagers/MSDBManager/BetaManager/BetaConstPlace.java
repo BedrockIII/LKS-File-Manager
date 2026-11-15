@@ -83,8 +83,8 @@ public class BetaConstPlace extends MobConstantPlace
 		activationFlag2 = bFM.Utils.getShort(data);
 		clearFlag = bFM.Utils.getShort(data);
 		deactivationFlag = -1;
-		num11 = 0;
-		num12 = bFM.Utils.getShort(data);
+		num12 = 0;
+		itemCode = bFM.Utils.getShort(data);
 	}
 	private void initializeVersion10(ByteBuffer data) 
 	{
@@ -101,7 +101,7 @@ public class BetaConstPlace extends MobConstantPlace
 		activationFlag2 = bFM.Utils.getShort(data);
 		clearFlag = bFM.Utils.getShort(data);
 		deactivationFlag = bFM.Utils.getShort(data);
-		num11 = bFM.Utils.getShort(data);
 		num12 = bFM.Utils.getShort(data);
+		itemCode = bFM.Utils.getShort(data);
 	}
 }
