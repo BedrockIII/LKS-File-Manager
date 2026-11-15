@@ -120,7 +120,7 @@ public class BuildingResource
 		String ret = "DAT " + buildingCode + "," + interactionType + "," + num0 + "," + num02 + "," + width + "," + depth + "," + linkCode1 + "," + linkCode2 + ";\r\n";
 		ret+="DAT2 " + buildingCode + "," + trainCode + "," + num1 + "," + num2 + "," + speakCode + ";\r\n";
 		ret+="MDL " + num3 + "," + num4;
-		if(num4<100&& buildingCode!= 10012 && buildingCode!=10034) ret+=" ";
+		if((((num4>1000||num4<100)&& buildingCode!= 10012 && buildingCode!=10034))) ret+=" ";
 		ret += "," + filePath + "," + name + ";\r\n";
 		if(Animations.size()>0)
 		{

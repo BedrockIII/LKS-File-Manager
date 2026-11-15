@@ -1,5 +1,6 @@
 package ResourceManagers.MapDatabaseManager;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,13 +66,14 @@ public class BuildingResourceList
 		return ret;
 	}
 	public byte[] toBytes()
-	{//Utils.encodeStringToBytes()
-		byte[] ret = Utils.encodeStringToBytes("NUM " + size() + ";\r\n");
-			for(BuildingResource bld : Buildings)
-				ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(bld.toString()));
-			ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes("MPJP_NUM " + (Connections.size()+1) +";\r\n"));
-			for(String str : Connections)
-				ret = Utils.mergeArrays(ret, Utils.encodeStringToBytes(str + "\r\n"));
-	return ret;
+	{
+		try
+		{
+			return Utils.encodeStringToBytes(toString(), Charset.forName("Shift-JIS"));
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

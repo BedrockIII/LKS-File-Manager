@@ -469,6 +469,11 @@ public class Utils
 				k++;
 			}
 		}
+		String line = decodeBytesToString(temp);
+		int ending = line.indexOf(0x00);
+		if(ending == -1) ending = line.length();
+		line = line.substring(0, ending);
+		Strings.add(line);
 		return Strings;
 	}
 	public static float[] formatCoords(String line) 
