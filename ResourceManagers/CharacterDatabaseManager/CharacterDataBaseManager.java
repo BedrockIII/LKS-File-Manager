@@ -7,61 +7,57 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import PCKGManager.PCKGManager;
-import ResourceManagers.CharacterDatabaseManager.indBinList.ind;
-import bFM.GenericFile;
+import ResourceManagers.CharacterDatabaseManager.CharacterResources.CharacterResourceList;
+import ResourceManagers.CharacterDatabaseManager.Index.ind;
+import ResourceManagers.CharacterDatabaseManager.Index.indBinList;
+import ResourceManagers.CharacterDatabaseManager.JobPrice.JobChangePriceList;
+import ResourceManagers.CharacterDatabaseManager.Join.JoinBinList;
+import ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinate.SoundEffectCoordinateList;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.TextureAnimationList;
+import bFM.OpenedFile;
 
-public class CharacterDataBaseManager extends GenericFile
+public class CharacterDataBaseManager implements OpenedFile
 {
-	PCKGManager CharacterDataBase = new PCKGManager("chrDB0");
+	public static final String FileName = "chrDB0.pac";
 	CharacterResourceList chrDB2 = null;
 	indBinList ind3 = null;
 	JobChangePriceList JobChangePrice = null;
 	JoinBinList join = null;
 	SoundEffectCoordinateList seCrd = null;
-	TextAnimationList texanim = null;
-	//PCKGManager texanim = null;
+	TextureAnimationList texanim = null;
 	public CharacterDataBaseManager(String characterDBPath)
 	{
-		name = "Character Data Base File";
 		try 
 		{
 			bFM.Utils.DebugPrint("Attempting to read chrDB package at: " + characterDBPath);
-			CharacterDataBase = new PCKGManager(Files.readAllBytes(Paths.get(characterDBPath)));
+			initializeFromBytes(Files.readAllBytes(Paths.get(characterDBPath)));
 		} catch (IOException e) 
 		{
 			bFM.Utils.DebugPrint("Failed to read package. Program will skip this step for now");
 		}
-		initialize(CharacterDataBase);
 	}
-	public CharacterDataBaseManager(byte[] characterDataBaseData) 
+	public CharacterDataBaseManager(byte[] data) 
 	{
-		name = "Character Data Base File";
-		CharacterDataBase = new PCKGManager(characterDataBaseData);
-		initialize(CharacterDataBase);
+		initializeFromBytes(data);
 	}
 	public CharacterDataBaseManager() 
 	{
-		name = "Character Data Base File";
 		chrDB2 = new CharacterResourceList();
 		ind3 = new indBinList();
-		JobChangePrice = new JobChangePriceList( this);
+		JobChangePrice = new JobChangePriceList(this);
 		join = new JoinBinList();
 		seCrd = new SoundEffectCoordinateList();
-		texanim = new TextAnimationList();
+		texanim = new TextureAnimationList();
 	}
-	private void initialize(PCKGManager CharacterDataBase) 
+	private void initializeFromBytes(byte[] data) 
 	{
+		PCKGManager CharacterDataBase = new PCKGManager(data);
 		chrDB2 = new CharacterResourceList(CharacterDataBase.getFile("chrDB2.lst"));
-		//bFM.Utils.testDifferences(CharacterDataBase.getFile("chrDB2.lst"), chrDB2.toString().getBytes(Charset.forName("SHIFT-JIS")));
 		ind3 = new indBinList(CharacterDataBase.getFile("ind3.bin"));
-		//bFM.Utils.testDifferences(CharacterDataBase.getFile("ind3.bin"), ind3.toBytes());
 		JobChangePrice = new JobChangePriceList(CharacterDataBase.getFile("JobChangePrice.cfg"), this);
 		join = new JoinBinList(CharacterDataBase.getFile("join.bin"));
-		//bFM.Utils.testDifferences(CharacterDataBase.getFile("join.bin"), join.toBytes());
 		seCrd = new SoundEffectCoordinateList(CharacterDataBase.getFile("seCrd.bin"));
-		//bFM.Utils.testDifferences(CharacterDataBase.getFile("seCrd.bin"), seCrd.toBytes());
-		texanim = new TextAnimationList(CharacterDataBase.getFile("texanim.bin"));
-		//bFM.Utils.testDifferences(CharacterDataBase.getFile("texanim.bin"), texanim.toBytes());
+		texanim = new TextureAnimationList(CharacterDataBase.getFile("texanim.bin"));
 	}
 	public void importIndex(String importDirectory)
 	{
@@ -93,12 +89,13 @@ public class CharacterDataBaseManager extends GenericFile
 	}
 	public byte[] getFile() 
 	{
-		CharacterDataBase.addFile("JobChangePrice.cfg", JobChangePrice.toBytes());
+		PCKGManager CharacterDataBase = new PCKGManager();
+		CharacterDataBase.addFile("chrDB2.lst", chrDB2.toBytes());
 		CharacterDataBase.addFile("ind3.bin", ind3.toBytes());
 		CharacterDataBase.addFile("join.bin", join.toBytes());
-		CharacterDataBase.addFile("chrDB2.lst", chrDB2.toBytes());
 		CharacterDataBase.addFile("seCrd.bin", seCrd.toBytes());
 		CharacterDataBase.addFile("texanim.bin", texanim.toBytes());
+		CharacterDataBase.addFile("JobChangePrice.cfg", JobChangePrice.toBytes());
 		return CharacterDataBase.getFile();
 	}
 	public void writeFile(String outputPath) 
@@ -116,7 +113,6 @@ public class CharacterDataBaseManager extends GenericFile
 		try 
 		{
 			join = new JoinBinList(Files.readAllLines(Paths.get(importDirectory+"joinList.csv"), Charset.forName("Shift-JIS")));
-			//bFM.Utils.testDifferences(CharacterDataBase.getFile("join.bin"), join.toBytes());
 			bFM.Utils.DebugPrint("Sucessfully added Character Join File");
 		} catch (IOException e) 
 		{
@@ -201,8 +197,8 @@ public class CharacterDataBaseManager extends GenericFile
 	}
 	public void setData(byte[] data)
 	{
-		CharacterDataBase = new PCKGManager(data);
-		initialize(CharacterDataBase);
+		
+		initializeFromBytes(data);
 	}
 	public byte[] toBytes()
 	{
@@ -210,11 +206,11 @@ public class CharacterDataBaseManager extends GenericFile
 	}
 	public String getName()
 	{
-		return name;
+		return FileName;
 	}
 	public String toString()
 	{
-		return "File: " + name + " File Size: " + getFile().length + "\n";
+		return "File: " + FileName + " File Size: " + getFile().length + "\n";
 	}
 	public int getSize()
 	{
@@ -222,7 +218,7 @@ public class CharacterDataBaseManager extends GenericFile
 	}
 	public void setName(String name) 
 	{
-		this.name = name;
+		throw new UnsupportedOperationException("setName(String name) should not be called on type " + this.getClass());
 	}
 	public CharacterResourceList getCharacterResource() 
 	{
@@ -240,7 +236,7 @@ public class CharacterDataBaseManager extends GenericFile
 	{
 		return seCrd;
 	}
-	public TextAnimationList getTextureAnimations()
+	public TextureAnimationList getTextureAnimations()
 	{
 		return texanim;
 	}
@@ -251,5 +247,9 @@ public class CharacterDataBaseManager extends GenericFile
 	public ind getCharacterIndex(int jobCode) 
 	{
 		return ind3.getByCode(jobCode);
+	}
+	public boolean equals(String name)
+	{
+		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
 	}
 }
