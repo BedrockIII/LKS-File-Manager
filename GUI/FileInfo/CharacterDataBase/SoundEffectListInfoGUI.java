@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinateList;
+import ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinate.SoundEffectCoordinateList;
 
 @SuppressWarnings("serial")
 public class SoundEffectListInfoGUI extends GenericFileInfoGUI

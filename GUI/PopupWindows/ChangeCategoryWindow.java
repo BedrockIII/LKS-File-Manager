@@ -3,8 +3,8 @@ package GUI.PopupWindows;
 import javax.swing.JComboBox;
 import GUI.LabeledInputBox;
 import GUI.FileList.Resources.MOPlacementListGUI.GroupCategoriesListGUI.GroupCategoryListGUI.GroupListGUI;
-import bFM.GroupCategoryManager;
-import bFM.GroupCategoryManager.Category;
+import bFM.InfoManagers.GroupCategoryManager;
+import bFM.InfoManagers.GroupCategoryManager.Category;
 
 @SuppressWarnings("serial")
 public class ChangeCategoryWindow extends GenericPopupWindow

@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.indBinList;
+import ResourceManagers.CharacterDatabaseManager.Index.indBinList;
 
 @SuppressWarnings("serial")
 public class CharacterIndexListInfoGUI extends GenericFileInfoGUI 

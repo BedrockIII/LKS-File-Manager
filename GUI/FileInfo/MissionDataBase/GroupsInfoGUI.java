@@ -12,8 +12,8 @@ import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
 import ResourceManagers.MSDBManager.Placement.MobGroup;
 import bFM.GUIUtils;
-import bFM.GroupCategoryManager;
 import bFM.Settings;
+import bFM.InfoManagers.GroupCategoryManager;
 
 @SuppressWarnings("serial")
 public class GroupsInfoGUI extends GenericFileInfoGUI 

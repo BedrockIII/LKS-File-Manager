@@ -22,9 +22,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import GUI.GUI;
 import GUI.FileList.CollapseableFileList;
 import PCKGManager.PCKGManager;
+import WorldFileManager.FixedPointManager;
 import ResourceManagers.CharacterDatabaseManager.CharacterDataBaseManager;
 import ResourceManagers.ItemDatabaseManager.itemDatabaseManager;
-import WorldFileManager.FixedPointManager;
 import colReader.ColReader;
 
 public abstract class GUIUtils 
@@ -369,7 +369,27 @@ public abstract class GUIUtils
 		
 		return field;
 	}
-
+	public static JTextField createUpdatingIntTextField(int value, Consumer<Integer> setterFunction)
+	{
+		JTextField field = new JTextField("" + value);
+		
+		field.getDocument().addDocumentListener(new DocumentListener()
+		{
+			public void insertUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(Utils.strToInt(field.getText()));
+				GUI.update();
+			}
+			public void removeUpdate(DocumentEvent e)
+			{
+				setterFunction.accept(Utils.strToInt(field.getText()));
+				GUI.update();
+			}
+			public void changedUpdate(DocumentEvent e) {}
+		});
+		
+		return field;
+	}
 	public static JTextField createFloatTextField(float value, Consumer<Float> setterFunction)
 	{
 		JTextField field = new JTextField("" + value);
