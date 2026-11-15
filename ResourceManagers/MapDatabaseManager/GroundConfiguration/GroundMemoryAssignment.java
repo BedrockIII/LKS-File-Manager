@@ -1,5 +1,7 @@
 package ResourceManagers.MapDatabaseManager.GroundConfiguration;
 
+import java.nio.charset.Charset;
+
 import bFM.Data;
 import bFM.Utils;
 
@@ -41,9 +43,14 @@ public class GroundMemoryAssignment implements Data
 	}
 	public String toString()
 	{
-		String ret = "DEF " + x + "" + y + ";\n";
-		ret += "MEM " + mem + ";\n";
-		if(hasSea) ret += "SEA;\n";
+		String ret = "DEF ";
+		if(x < 10) ret += "0" + x;
+		else ret += x;
+		if(y < 10) ret += "0" + y;
+		else ret += y;
+		ret+= ";\r\n";
+		if(hasSea) ret += "SEA;\r\n";
+		ret += "MEM " + mem + ";\r\n";
 		return ret;
 	}
 	public void setData(byte[] data) 
@@ -52,7 +59,14 @@ public class GroundMemoryAssignment implements Data
 	}
 	public byte[] toBytes() 
 	{
-		throw new UnsupportedOperationException("toBytes() should not be called on type " + this.getClass());
+		try
+		{
+			return Utils.encodeStringToBytes(toString(), Charset.forName("ASCII"));
+		} catch (Exception e)
+		{
+			//To String should always be english ascii characters
+			throw new IllegalArgumentException("This Should Never Happen");
+		}
 	}
 	public int getSize() 
 	{

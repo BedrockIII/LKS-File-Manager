@@ -24,6 +24,7 @@ public class PlacementObjectManager implements Data
 		for(int i = 0; i < ObjNum; i++)
 		{
 			data.get(16 + i * PlacementObject.PLACEMENT_OBJECT_SIZE, objData);
+			Objects.add(new PlacementObject(objData));
 		}
 	}
 	public void setData(byte[] data) 
