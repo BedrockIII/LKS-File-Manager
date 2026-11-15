@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import PCKGManager.PCKGManager;
+import ResourceManagers.MapDatabaseManager.GroundConfiguration.GroundMemoryAssignmentManager;
+import ResourceManagers.MapDatabaseManager.PlaceObject.PlacementObjectManager;
 import bFM.OpenedFile;
 import bFM.Utils;
 
@@ -14,6 +16,8 @@ public class mapDataBaseManager implements OpenedFile
 	PCKGManager MapDataBase = new PCKGManager("mapDB0");
 	BuildingResourceList buildingList = null;
 	exteriorPlaceList exteriorPlaces = null;
+	GroundMemoryAssignmentManager groundConfig = null;
+	PlacementObjectManager placeObj = null;
 	public mapDataBaseManager(byte[] data)
 	{
 		initializeFromBytes(data);
@@ -23,6 +27,8 @@ public class mapDataBaseManager implements OpenedFile
 		MapDataBase = new PCKGManager(data);
 		buildingList = new BuildingResourceList(Utils.bytesToStrs(MapDataBase.getFile("building0.lst")));
 		exteriorPlaces = new exteriorPlaceList(Utils.bytesToStrs(MapDataBase.getFile("extPlace1.lst")));
+		groundConfig = new GroundMemoryAssignmentManager(MapDataBase.getFile("grnd2.cfg"));
+		placeObj = new PlacementObjectManager(MapDataBase.getFile("placeObj3.bin"));
 	}
 	public mapDataBaseManager(String mapDBPath)
 	{
@@ -39,7 +45,7 @@ public class mapDataBaseManager implements OpenedFile
 	{
 		try 
 		{
-			MapDataBase.addFile("grnd2.cfg", Files.readAllBytes(Paths.get(inputPath+"grnd2.cfg")));
+			groundConfig.setData(Files.readAllBytes(Paths.get(inputPath+"grnd2.cfg")));
 			bFM.Utils.DebugPrint("Sucessfully added Ground Configuration File");
 		} catch (IOException e) 
 		{
@@ -140,6 +146,14 @@ public class mapDataBaseManager implements OpenedFile
 		if(exteriorPlaces == null) throw new IllegalArgumentException("Map Database has no defined Exterior Placement File.");
 		return exteriorPlaces;
 	}
+	public GroundMemoryAssignmentManager getGroundConfiguration()
+	{
+		return groundConfig;
+	}
+	public PlacementObjectManager getPlacementObjects()
+	{
+		return placeObj;
+	}
 	public boolean equals(String name) 
 	{
 		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
@@ -152,6 +166,8 @@ public class mapDataBaseManager implements OpenedFile
 	{
 		MapDataBase.addFile("building0.lst", buildingList.toBytes());
 		MapDataBase.addFile("extPlace1.lst", exteriorPlaces.toBytes());
+		MapDataBase.addFile("grnd2.cfg", groundConfig.toBytes());
+		MapDataBase.addFile("placeObj3.bin", placeObj.toBytes());
 		return MapDataBase.getFile();
 	}
 	public void setName(String name) 
