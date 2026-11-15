@@ -1,4 +1,4 @@
-package ResourceManagers.CharacterDatabaseManager;
+package ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinate;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import bFM.OpenedFile;
 public class SoundEffectCoordinateList implements OpenedFile
 {
 	ArrayList<SoundEffectCoordinate> list = new ArrayList<SoundEffectCoordinate>();
-	protected SoundEffectCoordinateList(byte[] data)
+	public SoundEffectCoordinateList(byte[] data)
 	{
 		ByteBuffer bytes = ByteBuffer.wrap(data);
 		for(int i = 4; i < data.length; i+=8)
@@ -28,6 +28,10 @@ public class SoundEffectCoordinateList implements OpenedFile
 				list.add(new SoundEffectCoordinate(line));
 			}
 		}
+	}
+	public SoundEffectCoordinateList()
+	{
+		
 	}
 	public String toString()
 	{

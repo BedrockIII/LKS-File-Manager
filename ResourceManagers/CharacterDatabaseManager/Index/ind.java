@@ -1,4 +1,4 @@
-package ResourceManagers.CharacterDatabaseManager;
+package ResourceManagers.CharacterDatabaseManager.Index;
 
 import java.nio.ByteBuffer;
 

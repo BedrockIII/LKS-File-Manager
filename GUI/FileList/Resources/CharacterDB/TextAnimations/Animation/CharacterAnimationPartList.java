@@ -2,16 +2,16 @@ package GUI.FileList.Resources.CharacterDB.TextAnimations.Animation;
 
 import GUI.FileInfo.CharacterDataBase.TextAnimations.CharacterAnimationPartInfoGUI;
 import GUI.FileList.CollapseableFileList;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.AnimationPattern;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.Part;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.AnimationPattern;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.PartManager;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class CharacterAnimationPartList extends CollapseableFileList
 {
 	CharacterAnimationGUI parent;
-	Part file;
-	public CharacterAnimationPartList(Part file, CharacterAnimationGUI parent) 
+	PartManager file;
+	public CharacterAnimationPartList(PartManager file, CharacterAnimationGUI parent) 
 	{
 		this.parent = parent;
 		this.file = file;

@@ -11,7 +11,7 @@ import javax.swing.event.DocumentListener;
 import GUI.GUI;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.PatternPart;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.PatternPart;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

@@ -2,7 +2,7 @@ package GUI.FileList.Resources.CharacterDB.Resource;
 
 import GUI.FileInfo.CharacterDataBase.CharacterFaceInfoGUI;
 import GUI.FileList.FileList;
-import ResourceManagers.CharacterDatabaseManager.CharacterFace;
+import ResourceManagers.CharacterDatabaseManager.CharacterResources.CharacterFace;
 import bFM.Settings;
 
 public class CharacterFaceListGUI extends FileList

@@ -2,7 +2,7 @@ package GUI.FileList.Resources.CharacterDB.Join;
 
 import GUI.FileInfo.CharacterDataBase.CharacterJoinInfo;
 import GUI.FileList.FileList;
-import ResourceManagers.CharacterDatabaseManager.join;
+import ResourceManagers.CharacterDatabaseManager.Join.join;
 import bFM.Settings;
 
 class JoinListGUI extends FileList

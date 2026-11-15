@@ -2,7 +2,7 @@ package GUI.FileList.Resources.CharacterDB.Resource;
 
 import GUI.FileInfo.CharacterDataBase.CharacterBodyInfoGUI;
 import GUI.FileList.FileList;
-import ResourceManagers.CharacterDatabaseManager.CharacterBody;
+import ResourceManagers.CharacterDatabaseManager.CharacterResources.CharacterBody;
 import bFM.Settings;
 
 public class CharacterBodyListGUI extends FileList

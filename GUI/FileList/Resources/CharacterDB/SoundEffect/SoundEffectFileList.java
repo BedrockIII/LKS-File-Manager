@@ -2,8 +2,8 @@ package GUI.FileList.Resources.CharacterDB.SoundEffect;
 
 import GUI.FileInfo.CharacterDataBase.SoundEffectListInfoGUI;
 import GUI.FileList.CollapseableFileList;
-import ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinate;
-import ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinateList;
+import ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinate.SoundEffectCoordinate;
+import ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinate.SoundEffectCoordinateList;
 
 @SuppressWarnings("serial")
 public class SoundEffectFileList extends CollapseableFileList

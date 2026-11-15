@@ -2,7 +2,7 @@ package GUI.FileList.Resources.CharacterDB.TextAnimations.Animation;
 
 import GUI.FileInfo.CharacterDataBase.TextAnimations.CharacterAnimationInfoGUI;
 import GUI.FileList.CollapseableFileList;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.Animation;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Animation.Animation;
 import bFM.Settings;
 
 public class CharacterAnimationGUI extends CollapseableFileList

@@ -2,7 +2,7 @@ package GUI.FileList.Resources.CharacterDB.Index;
 
 import GUI.FileInfo.CharacterDataBase.CharacterIndexInfoGUI;
 import GUI.FileList.FileList;
-import ResourceManagers.CharacterDatabaseManager.ind;
+import ResourceManagers.CharacterDatabaseManager.Index.ind;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

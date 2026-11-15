@@ -10,7 +10,7 @@ import javax.swing.event.DocumentListener;
 import GUI.GUI;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.Material;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.Material;
 
 @SuppressWarnings("serial")
 public class CharacterPatternMaterialInfoGUI extends GenericFileInfoGUI

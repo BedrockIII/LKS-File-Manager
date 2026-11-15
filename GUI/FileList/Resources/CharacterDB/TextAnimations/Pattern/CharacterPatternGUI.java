@@ -2,8 +2,8 @@ package GUI.FileList.Resources.CharacterDB.TextAnimations.Pattern;
 
 import GUI.FileInfo.CharacterDataBase.TextAnimations.CharacterPatternInfoGUI;
 import GUI.FileList.CollapseableFileList;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.Part2;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.PatternPart;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.Part;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.PatternPart;
 import bFM.Settings;
 
 public class CharacterPatternGUI extends CollapseableFileList
@@ -38,13 +38,13 @@ public class CharacterPatternGUI extends CollapseableFileList
 		addDeleteAction("Delete Pattern", parent, parent.file.getPatterns());
 		addMoveUpAction(parent, parent.file.getPatterns());
 		addMoveDownAction(parent, parent.file.getPatterns());
-		addChildAction("Add New Part", file.getParts(), Part2::new, CharacterPartGUI::new);
+		addChildAction("Add New Part", file.getParts(), Part::new, CharacterPartGUI::new);
 		addMouseListener();
 		add(actions);
 	}
 	public void initializeSubGUI()
 	{
-		for(Part2 part : file.getParts())
+		for(Part part : file.getParts())
 		{
 			subEntries.add(new CharacterPartGUI(part, this));
 		}

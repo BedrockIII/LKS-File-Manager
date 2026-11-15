@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.AnimationList;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Animation.AnimationList;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

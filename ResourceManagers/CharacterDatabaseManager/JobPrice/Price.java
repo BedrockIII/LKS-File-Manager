@@ -21,4 +21,8 @@ public class Price
 	{
 		this.price = price;
 	}
+	public String toString()
+	{
+		return "" + price;
+	}
 }

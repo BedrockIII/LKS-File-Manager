@@ -1,5 +1,6 @@
 package ResourceManagers.CharacterDatabaseManager.JobPrice;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,9 +26,17 @@ public class JobChangePriceList implements OpenedFile
 		this.parent = parent;
 		initializeFromLines(lines);
 	}
-	protected JobChangePriceList(CharacterDataBaseManager parent) 
+	public JobChangePriceList(CharacterDataBaseManager parent) 
 	{
 		this.parent = parent;
+	}
+	public JobChangePriceList(byte[] src)
+	{
+		this.parent = null;
+		String data = Utils.decodeBytesToString(src);
+		String[] lines = data.split("\n");
+		//Skip First Line
+		initializeFromLines(Arrays.asList(lines));
 	}
 	private void initializeFromLines(List<String> lines)
 	{
@@ -65,9 +74,10 @@ public class JobChangePriceList implements OpenedFile
 	{
 		throw new UnsupportedOperationException("setData(byte[] data) should not be called on type " + this.getClass());
 	}
+	
 	public byte[] toBytes() 
 	{
-		throw new UnsupportedOperationException("getData() should not be called on type " + this.getClass());
+		return toString().getBytes(Charset.defaultCharset());
 	}
 	public void setName(String name) 
 	{
@@ -102,5 +112,12 @@ public class JobChangePriceList implements OpenedFile
 			job.unregisterJob(oldJob);
 		}
 		jobs.remove(oldJob);
+	}
+	public String toString()
+	{
+		String ret = String.format("NUM %d;\r\n", jobs.size());
+		for(Job job : jobs)
+			ret += job.toString();
+		return ret;
 	}
 }

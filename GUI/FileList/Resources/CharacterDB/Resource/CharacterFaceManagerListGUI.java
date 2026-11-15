@@ -2,7 +2,7 @@ package GUI.FileList.Resources.CharacterDB.Resource;
 
 import java.util.ArrayList;
 import GUI.FileList.CollapseableFileList;
-import ResourceManagers.CharacterDatabaseManager.CharacterFace;
+import ResourceManagers.CharacterDatabaseManager.CharacterResources.CharacterFace;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

@@ -2,8 +2,8 @@ package GUI.FileList.Resources.CharacterDB.Index;
 
 import GUI.FileInfo.CharacterDataBase.CharacterIndexListInfoGUI;
 import GUI.FileList.CollapseableFileList;
-import ResourceManagers.CharacterDatabaseManager.ind;
-import ResourceManagers.CharacterDatabaseManager.indBinList;
+import ResourceManagers.CharacterDatabaseManager.Index.ind;
+import ResourceManagers.CharacterDatabaseManager.Index.indBinList;
 
 @SuppressWarnings("serial")
 public class IndexFileList extends CollapseableFileList

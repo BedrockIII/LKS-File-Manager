@@ -4,7 +4,7 @@ import GUI.FileInfo.CharacterDataBase.TextAnimations.CharacterFaceAnimationInfoG
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.Resources.CharacterDB.TextAnimations.Animation.CharacterAnimationList;
 import GUI.FileList.Resources.CharacterDB.TextAnimations.Pattern.CharacterPatternList;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.TextureAnimationList;
 
 public class CharacterTextAnimationList extends CollapseableFileList
 {
@@ -12,8 +12,8 @@ public class CharacterTextAnimationList extends CollapseableFileList
 	 * 
 	 */
 	private static final long serialVersionUID = 7180581046777407792L;
-	TextAnimationList file;
-	public CharacterTextAnimationList(TextAnimationList file, int padding) 
+	TextureAnimationList file;
+	public CharacterTextAnimationList(TextureAnimationList file, int padding) 
 	{
 		this.file = file;
 		super.file = file;

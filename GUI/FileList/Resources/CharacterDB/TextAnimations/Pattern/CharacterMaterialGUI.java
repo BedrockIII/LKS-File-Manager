@@ -2,7 +2,7 @@ package GUI.FileList.Resources.CharacterDB.TextAnimations.Pattern;
 
 import GUI.FileInfo.CharacterDataBase.TextAnimations.CharacterPatternMaterialInfoGUI;
 import GUI.FileList.FileList;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.Material;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.Material;
 import bFM.Settings;
 
 public class CharacterMaterialGUI extends FileList

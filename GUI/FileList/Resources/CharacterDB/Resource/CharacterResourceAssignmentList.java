@@ -6,9 +6,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.FileInfo.CharacterDataBase.CharacterResourceListGUI;
 import GUI.FileList.CollapseableFileList;
-import ResourceManagers.CharacterDatabaseManager.CharacterBody;
-import ResourceManagers.CharacterDatabaseManager.CharacterFace;
-import ResourceManagers.CharacterDatabaseManager.CharacterResourceList;
+import ResourceManagers.CharacterDatabaseManager.CharacterResources.CharacterBody;
+import ResourceManagers.CharacterDatabaseManager.CharacterResources.CharacterFace;
+import ResourceManagers.CharacterDatabaseManager.CharacterResources.CharacterResourceList;
 
 public class CharacterResourceAssignmentList extends CollapseableFileList
 {

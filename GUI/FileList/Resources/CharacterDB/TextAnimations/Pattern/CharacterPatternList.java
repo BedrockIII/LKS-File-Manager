@@ -3,8 +3,8 @@ package GUI.FileList.Resources.CharacterDB.TextAnimations.Pattern;
 import GUI.FileInfo.CharacterDataBase.TextAnimations.CharacterPatternListInfoGUI;
 import GUI.FileList.CollapseableFileList;
 import GUI.FileList.Resources.CharacterDB.TextAnimations.CharacterTextAnimationList;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.PatternList;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.PatternPart;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.PatternList;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.PatternPart;
 import bFM.Settings;
 
 public class CharacterPatternList extends CollapseableFileList

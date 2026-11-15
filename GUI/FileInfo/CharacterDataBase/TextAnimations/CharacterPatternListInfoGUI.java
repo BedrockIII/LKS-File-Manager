@@ -6,7 +6,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.PatternList;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.PatternList;
 import bFM.Settings;
 
 @SuppressWarnings("serial")

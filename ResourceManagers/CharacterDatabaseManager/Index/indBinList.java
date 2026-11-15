@@ -1,4 +1,4 @@
-package ResourceManagers.CharacterDatabaseManager;
+package ResourceManagers.CharacterDatabaseManager.Index;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import bFM.OpenedFile;
 public class indBinList implements OpenedFile
 {
 	ArrayList<ind> list = new ArrayList<ind>();
-	protected indBinList(byte[] data)
+	public indBinList(byte[] data)
 	{
 		ByteBuffer bytes = ByteBuffer.wrap(data);
 		for(int i = 16; i < data.length; i+=196)
@@ -19,7 +19,7 @@ public class indBinList implements OpenedFile
 			//list.get(list.size()-1).printUniques();
 		}
 	}
-	protected indBinList(List<String> lines) 
+	public indBinList(List<String> lines) 
 	{
 		for(String line : lines)
 		{
@@ -28,6 +28,9 @@ public class indBinList implements OpenedFile
 				list.add(new ind(line));
 			}
 		}
+	}
+	public indBinList()
+	{
 	}
 	public String toString()
 	{

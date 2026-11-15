@@ -1,4 +1,4 @@
-package ResourceManagers.CharacterDatabaseManager;
+package ResourceManagers.CharacterDatabaseManager.Join;
 
 import java.nio.ByteBuffer;
 
@@ -55,6 +55,10 @@ public class join implements Data
 	}
 	public join() 
 	{
+	}
+	public join(int index)
+	{
+		this.index = index;
 	}
 	public byte[] toBytes() 
 	{

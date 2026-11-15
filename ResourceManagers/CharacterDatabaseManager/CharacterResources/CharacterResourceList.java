@@ -1,4 +1,4 @@
-package ResourceManagers.CharacterDatabaseManager;
+package ResourceManagers.CharacterDatabaseManager.CharacterResources;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +10,17 @@ public class CharacterResourceList implements OpenedFile
 {
 	ArrayList<CharacterBody> bodies = null;
 	ArrayList<CharacterFace> faces = null;
-	protected CharacterResourceList(List<String> lines)
+	public CharacterResourceList(List<String> lines)
 	{
 		initialize(lines.toArray(new String[0]));
 	}
-	protected CharacterResourceList(byte[] file) 
+	public CharacterResourceList(byte[] file) 
 	{
 		String data = Utils.decodeBytesToString(file);
 		String[] lines = data.split(";");
 		initialize(lines);
 	}
-	protected CharacterResourceList()
+	public CharacterResourceList()
 	{
 		bodies = new ArrayList<CharacterBody>();
 		faces = new ArrayList<CharacterFace>();

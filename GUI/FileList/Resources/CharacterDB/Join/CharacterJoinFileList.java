@@ -6,8 +6,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GUI.FileInfo.CharacterDataBase.CharacterJoinListInfoGUI;
 import GUI.FileList.CollapseableFileList;
-import ResourceManagers.CharacterDatabaseManager.JoinBinList;
-import ResourceManagers.CharacterDatabaseManager.join;
+import ResourceManagers.CharacterDatabaseManager.Join.JoinBinList;
+import ResourceManagers.CharacterDatabaseManager.Join.join;
 
 public class CharacterJoinFileList extends CollapseableFileList
 {

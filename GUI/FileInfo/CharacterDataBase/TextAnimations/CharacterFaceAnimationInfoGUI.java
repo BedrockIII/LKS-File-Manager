@@ -7,16 +7,16 @@ import javax.swing.JLabel;
 
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.TextureAnimationList;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class CharacterFaceAnimationInfoGUI extends GenericFileInfoGUI
 {
-	TextAnimationList object;
+	TextureAnimationList object;
 	JLabel animationCountText;
 	JLabel partCountText;
-	public CharacterFaceAnimationInfoGUI(TextAnimationList object)
+	public CharacterFaceAnimationInfoGUI(TextureAnimationList object)
 	{
 		this.object = object;
 		makeGUI();

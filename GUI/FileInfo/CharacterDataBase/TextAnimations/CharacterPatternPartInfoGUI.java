@@ -7,16 +7,16 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import GUI.LabeledInputBox;
 import GUI.FileInfo.GenericFileInfoGUI;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.Part2;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.Part;
 import bFM.Settings;
 
 @SuppressWarnings("serial")
 public class CharacterPatternPartInfoGUI extends GenericFileInfoGUI
 {
-	Part2 object;
+	Part object;
 	JTextField nameText;
 	JLabel partCountText;
-	public CharacterPatternPartInfoGUI(Part2 object)
+	public CharacterPatternPartInfoGUI(Part object)
 	{
 		this.object = object;
 		makeGUI();

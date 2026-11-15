@@ -1,4 +1,4 @@
-package ResourceManagers.CharacterDatabaseManager;
+package ResourceManagers.CharacterDatabaseManager.Join;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import bFM.OpenedFile;
 public class JoinBinList implements OpenedFile
 {
 	ArrayList<join> list = new ArrayList<join>();
-	protected JoinBinList(byte[] data)
+	public JoinBinList(byte[] data)
 	{
 		ByteBuffer bytes = ByteBuffer.wrap(data);
 		for(int i = 8; i < data.length; i+=32)
@@ -20,7 +20,7 @@ public class JoinBinList implements OpenedFile
 			//list.get(list.size()-1).printUniques();
 		}
 	}
-	protected JoinBinList(List<String> lines) 
+	public JoinBinList(List<String> lines) 
 	{
 		for(String line : lines)
 		{
@@ -30,7 +30,7 @@ public class JoinBinList implements OpenedFile
 			}
 		}
 	}
-	protected JoinBinList() 
+	public JoinBinList() 
 	{
 	}
 	public String toString()

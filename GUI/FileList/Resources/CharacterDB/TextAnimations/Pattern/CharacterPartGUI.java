@@ -2,8 +2,8 @@ package GUI.FileList.Resources.CharacterDB.TextAnimations.Pattern;
 
 import GUI.FileInfo.CharacterDataBase.TextAnimations.CharacterPatternPartInfoGUI;
 import GUI.FileList.CollapseableFileList;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.Part2;
-import ResourceManagers.CharacterDatabaseManager.TextAnimationList.Pattern;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.Part;
+import ResourceManagers.CharacterDatabaseManager.TextureAnimation.Pattern.Pattern;
 import bFM.Settings;
 
 public class CharacterPartGUI extends CollapseableFileList
@@ -13,8 +13,8 @@ public class CharacterPartGUI extends CollapseableFileList
 	 */
 	private static final long serialVersionUID = 2949184465719223083L;
 	CharacterPatternGUI parent;
-	Part2 file;
-	public CharacterPartGUI(Part2 file, CharacterPatternGUI parent) 
+	Part file;
+	public CharacterPartGUI(Part file, CharacterPatternGUI parent) 
 	{
 		this.parent = parent;
 		super.file = file;

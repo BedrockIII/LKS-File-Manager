@@ -2,7 +2,7 @@ package GUI.FileList.Resources.CharacterDB.SoundEffect;
 
 import GUI.FileInfo.CharacterDataBase.CharacterSoundEffectInfoGUI;
 import GUI.FileList.FileList;
-import ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinate;
+import ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinate.SoundEffectCoordinate;
 import bFM.Settings;
 
 class SoundEffectListGUI extends FileList

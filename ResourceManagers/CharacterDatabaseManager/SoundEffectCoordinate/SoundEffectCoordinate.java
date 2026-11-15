@@ -1,4 +1,4 @@
-package ResourceManagers.CharacterDatabaseManager;
+package ResourceManagers.CharacterDatabaseManager.SoundEffectCoordinate;
 
 import java.nio.ByteBuffer;
 
