@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import GUI.GUI;
+import GUI.PopupWindows.ConsoleWindow;
 import bFM.InfoManagers.FlagManager;
 import bFM.InfoManagers.GroupCategoryManager;
 import colReader.ColReader;
@@ -30,6 +31,8 @@ public class Settings
 	public static Color bgColor = new Color(169, 169, 169);
 	public static int windowX = 0;
 	public static int windowY = 0;
+	public static int consoleWindowWidth = rowWidth;
+	public static int consoleWindowHeight = assetHeight*10;
 	public static int windowWidth = rowWidth*2;
 	public static int windowHeight = assetHeight*25;
 	public static boolean windowMaximized = false;
@@ -64,14 +67,14 @@ public class Settings
 		} catch (InterruptedException e)
 		{
 		}
-		System.err.println("     Known Bugs: VMC Editor Fails to get Strings");
-		System.err.println("     		 VMC Editor Fails to place some labels");
-		System.err.println("   	 	 	 VMC Editor Fails to read some types of events properly");
-		System.err.println("    	 	 VMC Editor Fails to get Strings");
-		System.err.println("     		 FP Editor Fails to properly Extract rotation when there are scalars applied to perpendicular axes");
-		System.err.println("     		 Flag Viewer can only display same flag label in one place at a time");
-		System.err.println("     		 Some Editors still load all sub-GUIs when they aren't needed");
-		System.err.println("     		 Some Editors dont load Bit Flags Labels and still use int flags");
+		ConsoleWindow.warn("     Known Bugs: VMC Editor Fails to get Strings");
+		ConsoleWindow.warn("     		 VMC Editor Fails to place some labels");
+		ConsoleWindow.warn("     		 VMC Editor Fails to read some types of events properly");
+		ConsoleWindow.warn("     		 VMC Editor Fails to get Strings");
+		ConsoleWindow.warn("     		 FP Editor Fails to properly Extract rotation when there are scalars applied to perpendicular axes");
+		ConsoleWindow.warn("     		 Flag Viewer can only display same flag label in one place at a time");
+		ConsoleWindow.warn("     		 Some Editors still load all sub-GUIs when they aren't needed");
+		ConsoleWindow.warn("     		 Some Editors dont load Bit Flags Labels and still use int flags");
 	}
 	
 	public static void setSettings() 

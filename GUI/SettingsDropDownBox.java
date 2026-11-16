@@ -19,5 +19,12 @@ public class SettingsDropDownBox extends JMenu
 			new PathsWindow();
 		});
 		add(PathSettings);
+		
+		
+		JMenuItem ShowConsole = new JMenuItem("Show Console");
+		ShowConsole.addActionListener(e -> {
+			GUI.debugOutput.setVisible(true);
+		});
+		add(ShowConsole);
 	}
 }

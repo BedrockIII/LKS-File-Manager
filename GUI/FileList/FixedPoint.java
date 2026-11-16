@@ -32,9 +32,7 @@ public class FixedPoint extends CollapseableFileList
 	protected void initializeAll()
 	{
 		fileTypes = new FileNameExtensionFilter("LKS Fixed Placement File", "fp", "vfp", "sfp", "lfp", "plfp");
-		initializeListGUI(padding);
-		initializeInfoGUI();
-		fileName.setText(data.getName());
+		initializeListGUI(data.getName());
 		initializeSubGUI();
 		addActions();
 		reAddComponents();
@@ -83,7 +81,13 @@ public class FixedPoint extends CollapseableFileList
 	}
 	protected void addReplaceButton()
 	{
-		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", ((Nameable) file).getName(), ((FixedPointManager)file).getExtension(),file::setData, ((Nameable)file)::setName, parent));
+		actions.add(GUIUtils.createReplaceAction("Replace With Raw Data", ((Nameable) file).getName(), ((FixedPointManager)file).getExtension(),this::replaceButtonClicked, ((Nameable)file)::setName, parent));
+	}
+	private void replaceButtonClicked(byte[] data)
+	{
+		this.data.setData(data);
+		initializeSubGUI();
+		update();
 	}
 	protected void addReplaceAsBFPButton()
 	{

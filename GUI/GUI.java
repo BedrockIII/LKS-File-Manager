@@ -28,7 +28,7 @@ public class GUI
 {
 	private static FileListPanel openedFileList = new FileListPanel();
 	private static FileInfoPanel fileInfoPanel = new FileInfoPanel();
-	//public static ConsoleWindow debugOutput = new ConsoleWindow();
+	public static ConsoleWindow debugOutput = new ConsoleWindow();
 	private static GenericFileInfoGUI fileInfo = null;
 	static JSplitPane contents = new JSplitPane();
 	public static JFrame frame = new JFrame();
@@ -55,9 +55,6 @@ public class GUI
 		//HRESULT hr = Shell32.INSTANCE.SetCurrentProcessExplicitAppUserModelID(appId);
 	}
 	*/
-	private void createConsoleGUI()
-	{
-	}
 	private void createFileGUIs()
 	{
 		openedFileList.setBackground(Settings.bgColor);
