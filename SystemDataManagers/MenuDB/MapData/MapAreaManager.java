@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.PopupWindows.ConsoleWindow;
 import bFM.Data;
 import bFM.Utils;
 
@@ -31,7 +32,7 @@ public class MapAreaManager implements Data
 			}
 			else
 			{
-				System.err.println(String.format("Map Area DB has too few Images. Has %d, Tried to get %d", Images.size(), i));
+				ConsoleWindow.warn(String.format("Map Area DB has too few Images. Has %d, Tried to get %d", Images.size(), i));
 				Image = "";
 			}
 			if(Flags.remaining()>=20)
@@ -44,7 +45,7 @@ public class MapAreaManager implements Data
 			}
 			else
 			{
-				System.err.println(String.format("Map Area DB has too few Flags. Has %d, Tried to get %d", Flags.limit()/20, i));
+				ConsoleWindow.warn(String.format("Map Area DB has too few Flags. Has %d, Tried to get %d", Flags.limit()/20, i));
 				Flag1 = -1;
 				Flag2 = -1;
 				Flag3 = -1;

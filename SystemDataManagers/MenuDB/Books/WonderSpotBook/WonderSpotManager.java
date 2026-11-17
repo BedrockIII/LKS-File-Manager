@@ -3,6 +3,7 @@ package SystemDataManagers.MenuDB.Books.WonderSpotBook;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.PopupWindows.ConsoleWindow;
 import PCKGManager.PCKGManager;
 import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
@@ -37,11 +38,11 @@ public class WonderSpotManager implements OpenedFile, IntermediateFileFormat
 		}
 		else if(spotCount != texts.size() || spotCount != images.size() || spotCount != details.size())
 		{
-			System.err.print("Wonder Spot Pack is incorrectly formatted. \n"
+			ConsoleWindow.warn("Wonder Spot Pack is incorrectly formatted. \n"
 					+ "Name Count: " + spotCount + "\n"
 					+ "Text Count: " + texts.size() + "\n"
 					+ "Image Count: " + images.size() + "\n"
-					+ "Detail Count: " + details.size() + "\n");
+					+ "Detail Count: " + details.size());
 		}
 		for(int i = 0; i < spotCount; i++)
 		{

@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.PopupWindows.ConsoleWindow;
 import PCKGManager.PCKGManager;
 import bFM.OpenedFile;
 import bFM.Utils;
@@ -42,10 +43,10 @@ public class MonsterBookManager implements OpenedFile
 		}
 		else if(entryCount != texts.size() || entryCount != images.size() || entryCount != string1s.size())
 		{
-			System.err.print("Monster Book Pack is incorrectly formatted. \n"
+			ConsoleWindow.warn("Monster Book Pack is incorrectly formatted. \n"
 					+ "Name Count: " + entryCount + "\n"
 					+ "Description Count: " + texts.size() + "\n"
-					+ "Image Count: " + images.size() + "\n");
+					+ "Image Count: " + images.size());
 		}
 		for(int i = 0; i < entryCount; i++)
 		{
@@ -60,9 +61,9 @@ public class MonsterBookManager implements OpenedFile
 		}
 		else if(entryCount != hps.length/4)
 		{
-			System.err.print("Monster Book Pack is incorrectly formatted. \n"
+			ConsoleWindow.warn("Monster Book Pack is incorrectly formatted. \n"
 					+ "Name Count: " + entryCount + "\n"
-					+ "Value Count: " + hps.length/4 + "\n");
+					+ "Value Count: " + hps.length/4);
 		}
 		ByteBuffer hpData = ByteBuffer.wrap(hps);
 		for(int i = 0; i < names.size(); i++)
@@ -73,9 +74,9 @@ public class MonsterBookManager implements OpenedFile
 		ByteBuffer valData = ByteBuffer.wrap(vals);
 		if(entryCount != vals.length/4)
 		{
-			System.err.print("Monster Book Pack is incorrectly formatted. \n"
+			ConsoleWindow.warn("Monster Book Pack is incorrectly formatted. \n"
 					+ "Log String Count: " + entryCount + "\n"
-					+ "Val Count: " + vals.length/4 + "\n");
+					+ "Val Count: " + vals.length/4);
 		}
 		for(int i = 0; i < entryCount; i++)
 		{

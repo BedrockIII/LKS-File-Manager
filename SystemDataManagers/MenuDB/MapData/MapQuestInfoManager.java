@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.PopupWindows.ConsoleWindow;
 import bFM.Data;
 import bFM.Utils;
 
@@ -43,7 +44,7 @@ public class MapQuestInfoManager implements Data
 			}
 			else
 			{
-				System.err.println(String.format("Map Quest DB has too few Flags. Has %d, Tried to get %d", Flags.limit()/40, i));
+				ConsoleWindow.warn(String.format("Map Quest DB has too few Flags. Has %d, Tried to get %d", Flags.limit()/40, i));
 				Flag1 = -1;
 				Flag2 = -1;
 				Flag3 = -1;

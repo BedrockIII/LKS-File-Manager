@@ -3,6 +3,7 @@ package SystemDataManagers.MenuDB.Books.JewelBook;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.PopupWindows.ConsoleWindow;
 import PCKGManager.PCKGManager;
 import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
@@ -37,11 +38,11 @@ public class JewelBookManager implements OpenedFile, IntermediateFileFormat
 		}
 		else if(entryCount != texts.size() || entryCount != images.size() || entryCount != details.size())
 		{
-			System.err.print("Jewel Book Pack is incorrectly formatted. \n"
+			ConsoleWindow.warn("Jewel Book Pack is incorrectly formatted. \n"
 					+ "Name Count: " + entryCount + "\n"
 					+ "Text Count: " + texts.size() + "\n"
 					+ "Image Count: " + images.size() + "\n"
-					+ "Gourmet Image Count: " + details.size() + "\n");
+					+ "Gourmet Image Count: " + details.size());
 		}
 		for(int i = 0; i < entryCount; i++)
 		{

@@ -49,7 +49,7 @@ public class ConsoleWindow extends JFrame
 	{
 		setVisible(true);
 		setLocationRelativeTo(GUI.GUI.frame);
-		setVisible(true);
+		setVisible(false);
 		setAlwaysOnTop(true);
 		setTitle(name);
 		getContentPane().add(contentPanel);

@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.PopupWindows.ConsoleWindow;
 import PCKGManager.PCKGManager;
 import bFM.OpenedFile;
 import bFM.Utils;
@@ -34,11 +35,11 @@ public class DevelopmentManager implements OpenedFile
 		}
 		else if(entryCount != images.size() || entryCount != pos.length/6 || entryCount != id.length/2)
 		{
-			System.err.print("Development Pack is incorrectly formatted. \n"
+			ConsoleWindow.warn("Development Pack is incorrectly formatted. \n"
 					+ "Icon Count: " + entryCount + "\n"
 					+ "Image Count: " + images.size() + "\n"
 					+ "Pos Count: " + pos.length/6 + "\n"
-					+ "ID Count: " + id.length/2 + "\n");
+					+ "ID Count: " + id.length/2);
 		}
 		for(int i = 0; i < entryCount; i++)
 		{

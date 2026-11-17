@@ -3,6 +3,7 @@ package bFM.InfoManagers;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.PopupWindows.ConsoleWindow;
 import bFM.Utils;
 
 public class GroupCategoryManager
@@ -80,8 +81,8 @@ public class GroupCategoryManager
 			}
 			catch(Exception e)
 			{
-				System.err.println("Unable to parse Flag Line");
-				e.printStackTrace();
+				ConsoleWindow.warn("Unable to parse Group Category");
+				e.printStackTrace(ConsoleWindow.warn);
 			}
 		}
 		sortList();

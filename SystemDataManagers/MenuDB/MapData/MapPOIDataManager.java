@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.PopupWindows.ConsoleWindow;
 import bFM.Data;
 import bFM.Utils;
 
@@ -37,7 +38,7 @@ public class MapPOIDataManager implements Data
 			}
 			else
 			{
-				System.err.println(String.format("Map POI DB has too few Messages. Has %d, Tried to get %d", Images.size(), i));
+				ConsoleWindow.warn(String.format("Map POI DB has too few Messages. Has %d, Tried to get %d", Images.size(), i));
 				Message = "";
 			}
 			if(Images.size() > i)
@@ -46,7 +47,7 @@ public class MapPOIDataManager implements Data
 			}
 			else
 			{
-				System.err.println(String.format("Map POI DB has too few Images. Has %d, Tried to get %d", Images.size(), i));
+				ConsoleWindow.warn(String.format("Map POI DB has too few Images. Has %d, Tried to get %d", Images.size(), i));
 				Image = "";
 			}
 			if(Flags.remaining()>=24)
@@ -60,7 +61,7 @@ public class MapPOIDataManager implements Data
 			}
 			else
 			{
-				System.err.println(String.format("Map POI DB has too few Flags. Has %d, Tried to get %d", Flags.limit()/24, i));
+				ConsoleWindow.warn(String.format("Map POI DB has too few Flags. Has %d, Tried to get %d", Flags.limit()/24, i));
 				Flag1 = -1;
 				Flag2 = -1;
 				Flag3 = -1;
@@ -75,7 +76,7 @@ public class MapPOIDataManager implements Data
 			}
 			else
 			{
-				System.err.println(String.format("Map POI DB has too few Position Data. Has %d, Tried to get %d", Flags.limit()/4, i));
+				ConsoleWindow.warn(String.format("Map POI DB has too few Position Data. Has %d, Tried to get %d", Flags.limit()/4, i));
 				PosX = 0;
 				PosY = 0;
 			}

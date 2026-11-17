@@ -6,7 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import PCKGManager.PCKGManager;
+import ResourceManagers.MapDatabaseManager.AreaPlan.AreaPlanManager;
+import ResourceManagers.MapDatabaseManager.CollisionAttributes.CollisionAttributeManager;
+import ResourceManagers.MapDatabaseManager.DebugCollision.DebugCollisionManager;
 import ResourceManagers.MapDatabaseManager.GroundConfiguration.GroundMemoryAssignmentManager;
+import ResourceManagers.MapDatabaseManager.InteractionPoints.InteractionPointManager;
 import ResourceManagers.MapDatabaseManager.PlaceObject.PlacementObjectManager;
 import bFM.OpenedFile;
 import bFM.Utils;
@@ -18,6 +22,10 @@ public class mapDataBaseManager implements OpenedFile
 	exteriorPlaceList exteriorPlaces = null;
 	GroundMemoryAssignmentManager groundConfig = null;
 	PlacementObjectManager placeObj = null;
+	InteractionPointManager points = null;
+	CollisionAttributeManager colAttr = null;
+	DebugCollisionManager dbgCol = null;
+	AreaPlanManager areaPlan = null;
 	public mapDataBaseManager(byte[] data)
 	{
 		initializeFromBytes(data);
@@ -29,6 +37,10 @@ public class mapDataBaseManager implements OpenedFile
 		exteriorPlaces = new exteriorPlaceList(Utils.bytesToStrs(MapDataBase.getFile("extPlace1.lst")));
 		groundConfig = new GroundMemoryAssignmentManager(MapDataBase.getFile("grnd2.cfg"));
 		placeObj = new PlacementObjectManager(MapDataBase.getFile("placeObj3.bin"));
+		points = new InteractionPointManager(MapDataBase.getFile("buildPos0.lst"));
+		colAttr = new CollisionAttributeManager(MapDataBase.getFile("colAttr0.bin"));
+		dbgCol = new DebugCollisionManager(MapDataBase.getFile("dbCol0.lst"));
+		areaPlan = new AreaPlanManager(MapDataBase.getFile("areaplan3.bin"));
 	}
 	public mapDataBaseManager(String mapDBPath)
 	{
@@ -64,7 +76,7 @@ public class mapDataBaseManager implements OpenedFile
 	{
 		try 
 		{
-			MapDataBase.addFile("buildPos0.lst", Files.readAllBytes(Paths.get(inputPath+"buildPos0.lst")));
+			points.setData(Files.readAllBytes(Paths.get(inputPath+"buildPos0.lst")));
 			bFM.Utils.DebugPrint("Sucessfully added Building Position File");
 		} catch (IOException e) 
 		{
@@ -154,6 +166,22 @@ public class mapDataBaseManager implements OpenedFile
 	{
 		return placeObj;
 	}
+	public InteractionPointManager getInteractionPoints()
+	{
+		return points;
+	}
+	public CollisionAttributeManager getCollisionAttributes()
+	{
+		return colAttr;
+	}
+	public DebugCollisionManager getDebugCollisions()
+	{
+		return dbgCol;
+	}
+	public AreaPlanManager getAreaPlans()
+	{
+		return areaPlan;
+	}
 	public boolean equals(String name) 
 	{
 		throw new UnsupportedOperationException("equals() should not be called on type " + this.getClass());
@@ -165,9 +193,14 @@ public class mapDataBaseManager implements OpenedFile
 	public byte[] toBytes() 
 	{
 		MapDataBase.addFile("building0.lst", buildingList.toBytes());
-		MapDataBase.addFile("extPlace1.lst", exteriorPlaces.toBytes());
-		MapDataBase.addFile("grnd2.cfg", groundConfig.toBytes());
+		//BRoot
+		MapDataBase.addFile("buildPos0.lst", points.toBytes());
+		MapDataBase.addFile("colAttr0.bin", colAttr.toBytes());
 		MapDataBase.addFile("placeObj3.bin", placeObj.toBytes());
+		MapDataBase.addFile("grnd2.cfg", groundConfig.toBytes());
+		MapDataBase.addFile("areaplan3.bin", areaPlan.toBytes());
+		MapDataBase.addFile("extPlace1.lst", exteriorPlaces.toBytes());
+		MapDataBase.addFile("dbCol0.lst", dbgCol.toBytes());
 		return MapDataBase.getFile();
 	}
 	public void setName(String name) 

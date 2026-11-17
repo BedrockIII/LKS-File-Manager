@@ -3,6 +3,7 @@ package SystemDataManagers.MenuDB.Books.AnimalBook;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.PopupWindows.ConsoleWindow;
 import PCKGManager.PCKGManager;
 import bFM.IntermediateFileFormat;
 import bFM.OpenedFile;
@@ -37,11 +38,11 @@ public class AnimalBookManager implements OpenedFile, IntermediateFileFormat
 		}
 		else if(entryCount != texts.size() || entryCount != images.size() || entryCount != details.size())
 		{
-			System.err.print("Animal Book Pack is incorrectly formatted. \n"
+			ConsoleWindow.warn("Animal Book Pack is incorrectly formatted. \n"
 					+ "Name Count: " + entryCount + "\n"
 					+ "Text Count: " + texts.size() + "\n"
 					+ "Image Count: " + images.size() + "\n"
-					+ "Detail Count: " + details.size() + "\n");
+					+ "Detail Count: " + details.size());
 		}
 		for(int i = 0; i < entryCount; i++)
 		{

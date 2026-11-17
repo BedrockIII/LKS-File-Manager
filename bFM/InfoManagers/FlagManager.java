@@ -3,6 +3,7 @@ package bFM.InfoManagers;
 import java.util.ArrayList;
 import java.util.List;
 
+import GUI.PopupWindows.ConsoleWindow;
 import bFM.Utils;
 
 public class FlagManager 
@@ -81,7 +82,7 @@ public class FlagManager
 			}
 			catch(Exception e)
 			{
-				System.err.println("Unable to parse Flag Line");
+				ConsoleWindow.warn("Unable to parse Flag Line");
 				e.printStackTrace();
 			}
 		}
