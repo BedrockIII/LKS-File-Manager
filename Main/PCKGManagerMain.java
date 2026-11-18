@@ -29,7 +29,7 @@ public class PCKGManagerMain
 		input.nextLine();
 		if( whatToDo == 1)
 		{
-			PCKGManager pac;
+			CommonFiles.PCKGManager.PCKGManager pac;
 			System.out.println("Enter the File Path of the PCKG file or press enter to create a New PCKG file.");
 			inputName = input.nextLine();
 			if(inputName.length()<1)
@@ -37,13 +37,13 @@ public class PCKGManagerMain
 				System.out.println("Enter the name of the PCKG file or press enter to use a default name (include file extension)");
 				String name = "NewPac.pac";
 				name = input.nextLine();
-				pac = new PCKGManager(name);
+				pac = new CommonFiles.PCKGManager.PCKGManager(name);
 			}
 			else
 			{
 				if(inputName.charAt(0) == '\"') inputName = inputName.substring(1);
 				if(inputName.charAt(inputName.length()-1) == '\"') inputName = inputName.substring(0,inputName.length()-1);
-				pac = new PCKGManager(Files.readAllBytes(Paths.get(inputName)), (Paths.get(inputName).getFileName().toString()));
+				pac = new CommonFiles.PCKGManager.PCKGManager(Files.readAllBytes(Paths.get(inputName)), (Paths.get(inputName).getFileName().toString()));
 			}
 			System.out.println("Type 1 to add a file, 2 to save the PCKG file, or 3 to extract all files from the PCKG");
 			whatToDo = input.nextInt();
@@ -97,7 +97,7 @@ public class PCKGManagerMain
 				{
 					thisOutputName = thisOutputName +   fileList[i].getName();
 					try {
-						if(PCKGManager.isPAC(Files.readAllBytes(fileList[i].toPath()))) 
+						if(CommonFiles.PCKGManager.PCKGManager.isPAC(Files.readAllBytes(fileList[i].toPath()))) 
 							{
 								File outputFolder = new File(thisOutputName);
 								thisOutputName = thisOutputName + "\\";
@@ -113,7 +113,7 @@ public class PCKGManagerMain
 				}
 				try 
 				{
-					new PCKGManager(Files.readAllBytes(Paths.get(inputName + fileList[i].getName())), fileList[i].getName()).extractAll(thisOutputName);
+					new CommonFiles.PCKGManager.PCKGManager(Files.readAllBytes(Paths.get(inputName + fileList[i].getName())), fileList[i].getName()).extractAll(thisOutputName);
 				} catch (IOException e) 
 				{
 					System.out.println("Could not read file: " + inputName + directory);
