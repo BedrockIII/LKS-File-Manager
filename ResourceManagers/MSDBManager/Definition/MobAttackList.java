@@ -106,7 +106,10 @@ public class MobAttackList implements Data
 	{
 		ArrayList<MobAttackCol> AttackCol = new ArrayList<MobAttackCol>();
 		for(MobAttack atk : Attacks)
+		{
+			atk.updateColNumbers();
 			if(atk.Hitboxes != null)AttackCol.addAll(atk.Hitboxes);
+		}
 		AttackCol.addAll(AttacklessCols);;
 		byte[] ret = new byte[]{0,1};
 		ret = Utils.mergeArrays(ret, Utils.toByteArr(AttackCol.size(), 2));
@@ -171,8 +174,8 @@ public class MobAttackList implements Data
 	}
 	public static class MobAttack implements Nameable, Data
 	{
+		String AttackAnimationName;//16
 		String AttackName;//16
-		String AttackType;//16
 		float num0; //4
 		float num1; //4
 		float num2; //4
@@ -210,15 +213,54 @@ public class MobAttackList implements Data
 		//ATK Cols
 		ArrayList<MobAttackCol> Hitboxes = new ArrayList<MobAttackCol>();
 		
-		private MobAttack()
+		public MobAttack()
 		{
-			
+			AttackName = "New Attack";//16
+			AttackAnimationName = "AttackType";//16
+			num0 = 0; //4
+			num1= 0; //4
+			num2= 0; //4
+			num3= 0; //4
+			num4= 0;//4
+			num5= 0; //4
+			num6= 0;//4
+			num7= 0;//4
+			num8= 0;//4
+			num9= 0;//4
+			num10= 0;//4
+			num11= 0;//4
+			attackCode = -1;//2
+			num13= 0;//2
+			num14= 0;
+			num15= 0;
+			num16= 0;
+			num17= 0;
+			num18= 0;
+			num19= 0;
+			num20= 0;
+			num21= 0;
+			//ATK Element Vars
+			Damage = 0;//2
+			atkNum2= 0;//2
+			HitTypes= 0;//2
+			ElementalType= 0;//2
+			atkNum5= 0;//2
+			name = "Attack Elem Name";//16 bytes
+			atkNum6= 0;
+			atkNum7= 0;
+			atkNum8= 0;
+			HitEffect= 0; //IE roll or blow away
+			atkNum10= 0;
+		}
+		public void updateColNumbers()
+		{
+			for(MobAttackCol c : Hitboxes)c.setAttackCode(attackCode);
 		}
 		private MobAttack(byte[] data)
 		{
 			ByteBuffer data2 = ByteBuffer.wrap(data);
-			AttackName = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 0, 16)));
-			AttackType = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 16, 32)));
+			AttackAnimationName = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 0, 16)));
+			AttackName = Utils.decodeBytesToString(bFM.Utils.removeEmptySpace(Arrays.copyOfRange(data, 16, 32)));
 			num0 = data2.getFloat(32);
 			num1 = data2.getFloat(36);
 			num2 = data2.getFloat(40);
@@ -273,7 +315,7 @@ public class MobAttackList implements Data
 		{
 			byte[] ret = null;
 			try {
-				ret = Utils.encodeStringToBytes(AttackName, Charset.forName("Shift-JIS"));
+				ret = Utils.encodeStringToBytes(AttackAnimationName, Charset.forName("Shift-JIS"));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -284,7 +326,7 @@ public class MobAttackList implements Data
 				ret2[i] = ret[i];
 			}
 			try {
-				ret2 = Utils.mergeArrays(ret2, Utils.encodeStringToBytes(AttackType,Charset.forName("Shift-JIS")));
+				ret2 = Utils.mergeArrays(ret2, Utils.encodeStringToBytes(AttackName,Charset.forName("Shift-JIS")));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -355,7 +397,7 @@ public class MobAttackList implements Data
 		public String toString()
 		{
 			String ret = "";
-			ret += "Mob Attack Info " +attackCode+": \"" + AttackName + "\", \"" + AttackType + "\", " + num0 + ", " + num1 + ", " +
+			ret += "Mob Attack Info " +attackCode+": \"" + AttackAnimationName + "\", \"" + AttackName + "\", " + num0 + ", " + num1 + ", " +
 			num2 + ", " +num3 + ", " +num4 + ", " +num5 + ", " +num6 + ", " +num7 + ", " +num8 + ", " + 
 			num9 + ", " +num10 + ", " +num11 + ", " +num13 + ", " +num14 + ", " +
 			num15 + ", " +num16 + ", " +num17 + ", " +num18 + ", " +num19 + ", " +num20 + ", " +
@@ -383,8 +425,8 @@ public class MobAttackList implements Data
 		{
 			return Hitboxes;
 		}
-		public String getAttackType() {
-			return AttackType;
+		public String getAttackAnimationName() {
+			return AttackAnimationName;
 		}
 		public void setSoundEffect(String attackName) {
 			name = attackName;
@@ -392,8 +434,8 @@ public class MobAttackList implements Data
 		public String getSoundEffect() {
 			return name;
 		}
-		public void setAttackType(String attackType) {
-			AttackType = attackType;
+		public void setAttackAnimationName(String attackType) {
+			AttackAnimationName = attackType;
 		}
 		public float getNum0() {
 			return num0;
@@ -588,6 +630,7 @@ public class MobAttackList implements Data
 			this.atkNum10 = (byte) atkNum10;
 		}
 		public ArrayList<MobAttackCol> getHitboxes() {
+			for(MobAttackCol c : Hitboxes)c.setAttackCode(attackCode);
 			return Hitboxes;
 		}
 		public void setHitboxes(ArrayList<MobAttackCol> hitboxes) {

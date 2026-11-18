@@ -2,6 +2,7 @@ package GUI.FileInfo.MenuDB.Explanation;
 
 import java.awt.GridBagConstraints;
 
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
@@ -14,7 +15,7 @@ public class ExplanationInfoGUI extends GenericFileInfoGUI
 {
 	Explanation file;
 	JTextField Name = null;
-	JTextField Text = null;
+	JTextArea Text = null;
 	JTextField Image1 = null;
 	JTextField Image2 = null;
 	JTextField Num1 = null;
@@ -46,7 +47,7 @@ public class ExplanationInfoGUI extends GenericFileInfoGUI
 	private void makeGUI()
 	{
 		Name = bFM.GUIUtils.createNameTextField(file.getName(), file::setName);
-		Text = bFM.GUIUtils.createStringTextField(file.getText(), file::setText);
+		Text = bFM.GUIUtils.createStringTextArea(file.getText(), file::setText);
 		Image1 = bFM.GUIUtils.createStringTextField(file.getImage1(), file::setImage1);
 		Image2 = bFM.GUIUtils.createStringTextField(file.getImage2(), file::setImage2);
 		Num1 = bFM.GUIUtils.createIntTextField(file.getNum1(), file::setNum1);

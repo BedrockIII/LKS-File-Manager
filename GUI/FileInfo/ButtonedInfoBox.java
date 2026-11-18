@@ -2,11 +2,16 @@ package GUI.FileInfo;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
+
 import GUI.SplitPanel;
 import bFM.Settings;
 
@@ -14,7 +19,9 @@ import bFM.Settings;
 public class ButtonedInfoBox extends SplitPanel
 {
 	JButton actionButton = new JButton();
-	SplitPanel contents;
+	JComponent left;
+	JComponent right;
+	JPanel contentAndButton;
 	@SuppressWarnings("unused")
 	private ButtonedInfoBox()
 	{
@@ -22,10 +29,13 @@ public class ButtonedInfoBox extends SplitPanel
 	}
 	public ButtonedInfoBox(Runnable f, JComponent left, JComponent right)
 	{
+		this.left = left;
+		this.right = right;
 		initializeButton(f);
-		contents = new SplitPanel(right, actionButton);
+		initializeContent();
+		
 		setLeftComponent(left);
-		setRightComponent(contents);
+		setRightComponent(contentAndButton);
 	}
 	private void initializeButton(Runnable f)
 	{
@@ -40,14 +50,37 @@ public class ButtonedInfoBox extends SplitPanel
 			
 		});
 	}
+	private void initializeContent()
+	{
+		contentAndButton = new JPanel();
+		
+		
+		contentAndButton.removeAll();
+		contentAndButton.setLayout(new GridBagLayout());
+		GridBagConstraints layout = Settings.getDefaultConstraints();
+		layout.gridwidth = GridBagConstraints.RELATIVE;
+		layout.insets = new Insets(0,0,0,0);
+		layout.weighty = 1;
+		layout.weightx = 1;
+		layout.fill = GridBagConstraints.BOTH;
+		
+		
+		contentAndButton.add(right, layout);
+		layout.weightx = 0;
+		
+		contentAndButton.add(actionButton, layout);
+		
+		contentAndButton.revalidate();
+		contentAndButton.repaint();
+		
+	}
 	public void setButtonEnabled(boolean isClickable)
 	{
 		actionButton.setEnabled(isClickable);
 	}
 	public Component getRightComponent()
 	{
-		if(contents == null) return null;
-		return contents.getLeftComponent();
+		return right;
 	}
 	public void update()
 	{

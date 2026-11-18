@@ -367,6 +367,7 @@ public class MOPlacementListGUI extends CollapseableFileList
 			}
 			public void update()
 			{
+				if(data.size()==0) return;
 				fileName.setText(GroupCategoryManager.getCategory(data.get(0).getGroupCategoryID()).name().toString());
 				super.update();
 			}

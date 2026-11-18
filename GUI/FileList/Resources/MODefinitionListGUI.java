@@ -83,7 +83,7 @@ public class MODefinitionListGUI extends CollapseableFileList
 		{
 			for(MobAttack Attack : Attacks.getAttacks())
 			{
-				subEntries.add(new MobAttackListGUI(Attack, padding + Settings.indentSize, this));
+				subEntries.add(new MobAttackListGUI(Attack, this));
 				//System.out.print(".");
 			}
 		}
@@ -100,6 +100,7 @@ public class MODefinitionListGUI extends CollapseableFileList
 		}
 		protected void addActions()
 		{
+			addChildAction("Add Attack", Attacks.getAttacks(), MobAttack::new, MobAttackListGUI::new);
 			addExpandAllAction();
 			addCollapseAllAction();
 			add(actions);
@@ -115,19 +116,19 @@ public class MODefinitionListGUI extends CollapseableFileList
 			
 			MobAttack Attack;
 			
-			public MobAttackListGUI(MobAttack file, int padding, MobAttacksListGUI parent)
+			public MobAttackListGUI(MobAttack file, MobAttacksListGUI parent)
 			{
 				this.parent = parent;
 				this.file = file;
 				Attack = file;
-				this.padding = padding;
+				this.padding = parent.getPadding() + Settings.indentSize;
 				initializeAll();
 			}
 			public void initializeSubGUI()
 			{
 				for(MobAttackCol AttackCol : Attack.getCollisions())
 				{
-					subEntries.add(new MobAttackColListGUI(AttackCol, padding + Settings.indentSize, this));
+					subEntries.add(new MobAttackColListGUI(AttackCol, this));
 					//System.out.print(".");
 				}
 			}
@@ -144,6 +145,7 @@ public class MODefinitionListGUI extends CollapseableFileList
 			}
 			protected void addActions()
 			{
+				addChildAction("Add Collision Bone", Attack.getCollisions(), MobAttackCol::new, MobAttackColListGUI::new);
 				add(actions);
 				addMouseListener();
 			}
@@ -156,12 +158,12 @@ public class MODefinitionListGUI extends CollapseableFileList
 			{
 				MobAttackCol Collision;
 				MobAttackListGUI parent;
-				public MobAttackColListGUI(MobAttackCol file, int padding, MobAttackListGUI parent)
+				public MobAttackColListGUI(MobAttackCol file, MobAttackListGUI parent)
 				{
 					this.parent = parent;
 					this.file = file;
 					Collision = file;
-					this.padding = padding;
+					this.padding = parent.getPadding() + Settings.indentSize;
 					initializeAll();
 				}
 				protected void initializeAll()

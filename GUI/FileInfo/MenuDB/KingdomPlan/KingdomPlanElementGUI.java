@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JComboBox;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import GUI.BitFlagPanel;
@@ -20,7 +21,7 @@ public class KingdomPlanElementGUI extends GenericFileInfoGUI
 {
 	KingdomPlanElement Element = null;
 	JTextField Name = null;
-	JTextField Description = null;
+	JTextArea Description = null;
 	JTextField Image = null;
 	JTextField Price = null;
 	BitFlagPanel ActivationFlag = null;
@@ -95,7 +96,7 @@ public class KingdomPlanElementGUI extends GenericFileInfoGUI
 	private void makeGUI()
 	{
 		Name = bFM.GUIUtils.createNameTextField(Element.getName(), Element::setName);
-		Description = bFM.GUIUtils.createFormattedTextField(Element.getDescription(), Element::setDescription);
+		Description = bFM.GUIUtils.createStringTextArea(Element.getDescription(), Element::setDescription);
 		Image = bFM.GUIUtils.createFormattedTextField(Element.getImage(), Element::setImage);
 		Price = bFM.GUIUtils.createIntTextField(Element.getPrice(), Element::setPrice);
 		ActivationFlag = new BitFlagPanel("Or Activation Flag 1: ", Element.getActivationFlag(), Element::setActivationFlag);

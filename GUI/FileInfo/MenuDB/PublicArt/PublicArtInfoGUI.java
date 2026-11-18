@@ -2,6 +2,7 @@ package GUI.FileInfo.MenuDB.PublicArt;
 
 import java.awt.GridBagConstraints;
 
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
@@ -15,7 +16,7 @@ public class PublicArtInfoGUI extends GenericFileInfoGUI
 	PublicArt file;
 	JTextField Name = null;
 	JTextField Text = null;
-	JTextField Description = null;
+	JTextArea Description = null;
 	JTextField Image = null;
 	JTextField Flag = null;
 	public PublicArtInfoGUI(PublicArt file) 
@@ -39,7 +40,7 @@ public class PublicArtInfoGUI extends GenericFileInfoGUI
 	{
 		Name = bFM.GUIUtils.createNameTextField(file.getName(), file::setName);
 		Text = bFM.GUIUtils.createStringTextField(file.getText(), file::setText);
-		Description = bFM.GUIUtils.createStringTextField(file.getDescription(), file::setDescription);
+		Description = bFM.GUIUtils.createStringTextArea(file.getDescription(), file::setDescription);
 		Image = bFM.GUIUtils.createStringTextField(file.getImage(), file::setImage);
 		Flag = bFM.GUIUtils.createIntTextField(file.getActivationFlag(), file::setActivationFlag);
 	}

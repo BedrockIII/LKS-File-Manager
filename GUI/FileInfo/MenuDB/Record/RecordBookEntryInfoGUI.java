@@ -2,6 +2,7 @@ package GUI.FileInfo.MenuDB.Record;
 
 import java.awt.GridBagConstraints;
 
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
@@ -14,10 +15,10 @@ public class RecordBookEntryInfoGUI extends GenericFileInfoGUI
 {
 	RecordBookEntry file;
 	JTextField Name = null;
-	JTextField Description0 = null;
-	JTextField Description1 = null;
-	JTextField Description2 = null;
-	JTextField Description3 = null;
+	JTextArea Description0 = null;
+	JTextArea Description1 = null;
+	JTextArea Description2 = null;
+	JTextArea Description3 = null;
 	JTextField Image = null;
 	JTextField Description1Count = null;
 	JTextField Description2Count = null;
@@ -46,10 +47,10 @@ public class RecordBookEntryInfoGUI extends GenericFileInfoGUI
 	private void makeGUI()
 	{
 		Name = bFM.GUIUtils.createNameTextField(file.getName(), file::setName);
-		Description0 = bFM.GUIUtils.createStringTextField(file.getLevel0Text(), file::setLevel0Text);
-		Description1 = bFM.GUIUtils.createStringTextField(file.getLevel1Text(), file::setLevel1Text);
-		Description2 = bFM.GUIUtils.createStringTextField(file.getLevel2Text(), file::setLevel2Text);
-		Description3 = bFM.GUIUtils.createStringTextField(file.getLevel3Text(), file::setLevel3Text);
+		Description0 = bFM.GUIUtils.createStringTextArea(file.getLevel0Text(), file::setLevel0Text);
+		Description1 = bFM.GUIUtils.createStringTextArea(file.getLevel1Text(), file::setLevel1Text);
+		Description2 = bFM.GUIUtils.createStringTextArea(file.getLevel2Text(), file::setLevel2Text);
+		Description3 = bFM.GUIUtils.createStringTextArea(file.getLevel3Text(), file::setLevel3Text);
 		Image = bFM.GUIUtils.createStringTextField(file.getImage(), file::setImage);
 		Description1Count = bFM.GUIUtils.createIntTextField(file.getLevel1Count(), file::setLevel1Count);
 		Description2Count = bFM.GUIUtils.createIntTextField(file.getLevel2Count(), file::setLevel2Count);

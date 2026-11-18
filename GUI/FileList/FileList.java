@@ -188,13 +188,15 @@ public abstract class FileList extends JPanel
 	{
 		if(!parent.isFirst(this, children))
 		{
-			actions.add(moveUp);
+			if(moveUp != null)
+				actions.add(moveUp);
 		}
 		else actions.remove(moveUp);
 		
 		if(!parent.isLast(this, children))
 		{
-			actions.add(moveDown);
+			if(moveDown != null)
+				actions.add(moveDown);
 		}
 		else actions.remove(moveDown);
 	}

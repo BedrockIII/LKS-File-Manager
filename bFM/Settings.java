@@ -86,7 +86,7 @@ public class Settings
 		ret += bFM.Utils.getAsSetting("Window Width", GUI.frame.getWidth());
 		ret += bFM.Utils.getAsSetting("Window Height", GUI.frame.getHeight());
 		ret += bFM.Utils.getAsSetting("Window Maximized", GUI.frame.getExtendedState() == Frame.MAXIMIZED_BOTH);
-		ret += bFM.Utils.getAsSetting("Optimize Collision", ColReader.optimizeCollision);
+		//ret += bFM.Utils.getAsSetting("Optimize Collision", ColReader.optimizeCollision);
 		ret += bFM.Utils.getAsSetting("Modding Path", importPath);
 		ret += bFM.Utils.getAsSetting("Riivolution Mod Path", outputPath);
 		ret += bFM.Utils.getAsSetting("Last Save Path", lastFileSavePath);
@@ -133,7 +133,8 @@ public class Settings
 			{
 				if(line.indexOf("Optimize Collision")!=-1)
 				{
-					ColReader.optimizeCollision = bFM.Utils.getSettingValue(line);
+					System.err.println("Optimize Collision is No More");
+					//ColReader.optimizeCollision = bFM.Utils.getSettingValue(line);
 				}
 				else if(line.indexOf("Debug Output")!=-1)
 				{

@@ -2,6 +2,7 @@ package GUI.FileInfo.MenuDB.MonsterBook;
 
 import java.awt.GridBagConstraints;
 
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
@@ -14,7 +15,7 @@ public class MonsterBookEntryInfoGUI extends GenericFileInfoGUI
 {
 	MonsterBook file;
 	JTextField Name = null;
-	JTextField Description = null;
+	JTextArea Description = null;
 	JTextField Image = null;
 	public MonsterBookEntryInfoGUI(MonsterBook entry) 
 	{
@@ -34,7 +35,7 @@ public class MonsterBookEntryInfoGUI extends GenericFileInfoGUI
 	private void makeGUI()
 	{
 		Name = bFM.GUIUtils.createNameTextField(file.getName(), file::setName);
-		Description = bFM.GUIUtils.createStringTextField(file.getDescription(), file::setDescription);
+		Description = bFM.GUIUtils.createStringTextArea(file.getDescription(), file::setDescription);
 		Image = bFM.GUIUtils.createStringTextField(file.getImage(), file::setImage);
 	}
 }

@@ -19,10 +19,13 @@ public class CockpitLogManager implements OpenedFile, IntermediateFileFormat
 	private void initializeFromBytes(byte[] data)
 	{
 		PCKGManager CockpitLog = new PCKGManager(data);
-		ArrayList<String> Messages = bFM.Utils.extractStrings(CockpitLog.getFile("CockpitLog"));
+		ArrayList<String> Messages = Utils.extractStrings(CockpitLog.getFile("CockpitLog"));
+		System.out.println(CockpitLog.getFile("CockpitLog").length);
+		System.out.println(Messages.size());
 		ByteBuffer flagBuffer = ByteBuffer.wrap(CockpitLog.getFile("Val"));
 		for(int i = 0; i < Messages.size(); i++)
 		{
+			System.out.println("a");
 			Entries.add(new LogEntry(Messages.get(i), flagBuffer.getInt(i*4)));
 		}
 	}

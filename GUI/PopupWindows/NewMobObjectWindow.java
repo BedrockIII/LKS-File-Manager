@@ -14,34 +14,40 @@ import bFM.Settings;
 @SuppressWarnings("serial")
 public class NewMobObjectWindow extends GenericPopupWindow
 {
-	GroupListGUI gui;
-	JComboBox<ObjectDefault> types;
-	JTextField modID;
-	int id = 0;
-	LabeledInputBox modIDLabel;
+	static GroupListGUI gui;
+	static JComboBox<ObjectDefault> types;
+	static JTextField modID;
+	static int id = 0;
+	static LabeledInputBox modIDLabel;
+	static boolean initialized = false;
 	public NewMobObjectWindow(GroupListGUI gui)
 	{
 		super("Create new Object");
-		this.gui = gui;
+		NewMobObjectWindow.gui = gui;
 		setModID(1);
 	}
 	protected void addGUI()
 	{
-		types = new JComboBox<ObjectDefault>();
-		types.addItem(ObjectDefault.OBJECT);
-		types.addItem(ObjectDefault.STILLUMA);
-		types.addItem(ObjectDefault.WANDERUMA);
+		if(!initialized)
+		{
+			types = new JComboBox<ObjectDefault>();
+			types.addItem(ObjectDefault.OBJECT);
+			types.addItem(ObjectDefault.STILLUMA);
+			types.addItem(ObjectDefault.WANDERUMA);
+			
+			modID = GUIUtils.createIntTextField(1, this::setModID);
+			
+			modIDLabel = new LabeledInputBox("Mod Code", modID);
+			modIDLabel.setMinimumSize(new Dimension(Settings.buttonWidth * 3, Settings.assetHeight));
+			initialized = true;
+		}
 		
-		modID = GUIUtils.createIntTextField(1, this::setModID);
-		
-		modIDLabel = new LabeledInputBox("Mod Code", modID);
-		modIDLabel.setMinimumSize(new Dimension(Settings.buttonWidth * 3, Settings.assetHeight));
 		add(modIDLabel);
 		add(new LabeledInputBox("Object Defaults", types));
 	}
 	private void setModID(int id)
 	{
-		this.id = id;
+		NewMobObjectWindow.id = id;
 		String name = "Mod Code: (" + gui.parent.parent.parent.parent.MonsterDataPack.getModCodeByName(id) + ")";
 		modIDLabel.replaceText(name);
 	}

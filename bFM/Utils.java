@@ -23,7 +23,6 @@ public class Utils
 	public final static int GERMAN_LANGUAGE = 4;
 	public final static int SPANISH_LANGUAGE = 5;
 	public static boolean debugOutput = false;
-	public static boolean autoEditSubPackFile = true;
 	public static void DebugPrint(String message)
 	{
 		if(debugOutput)

@@ -61,7 +61,7 @@ public class MobAttackInfoGUI extends GenericFileInfoGUI
 	private void makeGUI()
 	{
 		name = GUIUtils.createNameTextField(object.getName(), object::setName);
-		type = GUIUtils.createStringTextField(object.getAttackType(), object::setAttackType);
+		type = GUIUtils.createStringTextField(object.getAttackAnimationName(), object::setAttackAnimationName);
 		soundEffect = GUIUtils.createStringTextField(object.getSoundEffect(), object::setSoundEffect);
 		attackCode = GUIUtils.createIntTextField(object.getAttackCode(), object::setAttackCode);
 		num1 = GUIUtils.createFloatTextField(object.getNum1(), object::setNum1);
@@ -101,7 +101,7 @@ public class MobAttackInfoGUI extends GenericFileInfoGUI
 		setLayout(new GridBagLayout());
 		GridBagConstraints layout = Settings.getDefaultConstraints();
 		add(new LabeledInputBox("Name: ",  name), layout);
-		add(new LabeledInputBox("Type: ",  type), layout);
+		add(new LabeledInputBox("Animation Name: ",  type), layout);
 		add(new LabeledInputBox("Sound Effect: ",  soundEffect), layout);
 		add(new LabeledInputBox("Attack Code: ",  attackCode), layout);
 		add(new LabeledInputBox("Damage: ",  damage), layout);
@@ -116,11 +116,11 @@ public class MobAttackInfoGUI extends GenericFileInfoGUI
 		add(new LabeledInputBox("Number 9: ",  num9), layout);
 		add(new LabeledInputBox("Number 10: ",  num10), layout);
 		add(new LabeledInputBox("Number 11: ",  num11), layout);
-		add(new LabeledInputBox("Number 13: ",  num13), layout);
-		add(new LabeledInputBox("Number 14: ",  num14), layout);
-		add(new LabeledInputBox("Number 15: ",  num15), layout);
+		add(new LabeledInputBox("Attack Count: ",  num13), layout);
+		add(new LabeledInputBox("A: ",  num14), layout);
+		add(new LabeledInputBox("Attack Animation Loop Count: ",  num15), layout);
 		add(new LabeledInputBox("Number 16: ",  num16), layout);
-		add(new LabeledInputBox("Number 17: ",  num17), layout);
+		add(new LabeledInputBox("Wind Up Animation Loop Count: ",  num17), layout);
 		add(new LabeledInputBox("Number 18: ",  num18), layout);
 		add(new LabeledInputBox("Number 19: ",  num19), layout);
 		add(new LabeledInputBox("Number 20: ",  num20), layout);

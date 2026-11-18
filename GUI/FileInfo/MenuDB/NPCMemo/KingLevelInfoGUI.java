@@ -2,6 +2,7 @@ package GUI.FileInfo.MenuDB.NPCMemo;
 
 import java.awt.GridBagConstraints;
 
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
@@ -14,7 +15,7 @@ public class KingLevelInfoGUI extends GenericFileInfoGUI
 {
 	KingLevel file;
 	JTextField Name = null;
-	JTextField Text = null;
+	JTextArea Text = null;
 	public KingLevelInfoGUI(KingLevel level) 
 	{
 		this.file = level;
@@ -32,6 +33,6 @@ public class KingLevelInfoGUI extends GenericFileInfoGUI
 	private void makeGUI()
 	{
 		Name = bFM.GUIUtils.createNameTextField(file.getName(), file::setName);
-		Text = bFM.GUIUtils.createStringTextField(file.getText(), file::setText);
+		Text = bFM.GUIUtils.createStringTextArea(file.getText(), file::setText);
 	}
 }

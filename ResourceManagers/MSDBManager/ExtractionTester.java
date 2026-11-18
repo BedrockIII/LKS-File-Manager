@@ -267,7 +267,7 @@ public class ExtractionTester
 		//Files.write(Paths.get("D:\\ModTest\\MobResfile.bin"),res.toBytes());
 		//Utils.testDifferences(mod.toBytes(), Files.readAllBytes(Paths.get(inputPath+"MOB_24_MOD.lst")));
 		//MonsterDataBase.addFile("MOB_24_ATK_ELM.lst", AttackElem.toBytes());
-		MonsterDataBase.addFile("MOB_24_ATK_COL.lst", AttackCol.toBytes());
+		//MonsterDataBase.addFile("MOB_24_ATK_COL.lst", AttackCol.toBytes());
 		MonsterDataBase.addFile("MOB_24_MOD.lst", mod.toBytes());
 		MonsterDataBase.addFile("MOB_24_RES_ASN.lst", res.toBytes());
 		Files.write(Paths.get(Settings.outputPath+"Resources\\msDB27.pac"), MonsterDataBase.toBytes());

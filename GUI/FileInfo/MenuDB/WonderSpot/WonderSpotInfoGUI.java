@@ -2,6 +2,7 @@ package GUI.FileInfo.MenuDB.WonderSpot;
 
 import java.awt.GridBagConstraints;
 
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
@@ -14,7 +15,7 @@ public class WonderSpotInfoGUI extends GenericFileInfoGUI
 {
 	WonderSpot file;
 	JTextField Name = null;
-	JTextField Description = null;
+	JTextArea Description = null;
 	JTextField Image = null;
 	JTextField DebugDescription = null;
 	public WonderSpotInfoGUI(WonderSpot file) 
@@ -36,7 +37,7 @@ public class WonderSpotInfoGUI extends GenericFileInfoGUI
 	private void makeGUI()
 	{
 		Name = bFM.GUIUtils.createNameTextField(file.getName(), file::setName);
-		Description = bFM.GUIUtils.createStringTextField(file.getText(), file::setText);
+		Description = bFM.GUIUtils.createStringTextArea(file.getText(), file::setText);
 		Image = bFM.GUIUtils.createStringTextField(file.getImage(), file::setImage);
 		DebugDescription = bFM.GUIUtils.createStringTextField(file.getDebugText(), file::setDebugText);
 	}

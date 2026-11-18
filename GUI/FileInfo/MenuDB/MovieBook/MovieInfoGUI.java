@@ -2,6 +2,7 @@ package GUI.FileInfo.MenuDB.MovieBook;
 
 import java.awt.GridBagConstraints;
 
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import GUI.LabeledInputBox;
@@ -14,9 +15,9 @@ public class MovieInfoGUI extends GenericFileInfoGUI
 {
 	MovieBook file;
 	JTextField Name = null;
-	JTextField PreText = null;
-	JTextField PostText = null;
-	JTextField Description = null;
+	JTextArea PreText = null;
+	JTextArea PostText = null;
+	JTextArea Description = null;
 	JTextField Image = null;
 	JTextField Movie = null;
 	public MovieInfoGUI(MovieBook file) 
@@ -40,9 +41,9 @@ public class MovieInfoGUI extends GenericFileInfoGUI
 	private void makeGUI()
 	{
 		Name = bFM.GUIUtils.createNameTextField(file.getName(), file::setName);
-		PreText = bFM.GUIUtils.createStringTextField(file.getPreText(), file::setPreText);
-		PostText = bFM.GUIUtils.createStringTextField(file.getPostText(), file::setPostText);
-		Description = bFM.GUIUtils.createStringTextField(file.getDescription(), file::setDescription);
+		PreText = bFM.GUIUtils.createStringTextArea(file.getPreText(), file::setPreText);
+		PostText = bFM.GUIUtils.createStringTextArea(file.getPostText(), file::setPostText);
+		Description = bFM.GUIUtils.createStringTextArea(file.getDescription(), file::setDescription);
 		Image = bFM.GUIUtils.createStringTextField(file.getImage(), file::setImage);
 		Movie = bFM.GUIUtils.createStringTextField(file.getMovie(), file::setMovie);
 	}
